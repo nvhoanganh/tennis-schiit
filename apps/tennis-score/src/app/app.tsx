@@ -1,26 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@tennis-score/api-interfaces';
+import React from "react";
+import { renderRoutes } from "react-router-config";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFrog } from "@fortawesome/free-solid-svg-icons";
+import { LinkContainer } from "react-router-bootstrap";
 
-export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
-
-  useEffect(() => {
-    fetch('/api')
-      .then(r => r.json())
-      .then(setMessage);
-  }, []);
-
+export const App: React.SFC<any> = ({ route }) => {
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to tennis-score!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png"
-        />
-      </div>
-      <div>{m.message}</div>
-    </>
+    <div>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Brand href="#home">
+          <FontAwesomeIcon icon={faFrog} /> Tennis-Schiit
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <NavDropdown title="More" id="collasible-nav-dropdown">
+              <LinkContainer to="/home">
+                <NavDropdown.Item>Home</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/leaderboard">
+                <NavDropdown.Item>Leaderboard</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/admin">
+                <NavDropdown.Item>Admin</NavDropdown.Item>
+              </LinkContainer>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      <div>{renderRoutes(route.routes)}</div>
+    </div>
   );
 };
 

@@ -1,6 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { renderRoutes } from "react-router-config";
+import routes from "./app/routes";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import App from './app/app';
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <Router>{renderRoutes(routes)}</Router>,
+  document.getElementById("root")
+);
