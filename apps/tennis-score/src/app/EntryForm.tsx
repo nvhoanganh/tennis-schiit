@@ -27,7 +27,6 @@ const EntryForm: React.SFC<IEntryFormProps> = ({ players, match }) => {
       <form>
         <div className="card">
           <div className="card-body">
-            <p>Winner</p>
             <Table size="sm">
               <thead>
                 <tr>
