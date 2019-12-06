@@ -192,6 +192,33 @@
           }
         }
       }
+    },
+    "redux": {
+      "root": "libs/redux",
+      "sourceRoot": "libs/redux/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "config": "libs/redux/.eslintrc",
+            "tsConfig": [
+              "libs/redux/tsconfig.lib.json",
+              "libs/redux/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/redux/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/redux/jest.config.js",
+            "tsConfig": "libs/redux/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

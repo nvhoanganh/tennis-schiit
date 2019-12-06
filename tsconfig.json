@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tennis-score/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@tennis-score/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@tennis-score/redux": ["libs/redux/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
