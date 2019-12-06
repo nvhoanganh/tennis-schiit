@@ -1,7 +1,7 @@
-import App from "./app";
-import Home from "./Home";
-import Leaderboard from "./Leaderboard";
-import EntryForm from "./EntryForm";
+import App from "./components/app";
+import Home from "./components/Home";
+import Leaderboard from "./containers/TopLeaderboard";
+import EntryForm from "./components/EntryForm";
 
 const routes = [
 	{

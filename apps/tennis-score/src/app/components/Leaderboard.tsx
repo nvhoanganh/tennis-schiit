@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ListGroup from "react-bootstrap/ListGroup";
-import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import Card from "react-bootstrap/Card";
 import {
@@ -11,14 +9,14 @@ import {
   faSortAmountDown,
   faPlus
 } from "@fortawesome/free-solid-svg-icons";
-import { Player, Mocked_Players } from "@tennis-score/api-interfaces";
-import { loadPlayers, addScore } from "@tennis-score/redux";
+import { Player } from "@tennis-score/api-interfaces";
+import { IScore } from "@tennis-score/redux";
 
 interface ILeaderboardProps {
   groupName: string;
   players: Player[];
   loadPlayers(): any;
-  addScore(): any;
+  addScore(score: IScore): any;
 }
 // tslint:disable-next-line: typedef
 const scoreStyle = { fontSize: "0.8rem" };
@@ -26,11 +24,10 @@ const scoreStyle = { fontSize: "0.8rem" };
 const Leaderboard: React.SFC<ILeaderboardProps> = ({
   groupName,
   players,
-  loadPlayers,
-  addScore: any
+  ...props
 }) => {
   useEffect(() => {
-    addScore(null);
+    props.loadPlayers();
   }, []);
   return (
     <>
@@ -172,21 +169,4 @@ Leaderboard.defaultProps = {
   players: []
 };
 
-const getLeaderboard = state => {
-  console.log("state is", state);
-  return Mocked_Players;
-};
-
-const mapStateToProps = state => ({
-  players: getLeaderboard(state)
-});
-
-const mapDispatchToProps = dispatch => ({
-  loadPlayers: _ => dispatch(loadPlayers()),
-  addScore: score => dispatch(addScore(score))
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Leaderboard);
+export default Leaderboard;
