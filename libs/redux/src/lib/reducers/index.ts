@@ -4,7 +4,7 @@ import groups from "./groupsReducer";
 import players from "./playersReducer";
 import scores from "./scoresReducer";
 
-export default combineReducers({
+export const rootReducer = combineReducers({
   app,
   groups,
   players,

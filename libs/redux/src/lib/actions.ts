@@ -96,63 +96,65 @@ export class LastApiErrorAction implements IAction {
 }
 
 // action creators
-export function addScore(score: IScore) {
-  return new AddScoreAction(score);
+export function addScore(score: IScore): AddScoreAction {
+  return { type: AppActionTypes.ADD_SCORE, score };
 }
 
-export function deleteScore(id: string) {
-  return new DeleteScoreAction(id);
+export function deleteScore(id: string): DeleteScoreAction {
+  return { type: AppActionTypes.DELETE_SCORE, id };
 }
 
-export function updateScore(score: IScore) {
-  return new UpdateScoreAction(score);
+export function updateScore(score: IScore): UpdateScoreAction {
+  return { type: AppActionTypes.UPDATE_SCORE, score };
 }
 
-export function addGroup(group: IGroup) {
-  return new AddGroupAction(group);
+export function addGroup(group: IGroup): AddGroupAction {
+  return { type: AppActionTypes.ADD_GROUP, group };
 }
 
-export function deleteGroup(id: string) {
-  return new DeleteScoreAction(id);
+export function deleteGroup(id: string): DeleteGroupAction {
+  return { type: AppActionTypes.DELETE_GROUP, id };
 }
 
-export function updateGroup(group: IGroup) {
-  return new UpdateGroupAction(group);
+export function updateGroup(group: IGroup): UpdateGroupAction {
+  return { type: AppActionTypes.UPDATE_GROUP, group };
 }
-export function invitePlayerToGroup(groupId: string, playeId: string) {
-  return new InvitePlayerToGroupAction(groupId, playeId);
+export function invitePlayerToGroup(
+  groupId: string,
+  playerId: string
+): InvitePlayerToGroupAction {
+  return { type: AppActionTypes.ADD_PLAYER_TO_GROUP, groupId, playerId };
 }
-export function removePlayer(playeId: string) {
-  return new RemovePlayerAction(playeId);
+export function removePlayer(playerId: string): RemovePlayerAction {
+  return { type: AppActionTypes.REMOVE_PLAYER, playerId };
 }
-export function addPlayer(player: IPlayer) {
-  return new AddPlayerAction(player);
+export function addPlayer(player: IPlayer): AddPlayerAction {
+  return { type: AppActionTypes.ADD_PLAYER, player };
 }
 
 // thunks
 export function loadScores() {
   return dispatch => {
-    dispatch(new ApiStartAction());
+    dispatch(<ApiStartAction>{ type: AppActionTypes.API_START });
     return delay(2000).then(_ => {
-      dispatch(new ApiEndAction());
-      dispatch(
-        new LoadScoresSuccessAction({
-          "234234": null
-        })
-      );
+      dispatch(<ApiEndAction>{ type: AppActionTypes.API_END });
+      dispatch(<LoadScoresSuccessAction>{
+        type: AppActionTypes.LOAD_SCORE_SUCCESS
+      });
     });
   };
 }
 export function loadPlayers() {
   return dispatch => {
-    dispatch(new ApiStartAction());
+    dispatch(<ApiStartAction>{ type: AppActionTypes.API_START });
     return delay(2000).then(_ => {
-      dispatch(new ApiEndAction());
-      dispatch(
-        new LoadPlayersSuccessAction({
+      dispatch(<ApiEndAction>{ type: AppActionTypes.API_END });
+      dispatch(<LoadPlayersSuccessAction>{
+        type: AppActionTypes.LOAD_PLAYER_SUCCESS,
+        players: {
           "234234": null
-        })
-      );
+        }
+      });
     });
   };
 }
@@ -161,12 +163,13 @@ export function loadGroups() {
     dispatch(new ApiStartAction());
     console.log(`current state`, getState());
     return delay(2000).then(_ => {
-      dispatch(new ApiEndAction());
-      dispatch(
-        new LoadScoresSuccessAction({
+      dispatch({ type: AppActionTypes.API_END });
+      dispatch({
+        type: AppActionTypes.LOAD_SCORE_SUCCESS,
+        scores: {
           "234234": null
-        })
-      );
+        }
+      });
     });
   };
 }
