@@ -41,3 +41,7 @@ export interface IJoinedPlayer {
   dateJoined?: Date;
 }
 
+export interface IPager {
+  offset: number;
+  count: number;
+}

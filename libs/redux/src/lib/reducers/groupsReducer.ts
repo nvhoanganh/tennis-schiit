@@ -1,31 +1,16 @@
-import { AppActionTypes, AppAction } from "../actions";
 import { IGroup } from "../models";
+import { GroupActionTypes, GroupAction } from "../actions";
 
 export interface IGroupsState {
   [groupId: string]: IGroup;
 }
 
-const groups = (state: IGroupsState = {}, action: AppAction): IGroupsState => {
+const groups = (
+  state: IGroupsState = {},
+  action: GroupAction
+): IGroupsState => {
   switch (action.type) {
-    case AppActionTypes.ADD_GROUP:
-      return {
-        ...state,
-        [action.group.groupId]: action.group
-      };
-
-    case AppActionTypes.DELETE_GROUP:
-      const { [action.id]: deleted, ...newState } = state;
-      return newState;
-
-    case AppActionTypes.UPDATE_GROUP:
-      return {
-        ...state,
-        [action.group.groupId]: action.group
-      };
-
-    case AppActionTypes.LOAD_GROUP_SUCCESS:
-      return action.groups;
-    case AppActionTypes.ADD_PLAYER_TO_GROUP:
+    case GroupActionTypes.ADD_PLAYER_TO_GROUP:
       const fromState = state[action.groupId];
       return {
         ...state,
@@ -39,6 +24,25 @@ const groups = (state: IGroupsState = {}, action: AppAction): IGroupsState => {
           }
         }
       };
+    case GroupActionTypes.ADD_GROUP:
+      return {
+        ...state,
+        [action.group.groupId]: action.group
+      };
+
+    case GroupActionTypes.DELETE_GROUP:
+      const { [action.id]: deleted, ...newState } = state;
+      return newState;
+
+    case GroupActionTypes.UPDATE_GROUP:
+      return {
+        ...state,
+        [action.group.groupId]: action.group
+      };
+
+    case GroupActionTypes.LOAD_GROUP_SUCCESS:
+      return action.groups;
+
     default:
       return state;
   }

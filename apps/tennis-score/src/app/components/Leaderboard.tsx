@@ -18,7 +18,6 @@ interface ILeaderboardProps {
   loadPlayers(): any;
   addScore(score: IScore): any;
 }
-// tslint:disable-next-line: typedef
 const scoreStyle = { fontSize: "0.8rem" };
 
 const Leaderboard: React.SFC<ILeaderboardProps> = ({

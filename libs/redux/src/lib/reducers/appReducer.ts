@@ -1,8 +1,11 @@
-import { AppActionTypes, AppAction } from "../actions";
-import { IGroup, IPlayer } from "../models";
+import { IPlayer } from "../models";
+import { AppAction, AppActionTypes } from "../actions";
 
 export interface IAppState {
   pendingRequests: number;
+  lastAction?: string;
+  lastErrorAction?: string;
+  lastError?: any;
   user?: IPlayer;
 }
 
@@ -14,14 +17,21 @@ const app = (
     case AppActionTypes.API_START:
       return {
         ...state,
+        lastAction: action.type,
         pendingRequests: state.pendingRequests + 1
+      };
+    case AppActionTypes.API_ERROR:
+      return {
+        ...state,
+        pendingRequests: state.pendingRequests - 1,
+        lastErrorAction: action.type,
+        lastError: action.err,
       };
     case AppActionTypes.API_END:
       return {
         ...state,
         pendingRequests: state.pendingRequests - 1
       };
-
     default:
       return state;
   }

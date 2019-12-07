@@ -1,5 +1,6 @@
-import { AppActionTypes, AppAction } from "../actions";
+import { PlayerActionTypes } from "../actions";
 import { IPlayer } from "../models";
+import { PlayerAction } from '../actions';
 
 export interface IPlayersState {
   [playerId: string]: IPlayer;
@@ -7,15 +8,15 @@ export interface IPlayersState {
 
 const players = (
   state: IPlayersState = {},
-  action: AppAction
+  action: PlayerAction
 ): IPlayersState => {
   switch (action.type) {
-    case AppActionTypes.REMOVE_PLAYER:
-      const { [action.playerId]: deleted, ...newState } = state;
-      return newState;
-    case AppActionTypes.LOAD_PLAYER_SUCCESS:
+    case PlayerActionTypes.REMOVE_PLAYER:
+      const { [action.playerId]: deleted, ...newEntities } = state;
+      return newEntities;
+    case PlayerActionTypes.LOAD_PLAYER_SUCCESS:
       return action.players;
-    case AppActionTypes.ADD_PLAYER:
+    case PlayerActionTypes.ADD_PLAYER:
       return {
         ...state,
         [action.player.playerId]: action.player
