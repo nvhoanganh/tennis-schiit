@@ -8,9 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrog } from "@fortawesome/free-solid-svg-icons";
 import { LinkContainer } from "react-router-bootstrap";
 
-export const App: React.SFC<any> = ({ route, user }) => {
+export const App: React.SFC<any> = ({ route, user, ownP }) => {
   useEffect(() => {
     console.log(user);
+    console.log(ownP);
   }, []);
   return (
     <div>
@@ -40,8 +41,9 @@ export const App: React.SFC<any> = ({ route, user }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  user: state.app
+const mapStateToProps = (state, ownProps) => ({
+  user: state.app,
+  ownP: ownProps
 });
 
 const mapDispatchToProps = dispatch => ({});
