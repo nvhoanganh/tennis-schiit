@@ -8,6 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrog } from "@fortawesome/free-solid-svg-icons";
 import { LinkContainer } from "react-router-bootstrap";
 
+const linkStyle = {
+  lineHeight: "2rem"
+};
+
 export const App: React.SFC<any> = ({ route, user, ownP }) => {
   useEffect(() => {
     console.log(user);
@@ -15,25 +19,39 @@ export const App: React.SFC<any> = ({ route, user, ownP }) => {
   }, []);
   return (
     <div>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="#home">
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        bg="dark"
+        variant="dark"
+        style={{
+          padding: 0
+        }}
+      >
+        <Navbar.Brand
+          href="#home"
+          style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
+        >
           <FontAwesomeIcon icon={faFrog} /> Tennis-Schiit
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          style={{ marginRight: '0.4rem' }}
+        />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <LinkContainer to="/home">
+            <LinkContainer style={linkStyle} to="/home">
               <NavDropdown.Item className="text-white">Home</NavDropdown.Item>
             </LinkContainer>
-            <LinkContainer to="/leaderboard">
+            <LinkContainer style={linkStyle} to="/leaderboard">
               <NavDropdown.Item className="text-white">
                 Leaderboard
               </NavDropdown.Item>
             </LinkContainer>
-            <LinkContainer to="/admin">
+            <LinkContainer style={linkStyle} to="/admin">
               <NavDropdown.Item className="text-white">Admin</NavDropdown.Item>
             </LinkContainer>
-            <LinkContainer to="/signin">
+            <LinkContainer style={linkStyle} to="/signin">
               <NavDropdown.Item className="text-white">
                 Sign In
               </NavDropdown.Item>
