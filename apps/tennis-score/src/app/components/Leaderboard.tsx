@@ -15,7 +15,9 @@ import { IScore } from "@tennis-score/redux";
 interface ILeaderboardProps {
   groupName: string;
   players: Player[];
+  match: any;
   loadPlayers(): any;
+  loadGroups(): any;
   addScore(score: IScore): any;
 }
 const scoreStyle = { fontSize: "0.8rem" };
@@ -23,15 +25,18 @@ const scoreStyle = { fontSize: "0.8rem" };
 const Leaderboard: React.SFC<ILeaderboardProps> = ({
   groupName,
   players,
+  match,
   ...props
 }) => {
   useEffect(() => {
     props.loadPlayers();
+    props.loadGroups();
   }, []);
   return (
     <>
       <h4 className="text-center pt-3">
-        <FontAwesomeIcon icon={faChartLine} /> {groupName} - Leaderboard
+        <FontAwesomeIcon icon={faChartLine} /> {match.params.group || groupName}{" "}
+        - Leaderboard
       </h4>
       <div className="text-center py-3">
         <LinkContainer to={`/newscore/${groupName}`}>

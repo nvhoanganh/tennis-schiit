@@ -12,6 +12,41 @@ export interface Player {
   lastWeekPrizeMoney: number;
 }
 
+export interface GroupMember {
+  playerId: string;
+  joinDate: Date;
+}
+export interface Group {
+  groupId?: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  createdOn: Date;
+  isDeleted?: boolean;
+  ownerId?: string;
+  players?: GroupMember[];
+}
+export const Mocked_Groups: Group[] = [
+  {
+    groupId: "hsv",
+    name: "hoi so vo",
+    createdOn: new Date(),
+    players: [
+      {
+        playerId: "Anguyen",
+        joinDate: new Date()
+      },
+      {
+        playerId: "Anguyen2",
+        joinDate: new Date()
+      },
+      {
+        playerId: "Anguyen3",
+        joinDate: new Date()
+      }
+    ]
+  }
+];
 export const Mocked_Players: Player[] = [
   {
     id: "Anguyen",

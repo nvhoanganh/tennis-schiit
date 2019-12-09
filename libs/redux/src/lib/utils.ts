@@ -8,11 +8,11 @@ export function delay(duration): Promise<void> {
     }, duration);
   });
 }
-export const arrayToObject = (array: any[]) => {
+export const arrayToObject = (array: any[], keymap, valuemap) => {
   return array.reduce((presV, currV) => {
     return {
       ...presV,
-      [currV.id]: currV
+      [keymap(currV)]: valuemap(currV)
     };
   }, {});
 };

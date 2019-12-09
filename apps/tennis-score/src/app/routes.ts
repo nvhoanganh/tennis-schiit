@@ -1,6 +1,6 @@
 import App from "./components/app";
 import Home from "./components/Home";
-import Leaderboard from "./containers/TopLeaderboard";
+import Leaderboard from "./containers/LeaderboardContainer";
 import EntryForm from "./components/EntryForm";
 
 const routes = [
@@ -23,7 +23,7 @@ const routes = [
 				component: Home
 			},
 			{
-				path: "/leaderboard",
+				path: "/leaderboard/:group?",
 				exact: true,
 				component: Leaderboard
 			},

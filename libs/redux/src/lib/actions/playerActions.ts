@@ -35,7 +35,6 @@ export class LoadPlayersSuccessAction implements IAction {
   constructor(public players: { [playerId: string]: IPlayer }) {}
 }
 
-
 export function removePlayer(playerId: string): RemovePlayerAction {
   return { type: PlayerActionTypes.REMOVE_PLAYER, playerId };
 }
@@ -52,7 +51,7 @@ export function loadPlayers() {
         dispatch(apiEnd());
         dispatch(<LoadPlayersSuccessAction>{
           type: PlayerActionTypes.LOAD_PLAYER_SUCCESS,
-          players: arrayToObject(Mocked_Players)
+          players: arrayToObject(Mocked_Players, x => x.id, x => x)
         });
       })
       .catch(e => dispatch(apiError(PlayerActionTypes.LOAD_PLAYER, e)));

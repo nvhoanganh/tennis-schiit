@@ -1,6 +1,7 @@
 import { IGroup } from "../models";
 import { apiEnd, apiStart, apiError } from "./appActions";
-import { IAction, delay } from "../utils";
+import { IAction, delay, arrayToObject } from "../utils";
+import { Group, Mocked_Groups } from "@tennis-score/api-interfaces";
 export enum GroupActionTypes {
   LOAD_GROUP = "LOAD_GROUP",
   LOAD_GROUP_FAILED = "LOAD_GROUP_FAILED",
@@ -57,6 +58,13 @@ export function updateGroup(group: IGroup): UpdateGroupAction {
   return { type: GroupActionTypes.UPDATE_GROUP, group };
 }
 
+const mapGroups = (data: Group): IGroup => {
+  return {
+    ...data,
+    players: arrayToObject(data.players, x => x.playerId, x => x.joinDate)
+  };
+};
+
 // thunks
 export function loadGroups() {
   return dispatch => {
@@ -64,11 +72,13 @@ export function loadGroups() {
     return delay(2000)
       .then(_ => {
         dispatch(apiEnd());
-        dispatch({
+        dispatch(<LoadGroupsSuccessAction>{
           type: GroupActionTypes.LOAD_GROUP_SUCCESS,
-          scores: {
-            "234234": null
-          }
+          groups: arrayToObject(
+            Mocked_Groups.map(x => mapGroups(x)),
+            x => x.groupId,
+            x => x
+          )
         });
       })
       .catch(e => dispatch(apiError(GroupActionTypes.LOAD_GROUP, e)));

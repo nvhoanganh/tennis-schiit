@@ -7,6 +7,7 @@ export interface IAppState {
   lastErrorAction?: string;
   lastError?: any;
   user?: IPlayer;
+  currentGroup?: string;
 }
 
 const app = (
