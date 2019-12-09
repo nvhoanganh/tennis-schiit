@@ -22,17 +22,22 @@ export const App: React.SFC<any> = ({ route, user, ownP }) => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <NavDropdown title="More" id="collasible-nav-dropdown">
-              <LinkContainer to="/home">
-                <NavDropdown.Item>Home</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/leaderboard">
-                <NavDropdown.Item>Leaderboard</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/admin">
-                <NavDropdown.Item>Admin</NavDropdown.Item>
-              </LinkContainer>
-            </NavDropdown>
+            <LinkContainer to="/home">
+              <NavDropdown.Item className="text-white">Home</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/leaderboard">
+              <NavDropdown.Item className="text-white">
+                Leaderboard
+              </NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/admin">
+              <NavDropdown.Item className="text-white">Admin</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/signin">
+              <NavDropdown.Item className="text-white">
+                Sign In
+              </NavDropdown.Item>
+            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

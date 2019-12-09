@@ -1,39 +1,52 @@
 import Home from "./components/Home";
 import Leaderboard from "./containers/LeaderboardContainer";
 import EntryForm from "./components/EntryForm";
-import { App } from './containers/App';
+import { App } from "./containers/App";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import ForgotPassword from './components/ForgotPassword';
 
 const routes = [
-	{
-		component: App,
-		routes: [
-			{
-				path: "/",
-				exact: true,
-				component: Home
-			},
-			{
-				path: "/home",
-				exact: true,
-				component: Home
-			},
-			{
-				path: "/admin",
-				exact: true,
-				component: Home
-			},
-			{
-				path: "/leaderboard/:group?",
-				exact: true,
-				component: Leaderboard
-			},
-			{
-				path: "/newscore/:group",
-				exact: true,
-				component: EntryForm
-			}
-		]
-	}
+  {
+    component: App,
+    routes: [
+      {
+        path: "/",
+        exact: true,
+        component: Home
+      },
+      {
+        path: "/home",
+        exact: true,
+        component: Home
+      },
+      {
+        path: "/admin",
+        exact: true,
+        component: Home
+      },
+      {
+        path: "/leaderboard/:group?",
+        exact: true,
+        component: Leaderboard
+      },
+      {
+        path: "/signin",
+        exact: true,
+        component: SignIn
+      },
+      {
+        path: "/signup",
+        exact: true,
+        component: SignUp
+      },
+      {
+        path: "/forgot-password",
+        exact: true,
+        component: ForgotPassword
+      }
+    ]
+  }
 ];
 
 export default routes;

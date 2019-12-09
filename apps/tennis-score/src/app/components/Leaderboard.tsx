@@ -13,7 +13,7 @@ const Leaderboard: React.SFC<{
   loadPlayers(): any;
   loadGroups(): any;
   addScore(score: IScore): any;
-}> = ({ groupName, players, ...props }) => {
+}> = ({ groupName, players, match, ...props }) => {
   useEffect(() => {
     props.loadPlayers();
     props.loadGroups();

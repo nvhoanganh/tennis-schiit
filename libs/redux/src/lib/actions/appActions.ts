@@ -2,7 +2,7 @@ import { IAction, delay } from "../utils";
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
   API_START = "API_START",
-  API_END = "API_END"
+  API_END = "API_END",
 }
 
 export class ApiStartAction implements IAction {
