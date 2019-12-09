@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { renderRoutes } from "react-router-config";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -7,7 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrog } from "@fortawesome/free-solid-svg-icons";
 import { LinkContainer } from "react-router-bootstrap";
 
-export const App: React.SFC<any> = ({ route }) => {
+export const App: React.SFC<any> = ({ route, user }) => {
+  useEffect(() => {
+    console.log(user);
+  }, []);
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -36,4 +40,13 @@ export const App: React.SFC<any> = ({ route }) => {
   );
 };
 
-export default App;
+const mapStateToProps = state => ({
+  user: state.app
+});
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
