@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import TextInput from "./TextInput";
+import { Button } from "./Button";
+import { Link } from "./Link";
 
 const SignIn: React.SFC<{
   signInHandler(data);
@@ -45,13 +47,17 @@ const SignIn: React.SFC<{
   return (
     <div className="mt-4 mx-4">
       <LinkContainer to="/signup">
-        <a href="" className="float-right btn btn-outline-primary">
+        <Link
+          className="float-right btn btn-outline-primary"
+          title="Sign up"
+          href=""
+        >
           Sign up
-        </a>
+        </Link>
       </LinkContainer>
       <h4 className="card-title mb-4 mt-1">Sign in</h4>
       <p>
-        <a
+        <Link
           onClick={() => {
             console.log("login via google");
           }}
@@ -59,7 +65,7 @@ const SignIn: React.SFC<{
         >
           <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
           Login via Google
-        </a>
+        </Link>
       </p>
       <hr />
       <form noValidate onSubmit={validateAndSubmit}>
@@ -88,19 +94,13 @@ const SignIn: React.SFC<{
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <button
-                disabled={!state.formValid}
-                type="submit"
-                className="btn btn-primary btn-block"
-              >
-                Login
-              </button>
+              <Button disabled={!state.formValid}>Sign In</Button>
             </div>
           </div>
           <div className="col-md-6 text-right">
-            <a className="small" href="#">
+            <Link title="Forgot password?" href="#">
               Forgot password?
-            </a>
+            </Link>
           </div>
         </div>
       </form>
