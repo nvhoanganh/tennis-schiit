@@ -69,19 +69,17 @@ const mapGroups = (data: Group): IGroup => {
 export function loadGroups() {
   return dispatch => {
     dispatch(apiStart(GroupActionTypes.LOAD_GROUP));
-    return delay(2000)
-      .then(_ => {
-        dispatch(apiEnd());
-        dispatch(<LoadGroupsSuccessAction>{
-          type: GroupActionTypes.LOAD_GROUP_SUCCESS,
-          groups: arrayToObject(
-            Mocked_Groups.map(x => mapGroups(x)),
-            x => x.groupId,
-            x => x
-          )
-        });
-      })
-      .catch(e => dispatch(apiError(GroupActionTypes.LOAD_GROUP, e)));
+    return delay(2000).then(_ => {
+      dispatch(apiEnd());
+      dispatch(<LoadGroupsSuccessAction>{
+        type: GroupActionTypes.LOAD_GROUP_SUCCESS,
+        groups: arrayToObject(
+          Mocked_Groups.map(x => mapGroups(x)),
+          x => x.groupId,
+          x => x
+        )
+      });
+    });
   };
 }
 

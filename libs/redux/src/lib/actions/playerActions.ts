@@ -54,7 +54,6 @@ export function loadPlayers() {
           players: arrayToObject(Mocked_Players, x => x.id, x => x)
         });
       })
-      .catch(e => dispatch(apiError(PlayerActionTypes.LOAD_PLAYER, e)));
   };
 }
 

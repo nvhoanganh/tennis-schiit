@@ -3,37 +3,43 @@ import { strongPassword, isValidEmail } from "@tennis-score/core";
 import TextInput from "./TextInput";
 
 const SignUp: React.SFC<{
-  signupHandler();
+  signupHandler(data: { email: string; password: string });
 }> = ({ signupHandler }) => {
-  const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
-
-  const [password, setPassword] = useState("");
-  const [passwordValid, setPasswordValid] = useState(true);
-
-  const [confirmPass, setConfirmPass] = useState("");
-  const [confirmPassValid, setConfirmPassValid] = useState(true);
+  const [state, setState] = useState({
+    email: "",
+    emailValid: false,
+    password: "",
+    passwordValid: false,
+    confirmPass: "",
+    confirmPassValid: false,
+    formValid: false
+  });
 
   const [validated, setValidated] = useState(false);
+  const setValue = (field, value) =>
+    setState(curr => ({ ...curr, [field]: value }));
 
   useEffect(() => {
-    setPasswordValid(strongPassword(password) || !validated);
-  }, [password, validated]);
-
-  useEffect(() => {
-    setEmailValid(isValidEmail(email) || !validated);
-  }, [email, validated]);
-
-  useEffect(() => {
-    setConfirmPassValid(confirmPass === password);
-  }, [confirmPass, password]);
+    setState(current => {
+      const newS = {
+        ...current,
+        passwordValid: strongPassword(state.password),
+        emailValid: isValidEmail(state.email),
+        confirmPassValid: state.confirmPass === state.password
+      };
+      return {
+        ...newS,
+        formValid:
+          newS.passwordValid && newS.emailValid && newS.confirmPassValid
+      };
+    });
+  }, [state.email, state.password, state.confirmPass, validated]);
 
   const validateAndSubmit = e => {
     setValidated(true);
     e.preventDefault();
-    e.stopPropagation();
-    if (signupHandler && emailValid && passwordValid && confirmPassValid) {
-      signupHandler();
+    if (state.formValid) {
+      signupHandler({ email: state.email, password: state.password });
     }
   };
 
@@ -43,35 +49,35 @@ const SignUp: React.SFC<{
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput
           type="email"
-          name="username"
+          name="email"
           label="Username"
-          value={email}
+          value={state.email}
           placeholder="Email address"
           errorMessage="Valid email is required"
-          setValue={setEmail}
-          isValid={emailValid}
+          setValue={setValue}
+          isValid={state.emailValid}
         ></TextInput>
 
         <TextInput
           type="password"
           name="password"
           label="Password"
-          value={password}
+          value={state.password}
           placeholder="Password"
           errorMessage="Min 8 chars,1 number,1 special"
-          setValue={setPassword}
-          isValid={passwordValid}
+          setValue={setValue}
+          isValid={state.passwordValid}
         ></TextInput>
 
         <TextInput
           type="password"
-          name="confirm"
+          name="confirmPass"
           label="Confirm Password"
-          value={confirmPass}
+          value={state.confirmPass}
           placeholder="Confirm Password"
           errorMessage="Password doesn't match"
-          setValue={setConfirmPass}
-          isValid={confirmPassValid}
+          setValue={setValue}
+          isValid={state.confirmPassValid}
         ></TextInput>
 
         <div className="row">
@@ -87,4 +93,5 @@ const SignUp: React.SFC<{
     </div>
   );
 };
+
 export default SignUp;

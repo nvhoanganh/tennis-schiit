@@ -6,7 +6,7 @@ export interface IAppState {
   lastAction?: string;
   lastErrorAction?: string;
   lastError?: any;
-  user?: IPlayer;
+  user?: any;
   currentGroup?: string;
 }
 
@@ -26,12 +26,17 @@ const app = (
         ...state,
         pendingRequests: state.pendingRequests - 1,
         lastErrorAction: action.type,
-        lastError: action.err,
+        lastError: action.err
       };
     case AppActionTypes.API_END:
       return {
         ...state,
         pendingRequests: state.pendingRequests - 1
+      };
+    case AppActionTypes.SIGNIN_SUCCESS:
+      return {
+        ...state,
+        user: action.user
       };
     default:
       return state;

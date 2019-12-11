@@ -45,3 +45,8 @@ export interface IPager {
   offset: number;
   count: number;
 }
+
+export interface ISignInModel {
+  email: string;
+  password: string;
+}

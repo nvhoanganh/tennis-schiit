@@ -1,9 +1,8 @@
 import Home from "./components/Home";
 import Leaderboard from "./containers/LeaderboardContainer";
-import EntryForm from "./components/EntryForm";
 import { App } from "./containers/App";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
+import SignIn from "./containers/SignIn";
+import SignUp from "./containers/SignUp";
 import ForgotPassword from './components/ForgotPassword';
 
 const routes = [

@@ -9,7 +9,7 @@ const TextInput: React.SFC<{
   placeholder: string;
   isValid?: boolean;
   errorMessage: string;
-  setValue(val: string);
+  setValue(name: string, value: string);
 }> = ({
   label,
   name,
@@ -42,7 +42,7 @@ const TextInput: React.SFC<{
         className={className}
         onChange={e => {
           e.preventDefault();
-          setValue(e.target.value);
+          setValue(name, e.target.value);
         }}
         value={value}
         placeholder={placeholder}

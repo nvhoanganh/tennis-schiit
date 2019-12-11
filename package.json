@@ -34,6 +34,7 @@
     "classnames": "^2.2.6",
     "document-register-element": "1.13.1",
     "express": "4.17.1",
+    "firebase": "^7.5.2",
     "formik": "^2.0.6",
     "react": "16.10.2",
     "react-bootstrap": "^1.0.0-beta.16",

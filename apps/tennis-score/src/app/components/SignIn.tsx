@@ -1,39 +1,45 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-
-import {
-  faUserCircle} from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import TextInput from "./TextInput";
-import { isValidEmail } from "@tennis-score/core";
 
 const SignIn: React.SFC<{
-  loginHandler();
-  loginGoogle();
-}> = ({ loginHandler }) => {
-  const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
+  signInHandler(data);
+  history: any;
+  user: any;
+}> = ({ signInHandler, history, user, ...props }) => {
+  const [state, setState] = useState({
+    email: "",
+    emailValid: false,
+    password: "",
+    passwordValid: false,
+    formValid: false
+  });
 
-  const [password, setPassword] = useState("");
-  const [passwordValid, setPasswordValid] = useState(true);
-
-  const [validated, setValidated] = useState(false);
+  const setValue = (field, value) =>
+    setState(curr => ({ ...curr, [field]: value }));
 
   useEffect(() => {
-    setPasswordValid(!!password || !validated);
-  }, [password, validated]);
+    setState(current => ({
+      ...current,
+      passwordValid: !!state.password.trim(),
+      emailValid: !!state.email.trim(),
+      formValid: !!state.password.trim() && !!state.email.trim()
+    }));
+  }, [state.email, state.password]);
 
   useEffect(() => {
-    setEmailValid(isValidEmail(email) || !validated);
-  }, [email, validated]);
+    if (user) {
+      console.log("user is now", user);
+      history.push("/home");
+    }
+  }, [user]);
 
   const validateAndSubmit = e => {
-    setValidated(true);
     e.preventDefault();
     e.stopPropagation();
-    if (loginHandler && emailValid && passwordValid) {
-      loginHandler();
-    }
+    signInHandler(state);
   };
 
   return (
@@ -59,30 +65,34 @@ const SignIn: React.SFC<{
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput
           type="email"
-          name="username"
-          label="Username"
-          value={email}
+          name="email"
+          label="Email"
+          value={state.email}
           placeholder="Email address"
           errorMessage="Valid email is required"
-          setValue={setEmail}
-          isValid={emailValid}
+          setValue={setValue}
+          isValid={state.emailValid}
         ></TextInput>
 
         <TextInput
           type="password"
           name="password"
           label="Password"
-          value={password}
+          value={state.password}
           placeholder="Password"
           errorMessage="Password is required"
-          setValue={setPassword}
-          isValid={passwordValid}
+          setValue={setValue}
+          isValid={state.passwordValid}
         ></TextInput>
 
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-block">
+              <button
+                disabled={!state.formValid}
+                type="submit"
+                className="btn btn-primary btn-block"
+              >
                 Login
               </button>
             </div>
