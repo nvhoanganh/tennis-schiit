@@ -4,9 +4,11 @@ import Card from "react-bootstrap/Card";
 import {
   faUserCircle,
   faSortAmountUp,
-  faSortAmountDown} from "@fortawesome/free-solid-svg-icons";
+  faSortAmountDown
+} from "@fortawesome/free-solid-svg-icons";
 import { Player } from "@tennis-score/api-interfaces";
-const scoreStyle = { fontSize: "0.8rem" };
+import { Button } from "./Button";
+import { ScoreCard } from "./ScoreCard";
 
 const LeaderboardCard: React.SFC<{
   player: Player;
@@ -43,51 +45,23 @@ const LeaderboardCard: React.SFC<{
         </div>
         <div className="mr-auto">
           <div>
-            <button
+            <Button
+              disabled={false}
               type="button"
               style={{ paddingLeft: 8 }}
               className="btn btn-link"
             >
               {player.displayName}
-            </button>
+            </Button>
           </div>
-          <div>
-            <button
-              style={scoreStyle}
-              type="button"
-              className="btn btn-sm btn-default"
-            >
-              P<span className="ml-1 badge badge-light">4</span>
-            </button>
-            <button
-              style={scoreStyle}
-              type="button"
-              className="btn btn-sm btn-default"
-            >
-              W<span className="ml-1 badge badge-success">4</span>
-            </button>
-            <button
-              style={scoreStyle}
-              type="button"
-              className="btn btn-sm btn-default"
-            >
-              L<span className="ml-1 badge badge-danger">4</span>
-            </button>
-            <button
-              style={scoreStyle}
-              type="button"
-              className="btn btn-sm btn-default"
-            >
-              BW<span className="ml-1 badge badge-warning">4</span>
-            </button>
-            <button
-              style={scoreStyle}
-              type="button"
-              className="btn btn-sm btn-default"
-            >
-              BL<span className="ml-1 badge badge-danger">4</span>
-            </button>
-          </div>
+          <ScoreCard
+            fontSize="0.8rem"
+            played={4}
+            won={3}
+            lost={1}
+            bagelWin={0}
+            bagelLost={1}
+          />
         </div>
         <div className="float-right">
           <div

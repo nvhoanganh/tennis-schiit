@@ -41,6 +41,9 @@ export class SignUpSuccessAction implements IAction {
   readonly type = AppActionTypes.SIGNUP_SUCCESS;
   constructor(public user: any) {}
 }
+export class SignOutSuccessAction implements IAction {
+  readonly type = AppActionTypes.SIGNOUT_SUCCESS;
+}
 
 export function apiStart(action: string): ApiStartAction {
   return { type: AppActionTypes.API_START, action };
@@ -83,10 +86,26 @@ export function signUp({ email, password }: ISignInModel) {
   };
 }
 
+export function signOut() {
+  return dispatch => {
+    dispatch(apiStart(AppActionTypes.SIGNOUT));
+    firebase
+      .auth()
+      .signOut()
+      .then(_ => {
+        dispatch({ type: AppActionTypes.SIGNOUT_SUCCESS });
+      })
+      .catch(err => {
+        dispatch({ type: AppActionTypes.API_ERROR, err });
+      });
+  };
+}
+
 firebase.initializeApp(FBCONF);
 export type AppAction =
   | ApiStartAction
   | ApiEndAction
   | ApiErrorAction
   | SignInSuccessAction
+  | SignOutSuccessAction
   | SignUpSuccessAction;

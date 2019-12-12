@@ -94,7 +94,12 @@ const SignIn: React.SFC<{
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <Button disabled={!state.formValid}>Sign In</Button>
+              <Button
+                disabled={!state.formValid}
+                className="btn btn-primary btn-block"
+              >
+                Sign In
+              </Button>
             </div>
           </div>
           <div className="col-md-6 text-right">

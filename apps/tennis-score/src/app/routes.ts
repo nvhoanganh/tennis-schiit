@@ -1,9 +1,10 @@
 import Home from "./components/Home";
 import Leaderboard from "./containers/LeaderboardContainer";
-import { App } from "./containers/App";
+import App from "./containers/App";
 import SignIn from "./containers/SignIn";
 import SignUp from "./containers/SignUp";
-import ForgotPassword from './components/ForgotPassword';
+import ForgotPassword from "./components/ForgotPassword";
+import UserProfile from "./containers/UserProfile";
 
 const routes = [
   {
@@ -38,6 +39,11 @@ const routes = [
         path: "/signup",
         exact: true,
         component: SignUp
+      },
+      {
+        path: "/account-details",
+        exact: true,
+        component: UserProfile
       },
       {
         path: "/forgot-password",

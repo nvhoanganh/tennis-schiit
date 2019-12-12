@@ -38,6 +38,11 @@ const app = (
         ...state,
         user: action.user
       };
+    case AppActionTypes.SIGNOUT_SUCCESS:
+      return {
+        ...state,
+        user: null
+      };
     default:
       return state;
   }

@@ -1,22 +1,22 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { renderRoutes } from "react-router-config";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrog } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect } from "react";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
+import { renderRoutes } from "react-router-config";
 
 const linkStyle = {
   lineHeight: "2rem"
 };
 
-export const App: React.SFC<any> = ({ route, user, ownP }) => {
+const App = ({ route, user, ownP }) => {
   useEffect(() => {
     console.log(user);
     console.log(ownP);
-  }, []);
+  }, [user]);
   return (
     <div>
       <Navbar
@@ -36,7 +36,7 @@ export const App: React.SFC<any> = ({ route, user, ownP }) => {
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
-          style={{ marginRight: '0.4rem' }}
+          style={{ marginRight: "0.4rem" }}
         />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
@@ -51,11 +51,19 @@ export const App: React.SFC<any> = ({ route, user, ownP }) => {
             <LinkContainer style={linkStyle} to="/admin">
               <NavDropdown.Item className="text-white">Admin</NavDropdown.Item>
             </LinkContainer>
-            <LinkContainer style={linkStyle} to="/signin">
-              <NavDropdown.Item className="text-white">
-                Sign In
-              </NavDropdown.Item>
-            </LinkContainer>
+            {!user ? (
+              <LinkContainer style={linkStyle} to="/signin">
+                <NavDropdown.Item className="text-white">
+                  Sign In
+                </NavDropdown.Item>
+              </LinkContainer>
+            ) : (
+              <LinkContainer style={linkStyle} to="/account-details">
+                <NavDropdown.Item className="text-white">
+                  User Profile
+                </NavDropdown.Item>
+              </LinkContainer>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -64,9 +72,10 @@ export const App: React.SFC<any> = ({ route, user, ownP }) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  user: state.app,
-  ownP: ownProps
+const mapStateToProps = ({ app: { lastError, pendingRequests, user } }) => ({
+  lastError,
+  user,
+  loading: pendingRequests > 0
 });
 
 const mapDispatchToProps = dispatch => ({});
