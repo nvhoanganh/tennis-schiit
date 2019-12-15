@@ -186,10 +186,10 @@ export function appLoad() {
           user
             .sendEmailVerification()
             .then(function() {
-              console.log("Send email verification");
+              console.log("Sent email verification");
             })
             .catch(function(error) {
-              console.log("cannot send email verification ");
+              console.log("cannot send email verification", error);
             });
         }
       }

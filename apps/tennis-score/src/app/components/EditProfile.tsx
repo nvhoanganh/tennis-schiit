@@ -47,9 +47,9 @@ const EditProfile = ({ user, updateProfile, history }) => {
     setState(curr => ({
       ...curr,
       email: user.email,
-      displayName: user.displayName,
-      leftHanded: user.leftHanded,
-      singleHandedBackhand: user.singleHandedBackhand
+      displayName: user.displayName || "",
+      leftHanded: user.leftHanded || false,
+      singleHandedBackhand: user.singleHandedBackhand || false
     }));
   }, [user]);
 

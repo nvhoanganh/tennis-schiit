@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-const classNames = require("classnames");
+import classNames from "classnames";
 
 const TextInput: React.SFC<{
   label: string;

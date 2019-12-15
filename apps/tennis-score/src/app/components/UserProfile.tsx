@@ -64,7 +64,7 @@ const UserProfile = ({ signOutHandler, history, user, ...props }) => {
         </div>
         <div className="col-xs-12 col-sm-4 emphasis">
           <h2>
-            <strong>.00</strong>
+            <strong>$40.00</strong>
           </h2>
         </div>
       </div>
