@@ -11,6 +11,7 @@ export enum AppActionTypes {
   API_START = "API_START",
   API_END = "API_END",
 
+  APP_LOAD = "APP_LOAD",
   SIGNIN = "SIGNIN",
   SIGNIN_SUCCESS = "SIGNIN_SUCCESS",
 
@@ -24,6 +25,9 @@ export enum AppActionTypes {
 export class ApiStartAction implements IAction {
   readonly type = AppActionTypes.API_START;
   constructor(public action: string) {}
+}
+export class AppLoadAction implements IAction {
+  readonly type = AppActionTypes.APP_LOAD;
 }
 export class ApiEndAction implements IAction {
   readonly type = AppActionTypes.API_END;
@@ -62,12 +66,8 @@ export function signIn({ email, password }: ISignInModel) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
-      })
-      .catch(err => {
-        dispatch({ type: AppActionTypes.API_ERROR, err });
-      });
+      .then(user => dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user }))
+      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
 
@@ -77,12 +77,8 @@ export function signUp({ email, password }: ISignInModel) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(user => {
-        dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user });
-      })
-      .catch(err => {
-        dispatch({ type: AppActionTypes.API_ERROR, err });
-      });
+      .then(user => dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user }))
+      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
 
@@ -92,17 +88,27 @@ export function signOut() {
     firebase
       .auth()
       .signOut()
-      .then(_ => {
-        dispatch({ type: AppActionTypes.SIGNOUT_SUCCESS });
-      })
-      .catch(err => {
-        dispatch({ type: AppActionTypes.API_ERROR, err });
-      });
+      .then(_ => dispatch({ type: AppActionTypes.SIGNOUT_SUCCESS }))
+      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
+  };
+}
+
+export function appLoad() {
+  return dispatch => {
+    dispatch(apiStart(AppActionTypes.API_START));
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("user is authenticated", user);
+        dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
+      }
+    });
   };
 }
 
 firebase.initializeApp(FBCONF);
+
 export type AppAction =
+  | AppLoadAction
   | ApiStartAction
   | ApiEndAction
   | ApiErrorAction

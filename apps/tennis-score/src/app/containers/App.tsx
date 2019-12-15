@@ -1,5 +1,8 @@
 import { faFrog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 import React, { useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -7,16 +10,17 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
+import { appLoad } from "@tennis-score/redux";
 
 const linkStyle = {
   lineHeight: "2rem"
 };
 
-const App = ({ route, user, ownP }) => {
+const App = ({ route, user, appLoad }) => {
   useEffect(() => {
-    console.log(user);
-    console.log(ownP);
-  }, [user]);
+    appLoad();
+  }, []);
+  
   return (
     <div>
       <Navbar
@@ -78,7 +82,9 @@ const mapStateToProps = ({ app: { lastError, pendingRequests, user } }) => ({
   loading: pendingRequests > 0
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  appLoad: _ => dispatch(appLoad())
+});
 
 export default connect(
   mapStateToProps,

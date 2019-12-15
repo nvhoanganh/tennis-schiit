@@ -34,7 +34,7 @@ const UserProfile = ({ signOutHandler, history, user, ...props }) => {
             </p>
             <div className="text-center">
               <ScoreCard
-                fontSize="l"
+                fontSize="1rem"
                 played={4}
                 won={3}
                 lost={1}
