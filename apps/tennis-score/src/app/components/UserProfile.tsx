@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "./Button";
 import Gravatar from "react-gravatar";
+import { LinkContainer } from "react-router-bootstrap";
+import { Button } from "./Button";
+import { Link } from "./Link";
 import { ScoreCard } from "./ScoreCard";
+
 const UserProfile = ({ signOutHandler, history, user, ...props }) => {
   const [signedOut, setSignedOut] = useState(false);
   useEffect(() => {
@@ -14,23 +17,29 @@ const UserProfile = ({ signOutHandler, history, user, ...props }) => {
 
   function signOutNow() {
     setSignedOut(true);
-    signOutHandler();
+    signOutHandler().then(_ => {
+      history.push("/home");
+    });
   }
+  if (!user) return null;
   return (
     <div className="container-fluid">
       <div className="row pt-3">
         <div className="col-sm-12 text-center">
-          {user && user.user ? (
-            <Gravatar email={user.user.email} size={150} />
-          ) : null}
+          {user ? <Gravatar email={user.email} size={150} /> : null}
         </div>
       </div>
       <div className="row pt-3">
         <div className="col-sm-12 text-center">
           <div>
-            <h2>Nicole Pearson</h2>
+            <h2>{user.displayName}</h2>
             <p>
-              <strong>Right-handed, One-Handed Backhand</strong>
+              <strong>
+                {user.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
+                {user.singleHandedBackhand
+                  ? "One-Handed Backhand"
+                  : "Two-Handed Backhand"}
+              </strong>
             </p>
             <div className="text-center">
               <ScoreCard
@@ -55,7 +64,7 @@ const UserProfile = ({ signOutHandler, history, user, ...props }) => {
         </div>
         <div className="col-xs-12 col-sm-4 emphasis">
           <h2>
-            <strong>$30.00</strong>
+            <strong>.00</strong>
           </h2>
         </div>
       </div>
@@ -84,6 +93,15 @@ const UserProfile = ({ signOutHandler, history, user, ...props }) => {
               Sign Out
             </Button>
           </div>
+        </div>
+      </div>
+      <div className="row pt-3">
+        <div className="col-md-6 text-center">
+          <LinkContainer to="/account-details/edit">
+            <Link title="Update Details" href="">
+              Update Details
+            </Link>
+          </LinkContainer>
         </div>
       </div>
     </div>

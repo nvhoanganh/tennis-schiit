@@ -6,11 +6,7 @@ import TextInput from "./TextInput";
 import { Button } from "./Button";
 import { Link } from "./Link";
 
-const SignIn: React.SFC<{
-  signInHandler(data);
-  history: any;
-  user: any;
-}> = ({ signInHandler, history, user, ...props }) => {
+const SignIn = ({ signInHandler, history, user }) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,

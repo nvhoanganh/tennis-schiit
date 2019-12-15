@@ -1,6 +1,6 @@
 import { faFrog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as firebase from "firebase/app";
+import { appLoad } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect } from "react";
@@ -10,18 +10,25 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
-import { appLoad } from "@tennis-score/redux";
+
 
 const linkStyle = {
   lineHeight: "2rem"
 };
 
-const App = ({ route, user, appLoad }) => {
+const App = ({ route, user, appLoad, appLoaded, history }) => {
   useEffect(() => {
     appLoad();
   }, []);
-  
-  return (
+
+  useEffect(() => {
+    if (user && !user.displayName) {
+      console.log("user has not profile name");
+      history.push("/account-details/edit");
+    }
+  }, [user]);
+
+  return appLoaded ? (
     <div>
       <Navbar
         collapseOnSelect
@@ -73,12 +80,17 @@ const App = ({ route, user, appLoad }) => {
       </Navbar>
       <div>{renderRoutes(route.routes)}</div>
     </div>
+  ) : (
+    <h4>Loading...</h4>
   );
 };
 
-const mapStateToProps = ({ app: { lastError, pendingRequests, user } }) => ({
+const mapStateToProps = ({
+  app: { lastError, pendingRequests, user, appLoaded }
+}) => ({
   lastError,
   user,
+  appLoaded,
   loading: pendingRequests > 0
 });
 

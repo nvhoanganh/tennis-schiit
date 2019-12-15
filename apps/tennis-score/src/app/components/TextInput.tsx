@@ -9,9 +9,11 @@ const TextInput: React.SFC<{
   placeholder: string;
   isValid?: boolean;
   errorMessage: string;
+  disabled?: boolean;
   setValue(name: string, value: string);
 }> = ({
   label,
+  disabled,
   name,
   value,
   placeholder,
@@ -36,19 +38,17 @@ const TextInput: React.SFC<{
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
+        disabled={disabled}
         name={name}
         ref={inputRef}
         autoComplete="off"
         className={className}
-        onChange={e => {
-          e.preventDefault();
-          setValue(name, e.target.value);
-        }}
+        onChange={e => setValue(name, e.target.value)}
         value={value}
         placeholder={placeholder}
         type={type}
       />
-      {<div className="invalid-feedback">{errorMessage}</div>}
+      <div className="invalid-feedback">{errorMessage}</div>
     </div>
   );
 };

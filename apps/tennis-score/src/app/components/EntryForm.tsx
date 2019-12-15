@@ -1,24 +1,14 @@
-import { Player, Mocked_Players } from "@tennis-score/api-interfaces";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Table from "react-bootstrap/Table";
+import { Mocked_Players, Player } from "@tennis-score/api-interfaces";
 import React from "react";
-import {
-  faChartLine,
-  faUserCircle,
-  faSortAmountUp,
-  faSortAmountDown,
-  faPlus
-} from "@fortawesome/free-solid-svg-icons";
+import Table from "react-bootstrap/Table";
+import { CheckBox } from "./CheckBox";
 
 export interface IEntryFormProps {
   players: Player[];
   match: any;
 }
-
-const checkBoxStyle = {
-  height: 30,
-  marginTop: 3
-};
 
 const EntryForm: React.SFC<IEntryFormProps> = ({ players, match }) => {
   return (
@@ -50,20 +40,10 @@ const EntryForm: React.SFC<IEntryFormProps> = ({ players, match }) => {
                       </div>
                     </td>
                     <td>
-                      <input
-                        className="form-control"
-                        style={checkBoxStyle}
-                        type="checkbox"
-                        value={`w_${p.id}`}
-                      />
+                      <CheckBox value={`w_${p.id}`} large={true} />
                     </td>
                     <td>
-                      <input
-                        className="form-control"
-                        style={checkBoxStyle}
-                        type="checkbox"
-                        value={`l_${p.id}`}
-                      />
+                      <CheckBox value={`l_${p.id}`} large={true} />
                     </td>
                   </tr>
                 ))}
@@ -76,7 +56,7 @@ const EntryForm: React.SFC<IEntryFormProps> = ({ players, match }) => {
           <div className="card-body">
             <div className="card-title">Set won by losing team</div>
             <select className="custom-select mb-3">
-              <option selected>0</option>
+              <option value="0">0</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>

@@ -26,9 +26,10 @@ export interface IGroup {
 
 export interface IPlayer {
   playerId?: string;
-  fullName: string;
-  nickName: string;
+  displayName: string;
   email: string;
+  leftHanded: boolean;
+  singleHandedBackhand: boolean;
   avatarUrl?: string;
   isDeleted?: boolean;
   createdOn: Date;

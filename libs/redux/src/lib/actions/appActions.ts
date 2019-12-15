@@ -12,6 +12,8 @@ export enum AppActionTypes {
   API_END = "API_END",
 
   APP_LOAD = "APP_LOAD",
+  APP_LOADED = "APP_LOADED",
+
   SIGNIN = "SIGNIN",
   SIGNIN_SUCCESS = "SIGNIN_SUCCESS",
 
@@ -19,7 +21,10 @@ export enum AppActionTypes {
   SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS",
 
   SIGNUP = "SIGNUP",
-  SIGNUP_SUCCESS = "SIGNUP_SUCCESS"
+  SIGNUP_SUCCESS = "SIGNUP_SUCCESS",
+
+  UPDATE_PROFILE = "UPDATE_PROFILE",
+  UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS"
 }
 
 export class ApiStartAction implements IAction {
@@ -28,6 +33,9 @@ export class ApiStartAction implements IAction {
 }
 export class AppLoadAction implements IAction {
   readonly type = AppActionTypes.APP_LOAD;
+}
+export class AppLoadedAction implements IAction {
+  readonly type = AppActionTypes.APP_LOADED;
 }
 export class ApiEndAction implements IAction {
   readonly type = AppActionTypes.API_END;
@@ -49,6 +57,15 @@ export class SignOutSuccessAction implements IAction {
   readonly type = AppActionTypes.SIGNOUT_SUCCESS;
 }
 
+export class UpdateProfileAction implements IAction {
+  readonly type = AppActionTypes.UPDATE_PROFILE;
+  constructor(public user: any) {}
+}
+export class UpdateProfileSuccessAction implements IAction {
+  readonly type = AppActionTypes.UPDATE_PROFILE_SUCCESS;
+  constructor(public user: any) {}
+}
+
 export function apiStart(action: string): ApiStartAction {
   return { type: AppActionTypes.API_START, action };
 }
@@ -66,7 +83,9 @@ export function signIn({ email, password }: ISignInModel) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(user => dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user }))
+      .then(user =>
+        dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user: user.user })
+      )
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
@@ -77,15 +96,57 @@ export function signUp({ email, password }: ISignInModel) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(user => dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user }))
+      .then(user =>
+        dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user: user.user })
+      )
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
+  };
+}
+
+export function updateProfile({
+  displayName,
+  leftHanded,
+  singleHandedBackhand,
+  uid
+}) {
+  return dispatch => {
+    dispatch(apiStart(AppActionTypes.UPDATE_PROFILE));
+    var user = firebase.auth().currentUser;
+    return user
+      .updateProfile({
+        displayName
+      })
+      .then(u =>
+        db
+          .collection("users")
+          .doc(uid)
+          .set({
+            displayName,
+            leftHanded,
+            singleHandedBackhand
+          })
+      )
+      .then(function() {
+        dispatch({
+          type: AppActionTypes.UPDATE_PROFILE_SUCCESS,
+          user: {
+            displayName,
+            leftHanded,
+            singleHandedBackhand
+          }
+        });
+      })
+
+      .catch(function(err) {
+        dispatch({ type: AppActionTypes.API_ERROR, err });
+      });
   };
 }
 
 export function signOut() {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.SIGNOUT));
-    firebase
+    return firebase
       .auth()
       .signOut()
       .then(_ => dispatch({ type: AppActionTypes.SIGNOUT_SUCCESS }))
@@ -96,19 +157,54 @@ export function signOut() {
 export function appLoad() {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.API_START));
+    dispatch(apiStart(AppActionTypes.APP_LOAD));
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log("user is authenticated", user);
-        dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
+        db.collection("users")
+          .doc(user.uid)
+          .get()
+          .then(function(doc) {
+            if (doc.exists) {
+              const userProfile = doc.data();
+              console.log("user profile is ", userProfile);
+              dispatch({
+                type: AppActionTypes.SIGNIN_SUCCESS,
+                user: {
+                  ...user,
+                  ...userProfile
+                }
+              });
+            } else {
+              dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
+            }
+          })
+          .catch(function(error) {
+            console.log("Error getting document:", error);
+          });
+
+        if (!user.emailVerified) {
+          user
+            .sendEmailVerification()
+            .then(function() {
+              console.log("Send email verification");
+            })
+            .catch(function(error) {
+              console.log("cannot send email verification ");
+            });
+        }
       }
+      dispatch({ type: AppActionTypes.APP_LOADED });
     });
   };
 }
 
 firebase.initializeApp(FBCONF);
-
+const db = firebase.firestore();
 export type AppAction =
   | AppLoadAction
+  | AppLoadedAction
+  | UpdateProfileAction
+  | UpdateProfileSuccessAction
   | ApiStartAction
   | ApiEndAction
   | ApiErrorAction

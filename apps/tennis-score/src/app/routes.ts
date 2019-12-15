@@ -5,6 +5,8 @@ import SignIn from "./containers/SignIn";
 import SignUp from "./containers/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
 import UserProfile from "./containers/UserProfile";
+import EntryForm from "./components/EntryForm";
+import EditProfile from './containers/EditProfile';
 
 const routes = [
   {
@@ -31,6 +33,11 @@ const routes = [
         component: Leaderboard
       },
       {
+        path: "/newscore/:group?",
+        exact: true,
+        component: EntryForm
+      },
+      {
         path: "/signin",
         exact: true,
         component: SignIn
@@ -44,6 +51,11 @@ const routes = [
         path: "/account-details",
         exact: true,
         component: UserProfile
+      },
+      {
+        path: "/account-details/edit",
+        exact: true,
+        component: EditProfile
       },
       {
         path: "/forgot-password",

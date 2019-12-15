@@ -6,7 +6,14 @@ import routes from "./app/routes";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@tennis-score/redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+toast.configure({
+  position: toast.POSITION.BOTTOM_CENTER,
+  autoClose: 1000,
+  hideProgressBar: true
+});
 const store = configureStore({});
 
 ReactDOM.render(
