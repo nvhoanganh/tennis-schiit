@@ -10,6 +10,8 @@ export interface IAppState {
   currentGroup?: string;
 }
 
+const decrementApi = state =>
+  state.pendingRequests - 1 < 0 ? 0 : state.pendingRequests - 1;
 const app = (
   state: IAppState = { pendingRequests: 0 },
   action: AppAction
@@ -34,7 +36,7 @@ const app = (
     case AppActionTypes.API_ERROR:
       return {
         ...state,
-        pendingRequests: state.pendingRequests - 1,
+        pendingRequests: decrementApi(state),
         lastErrorAction: action.type,
         lastError: action.err
       };

@@ -51,3 +51,6 @@ export interface ISignInModel {
   email: string;
   password: string;
 }
+
+export const GROUPS = 'groups'
+export const USERS = 'users'

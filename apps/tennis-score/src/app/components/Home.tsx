@@ -1,12 +1,30 @@
-import React from "react";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect } from "react";
+import FloatButton from "./FloatButton";
+import GroupCard from "./GroupCard";
+const Home = ({ user, groups, players, ...props }) => {
+  useEffect(() => {
+    props.loadGroups();
+  }, []);
 
-export interface IHomeProps {
-  [name: string]: any;
-}
+  // return <pre>{JSON.stringify(groups, null, 2)}</pre>;
+  return (
+    <>
+      <h4 className="text-center pt-3">Groups</h4>
+      <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />
 
-const Home: React.SFC<IHomeProps> = props => {
-  console.log("matched ", props.match.params.group);
-  return <h1>Welcome to App</h1>;
+      <div className="px-1 pb-5">
+        {groups.map((p, i) => (
+          <GroupCard
+            index={i}
+            key={p.groupId}
+            group={p}
+            user={user}
+          ></GroupCard>
+        ))}
+      </div>
+    </>
+  );
 };
 
 export default Home;

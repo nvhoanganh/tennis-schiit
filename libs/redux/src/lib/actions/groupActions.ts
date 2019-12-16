@@ -1,7 +1,10 @@
-import { IGroup } from "../models";
-import { apiEnd, apiStart, apiError } from "./appActions";
-import { IAction, delay, arrayToObject } from "../utils";
-import { Group, Mocked_Groups } from "@tennis-score/api-interfaces";
+import { FBCONF, Group } from "@tennis-score/api-interfaces";
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import { GROUPS, IGroup } from "../models";
+import { arrayToObject, IAction } from "../utils";
+import { apiEnd, apiStart } from "./appActions";
 export enum GroupActionTypes {
   LOAD_GROUP = "LOAD_GROUP",
   LOAD_GROUP_FAILED = "LOAD_GROUP_FAILED",
@@ -58,7 +61,7 @@ export function updateGroup(group: IGroup): UpdateGroupAction {
   return { type: GroupActionTypes.UPDATE_GROUP, group };
 }
 
-const mapGroups = (data: Group): IGroup => {
+const mapGroups = (data): IGroup => {
   return {
     ...data,
     players: arrayToObject(data.players, x => x.playerId, x => x.joinDate)
@@ -69,17 +72,25 @@ const mapGroups = (data: Group): IGroup => {
 export function loadGroups() {
   return dispatch => {
     dispatch(apiStart(GroupActionTypes.LOAD_GROUP));
-    return delay(2000).then(_ => {
-      dispatch(apiEnd());
-      dispatch(<LoadGroupsSuccessAction>{
-        type: GroupActionTypes.LOAD_GROUP_SUCCESS,
-        groups: arrayToObject(
-          Mocked_Groups.map(x => mapGroups(x)),
-          x => x.groupId,
-          x => x
-        )
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .get()
+      .then(querySnapshot => {
+        const data = {};
+        querySnapshot.forEach(doc => {
+          console.log(doc.id, " => ", doc.data());
+          data[doc.id] = {
+            groupId: doc.id,
+            ...mapGroups(doc.data())
+          };
+        });
+        dispatch(apiEnd());
+        dispatch(<LoadGroupsSuccessAction>{
+          type: GroupActionTypes.LOAD_GROUP_SUCCESS,
+          groups: data
+        });
       });
-    });
   };
 }
 

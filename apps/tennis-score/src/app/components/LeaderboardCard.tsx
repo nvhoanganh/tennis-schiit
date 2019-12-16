@@ -44,16 +44,14 @@ const LeaderboardCard: React.SFC<{
           </div>
         </div>
         <div className="mr-auto">
-          <div>
-            <Button
-              disabled={false}
-              type="button"
-              style={{ paddingLeft: 8 }}
-              className="btn btn-link"
-            >
-              {player.displayName}
-            </Button>
-          </div>
+          <Button
+            disabled={false}
+            type="button"
+            style={{ paddingLeft: 8, fontSize: "1.3rem" }}
+            className="btn btn-link pl-0 pt-0"
+          >
+            {player.displayName}
+          </Button>
           <ScoreCard
             fontSize="0.8rem"
             played={4}

@@ -1,19 +1,18 @@
-import React, { useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LinkContainer } from "react-router-bootstrap";
 import { faChartLine, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Player } from "@tennis-score/api-interfaces";
-import { IScore } from "@tennis-score/redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect } from "react";
+import { LinkContainer } from "react-router-bootstrap";
 import LeaderboardCard from "./LeaderboardCard";
+import MySpinner from "./MySpinner";
+import FloatButton from "./FloatButton";
 
-const Leaderboard: React.SFC<{
-  groupName: string;
-  players: Player[];
-  match: any;
-  loadPlayers(): any;
-  loadGroups(): any;
-  addScore(score: IScore): any;
-}> = ({ groupName, players, match, ...props }) => {
+const Leaderboard = ({
+  groupName,
+  players,
+  match,
+  pendingRequests,
+  ...props
+}) => {
   useEffect(() => {
     props.loadPlayers();
     props.loadGroups();
@@ -24,19 +23,25 @@ const Leaderboard: React.SFC<{
         <FontAwesomeIcon icon={faChartLine} /> {match.params.group || groupName}{" "}
         - Leaderboard
       </h4>
-      <div className="text-center py-3">
-        <LinkContainer to={`/newscore/${groupName}`}>
-          <button type="button" className="btn btn-primary btn-sm">
-            <FontAwesomeIcon icon={faPlus} /> Submit New Score
-          </button>
-        </LinkContainer>
-      </div>
+      <FloatButton
+        icon={faPlus}
+        tooltip="Add new score"
+        url={`/newscore/${match.params.group || groupName}`}
+      />
 
-      <div className="px-1 pb-5">
-        {players.map((p, i) => (
-          <LeaderboardCard key={p.id} player={p} ranking={i}></LeaderboardCard>
-        ))}
-      </div>
+      {pendingRequests === 0 ? (
+        <div className="px-1 pb-5">
+          {players.map((p, i) => (
+            <LeaderboardCard
+              key={p.id}
+              player={p}
+              ranking={i}
+            ></LeaderboardCard>
+          ))}
+        </div>
+      ) : (
+        <MySpinner />
+      )}
     </>
   );
 };

@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 
-
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -51,16 +50,15 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
         />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
+            {user && user.lastGroup ? (
+              <LinkContainer style={linkStyle} to="/leaderboard">
+                <NavDropdown.Item className="text-white">
+                  Leaderboard
+                </NavDropdown.Item>
+              </LinkContainer>
+            ) : null}
             <LinkContainer style={linkStyle} to="/home">
-              <NavDropdown.Item className="text-white">Home</NavDropdown.Item>
-            </LinkContainer>
-            <LinkContainer style={linkStyle} to="/leaderboard">
-              <NavDropdown.Item className="text-white">
-                Leaderboard
-              </NavDropdown.Item>
-            </LinkContainer>
-            <LinkContainer style={linkStyle} to="/admin">
-              <NavDropdown.Item className="text-white">Admin</NavDropdown.Item>
+              <NavDropdown.Item className="text-white">Groups</NavDropdown.Item>
             </LinkContainer>
             {!user ? (
               <LinkContainer style={linkStyle} to="/signin">

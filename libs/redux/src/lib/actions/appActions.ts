@@ -83,9 +83,10 @@ export function signIn({ email, password }: ISignInModel) {
     return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(user =>
-        dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user: user.user })
-      )
+      .then(user => {
+        dispatch(apiEnd());
+        dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user: user.user });
+      })
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
@@ -96,9 +97,10 @@ export function signUp({ email, password }: ISignInModel) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(user =>
-        dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user: user.user })
-      )
+      .then(user => {
+        dispatch(apiEnd());
+        dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user: user.user });
+      })
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
@@ -117,7 +119,8 @@ export function updateProfile({
         displayName
       })
       .then(u =>
-        db
+        firebase
+          .firestore()
           .collection("users")
           .doc(uid)
           .set({
@@ -156,7 +159,6 @@ export function signOut() {
 
 export function appLoad() {
   return dispatch => {
-    dispatch(apiStart(AppActionTypes.API_START));
     dispatch(apiStart(AppActionTypes.APP_LOAD));
     return firebase.auth().onAuthStateChanged(user => {
       if (!user) {
@@ -177,7 +179,9 @@ export function appLoad() {
       }
 
       // get additional details from firestore
-      db.collection("users")
+      firebase
+        .firestore()
+        .collection("users")
         .doc(user.uid)
         .get()
         .then(function(doc) {
@@ -197,17 +201,16 @@ export function appLoad() {
           }
           // dispatch apploaded last
           dispatch({ type: AppActionTypes.APP_LOADED });
+          dispatch(apiEnd());
         })
         .catch(function(error) {
           dispatch({ type: AppActionTypes.API_ERROR, error });
-          dispatch({ type: AppActionTypes.APP_LOADED });
+          dispatch(apiEnd());
         });
     });
   };
 }
 
-firebase.initializeApp(FBCONF);
-const db = firebase.firestore();
 export type AppAction =
   | AppLoadAction
   | AppLoadedAction
