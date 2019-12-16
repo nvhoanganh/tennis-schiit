@@ -43,7 +43,6 @@ const EditProfile = ({ user, updateProfile, history }) => {
   }, [state.displayName]);
 
   useEffect(() => {
-    if (!user) return;
     setState(curr => ({
       ...curr,
       email: user.email,

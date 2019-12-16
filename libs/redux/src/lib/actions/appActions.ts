@@ -80,7 +80,7 @@ export function apiError(action: string, err: any): ApiErrorAction {
 export function signIn({ email, password }: ISignInModel) {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.SIGNIN));
-    firebase
+    return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(user =>
@@ -175,7 +175,7 @@ export function appLoad() {
             console.log("cannot send email verification", error);
           });
       }
-      
+
       // get additional details from firestore
       db.collection("users")
         .doc(user.uid)

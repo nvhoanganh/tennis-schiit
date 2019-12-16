@@ -1,10 +1,11 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState, useEffect } from "react";
-import { LinkContainer } from "react-router-bootstrap";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import TextInput from "./TextInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 import { Link } from "./Link";
+import TextInput from "./TextInput";
+const queryString = require("query-string");
 
 const SignIn = ({ signInHandler, history, user }) => {
   const [state, setState] = useState({
@@ -27,17 +28,13 @@ const SignIn = ({ signInHandler, history, user }) => {
     }));
   }, [state.email, state.password]);
 
-  useEffect(() => {
-    if (user) {
-      console.log("user is now", user);
-      history.push("/home");
-    }
-  }, [user]);
-
   const validateAndSubmit = e => {
     e.preventDefault();
-    e.stopPropagation();
-    signInHandler(state);
+    signInHandler(state).then(user => {
+      console.log("user is now", user);
+      const parsed = queryString.parse(location.search);
+      history.push(parsed.ReturnUrl || "/home");
+    });
   };
 
   return (

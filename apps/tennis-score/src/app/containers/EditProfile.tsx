@@ -1,11 +1,12 @@
 import { updateProfile } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import EditProfile from '../components/EditProfile';
+import EditProfile from "../components/EditProfile";
+import ProtectedComponent from '../components/ProtectedComponent';
 
-const mapStateToProps = ({ app: { lastError, pendingRequests, user } }) => ({
-  lastError,
+const mapStateToProps = ({ app: { appLoaded, user } }) => ({
+  component: EditProfile,
   user,
-  loading: pendingRequests > 0
+  appLoaded
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -15,4 +16,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditProfile);
+)(ProtectedComponent);

@@ -7,4 +7,5 @@ const useAuthGuard = ({ user, appLoaded, history }) => {
   }, [appLoaded]);
 };
 
+
 export default useAuthGuard;

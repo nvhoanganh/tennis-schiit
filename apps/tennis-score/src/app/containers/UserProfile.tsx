@@ -1,14 +1,12 @@
 import { signOut } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import UserProfile from '../components/UserProfile';
+import ProtectedComponent from "../components/ProtectedComponent";
+import UserProfile from "../components/UserProfile";
 
-const mapStateToProps = ({
-  app: { lastError, appLoaded, pendingRequests, user }
-}) => ({
-  lastError,
+const mapStateToProps = ({ app: { appLoaded, user } }) => ({
+  component: UserProfile,
   user,
-  appLoaded,
-  loading: pendingRequests > 0
+  appLoaded
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -18,4 +16,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserProfile);
+)(ProtectedComponent);

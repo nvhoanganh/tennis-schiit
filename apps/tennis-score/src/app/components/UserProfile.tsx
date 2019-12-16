@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Gravatar from "react-gravatar";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 import { Link } from "./Link";
 import { ScoreCard } from "./ScoreCard";
-import useAuthGuard from '../hooks/useAuthGuard';
 
-const UserProfile = ({ signOutHandler, history, user, appLoaded }) => {
-  useAuthGuard({ user, appLoaded, history });
-  function signOutNow() {
+const UserProfile = ({ signOutHandler, history, user }) => {
+  const signOutNow = () => {
     signOutHandler().then(_ => {
       history.push("/home");
     });
-  }
+  };
+
   if (!user) return null;
   return (
     <div className="container-fluid">
