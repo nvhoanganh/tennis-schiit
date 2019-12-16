@@ -4,14 +4,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 import { Link } from "./Link";
 import { ScoreCard } from "./ScoreCard";
+import useAuthGuard from '../hooks/useAuthGuard';
 
 const UserProfile = ({ signOutHandler, history, user, appLoaded }) => {
-  useEffect(() => {
-    if (appLoaded && !user) {
-      history.push("/signin");
-    }
-  }, [appLoaded]);
-
+  useAuthGuard({ user, appLoaded, history });
   function signOutNow() {
     signOutHandler().then(_ => {
       history.push("/home");
