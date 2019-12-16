@@ -43,7 +43,7 @@ const app = (
     case AppActionTypes.API_END:
       return {
         ...state,
-        pendingRequests: state.pendingRequests - 1
+        pendingRequests: decrementApi(state)
       };
     case AppActionTypes.SIGNIN_SUCCESS:
       return {
@@ -53,6 +53,7 @@ const app = (
     case AppActionTypes.UPDATE_PROFILE_SUCCESS:
       return {
         ...state,
+        pendingRequests: decrementApi(state),
         user: {
           ...state.user,
           ...action.user

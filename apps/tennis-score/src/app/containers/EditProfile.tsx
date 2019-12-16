@@ -1,10 +1,11 @@
 import { updateProfile } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import EditProfile from "../components/EditProfile";
-import ProtectedComponent from '../components/ProtectedComponent';
+import ProtectedComponent from "../components/ProtectedComponent";
 
-const mapStateToProps = ({ app: { appLoaded, user } }) => ({
+const mapStateToProps = ({ app: { appLoaded, user, pendingRequests } }) => ({
   component: EditProfile,
+  pendingRequests,
   user,
   appLoaded
 });

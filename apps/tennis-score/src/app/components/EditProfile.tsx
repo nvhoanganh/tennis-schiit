@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import CheckBoxInput from "./CheckBoxInput";
 import TextInput from "./TextInput";
-
-const EditProfile = ({ user, updateProfile, history }) => {
+import Spinner from "react-bootstrap/Spinner";
+const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const [state, setState] = useState({
     email: "",
     displayName: "",
@@ -24,7 +24,7 @@ const EditProfile = ({ user, updateProfile, history }) => {
       leftHanded: state.leftHanded,
       singleHandedBackhand: state.singleHandedBackhand
     }).then(_ => {
-      toast.success("Profile updated");
+      // toast.success("Profile updated");
       history.push("/home");
     });
   };
@@ -98,10 +98,24 @@ const EditProfile = ({ user, updateProfile, history }) => {
             <div className="form-group">
               <button
                 type="submit"
-                disabled={!state.formValid}
+                disabled={!state.formValid || pendingRequests > 0}
                 className="btn btn-primary btn-block"
               >
-                Update Profile
+                {pendingRequests === 0 ? (
+                  "Update Profile"
+                ) : (
+                  <>
+                    <Spinner
+                      as="span"
+                      i
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    {" "}Saving..
+                  </>
+                )}
               </button>
             </div>
           </div>
