@@ -1,4 +1,3 @@
-import { IPlayer } from "../models";
 import { AppAction, AppActionTypes } from "../actions";
 
 export interface IAppState {

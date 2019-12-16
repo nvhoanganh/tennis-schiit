@@ -5,18 +5,14 @@ import { Button } from "./Button";
 import { Link } from "./Link";
 import { ScoreCard } from "./ScoreCard";
 
-const UserProfile = ({ signOutHandler, history, user, ...props }) => {
-  const [signedOut, setSignedOut] = useState(false);
+const UserProfile = ({ signOutHandler, history, user, appLoaded }) => {
   useEffect(() => {
-    if (!user && !signedOut) {
+    if (appLoaded && !user) {
       history.push("/signin");
-    } else if (signedOut && !user) {
-      history.push("/home");
     }
-  }, [user]);
+  }, [appLoaded]);
 
   function signOutNow() {
-    setSignedOut(true);
     signOutHandler().then(_ => {
       history.push("/home");
     });

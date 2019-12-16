@@ -158,42 +158,50 @@ export function appLoad() {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.API_START));
     dispatch(apiStart(AppActionTypes.APP_LOAD));
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        db.collection("users")
-          .doc(user.uid)
-          .get()
-          .then(function(doc) {
-            if (doc.exists) {
-              const userProfile = doc.data();
-              console.log("user profile is ", userProfile);
-              dispatch({
-                type: AppActionTypes.SIGNIN_SUCCESS,
-                user: {
-                  ...user,
-                  ...userProfile
-                }
-              });
-            } else {
-              dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
-            }
+    return firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        dispatch({ type: AppActionTypes.APP_LOADED });
+        return;
+      }
+
+      // send email verification
+      if (!user.emailVerified) {
+        user
+          .sendEmailVerification()
+          .then(function() {
+            console.log("Sent email verification");
           })
           .catch(function(error) {
-            console.log("Error getting document:", error);
+            console.log("cannot send email verification", error);
           });
-
-        if (!user.emailVerified) {
-          user
-            .sendEmailVerification()
-            .then(function() {
-              console.log("Sent email verification");
-            })
-            .catch(function(error) {
-              console.log("cannot send email verification", error);
-            });
-        }
       }
-      dispatch({ type: AppActionTypes.APP_LOADED });
+      
+      // get additional details from firestore
+      db.collection("users")
+        .doc(user.uid)
+        .get()
+        .then(function(doc) {
+          if (doc.exists) {
+            const userProfile = doc.data();
+            console.log("user profile is ", userProfile);
+            dispatch({
+              type: AppActionTypes.SIGNIN_SUCCESS,
+              user: {
+                ...user,
+                ...userProfile
+              }
+            });
+          } else {
+            // uer has not updated the profile
+            dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
+          }
+          // dispatch apploaded last
+          dispatch({ type: AppActionTypes.APP_LOADED });
+        })
+        .catch(function(error) {
+          dispatch({ type: AppActionTypes.API_ERROR, error });
+          dispatch({ type: AppActionTypes.APP_LOADED });
+        });
     });
   };
 }
