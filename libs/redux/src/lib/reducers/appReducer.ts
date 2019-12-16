@@ -31,6 +31,7 @@ const app = (
     case AppActionTypes.APP_LOADED:
       return {
         ...state,
+        pendingRequests: decrementApi(state),
         appLoaded: true
       };
     case AppActionTypes.API_ERROR:

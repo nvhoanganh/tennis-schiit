@@ -201,7 +201,6 @@ export function appLoad() {
           }
           // dispatch apploaded last
           dispatch({ type: AppActionTypes.APP_LOADED });
-          dispatch(apiEnd());
         })
         .catch(function(error) {
           dispatch({ type: AppActionTypes.API_ERROR, error });
