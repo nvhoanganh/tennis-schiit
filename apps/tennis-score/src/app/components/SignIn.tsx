@@ -5,7 +5,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 import { Link } from "./Link";
 import TextInput from "./TextInput";
-const queryString = require("query-string");
+import queryString from "query-string";
 
 const SignIn = ({ signInHandler, history, user }) => {
   const [state, setState] = useState({

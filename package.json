@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
+    "predeploy":"npm run build",
     "deploy": "firebase deploy",
     "start": "nx serve",
     "build": "nx build",

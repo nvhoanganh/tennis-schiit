@@ -7,7 +7,6 @@ const Home = ({ user, groups, players, ...props }) => {
     props.loadGroups();
   }, []);
 
-  // return <pre>{JSON.stringify(groups, null, 2)}</pre>;
   return (
     <>
       <h4 className="text-center pt-3">Groups</h4>
