@@ -5,27 +5,20 @@ import FloatButton from "./FloatButton";
 import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
 
-const Leaderboard = ({
-  groupName,
-  players,
-  match,
-  pendingRequests,
-  ...props
-}) => {
+const Leaderboard = ({ players, match, pendingRequests, ...props }) => {
   useEffect(() => {
-    props.loadPlayers();
-    props.loadGroups();
+    props.loadPlayers(match.params.group);
   }, []);
   return (
     <>
       <h4 className="text-center pt-3">
-        <FontAwesomeIcon icon={faChartLine} /> {match.params.group || groupName}{" "}
-        - Leaderboard
+        <FontAwesomeIcon icon={faChartLine} /> {match.params.group} -
+        Leaderboard
       </h4>
       <FloatButton
         icon={faPlus}
         tooltip="Add new score"
-        url={`/newscore/${match.params.group || groupName}`}
+        url={`/newscore/${match.params.group}`}
       ></FloatButton>
 
       {pendingRequests === 0 ? (

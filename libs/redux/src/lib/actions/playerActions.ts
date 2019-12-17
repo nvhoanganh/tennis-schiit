@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { IPlayer, USERS } from "../models";
+import { IPlayer, USERS, GROUPS } from "../models";
 import { apiEnd, apiStart } from "./appActions";
 export enum PlayerActionTypes {
   LOAD_PLAYERS = "LOAD_PLAYERS",
@@ -44,25 +44,33 @@ export function addPlayer(player: IPlayer): AddPlayerAction {
 }
 
 // thunks
-export function loadPlayers() {
+export function loadPlayers(groupId: string) {
   return dispatch => {
     dispatch(apiStart(PlayerActionTypes.LOAD_PLAYERS));
+    const group = firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId);
 
-    return firebase
+    const allPlayers = firebase
       .firestore()
       .collection(USERS)
-      .get()
-      .then(querySnapshot => {
-        const data = {};
-        querySnapshot.forEach(doc => {
-          data[doc.id] = doc.data();
-        });
-        dispatch(apiEnd());
-        dispatch(<LoadPlayersSuccessAction>{
-          type: PlayerActionTypes.LOAD_PLAYERS_SUCCESS,
-          players: data
-        });
+      .get();
+
+    Promise.all([group, allPlayers]).then(([g, users]) => {
+      const allUsers = {};
+      users.forEach(doc => {
+        allUsers[doc.id] = {
+          id: doc.id,
+          ...doc.data()
+        };
       });
+      dispatch(apiEnd());
+      dispatch(<LoadPlayersSuccessAction>{
+        type: PlayerActionTypes.LOAD_PLAYERS_SUCCESS,
+        players: allUsers
+      });
+    });
   };
 }
 
