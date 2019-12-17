@@ -10,14 +10,14 @@ const GroupCard = ({ index, group, user }) => {
     <Card className="mt-1" body>
       <div className="row">
         <div className="mr-auto">
-          <LinkContainer to={`/leaderboard/${group.name}`}>
+          <LinkContainer to={`/leaderboard/${group.groupId}`}>
             <a
               style={{
                 paddingLeft: 8
               }}
               className="h3 pl-0"
             >
-              {group.name}
+              {group.name.toUpperCase()}
             </a>
           </LinkContainer>
           <div className="text-muted">

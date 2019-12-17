@@ -21,12 +21,11 @@ const Leaderboard = ({
   }, []);
   return (
     <>
-      <h4 className="text-center pt-3">
-        <FontAwesomeIcon icon={faChartLine} /> {match.params.group} -
-        Leaderboard
-      </h4>
       {group && user ? (
-        <div className="py-3">
+        <div className="text-center pb-3">
+          <h1 className="pt-3">
+            <FontAwesomeIcon icon={faChartLine} /> {group.name.toUpperCase()}
+          </h1>
           <GroupScoreCard
             group={group}
             fontSize=""

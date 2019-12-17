@@ -54,3 +54,4 @@ export interface ISignInModel {
 
 export const GROUPS = 'groups'
 export const USERS = 'users'
+export const TOURNAMENTS = 'tournaments'
