@@ -5,7 +5,7 @@ import SignIn from "./containers/SignIn";
 import SignUp from "./containers/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
 import UserProfile from "./containers/UserProfile";
-import EntryForm from "./components/EntryForm";
+import EntryForm from "./containers/EntryForm";
 import EditProfile from "./containers/EditProfile";
 
 const routes = [

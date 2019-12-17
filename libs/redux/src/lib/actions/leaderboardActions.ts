@@ -1,22 +1,25 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { GROUPS, IGroup, TOURNAMENTS } from "../models";
+import { GROUPS, IGroup, TOURNAMENTS, SCORES } from "../models";
 import { arrayToObject, IAction } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
 export enum LeaderboardActionTypes {
   LOAD_LEADERBOARD = "LOAD_LEADERBOARD",
-  LOAD_LEADERBOARD_SUCCESS = "LOAD_LEADERBOARD_SUCCESS"
+  LOAD_LEADERBOARD_SUCCESS = "LOAD_LEADERBOARD_SUCCESS",
+  SUBMIT_SCORE = "SUBMIT_SCORE",
+  SUBMIT_SCORE_SUCCESS = "SUBMIT_SCORE_SUCCESS"
 }
 
 // actions
-export class LoadLeaderboardAction implements IAction {
-  readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD;
-  constructor(public groupId: string) {}
-}
 export class LoadLeaderboardSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
   constructor(public groupId: any, public tournament: any) {}
+}
+
+export class SubmitScoreSuccessAction implements IAction {
+  readonly type = LeaderboardActionTypes.SUBMIT_SCORE_SUCCESS;
+  constructor(public newScoreId: string) {}
 }
 
 // action creators
@@ -55,6 +58,41 @@ export function loadLeaderboard(groupId: string) {
   };
 }
 
-export type LeaderboardAction =
-  | LoadLeaderboardAction
-  | LoadLeaderboardSuccessAction;
+export function submitScore({
+  groupId,
+  currentTournament,
+  winners,
+  losers,
+  gameWonByLostTeam,
+  reverseBagel,
+  matchDate,
+  ...score
+}) {
+  return async (dispatch, getState) => {
+    dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
+    const g = await firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .collection(TOURNAMENTS)
+      .doc(currentTournament)
+      .collection(SCORES)
+      .add({
+        winners,
+        losers,
+        gameWonByLostTeam,
+        reverseBagel,
+        matchDate: new Date(matchDate)
+      });
+
+    dispatch(apiEnd());
+    dispatch(<SubmitScoreSuccessAction>{
+      type: LeaderboardActionTypes.SUBMIT_SCORE_SUCCESS,
+      newScoreId: g.id
+    });
+
+    return Promise.resolve(g.id);
+  };
+}
+
+export type LeaderboardAction = LoadLeaderboardSuccessAction;

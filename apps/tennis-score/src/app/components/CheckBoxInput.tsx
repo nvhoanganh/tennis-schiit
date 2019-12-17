@@ -14,7 +14,7 @@ const CheckBoxInput: React.SFC<{
   setValue(name: string, value: boolean);
 }> = ({ label, disabled, name, value, setValue }) => {
   return (
-    <div className="form-check pt-2">
+    <div className="form-check">
       <input
         disabled={disabled}
         name={name}

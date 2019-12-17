@@ -42,7 +42,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
           href="#home"
           style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
         >
-          <FontAwesomeIcon icon={faFrog} /> Tennis-Schiit
+          Tennis Schiit
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"

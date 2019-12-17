@@ -3,7 +3,6 @@ import Gravatar from "react-gravatar";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 import { Link } from "./Link";
-import { ScoreCard } from "./ScoreCard";
 
 const UserProfile = ({ signOutHandler, history, user }) => {
   const signOutNow = () => {
