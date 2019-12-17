@@ -1,7 +1,14 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import {
+  faUserCircle,
+  faSortAmountUp,
+  faSortAmountDown
+} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import groups from "libs/redux/src/lib/reducers/groupsReducer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const GroupScoreCard = ({
-  group: { played, players, lastMatch },
+  group: { played, players, lastMatch, owner },
   fontSize,
   user
 }) => {
@@ -38,6 +45,12 @@ const GroupScoreCard = ({
               addSuffix: false
             })}
           </span>
+        </span>
+      ) : null}
+
+      {user && owner === user.uid ? (
+        <span className="badge badge-warn ml-1">
+          <FontAwesomeIcon style={{ fontSize: "1.1rem", color: 'red' }} icon={faUserCircle} />
         </span>
       ) : null}
     </div>

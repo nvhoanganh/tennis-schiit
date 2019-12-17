@@ -12,7 +12,7 @@ const mapStateToProps = ({ app: { appLoaded, user, pendingRequests }, players, g
 
 const mapDispatchToProps = dispatch => ({
   loadPlayers: _ => dispatch(loadPlayers()),
-  loadGroups: _ => dispatch(loadGroups())
+  loadGroups: _ => dispatch(loadGroups()),
 });
 
 export default connect(

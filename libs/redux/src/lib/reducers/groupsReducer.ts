@@ -40,7 +40,7 @@ const groups = (
         [action.group.groupId]: action.group
       };
 
-    case GroupActionTypes.LOAD_GROUP_SUCCESS:
+    case GroupActionTypes.LOAD_GROUPS_SUCCESS:
       return action.groups;
 
     default:

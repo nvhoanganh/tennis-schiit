@@ -1,10 +1,9 @@
 import { faChartLine, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
-import { LinkContainer } from "react-router-bootstrap";
+import FloatButton from "./FloatButton";
 import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
-import FloatButton from "./FloatButton";
 
 const Leaderboard = ({
   groupName,
@@ -27,7 +26,7 @@ const Leaderboard = ({
         icon={faPlus}
         tooltip="Add new score"
         url={`/newscore/${match.params.group || groupName}`}
-      />
+      ></FloatButton>
 
       {pendingRequests === 0 ? (
         <div className="px-1 pb-5">

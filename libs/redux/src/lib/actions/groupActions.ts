@@ -1,4 +1,3 @@
-import { FBCONF, Group } from "@tennis-score/api-interfaces";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -6,9 +5,8 @@ import { GROUPS, IGroup } from "../models";
 import { arrayToObject, IAction } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
 export enum GroupActionTypes {
-  LOAD_GROUP = "LOAD_GROUP",
-  LOAD_GROUP_FAILED = "LOAD_GROUP_FAILED",
-  LOAD_GROUP_SUCCESS = "LOAD_GROUP_SUCCESS",
+  LOAD_GROUPS = "LOAD_GROUPS",
+  LOAD_GROUPS_SUCCESS = "LOAD_GROUPS_SUCCESS",
 
   ADD_GROUP = "ADD_GROUP",
   DELETE_GROUP = "DELETE_GROUP",
@@ -37,7 +35,7 @@ export class DeleteGroupAction implements IAction {
 }
 
 export class LoadGroupsSuccessAction implements IAction {
-  readonly type = GroupActionTypes.LOAD_GROUP_SUCCESS;
+  readonly type = GroupActionTypes.LOAD_GROUPS_SUCCESS;
   constructor(public groups: { [groupId: string]: IGroup }) {}
 }
 
@@ -71,7 +69,7 @@ const mapGroups = (data): IGroup => {
 // thunks
 export function loadGroups() {
   return dispatch => {
-    dispatch(apiStart(GroupActionTypes.LOAD_GROUP));
+    dispatch(apiStart(GroupActionTypes.LOAD_GROUPS));
     return firebase
       .firestore()
       .collection(GROUPS)
@@ -87,7 +85,7 @@ export function loadGroups() {
         });
         dispatch(apiEnd());
         dispatch(<LoadGroupsSuccessAction>{
-          type: GroupActionTypes.LOAD_GROUP_SUCCESS,
+          type: GroupActionTypes.LOAD_GROUPS_SUCCESS,
           groups: data
         });
       });

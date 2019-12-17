@@ -1,10 +1,11 @@
-import { IPlayer } from "../models";
-import { apiStart, apiEnd, apiError } from "./appActions";
-import { IAction, delay, arrayToObject } from "../utils";
-import { Mocked_Players } from "@tennis-score/api-interfaces";
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import { IPlayer, USERS } from "../models";
+import { apiEnd, apiStart } from "./appActions";
 export enum PlayerActionTypes {
-  LOAD_PLAYER = "LOAD_PLAYER",
-  LOAD_PLAYER_SUCCESS = "LOAD_PLAYER_SUCCESS",
+  LOAD_PLAYERS = "LOAD_PLAYERS",
+  LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
 
   ADD_PLAYER = "CREATE_PLAYER",
   INVITE_PLAYER = "INVITE_PLAYER",
@@ -31,7 +32,7 @@ export class RemovePlayerAction implements IAction {
 }
 
 export class LoadPlayersSuccessAction implements IAction {
-  readonly type = PlayerActionTypes.LOAD_PLAYER_SUCCESS;
+  readonly type = PlayerActionTypes.LOAD_PLAYERS_SUCCESS;
   constructor(public players: { [playerId: string]: IPlayer }) {}
 }
 
@@ -45,15 +46,23 @@ export function addPlayer(player: IPlayer): AddPlayerAction {
 // thunks
 export function loadPlayers() {
   return dispatch => {
-    dispatch(apiStart(PlayerActionTypes.LOAD_PLAYER));
-    return delay(2000)
-      .then(_ => {
+    dispatch(apiStart(PlayerActionTypes.LOAD_PLAYERS));
+
+    return firebase
+      .firestore()
+      .collection(USERS)
+      .get()
+      .then(querySnapshot => {
+        const data = {};
+        querySnapshot.forEach(doc => {
+          data[doc.id] = doc.data();
+        });
         dispatch(apiEnd());
         dispatch(<LoadPlayersSuccessAction>{
-          type: PlayerActionTypes.LOAD_PLAYER_SUCCESS,
-          players: arrayToObject(Mocked_Players, x => x.id, x => x)
+          type: PlayerActionTypes.LOAD_PLAYERS_SUCCESS,
+          players: data
         });
-      })
+      });
   };
 }
 
