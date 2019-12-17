@@ -16,7 +16,7 @@ export class LoadLeaderboardAction implements IAction {
 }
 export class LoadLeaderboardSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
-  constructor(public groupId: any, public leaderboards: any) {}
+  constructor(public groupId: any, public players: any) {}
 }
 
 // action creators
@@ -49,7 +49,7 @@ export function loadLeaderboard(groupId: string) {
     dispatch(<LoadLeaderboardSuccessAction>{
       type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
       groupId: groupId,
-      leaderboards: null
+      players: currentTournament.exists ? currentTournament.data() : null
     });
     return Promise.resolve();
   };

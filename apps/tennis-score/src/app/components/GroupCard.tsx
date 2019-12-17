@@ -1,8 +1,8 @@
-import React from "react";
+import { GroupMembership } from "./GroupMembership";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import React from "react";
 import Card from "react-bootstrap/Card";
 import { LinkContainer } from "react-router-bootstrap";
-import { Button } from "./Button";
 import GroupScoreCard from "./GroupScoreCard";
 
 const GroupCard = ({ index, group, user }) => {
@@ -20,17 +20,14 @@ const GroupCard = ({ index, group, user }) => {
               {group.name.toUpperCase()}
             </a>
           </LinkContainer>
+          <GroupMembership user={user} group={group} />
           <div className="text-muted">
             Created{" "}
             {formatDistanceToNow(group.createdOn.toDate(), {
               addSuffix: false
             })}
           </div>
-          <GroupScoreCard
-            group={group}
-            fontSize=""
-            user={user}
-          ></GroupScoreCard>
+          <GroupScoreCard group={group} user={user}></GroupScoreCard>
         </div>
       </div>
     </Card>

@@ -13,7 +13,8 @@ const leaderboard = (
     case LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS:
       return {
         ...state,
-        groupId: action.groupId
+        groupId: action.groupId,
+        players: action.players
       };
     default:
       return state;

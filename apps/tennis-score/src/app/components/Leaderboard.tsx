@@ -5,6 +5,7 @@ import FloatButton from "./FloatButton";
 import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
 import GroupScoreCard from "./GroupScoreCard";
+import { GroupMembership } from "./GroupMembership";
 
 const Leaderboard = ({
   players,
@@ -23,14 +24,11 @@ const Leaderboard = ({
     <>
       {group && user ? (
         <div className="text-center pb-3">
-          <h1 className="pt-3">
+          <div className="pt-3 h1">
             <FontAwesomeIcon icon={faChartLine} /> {group.name.toUpperCase()}
-          </h1>
-          <GroupScoreCard
-            group={group}
-            fontSize=""
-            user={user}
-          ></GroupScoreCard>
+          </div>
+          <GroupMembership user={user} group={group} />
+          <GroupScoreCard group={group} user={user}></GroupScoreCard>
         </div>
       ) : null}
       <FloatButton
