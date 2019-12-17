@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import groups from "libs/redux/src/lib/reducers/groupsReducer";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const GroupScoreCard = ({
   group: { played, players, lastMatch, owner },
   fontSize,
@@ -20,39 +20,29 @@ const GroupScoreCard = ({
   const iconS = { fontSize: "1.2rem" };
   return (
     <div>
-      <span className="badge badge-primary">
-        Players{" "}
+      {user && owner === user.uid ? (
+        <span className="badge badge-warning ml-1">Owner</span>
+      ) : null}
+
+      {user && players[user.uid] ? (
+        <span className="badge badge-success ml-1">Member</span>
+      ) : null}
+      <span className="badge badge-primary ml-1">
         <span className="badge badge-light">
           {Object.values(players).length}
-        </span>
+        </span>{" "}
+        Players
       </span>
       <span className="badge badge-secondary ml-1">
-        Played <span className="badge badge-light">{played}</span>
+        <span className="badge badge-light">{played}</span> Matches
       </span>
 
       <span className="badge badge-warning ml-1">
-        Last Match{" "}
+        Played{" "}
         <span className="badge badge-light">
-          {formatDistanceToNow(lastMatch.toDate(), { addSuffix: false })}
+          {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
         </span>
       </span>
-
-      {user && players[user.uid] ? (
-        <span className="badge badge-success ml-1">
-          Joined{" "}
-          <span className="badge badge-light">
-            {formatDistanceToNow(players[user.uid].toDate(), {
-              addSuffix: false
-            })}
-          </span>
-        </span>
-      ) : null}
-
-      {user && owner === user.uid ? (
-        <span className="badge badge-warn ml-1">
-          <FontAwesomeIcon style={{ fontSize: "1.1rem", color: 'red' }} icon={faUserCircle} />
-        </span>
-      ) : null}
     </div>
   );
 };

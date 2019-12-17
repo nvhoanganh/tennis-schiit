@@ -23,12 +23,12 @@ const routes = [
         component: Home
       },
       {
-        path: "/leaderboard/:group?",
+        path: "/leaderboard/:group",
         exact: true,
         component: Leaderboard
       },
       {
-        path: "/newscore/:group?",
+        path: "/newscore/:group",
         exact: true,
         component: EntryForm
       },

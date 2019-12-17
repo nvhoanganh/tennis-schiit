@@ -1,4 +1,5 @@
 import React from "react";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Card from "react-bootstrap/Card";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
@@ -8,18 +9,23 @@ const GroupCard = ({ index, group, user }) => {
   return (
     <Card className="mt-1" body>
       <div className="row">
-        <div className="mx-2"></div>
         <div className="mr-auto">
           <LinkContainer to={`/leaderboard/${group.name}`}>
-            <Button
-              disabled={false}
-              type="button"
-              style={{ paddingLeft: 8, fontSize: "1.8rem" }}
-              className="btn btn-lg btn-link pl-0"
+            <a
+              style={{
+                paddingLeft: 8
+              }}
+              className="h3 pl-0"
             >
-              {index + 1} - {group.name}
-            </Button>
+              {group.name}
+            </a>
           </LinkContainer>
+          <div className="text-muted">
+            Created{" "}
+            {formatDistanceToNow(group.createdOn.toDate(), {
+              addSuffix: false
+            })}
+          </div>
           <GroupScoreCard
             group={group}
             fontSize=""

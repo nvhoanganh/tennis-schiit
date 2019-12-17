@@ -2,7 +2,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
 import GroupCard from "./GroupCard";
-const Home = ({ user, groups, players, ...props }) => {
+const Home = ({ user, groups, ...props }) => {
   useEffect(() => {
     props.loadGroups();
   }, []);

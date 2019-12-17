@@ -10,7 +10,6 @@ const mapStateToProps = ({ app: { appLoaded, user }, players, groups }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadPlayers: _ => dispatch(loadPlayers()),
   loadGroups: _ => dispatch(loadGroups())
 });
 

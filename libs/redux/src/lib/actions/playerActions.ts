@@ -44,33 +44,33 @@ export function addPlayer(player: IPlayer): AddPlayerAction {
 }
 
 // thunks
-export function loadPlayers(groupId: string) {
-  return dispatch => {
+export function loadPlayers() {
+  return (dispatch, getState) => {
+    const curr = getState();
+    if (Object.keys(curr.players).length > 0) {
+      console.log("players already loaded");
+      return Promise.resolve();
+    }
+    
     dispatch(apiStart(PlayerActionTypes.LOAD_PLAYERS));
-    const group = firebase
-      .firestore()
-      .collection(GROUPS)
-      .doc(groupId);
-
-    const allPlayers = firebase
+    return firebase
       .firestore()
       .collection(USERS)
-      .get();
-
-    Promise.all([group, allPlayers]).then(([g, users]) => {
-      const allUsers = {};
-      users.forEach(doc => {
-        allUsers[doc.id] = {
-          id: doc.id,
-          ...doc.data()
-        };
+      .get()
+      .then(users => {
+        const allUsers = {};
+        users.forEach(doc => {
+          allUsers[doc.id] = {
+            id: doc.id,
+            ...doc.data()
+          };
+        });
+        dispatch(apiEnd());
+        dispatch(<LoadPlayersSuccessAction>{
+          type: PlayerActionTypes.LOAD_PLAYERS_SUCCESS,
+          players: allUsers
+        });
       });
-      dispatch(apiEnd());
-      dispatch(<LoadPlayersSuccessAction>{
-        type: PlayerActionTypes.LOAD_PLAYERS_SUCCESS,
-        players: allUsers
-      });
-    });
   };
 }
 

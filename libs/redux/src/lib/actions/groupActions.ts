@@ -68,21 +68,28 @@ const mapGroups = (data): IGroup => {
 
 // thunks
 export function loadGroups() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const curr = getState();
+    if (Object.keys(curr.groups).length > 0) {
+      console.log("groups already loaded");
+      return Promise.resolve();
+    }
+
     dispatch(apiStart(GroupActionTypes.LOAD_GROUPS));
     return firebase
       .firestore()
       .collection(GROUPS)
       .get()
       .then(querySnapshot => {
-        const data = {};
-        querySnapshot.forEach(doc => {
-          console.log(doc.id, " => ", doc.data());
-          data[doc.id] = {
-            groupId: doc.id,
-            ...mapGroups(doc.data())
-          };
-        });
+        const data = arrayToObject(
+          querySnapshot.docs,
+          x => x.id,
+          x => ({
+            groupId: x.id,
+            ...mapGroups(x.data())
+          })
+        );
+
         dispatch(apiEnd());
         dispatch(<LoadGroupsSuccessAction>{
           type: GroupActionTypes.LOAD_GROUPS_SUCCESS,
