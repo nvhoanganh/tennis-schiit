@@ -1,35 +1,18 @@
 import React from "react";
-import { Button } from "./Button";
-export function ScoreCard({
-  played,
-  won,
-  lost,
-  bagelWin,
-  bagelLost,
-  fontSize
-}) {
-  const props = {
-    style: { fontSize: fontSize || "0.8rem" },
-    type: "button",
-    className: "btn btn-sm btn-default"
-  };
+export function ScoreCard({ played, won, lost, bagelWon, bagelLost }) {
   return (
     <div>
-      <Button {...props}>
-        P<span className="ml-1 badge badge-light">{played}</span>
-      </Button>
-      <Button {...props}>
-        W<span className="ml-1 badge badge-success">{won}</span>
-      </Button>
-      <Button {...props}>
-        L<span className="ml-1 badge badge-danger">{lost}</span>
-      </Button>
-      <Button {...props}>
-        BW<span className="ml-1 badge badge-warning">{bagelWin}</span>
-      </Button>
-      <Button {...props}>
-        BL<span className="ml-1 badge badge-danger">{bagelLost}</span>
-      </Button>
+      <div className="badge badge-light">
+        Played
+        <span className="badge badge-dark ml-1">{played}</span> Won
+        <span className="badge badge-success ml-1">{won}</span> Lost
+        <span className="badge badge-danger ml-1">{lost}</span>
+      </div>
+      <div className="badge badge-light">
+        Bagel: Win
+        <span className="badge badge-success ml-1">{bagelWon}</span> Lost
+        <span className="badge badge-danger ml-1">{bagelLost}</span>
+      </div>
     </div>
   );
 }

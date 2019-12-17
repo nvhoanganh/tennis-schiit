@@ -1,7 +1,9 @@
 import { LeaderboardAction, LeaderboardActionTypes } from "../actions";
 
+
 interface ILeaderboardState {
   groupId?: any;
+  tournament?: any;
   players?: any;
 }
 
@@ -14,7 +16,11 @@ const leaderboard = (
       return {
         ...state,
         groupId: action.groupId,
-        players: action.players
+        tournament: {
+          startDate: action.tournament.startDate,
+          endDate: action.tournament.endDate
+        },
+        players: action.tournament.players
       };
     default:
       return state;

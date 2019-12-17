@@ -1,19 +1,23 @@
 import { connect } from "react-redux";
-import { loadPlayers, loadGroups, loadLeaderboard } from "@tennis-score/redux";
+import {
+  loadPlayers,
+  loadGroups,
+  loadLeaderboard,
+  getLeaderboardPlayers
+} from "@tennis-score/redux";
 import Leaderboard from "../components/Leaderboard";
 
 const mapStateToProps = ({
   app: { appLoaded, user, pendingRequests },
-  players,
   groups,
-  leaderboard
+  leaderboard: { groupId, tournament, players }
 }) => ({
-  players: Object.values(players),
+  players: getLeaderboardPlayers({ players }),
   user,
-  group: leaderboard.groupId ? groups[leaderboard.groupId] : null,
+  group: groupId ? groups[groupId] : null,
   pendingRequests,
   appLoaded,
-  Leaderboard
+  tournament
 });
 
 const mapDispatchToProps = dispatch => ({

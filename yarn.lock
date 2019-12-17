@@ -5091,6 +5091,11 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
+free-gaussian@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/free-gaussian/-/free-gaussian-0.1.0.tgz#b5152abe0dbdddf36080ded0b4d4ba6f8ace17fc"
+  integrity sha1-tRUqvg293fNggN7QtNS6b4rOF/w=
+
 fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
@@ -9274,6 +9279,11 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
+reselect@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.0.0.tgz#f2529830e5d3d0e021408b246a206ef4ea4437f7"
+  integrity sha512-qUgANli03jjAyGlnbYVAV5vvnOmJnODyABz51RdBN7M4WaVu8mecZWgyQNkG8Yqe3KRGRt0l4K4B3XVEULC4CA==
+
 reserved-words@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/reserved-words/-/reserved-words-0.1.2.tgz#00a0940f98cd501aeaaac316411d9adc52b31ab1"
@@ -10580,6 +10590,13 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
+
+"trueskill@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/trueskill/-/trueskill-0.0.2.tgz#f6c7ef634c2debac0d57ffbb5d4c8f26eb4eda75"
+  integrity sha1-9sfvY0wt66wNV/+7XUyPJutO2nU=
+  dependencies:
+    free-gaussian "0.1.0"
 
 ts-jest@24.0.0:
   version "24.0.0"

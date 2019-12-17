@@ -21,11 +21,13 @@ const GroupCard = ({ index, group, user }) => {
             </a>
           </LinkContainer>
           <GroupMembership user={user} group={group} />
-          <div className="text-muted">
-            Created{" "}
-            {formatDistanceToNow(group.createdOn.toDate(), {
-              addSuffix: false
-            })}
+          <div>
+            <em className="text-muted" style={{ fontSize: "0.7rem" }}>
+              Created{" "}
+              {formatDistanceToNow(group.createdOn.toDate(), {
+                addSuffix: false
+              })}
+            </em>
           </div>
           <GroupScoreCard group={group} user={user}></GroupScoreCard>
         </div>

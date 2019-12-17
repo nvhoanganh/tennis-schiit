@@ -32,16 +32,6 @@ const UserProfile = ({ signOutHandler, history, user }) => {
                   : "Two-Handed Backhand"}
               </strong>
             </p>
-            <div className="text-center">
-              <ScoreCard
-                fontSize="1rem"
-                played={4}
-                won={3}
-                lost={1}
-                bagelWin={0}
-                bagelLost={1}
-              />
-            </div>
           </div>
         </div>
       </div>
