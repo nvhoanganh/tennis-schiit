@@ -23,7 +23,7 @@ const Leaderboard = ({
   }, []);
   return (
     <>
-      {group && user ? (
+      {group && (
         <div className="text-center pb-4">
           <div className="pt-2 h1">{group.name.toUpperCase()}</div>
           <GroupMembership user={user} group={group} />
@@ -37,7 +37,7 @@ const Leaderboard = ({
             </em>
           )}
         </div>
-      ) : null}
+      )}
       <FloatButton
         icon={faPlus}
         tooltip="Add new score"
