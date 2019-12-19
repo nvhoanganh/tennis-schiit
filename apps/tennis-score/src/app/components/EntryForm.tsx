@@ -6,6 +6,7 @@ import CheckBoxInput from "./CheckBoxInput";
 import UpdateButton from "./LoadingButton";
 import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
+import RoundGravatar from "./RoundGravatar";
 
 const EntryForm = ({
   pendingRequests,
@@ -113,7 +114,7 @@ const EntryForm = ({
                         <td>
                           <div className="row">
                             <div className="ml-3">
-                              <Gravatar email={p.email} size={37} />
+                              <RoundGravatar size={37} email={p.email} />
                             </div>
                             <div className="ml-2 mr-auto mt-1">{p.name}</div>
                           </div>

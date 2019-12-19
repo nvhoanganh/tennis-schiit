@@ -1,5 +1,3 @@
-import { faFrog } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { appLoad } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
@@ -10,6 +8,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
+import "../app.scss";
 
 const linkStyle = {
   lineHeight: "2rem"
