@@ -1,12 +1,11 @@
-import { faChartLine, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import format from "date-fns/format";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
+import { GroupMembership } from "./GroupMembership";
+import GroupScoreCard from "./GroupScoreCard";
 import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
-import GroupScoreCard from "./GroupScoreCard";
-import { GroupMembership } from "./GroupMembership";
-import format from "date-fns/format";
 
 const Leaderboard = ({
   players,
@@ -23,7 +22,7 @@ const Leaderboard = ({
   }, []);
   return (
     <>
-      {group && user ? (
+      {group ? (
         <div className="text-center pb-4">
           <div className="pt-2 h1">{group.name.toUpperCase()}</div>
           <GroupMembership user={user} group={group} />
