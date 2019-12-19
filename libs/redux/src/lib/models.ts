@@ -12,16 +12,15 @@ export interface IScore {
 }
 
 export interface IGroup {
-  groupId?: string;
+  id?: string;
   name: string;
   description?: string;
-  imageUrl?: string;
+  currentTournament?: string;
+  lastMatch?: Date;
   createdOn: Date;
-  isDeleted?: boolean;
-  ownerId?: string;
-  players?: {
-    [playerId: string]: IJoinedPlayer;
-  };
+  owner: string;
+  played?: number;
+  players?: any[];
 }
 
 export interface IPlayer {
@@ -52,7 +51,7 @@ export interface ISignInModel {
   password: string;
 }
 
-export const GROUPS = 'groups'
-export const USERS = 'users'
-export const TOURNAMENTS = 'tournaments'
-export const SCORES = 'scores'
+export const GROUPS = "groups";
+export const USERS = "users";
+export const TOURNAMENTS = "tournaments";
+export const SCORES = "scores";

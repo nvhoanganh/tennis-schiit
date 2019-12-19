@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import { IPlayer, USERS, GROUPS } from "../models";
 import { apiEnd, apiStart } from "./appActions";
+import { IAction } from '@tennis-score/redux';
 export enum PlayerActionTypes {
   LOAD_PLAYERS = "LOAD_PLAYERS",
   LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
@@ -13,9 +14,7 @@ export enum PlayerActionTypes {
   UPDATE_PLAYER = "UPDATE_PLAYER",
   REMOVE_PLAYER = "REMOVE_PLAYER"
 }
-export interface IAction {
-  type: string;
-}
+
 
 // actions
 export class AddPlayerAction implements IAction {
@@ -51,7 +50,7 @@ export function loadPlayers() {
       console.log("players already loaded");
       return Promise.resolve();
     }
-    
+
     dispatch(apiStart(PlayerActionTypes.LOAD_PLAYERS));
     return firebase
       .firestore()

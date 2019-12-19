@@ -2,26 +2,45 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
 import GroupCard from "./GroupCard";
-const Home = ({ user, groups, ...props }) => {
+const Home = ({ user, groups, myGroups, ...props }) => {
   useEffect(() => {
     props.loadGroups();
   }, []);
 
   return (
     <>
-      <h4 className="text-center pt-3">Groups</h4>
       <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />
+      {myGroups.length > 0 && (
+        <>
+          <h4 className="text-center pt-3">My Groups</h4>
+          <div className="px-1 pb-5">
+            {myGroups.map((p, i) => (
+              <GroupCard
+                index={i}
+                key={p.groupId}
+                group={p}
+                user={user}
+              ></GroupCard>
+            ))}
+          </div>
+        </>
+      )}
 
-      <div className="px-1 pb-5">
-        {groups.map((p, i) => (
-          <GroupCard
-            index={i}
-            key={p.groupId}
-            group={p}
-            user={user}
-          ></GroupCard>
-        ))}
-      </div>
+      {groups.length > 0 && (
+        <>
+          <h4 className="text-center pt-3">Groups near me</h4>
+          <div className="px-1 pb-5">
+            {groups.map((p, i) => (
+              <GroupCard
+                index={i}
+                key={p.groupId}
+                group={p}
+                user={user}
+              ></GroupCard>
+            ))}
+          </div>
+        </>
+      )}
     </>
   );
 };

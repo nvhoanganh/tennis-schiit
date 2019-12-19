@@ -1,6 +1,23 @@
 import { createSelector } from "reselect";
+import { isMember } from "../utils";
 const getPlayers = state => state.players;
+const getGroups = state => state.groups;
+const getAppState = state => state.app;
 
+export const getUser = createSelector(
+  getAppState,
+  s => s.user
+);
+
+export const getPlayerList = createSelector(
+  getPlayers,
+  s => Object.values(s)
+);
+
+export const getAppIsLoaded = createSelector(
+  getAppState,
+  s => s.appLoaded
+);
 export const getLeaderboardPlayers = createSelector(
   getPlayers,
   players => {
@@ -20,5 +37,23 @@ export const getLeaderboardPlayers = createSelector(
       ...players[k]
     }));
     return p;
+  }
+);
+
+export const getMyGroups = createSelector(
+  getUser,
+  getGroups,
+  (user, groups) => {
+    if (!user) return [];
+    return Object.values(groups).filter(x => isMember(user, x));
+  }
+);
+
+export const getGroupNotMemberOff = createSelector(
+  getUser,
+  getGroups,
+  (user, groups) => {
+    if (!user) return Object.values(groups);
+    return Object.values(groups).filter(x => !isMember(user, x));
   }
 );

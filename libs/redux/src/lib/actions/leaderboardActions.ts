@@ -2,8 +2,9 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { GROUPS, IGroup, TOURNAMENTS, SCORES } from "../models";
-import { arrayToObject, IAction } from "../utils";
+import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
+import { IAction } from "@tennis-score/redux";
 export enum LeaderboardActionTypes {
   LOAD_LEADERBOARD = "LOAD_LEADERBOARD",
   LOAD_LEADERBOARD_SUCCESS = "LOAD_LEADERBOARD_SUCCESS",
@@ -27,6 +28,7 @@ export class SubmitScoreSuccessAction implements IAction {
 // thunks
 export function loadLeaderboard(groupId: string) {
   return async dispatch => {
+    debugger;
     dispatch(apiStart(LeaderboardActionTypes.LOAD_LEADERBOARD));
     const group = await firebase
       .firestore()
@@ -41,19 +43,28 @@ export function loadLeaderboard(groupId: string) {
 
     const fgroupData = group.data();
     // get current leader board
-    const currentTournament = await firebase
-      .firestore()
-      .collection(GROUPS)
-      .doc(groupId)
-      .collection(TOURNAMENTS)
-      .doc(fgroupData.currentTournament)
-      .get();
+    if (fgroupData.currentTournament) {
+      const currentTournament = await firebase
+        .firestore()
+        .collection(GROUPS)
+        .doc(groupId)
+        .collection(TOURNAMENTS)
+        .doc(fgroupData.currentTournament)
+        .get();
 
-    dispatch(<LoadLeaderboardSuccessAction>{
-      type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
-      groupId: groupId,
-      tournament: currentTournament.exists ? currentTournament.data() : null
-    });
+      dispatch(<LoadLeaderboardSuccessAction>{
+        type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
+        groupId: groupId,
+        tournament: currentTournament.exists ? currentTournament.data() : null
+      });
+    } else {
+      dispatch(<LoadLeaderboardSuccessAction>{
+        type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
+        groupId: groupId,
+        tournament: null
+      });
+    }
+
     return Promise.resolve();
   };
 }

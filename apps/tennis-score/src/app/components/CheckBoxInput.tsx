@@ -1,8 +1,8 @@
 import React from "react";
 
 const checkBoxStyle = {
-  height: 30,
-  width: 30,
+  height: 24,
+  width: 24,
   marginTop: 3
 };
 

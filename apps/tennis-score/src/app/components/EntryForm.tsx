@@ -7,6 +7,8 @@ import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
+import RadioInput from "./RadioInput";
+import RadioInputButton from "./RadioInputButtons";
 
 const EntryForm = ({
   pendingRequests,
@@ -100,13 +102,12 @@ const EntryForm = ({
                 {group.name.toUpperCase()} - New Result
               </span>
             }
-            right={null}
           ></RouteNav>
           <div className="container">
             <form noValidate onSubmit={validateAndSubmit}>
-              <div className="card">
+              <div className="card mt-3">
                 <div className="card-body">
-                  <Table size="sm">
+                  <table className="table table-borderless pb-3">
                     <thead>
                       <tr>
                         <td></td>
@@ -122,7 +123,9 @@ const EntryForm = ({
                               <div className="ml-3">
                                 <RoundGravatar size={37} email={p.email} />
                               </div>
-                              <div className="ml-2 mr-auto mt-1">{p.name}</div>
+                              <div className="ml-2 font-weight-bold mr-auto mt-1">
+                                {p.name}
+                              </div>
                             </div>
                           </td>
 
@@ -145,22 +148,17 @@ const EntryForm = ({
                         </tr>
                       ))}
                     </tbody>
-                  </Table>
-                </div>
-              </div>
+                  </table>
 
-              <div className="card mt-3">
-                <div className="card-body">
-                  <SelectInput
+                  <RadioInputButton
                     name="gameWonByLostTeam"
-                    label="Set won by losing team"
+                    label="Games won by losing team"
                     value={state.gameWonByLostTeam}
-                    placeholder="Display Name"
                     errorMessage=""
                     setValue={setValue}
-                    isValid={true}
                     options={["0", "1", "2", "3", "4", "5", "6"]}
-                  ></SelectInput>
+                    isValid={true}
+                  ></RadioInputButton>
                   <TextInput
                     type="date"
                     name="matchDate"
@@ -173,7 +171,7 @@ const EntryForm = ({
                   ></TextInput>
                   <CheckBoxInput
                     name="reverseBagel"
-                    label="Reverse Bagel?"
+                    label="Reversed Bagel?"
                     value={state.reverseBagel}
                     setValue={setValue}
                   ></CheckBoxInput>

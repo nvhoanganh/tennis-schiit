@@ -2,8 +2,9 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { GROUPS, IGroup } from "../models";
-import { arrayToObject, IAction } from "../utils";
+import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
+import { IAction } from "@tennis-score/redux";
 export enum GroupActionTypes {
   LOAD_GROUPS = "LOAD_GROUPS",
   LOAD_GROUPS_SUCCESS = "LOAD_GROUPS_SUCCESS",
@@ -45,10 +46,6 @@ export function invitePlayerToGroup(
   playerId: string
 ): AddPlayerToGroupAction {
   return { type: GroupActionTypes.ADD_PLAYER_TO_GROUP, groupId, playerId };
-}
-
-export function addGroup(group: IGroup): AddGroupAction {
-  return { type: GroupActionTypes.ADD_GROUP, group };
 }
 
 export function deleteGroup(id: string): DeleteGroupAction {
@@ -94,6 +91,42 @@ export function loadGroups() {
         dispatch(<LoadGroupsSuccessAction>{
           type: GroupActionTypes.LOAD_GROUPS_SUCCESS,
           groups: data
+        });
+      });
+  };
+}
+
+export function addGroup({ name, description }) {
+  return (dispatch, getState) => {
+    const {
+      app: { user }
+    } = getState();
+
+    const dat = {
+      name,
+      description,
+      createdOn: new Date(),
+      owner: user.uid,
+      played: 0,
+      players: [
+        {
+          joinDate: new Date(),
+          name: user.displayName,
+          playerId: user.uid
+        }
+      ]
+    };
+    console.log("adding group", dat);
+    dispatch(apiStart(GroupActionTypes.ADD_GROUP));
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .add(dat)
+      .then(d => {
+        dispatch(apiEnd());
+        dispatch(<AddGroupAction>{
+          type: GroupActionTypes.ADD_GROUP,
+          group: <any>d
         });
       });
   };

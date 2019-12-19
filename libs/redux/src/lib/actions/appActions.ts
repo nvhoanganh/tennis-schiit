@@ -1,10 +1,9 @@
-import { IAction, delay } from "../utils";
-import { ISignInModel } from "../models";
-import { FBCONF } from "@tennis-score/api-interfaces";
-
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import { ISignInModel } from "../models";
+import { IAction } from '@tennis-score/redux';
+
 
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
@@ -109,7 +108,8 @@ export function updateProfile({
   displayName,
   leftHanded,
   singleHandedBackhand,
-  uid
+  uid,
+  history
 }) {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.UPDATE_PROFILE));
@@ -138,6 +138,7 @@ export function updateProfile({
             singleHandedBackhand
           }
         });
+        history.push("/home");
       })
 
       .catch(function(err) {

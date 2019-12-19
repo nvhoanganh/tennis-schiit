@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { strongPassword, isValidEmail } from "@tennis-score/core";
 import TextInput from "./TextInput";
+import UpdateButton from './LoadingButton';
 
-const SignUp: React.SFC<{
-  signupHandler(data: { email: string; password: string });
-}> = ({ signupHandler }) => {
+const SignUp = ({ loading, signupHandler }) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -83,9 +82,13 @@ const SignUp: React.SFC<{
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-block">
-                Sign up
-              </button>
+              <UpdateButton
+                loading={loading}
+                value="Sign up"
+                type="submit"
+                disabled={!state.formValid || loading}
+                className="btn btn-primary btn-block"
+              ></UpdateButton>
             </div>
           </div>
         </div>

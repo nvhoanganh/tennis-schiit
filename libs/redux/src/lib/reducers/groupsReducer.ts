@@ -27,7 +27,7 @@ const groups = (
     case GroupActionTypes.ADD_GROUP:
       return {
         ...state,
-        [action.group.groupId]: action.group
+        [action.group.id]: action.group
       };
 
     case GroupActionTypes.DELETE_GROUP:
@@ -37,7 +37,7 @@ const groups = (
     case GroupActionTypes.UPDATE_GROUP:
       return {
         ...state,
-        [action.group.groupId]: action.group
+        [action.group.id]: action.group
       };
 
     case GroupActionTypes.LOAD_GROUPS_SUCCESS:

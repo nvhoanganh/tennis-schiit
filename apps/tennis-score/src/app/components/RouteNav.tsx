@@ -2,7 +2,11 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button } from "./Button";
-function RouteNav({ history, center, right }) {
+const RouteNav: React.SFC<{
+  history: any;
+  center: any;
+  right?: any;
+}> = ({ history, center, right }) => {
   return (
     <div className="d-flex justify-content-between pb-1">
       <div className="p-2">
@@ -19,15 +23,11 @@ function RouteNav({ history, center, right }) {
         {right ? (
           right
         ) : (
-          <Button
-            type="button"
-            className="btn btn-light invisible"
-          >
-          </Button>
+          <Button type="button" className="btn btn-light invisible"></Button>
         )}
       </div>
     </div>
   );
-}
+};
 
 export default RouteNav;

@@ -1,6 +1,7 @@
 import { IScore } from "../models";
-import { IAction, delay } from "../utils";
+import { delay } from "../utils";
 import { apiStart, apiEnd } from "./appActions";
+import { IAction } from "@tennis-score/redux";
 export enum ScoreActionTypes {
   LOAD_SCORE = "LOAD_SCORE_SUCCESS",
   LOAD_SCORE_FAILED = "LOAD_SCORE_FAILED",

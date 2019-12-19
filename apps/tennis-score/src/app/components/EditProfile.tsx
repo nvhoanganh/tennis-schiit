@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import CheckBoxInput from "./CheckBoxInput";
-import TextInput from "./TextInput";
-import Spinner from "react-bootstrap/Spinner";
 import UpdateButton from "./LoadingButton";
+import TextInput from "./TextInput";
+import RouteNav from "./RouteNav";
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const [state, setState] = useState({
     email: "",
@@ -13,7 +12,6 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
     singleHandedBackhand: false,
     formValid: false
   });
-
   const setValue = (field, value) =>
     setState(curr => ({ ...curr, [field]: value }));
 
@@ -23,10 +21,8 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       uid: user.uid,
       displayName: state.displayName,
       leftHanded: state.leftHanded,
-      singleHandedBackhand: state.singleHandedBackhand
-    }).then(_ => {
-      // toast.success("Profile updated");
-      history.push("/home");
+      singleHandedBackhand: state.singleHandedBackhand,
+      history
     });
   };
 
@@ -55,7 +51,10 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
 
   return (
     <div className="mt-4 mx-4">
-      <h4 className="card-title mb-4 mt-1">Update my profile</h4>
+      <RouteNav
+        history={history}
+        center={<span className="h3">Update my profile</span>}
+      ></RouteNav>
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput
           type="email"

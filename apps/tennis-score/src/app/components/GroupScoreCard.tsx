@@ -6,7 +6,6 @@ const GroupScoreCard = ({
 }) => {
   return (
     <div>
-      
       <span className="badge badge-primary ml-1">
         <span className="badge badge-light">
           {Object.values(players).length}
@@ -16,13 +15,14 @@ const GroupScoreCard = ({
       <span className="badge badge-secondary ml-1">
         <span className="badge badge-light">{played}</span> Matches
       </span>
-
-      <span className="badge badge-warning ml-1">
-        Played{" "}
-        <span className="badge badge-light">
-          {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
+      {lastMatch ? (
+        <span className="badge badge-warning ml-1">
+          Played{" "}
+          <span className="badge badge-light">
+            {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
+          </span>
         </span>
-      </span>
+      ) : null}
     </div>
   );
 };

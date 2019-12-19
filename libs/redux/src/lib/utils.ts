@@ -14,5 +14,7 @@ export const arrayToObject = (array: any[], keymap, valuemap) => {
   }, {});
 };
 
-export const isOwner = (user, group) => group.owner === user.uid;
-export const isMember = (user, group) => !!group.players[user.uid];
+export const isOwner = (user, group) =>
+  user && group && group.owner === user.uid;
+export const isMember = (user, group) =>
+  user && group && !!group.players[user.uid];

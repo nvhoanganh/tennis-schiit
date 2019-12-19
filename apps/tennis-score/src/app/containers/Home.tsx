@@ -1,13 +1,23 @@
-import { loadGroups, loadPlayers } from "@tennis-score/redux";
+import {
+  getAppIsLoaded,
+  getMyGroups,
+  getPlayerList,
+  getUser,
+  loadGroups,
+  getGroupNotMemberOff
+} from "@tennis-score/redux";
 import { connect } from "react-redux";
-import Home from '../components/Home';
+import Home from "../components/Home";
 
-const mapStateToProps = ({ app: { appLoaded, user }, players, groups }) => ({
-  players: Object.values(players),
-  groups: Object.values(groups),
-  user,
-  appLoaded
-});
+const mapStateToProps = state => {
+  return {
+    players: getPlayerList(state),
+    groups: getGroupNotMemberOff(state),
+    myGroups: getMyGroups(state),
+    user: getUser(state),
+    appLoaded: getAppIsLoaded(state)
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   loadGroups: _ => dispatch(loadGroups())
@@ -17,4 +27,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home);
-
