@@ -1,6 +1,3 @@
-export interface IAction {
-  type: string;
-}
 export function delay(duration): Promise<void> {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -16,3 +13,6 @@ export const arrayToObject = (array: any[], keymap, valuemap) => {
     };
   }, {});
 };
+
+export const isOwner = (user, group) => group.owner === user.uid;
+export const isMember = (user, group) => !!group.players[user.uid];

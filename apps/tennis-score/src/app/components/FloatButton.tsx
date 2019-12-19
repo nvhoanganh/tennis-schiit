@@ -13,7 +13,7 @@ function FloatButton({ icon, url, tooltip }) {
       }}
     >
       <LinkContainer to={url}>
-        <Button tooltip={tooltip} icon="fas fa-plus" rotate={true}>
+        <Button tooltip={tooltip} icon="fas fa-plus" rotate={false}>
           <FontAwesomeIcon icon={icon} />
         </Button>
       </LinkContainer>

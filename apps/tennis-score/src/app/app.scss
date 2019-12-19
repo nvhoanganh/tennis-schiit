@@ -134,3 +134,7 @@
 .react-gravatar {
   border-radius: 50%;
 }
+
+.dropleft .dropdown-toggle::before {
+  display: none;
+}

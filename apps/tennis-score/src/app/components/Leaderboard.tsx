@@ -1,18 +1,13 @@
-import {
-  faPlus,
-  faArrowLeft,
-  faChevronLeft,
-  faEllipsisV
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import format from "date-fns/format";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
+import { GroupMemberDropdown } from "./GroupMemberDropdown";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "react-bootstrap/Button";
+import RouteNav from "./RouteNav";
 
 const Leaderboard = ({
   players,
@@ -21,6 +16,7 @@ const Leaderboard = ({
   pendingRequests,
   user,
   tournament,
+  history,
   ...props
 }) => {
   useEffect(() => {
@@ -31,21 +27,12 @@ const Leaderboard = ({
     <>
       {group && (
         <>
-          <div className="d-flex justify-content-between pb-1">
-            <div className="p-2">
-              <Button type="button" className="btn btn-light">
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </Button>
-            </div>
-            <div className="p-2">
-              <span className="h3">{group.name.toUpperCase()}</span>
-            </div>
-            <div className="p-2">
-              <Button type="button" className="btn btn-light">
-                <FontAwesomeIcon icon={faEllipsisV} />
-              </Button>
-            </div>
-          </div>
+          <RouteNav
+            history={history}
+            center={<span className="h3">{group.name.toUpperCase()}</span>}
+            right={<GroupMemberDropdown user={user} group={group} />}
+          ></RouteNav>
+
           <div className="text-center pb-4">
             <GroupMembership user={user} group={group} />
             <GroupScoreCard group={group} user={user}></GroupScoreCard>

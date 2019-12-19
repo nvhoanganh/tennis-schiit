@@ -1,17 +1,16 @@
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
-import Gravatar from "react-gravatar";
 import CheckBoxInput from "./CheckBoxInput";
 import UpdateButton from "./LoadingButton";
+import RoundGravatar from "./RoundGravatar";
+import RouteNav from "./RouteNav";
 import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
-import RoundGravatar from "./RoundGravatar";
 
 const EntryForm = ({
   pendingRequests,
   group,
-  user,
   players,
   match,
   submitScore,
@@ -92,99 +91,107 @@ const EntryForm = ({
   }, [state.gameWonByLostTeam, state.matchDate, state.winners, state.losers]);
   return (
     <>
-      {group && user ? (
-        <div className="container">
-          <h4 className="text-center pt-3">
-            {group.name.toUpperCase()} - New Score
-          </h4>
-          <form noValidate onSubmit={validateAndSubmit}>
-            <div className="card">
-              <div className="card-body">
-                <Table size="sm">
-                  <thead>
-                    <tr>
-                      <td></td>
-                      <td className="text-center font-weight-bold">Winner</td>
-                      <td className="text-center font-weight-bold">Loser</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {players.map(p => (
-                      <tr key={p.id}>
-                        <td>
-                          <div className="row">
-                            <div className="ml-3">
-                              <RoundGravatar size={37} email={p.email} />
-                            </div>
-                            <div className="ml-2 mr-auto mt-1">{p.name}</div>
-                          </div>
-                        </td>
-
-                        <td className="text-center">
-                          <CheckBoxInput
-                            name={`w_${p.id}`}
-                            label=""
-                            value={state[`w_${p.id}`] || false}
-                            setValue={setValue}
-                          ></CheckBoxInput>
-                        </td>
-                        <td className="text-center">
-                          <CheckBoxInput
-                            name={`l_${p.id}`}
-                            label=""
-                            value={state[`l_${p.id}`] || false}
-                            setValue={setValue}
-                          ></CheckBoxInput>
-                        </td>
+      {group ? (
+        <>
+          <RouteNav
+            history={history}
+            center={
+              <span className="h3">
+                {group.name.toUpperCase()} - New Result
+              </span>
+            }
+            right={null}
+          ></RouteNav>
+          <div className="container">
+            <form noValidate onSubmit={validateAndSubmit}>
+              <div className="card">
+                <div className="card-body">
+                  <Table size="sm">
+                    <thead>
+                      <tr>
+                        <td></td>
+                        <td className="text-center font-weight-bold">Winner</td>
+                        <td className="text-center font-weight-bold">Loser</td>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
+                    </thead>
+                    <tbody>
+                      {players.map(p => (
+                        <tr key={p.id}>
+                          <td>
+                            <div className="row">
+                              <div className="ml-3">
+                                <RoundGravatar size={37} email={p.email} />
+                              </div>
+                              <div className="ml-2 mr-auto mt-1">{p.name}</div>
+                            </div>
+                          </td>
 
-            <div className="card mt-3">
-              <div className="card-body">
-                <SelectInput
-                  name="gameWonByLostTeam"
-                  label="Set won by losing team"
-                  value={state.gameWonByLostTeam}
-                  placeholder="Display Name"
-                  errorMessage=""
-                  setValue={setValue}
-                  isValid={true}
-                  options={["0", "1", "2", "3", "4", "5", "6"]}
-                ></SelectInput>
-                <TextInput
-                  type="date"
-                  name="matchDate"
-                  label="Date"
-                  value={state.matchDate}
-                  placeholder=""
-                  errorMessage=""
-                  setValue={setValue}
-                  isValid={state.matchDateValid}
-                ></TextInput>
-                <CheckBoxInput
-                  name="reverseBagel"
-                  label="Reverse Bagel?"
-                  value={state.reverseBagel}
-                  setValue={setValue}
-                ></CheckBoxInput>
+                          <td className="text-center">
+                            <CheckBoxInput
+                              name={`w_${p.id}`}
+                              label=""
+                              value={state[`w_${p.id}`] || false}
+                              setValue={setValue}
+                            ></CheckBoxInput>
+                          </td>
+                          <td className="text-center">
+                            <CheckBoxInput
+                              name={`l_${p.id}`}
+                              label=""
+                              value={state[`l_${p.id}`] || false}
+                              setValue={setValue}
+                            ></CheckBoxInput>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
               </div>
-            </div>
-            <div className="text-center py-3">
-              <UpdateButton
-                loading={pendingRequests > 0}
-                loadingText="Saving..."
-                value="Submit"
-                type="submit"
-                disabled={!state.formValid || pendingRequests > 0}
-                className="btn btn-primary btn-block"
-              ></UpdateButton>
-            </div>
-          </form>
-        </div>
+
+              <div className="card mt-3">
+                <div className="card-body">
+                  <SelectInput
+                    name="gameWonByLostTeam"
+                    label="Set won by losing team"
+                    value={state.gameWonByLostTeam}
+                    placeholder="Display Name"
+                    errorMessage=""
+                    setValue={setValue}
+                    isValid={true}
+                    options={["0", "1", "2", "3", "4", "5", "6"]}
+                  ></SelectInput>
+                  <TextInput
+                    type="date"
+                    name="matchDate"
+                    label="Date"
+                    value={state.matchDate}
+                    placeholder=""
+                    errorMessage=""
+                    setValue={setValue}
+                    isValid={state.matchDateValid}
+                  ></TextInput>
+                  <CheckBoxInput
+                    name="reverseBagel"
+                    label="Reverse Bagel?"
+                    value={state.reverseBagel}
+                    setValue={setValue}
+                  ></CheckBoxInput>
+                </div>
+              </div>
+              <div className="text-center py-3">
+                <UpdateButton
+                  loading={pendingRequests > 0}
+                  loadingText="Saving..."
+                  value="Submit"
+                  type="submit"
+                  disabled={!state.formValid || pendingRequests > 0}
+                  className="btn btn-primary btn-block"
+                ></UpdateButton>
+              </div>
+            </form>
+          </div>
+        </>
       ) : null}
     </>
   );
