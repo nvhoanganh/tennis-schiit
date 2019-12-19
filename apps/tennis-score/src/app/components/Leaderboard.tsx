@@ -52,15 +52,17 @@ const Leaderboard = ({
         url={`/newscore/${match.params.group}`}
       ></FloatButton>
       {pendingRequests === 0 && players ? (
-        <div className="px-1 pb-5">
-          {players.map((k, i) => (
-            <LeaderboardCard
-              key={k.id}
-              player={k}
-              ranking={i}
-            ></LeaderboardCard>
-          ))}
-        </div>
+        players.length > 0 ? (
+          <div className="px-1 pb-5">
+            {players.map((k, i) => (
+              <LeaderboardCard
+                key={k.id}
+                player={k}
+                ranking={i}
+              ></LeaderboardCard>
+            ))}
+          </div>
+        ) : <h6 className="text-center py-5">Click add buton to add your first match</h6>
       ) : (
         <MySpinner />
       )}

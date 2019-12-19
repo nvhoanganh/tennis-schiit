@@ -28,7 +28,6 @@ export class SubmitScoreSuccessAction implements IAction {
 // thunks
 export function loadLeaderboard(groupId: string) {
   return async dispatch => {
-    debugger;
     dispatch(apiStart(LeaderboardActionTypes.LOAD_LEADERBOARD));
     const group = await firebase
       .firestore()
