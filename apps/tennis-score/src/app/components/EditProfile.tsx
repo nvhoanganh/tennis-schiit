@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import CheckBoxInput from "./CheckBoxInput";
 import TextInput from "./TextInput";
 import Spinner from "react-bootstrap/Spinner";
-import { UpdateButton } from "./Button";
+import UpdateButton from "./LoadingButton";
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const [state, setState] = useState({
     email: "",
@@ -98,9 +98,9 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
           <div className="col-md-6">
             <div className="form-group">
               <UpdateButton
-                saving={pendingRequests > 0}
-                savingText="Saving..."
-                normalText="Update Profile"
+                loading={pendingRequests > 0}
+                loadingText="Saving..."
+                value="Update Profile"
                 type="submit"
                 disabled={!state.formValid || pendingRequests > 0}
                 className="btn btn-primary btn-block"

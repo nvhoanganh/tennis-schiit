@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import ProtectedComponent from "../components/ProtectedComponent";
 import UserProfile from "../components/UserProfile";
 
-const mapStateToProps = ({ app: { appLoaded, user } }) => ({
+const mapStateToProps = ({ app: { appLoaded, user, pendingRequests } }) => ({
   component: UserProfile,
   user,
+  loading: pendingRequests > 0,
   appLoaded
 });
 

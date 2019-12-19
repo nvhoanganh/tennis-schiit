@@ -1,10 +1,9 @@
-import { Mocked_Players } from "@tennis-score/api-interfaces";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Gravatar from "react-gravatar";
-import { UpdateButton } from "./Button";
 import CheckBoxInput from "./CheckBoxInput";
+import UpdateButton from "./LoadingButton";
 import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
 
@@ -175,9 +174,9 @@ const EntryForm = ({
             </div>
             <div className="text-center py-3">
               <UpdateButton
-                saving={pendingRequests > 0}
-                savingText="Saving..."
-                normalText="Submit"
+                loading={pendingRequests > 0}
+                loadingText="Saving..."
+                value="Submit"
                 type="submit"
                 disabled={!state.formValid || pendingRequests > 0}
                 className="btn btn-primary btn-block"
@@ -190,7 +189,4 @@ const EntryForm = ({
   );
 };
 
-EntryForm.defaultProps = {
-  players: Mocked_Players
-};
 export default EntryForm;

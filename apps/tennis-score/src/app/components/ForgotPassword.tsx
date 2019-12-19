@@ -1,16 +1,6 @@
-import { Player, Mocked_Players } from "@tennis-score/api-interfaces";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Table from "react-bootstrap/Table";
 import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 
-import {
-  faChartLine,
-  faUserCircle,
-  faSortAmountUp,
-  faSortAmountDown,
-  faPlus
-} from "@fortawesome/free-solid-svg-icons";
 
 const ForgotPassword: React.SFC<{
   onSubmit();

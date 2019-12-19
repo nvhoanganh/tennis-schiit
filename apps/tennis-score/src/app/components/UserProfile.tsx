@@ -1,18 +1,13 @@
 import React from "react";
 import Gravatar from "react-gravatar";
 import { LinkContainer } from "react-router-bootstrap";
-import { Button } from "./Button";
+import { Redirect } from "react-router-dom";
 import { Link } from "./Link";
-
-const UserProfile = ({ signOutHandler, history, user }) => {
-  const signOutNow = () => {
-    signOutHandler().then(_ => {
-      history.push("/home");
-    });
-  };
-
-  if (!user) return null;
-  return (
+import UpdateButton from "./LoadingButton";
+const UserProfile = ({ signOutHandler, user, loading }) => {
+  return !user ? (
+    <Redirect to="/signin" />
+  ) : (
     <div className="container-fluid">
       <div className="row pt-3">
         <div className="col-sm-12 text-center">
@@ -65,13 +60,13 @@ const UserProfile = ({ signOutHandler, history, user }) => {
       <div className="row pt-5 text-center">
         <div className="col-xs-12 col-sm-4 emphasis">
           <div className="btn-group dropup btn-block">
-            <Button
-              onClick={signOutNow}
+            <UpdateButton
+              loading={loading}
+              onClick={signOutHandler}
+              value="Sign Out"
               type="button"
-              className="btn btn-primary"
-            >
-              Sign Out
-            </Button>
+              className="btn btn-primary btn-block"
+            ></UpdateButton>
           </div>
         </div>
       </div>

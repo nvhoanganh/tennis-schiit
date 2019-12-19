@@ -2,12 +2,12 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Button } from "./Button";
+import { Redirect } from "react-router-dom";
+import UpdateButton from "./LoadingButton";
 import { Link } from "./Link";
 import TextInput from "./TextInput";
-import queryString from "query-string";
 
-const SignIn = ({ signInHandler, history, user }) => {
+const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -32,12 +32,14 @@ const SignIn = ({ signInHandler, history, user }) => {
     e.preventDefault();
     signInHandler(state).then(user => {
       console.log("user is now", user);
-      const parsed = queryString.parse(location.search);
-      history.push(parsed.ReturnUrl || "/home");
+      // const parsed = queryString.parse(location.search);
+      // history.push(parsed.ReturnUrl || "/home");
     });
   };
 
-  return (
+  return user ? (
+    <Redirect to="/home" />
+  ) : (
     <div className="mt-4 mx-4">
       <LinkContainer to="/signup">
         <Link
@@ -61,6 +63,7 @@ const SignIn = ({ signInHandler, history, user }) => {
         </Link>
       </p>
       <hr />
+      {lastError && <div className="alert alert-danger">Login failed!</div>}
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput
           type="email"
@@ -87,12 +90,13 @@ const SignIn = ({ signInHandler, history, user }) => {
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <Button
-                disabled={!state.formValid}
+              <UpdateButton
+                loading={loading}
+                value="Sign In"
+                type="submit"
+                disabled={!state.formValid || loading}
                 className="btn btn-primary btn-block"
-              >
-                Sign In
-              </Button>
+              ></UpdateButton>
             </div>
           </div>
           <div className="col-md-6 text-right">

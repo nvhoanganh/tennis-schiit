@@ -6,6 +6,7 @@ export interface IAppState {
   lastAction?: string;
   lastErrorAction?: string;
   lastError?: any;
+  signInError?: any;
   user?: any;
   currentGroup?: string;
 }
