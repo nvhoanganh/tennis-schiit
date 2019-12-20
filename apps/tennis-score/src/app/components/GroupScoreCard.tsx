@@ -6,10 +6,16 @@ const GroupScoreCard = ({
 }) => {
   return (
     <div>
-      <div>
-        <span className="text-dark font-weight-bold">{Object.values(players).length}</span> players,{" "}
-        <span className="text-dark font-weight-bold">{played}</span> matches played{" "}
-        {lastMatch && <span className="text-dark">({formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })})</span>}
+      {lastMatch &&
+        <div>
+          <em className="text-muted" style={{ fontSize: "0.7rem" }}>
+            Last match: {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
+          </em>
+        </div>
+      }
+      <div >
+        <span className="text-dark font-weight-bold">{Object.values(players).length}</span> players, played{" "}
+        <span className="text-dark font-weight-bold">{played}</span> matches{" "}
       </div>
     </div>
   );

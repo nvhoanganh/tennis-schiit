@@ -41,6 +41,7 @@
     "formik": "^2.0.6",
     "free-gaussian": "0.1.0",
     "lodash": "^4.17.15",
+    "particles-bg": "^2.4.1",
     "query-string": "^6.9.0",
     "react": "16.10.2",
     "react-bootstrap": "^1.0.0-beta.16",

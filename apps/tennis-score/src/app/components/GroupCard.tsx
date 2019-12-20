@@ -8,7 +8,7 @@ import GroupScoreCard from "./GroupScoreCard";
 const GroupCard = ({ index, group, user }) => {
   return (
     <Card className="mt-1" body>
-      <div className="row">
+      <div className="row px-2">
         <div className="mr-auto">
           <LinkContainer to={`/leaderboard/${group.groupId}`}>
             <a
@@ -25,7 +25,7 @@ const GroupCard = ({ index, group, user }) => {
             <em className="text-muted" style={{ fontSize: "0.7rem" }}>
               Created{" "}
               {formatDistanceToNow(group.createdOn.toDate(), {
-                addSuffix: false
+                addSuffix: true
               })}
             </em>
           </div>

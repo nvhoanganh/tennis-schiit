@@ -50,65 +50,67 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   }, [user]);
 
   return (
-    <div className="mt-4 mx-4">
+    <>
       <RouteNav
         history={history}
         center={<span className="h3">Update my profile</span>}
       ></RouteNav>
-      <form noValidate onSubmit={validateAndSubmit}>
-        <TextInput
-          type="email"
-          name="email"
-          label="Email"
-          disabled={true}
-          value={state.email}
-          placeholder="Email address"
-          errorMessage="Valid email is required"
-          setValue={setValue}
-          isValid={true}
-        ></TextInput>
+      <div className="mt-4 mx-4">
+        <form noValidate onSubmit={validateAndSubmit}>
+          <TextInput
+            type="email"
+            name="email"
+            label="Email"
+            disabled={true}
+            value={state.email}
+            placeholder="Email address"
+            errorMessage="Valid email is required"
+            setValue={setValue}
+            isValid={true}
+          ></TextInput>
 
-        <TextInput
-          type="text"
-          name="displayName"
-          label="Display Name"
-          value={state.displayName}
-          placeholder="Display Name"
-          errorMessage=""
-          setValue={setValue}
-          isValid={state.displayNameValid}
-        ></TextInput>
+          <TextInput
+            type="text"
+            name="displayName"
+            label="Display Name"
+            value={state.displayName}
+            placeholder="Display Name"
+            errorMessage=""
+            setValue={setValue}
+            isValid={state.displayNameValid}
+          ></TextInput>
 
-        <CheckBoxInput
-          name="leftHanded"
-          label="Play Left Hand?"
-          value={state.leftHanded}
-          setValue={setValue}
-        ></CheckBoxInput>
+          <CheckBoxInput
+            name="leftHanded"
+            label="Play Left Hand?"
+            value={state.leftHanded}
+            setValue={setValue}
+          ></CheckBoxInput>
 
-        <CheckBoxInput
-          name="singleHandedBackhand"
-          label="Single Backhand?"
-          value={state.singleHandedBackhand}
-          setValue={setValue}
-        ></CheckBoxInput>
+          <CheckBoxInput
+            name="singleHandedBackhand"
+            label="Single Backhand?"
+            value={state.singleHandedBackhand}
+            setValue={setValue}
+          ></CheckBoxInput>
 
-        <div className="row pt-4">
-          <div className="col-md-6">
-            <div className="form-group">
-              <UpdateButton
-                loading={pendingRequests > 0}
-                loadingText="Saving..."
-                value="Update Profile"
-                type="submit"
-                disabled={!state.formValid || pendingRequests > 0}
-                className="btn btn-primary btn-block"
-              ></UpdateButton>
+          <div className="row pt-4">
+            <div className="col-md-6">
+              <div className="form-group">
+                <UpdateButton
+                  loading={pendingRequests > 0}
+                  loadingText="Saving..."
+                  value="Update Profile"
+                  type="submit"
+                  disabled={!state.formValid || pendingRequests > 0}
+                  className="btn btn-primary btn-block"
+                ></UpdateButton>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 };
 

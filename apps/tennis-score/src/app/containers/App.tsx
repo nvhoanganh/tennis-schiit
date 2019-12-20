@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
-
+import MySpinner from '../components/MySpinner';
+import ParticlesBg from "particles-bg";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -41,7 +42,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
           href="#home"
           style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
         >
-          Tennis Schiit
+          Tennis-Sheet
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
@@ -66,20 +67,22 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
                 </NavDropdown.Item>
               </LinkContainer>
             ) : (
-              <LinkContainer style={linkStyle} to="/account-details">
-                <NavDropdown.Item className="text-white">
-                  User Profile
+                <LinkContainer style={linkStyle} to="/account-details">
+                  <NavDropdown.Item className="text-white">
+                    User Profile
                 </NavDropdown.Item>
-              </LinkContainer>
-            )}
+                </LinkContainer>
+              )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
       <div>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
-    <h4>Loading...</h4>
-  );
+      <>
+        <ParticlesBg type="random" bg={true} />
+      </>
+    );
 };
 
 const mapStateToProps = ({
