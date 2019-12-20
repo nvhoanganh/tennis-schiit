@@ -80,7 +80,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
     </div>
   ) : (
       <>
-        <ParticlesBg type="cobweb" bg={true} />
+        <ParticlesBg type="cobweb" bg={true} config={null}/>
       </>
     );
 };
