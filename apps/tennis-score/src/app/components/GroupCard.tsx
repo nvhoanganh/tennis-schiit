@@ -15,7 +15,7 @@ const GroupCard = ({ index, group, user }) => {
               style={{
                 paddingLeft: 8
               }}
-              className="h3 pl-0"
+              className="h5 text-dark pl-0"
             >
               {group.name.toUpperCase()}
             </a>

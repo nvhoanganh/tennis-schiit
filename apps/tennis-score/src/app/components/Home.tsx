@@ -9,11 +9,11 @@ const Home = ({ user, groups, myGroups, ...props }) => {
 
   return (
     <>
-      <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />
+      {user && <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />}
       {myGroups.length > 0 && (
         <>
           <h4 className="text-center pt-3">My Groups</h4>
-          <div className="px-1 pb-5">
+          <div className="px-2 pb-5">
             {myGroups.map((p, i) => (
               <GroupCard
                 index={i}
@@ -29,7 +29,7 @@ const Home = ({ user, groups, myGroups, ...props }) => {
       {groups.length > 0 && (
         <>
           <h4 className="text-center pt-3">Groups near me</h4>
-          <div className="px-1 pb-5">
+          <div className="px-2 pb-5">
             {groups.map((p, i) => (
               <GroupCard
                 index={i}

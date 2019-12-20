@@ -62,10 +62,10 @@ const Leaderboard = ({
               ></LeaderboardCard>
             ))}
           </div>
-        ) : <h6 className="text-center py-5">Click add buton to add your first match</h6>
+        ) : <p className="text-center font-italic py-5">Click add buton to add your first match</p>
       ) : (
-        <MySpinner />
-      )}
+          <MySpinner />
+        )}
     </>
   );
 };

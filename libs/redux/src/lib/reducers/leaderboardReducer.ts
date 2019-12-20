@@ -11,15 +11,23 @@ const leaderboard = (
   action: LeaderboardAction
 ): ILeaderboardState => {
   switch (action.type) {
+    case LeaderboardActionTypes.LOAD_LEADERBOARD:
+      return {
+        ...state,
+        groupId: action.groupId,
+        tournament: null,
+        players: null
+      };
+
     case LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS:
       return {
         ...state,
         groupId: action.groupId,
         tournament: action.tournament
           ? {
-              startDate: action.tournament.startDate,
-              endDate: action.tournament.endDate
-            }
+            startDate: action.tournament.startDate,
+            endDate: action.tournament.endDate
+          }
           : null,
         players: action.tournament ? action.tournament.players : {}
       };

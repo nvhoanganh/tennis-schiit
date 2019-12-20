@@ -15,12 +15,17 @@ export enum LeaderboardActionTypes {
 // actions
 export class LoadLeaderboardSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
-  constructor(public groupId: any, public tournament: any) {}
+  constructor(public groupId: any, public tournament: any) { }
+}
+
+export class LoadLeaderboardAction implements IAction {
+  readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD;
+  constructor(public groupId: any) { }
 }
 
 export class SubmitScoreSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.SUBMIT_SCORE_SUCCESS;
-  constructor(public newScoreId: string) {}
+  constructor(public newScoreId: string) { }
 }
 
 // action creators
@@ -28,6 +33,10 @@ export class SubmitScoreSuccessAction implements IAction {
 // thunks
 export function loadLeaderboard(groupId: string) {
   return async dispatch => {
+    dispatch(<LoadLeaderboardAction>{
+      type: LeaderboardActionTypes.LOAD_LEADERBOARD,
+      groupId: groupId
+    });
     dispatch(apiStart(LeaderboardActionTypes.LOAD_LEADERBOARD));
     const group = await firebase
       .firestore()
@@ -105,4 +114,4 @@ export function submitScore({
   };
 }
 
-export type LeaderboardAction = LoadLeaderboardSuccessAction;
+export type LeaderboardAction = LoadLeaderboardSuccessAction | LoadLeaderboardAction;
