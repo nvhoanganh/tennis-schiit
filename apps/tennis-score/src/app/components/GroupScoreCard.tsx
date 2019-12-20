@@ -7,9 +7,9 @@ const GroupScoreCard = ({
   return (
     <div>
       <div>
-        <span className="text-dark p-1 font-weight-bold">{Object.values(players).length}</span> Players,
-        <span className="text-dark p-1 font-weight-bold">{played}</span> Matches, Last Match
-        <span className="text-dark p-1 font-weight-bold">{formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}</span>
+        <span className="text-dark font-weight-bold">{Object.values(players).length}</span> players,{" "}
+        <span className="text-dark font-weight-bold">{played}</span> matches played{" "}
+        {lastMatch && <span className="text-dark">({formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })})</span>}
       </div>
     </div>
   );
