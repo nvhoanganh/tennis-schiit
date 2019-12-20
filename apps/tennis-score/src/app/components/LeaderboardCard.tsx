@@ -51,7 +51,7 @@ const LeaderboardCard = ({ player, ranking }) => {
         }}
       >
         <div className="float-left pr-2">
-          <RoundGravatar size={60} email={player.email} />
+          <RoundGravatar size={50} email={player.email} />
           <div className="text-center">
             <span className="badge badge-pill " style={top3}>
               {ranking === 0
@@ -66,7 +66,7 @@ const LeaderboardCard = ({ player, ranking }) => {
         </div>
         <div className="mr-auto">
           <LinkContainer to={`/player/${player.id}`}>
-            <a className="h5 pl-1">{player.name}</a>
+            <a className="h5 text-dark pl-0">{player.name}</a>
           </LinkContainer>
           <div className="float-right">
             <div className="h4">
