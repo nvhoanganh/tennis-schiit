@@ -13,7 +13,7 @@ import RoundGravatar from "./RoundGravatar";
 
 const LeaderboardCard = ({ player, ranking }) => {
   const prizeMoneyCls = classNames({
-    h6: true,
+    h5: true,
     "text-success": player.prizeMoney > 0,
     "text-danger": player.prizeMoney < 0
   });
@@ -50,7 +50,7 @@ const LeaderboardCard = ({ player, ranking }) => {
           margin: -9
         }}
       >
-        <div className="float-left pr-2">
+        <div className="float-left pr-3 pl-2">
           <RoundGravatar size={50} email={player.email} />
           <div className="text-center">
             <span className="badge badge-pill " style={top3}>
@@ -69,7 +69,7 @@ const LeaderboardCard = ({ player, ranking }) => {
             <a className="h5 text-dark pl-0">{player.name}</a>
           </LinkContainer>
           <div className="float-right">
-            <div className="h4">
+            <div className="h5">
               {player.score}
               {getArrow}
             </div>

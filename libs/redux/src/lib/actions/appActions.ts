@@ -76,9 +76,13 @@ export function apiError(action: string, err: any): ApiErrorAction {
 }
 
 // thunks
-export function signIn({ email, password }: ISignInModel) {
+export function signIn({ email, password, isGmail }) {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.SIGNIN));
+    if (isGmail) {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      return firebase.auth().signInWithRedirect(provider);
+    }
     return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)

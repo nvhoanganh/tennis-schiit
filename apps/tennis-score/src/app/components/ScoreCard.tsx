@@ -11,7 +11,7 @@ export function ScoreCard({ played, won, lost, bagelWon, bagelLost }) {
         <span className="text-danger p-1 font-weight-bold">{bagelLost}</span>
       </div>
       <div>
-        <span className="text-dark font-weight-bold">{played}</span> matches played
+        <span className="text-dark font-weight-bold">{played}</span> matches
       </div>
     </div>
   );

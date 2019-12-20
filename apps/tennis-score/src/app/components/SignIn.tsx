@@ -30,83 +30,79 @@ const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
 
   const validateAndSubmit = e => {
     e.preventDefault();
-    signInHandler(state).then(user => {
-      console.log("user is now", user);
-      // const parsed = queryString.parse(location.search);
-      // history.push(parsed.ReturnUrl || "/home");
-    });
+    signInHandler(state);
   };
 
   return user ? (
     <Redirect to="/home" />
   ) : (
-    <div className="mt-4 mx-4">
-      <LinkContainer to="/signup">
-        <Link
-          className="float-right btn btn-outline-primary"
-          title="Sign up"
-          href=""
-        >
-          Sign up
+      <div className="mt-4 mx-4">
+        <LinkContainer to="/signup">
+          <Link
+            className="float-right btn btn-outline-primary"
+            title="Sign up"
+            href=""
+          >
+            Sign up
         </Link>
-      </LinkContainer>
-      <h4 className="card-title mb-4 mt-1">Sign in</h4>
-      <p>
-        <Link
-          onClick={() => {
-            console.log("login via google");
-          }}
-          className="btn btn-block btn-outline-danger"
-        >
-          <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
-          Login via Google
+        </LinkContainer>
+        <h4 className="card-title mb-4 mt-1">Sign in</h4>
+        <p>
+          <Link
+            onClick={() => {
+              signInHandler({ isGmail: true });
+            }}
+            className="btn btn-block btn-outline"
+          >
+            <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
+            Login via Google
         </Link>
-      </p>
-      <hr />
-      {lastError && <div className="alert alert-danger">Login failed!</div>}
-      <form noValidate onSubmit={validateAndSubmit}>
-        <TextInput
-          type="email"
-          name="email"
-          label="Email"
-          value={state.email}
-          placeholder="Email address"
-          errorMessage="Valid email is required"
-          setValue={setValue}
-          isValid={state.emailValid}
-        ></TextInput>
+        </p>
+        <hr />
+        {lastError && <div className="alert alert-danger">Login failed!</div>}
+        <form noValidate onSubmit={validateAndSubmit}>
+          <TextInput
+            type="email"
+            name="email"
+            label="Email"
+            value={state.email}
+            placeholder="Email address"
+            errorMessage="Valid email is required"
+            setValue={setValue}
+            isValid={state.emailValid}
+          ></TextInput>
 
-        <TextInput
-          type="password"
-          name="password"
-          label="Password"
-          value={state.password}
-          placeholder="Password"
-          errorMessage="Password is required"
-          setValue={setValue}
-          isValid={state.passwordValid}
-        ></TextInput>
+          <TextInput
+            type="password"
+            name="password"
+            label="Password"
+            value={state.password}
+            placeholder="Password"
+            errorMessage="Password is required"
+            setValue={setValue}
+            isValid={state.passwordValid}
+          ></TextInput>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div className="form-group">
-              <UpdateButton
-                loading={loading}
-                value="Sign In"
-                type="submit"
-                disabled={!state.formValid || loading}
-                className="btn btn-primary btn-block"
-              ></UpdateButton>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
+                <UpdateButton
+                  loading={loading}
+                  value="Sign In"
+                  type="submit"
+                  disabled={!state.formValid || loading}
+                  className="btn btn-primary btn-block"
+                ></UpdateButton>
+              </div>
+            </div>
+            <div className="col-md-6 text-right">
+              <Link title="Forgot password?" href="#">
+                Forgot password?
+            </Link>
             </div>
           </div>
-          <div className="col-md-6 text-right">
-            <Link title="Forgot password?" href="#">
-              Forgot password?
-            </Link>
-          </div>
-        </div>
-      </form>
-    </div>
-  );
+        </form>
+      </div>
+    );
 };
 export default SignIn;
