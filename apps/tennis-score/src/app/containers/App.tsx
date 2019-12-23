@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
-import MySpinner from '../components/MySpinner';
+import MySpinner from "../components/MySpinner";
 import ParticlesBg from "particles-bg";
 const linkStyle = {
   lineHeight: "2rem"
@@ -67,22 +67,28 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
                 </NavDropdown.Item>
               </LinkContainer>
             ) : (
-                <LinkContainer style={linkStyle} to="/account-details">
-                  <NavDropdown.Item className="text-white">
-                    User Profile
+              <LinkContainer style={linkStyle} to="/account-details">
+                <NavDropdown.Item className="text-white">
+                  User Profile
                 </NavDropdown.Item>
-                </LinkContainer>
-              )}
+              </LinkContainer>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
       <div>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
-      <>
-        <ParticlesBg type="cobweb" bg={true} config={null}/>
-      </>
-    );
+    <div className="py-5">
+      <MySpinner />
+      <div className="text-center">
+        <h3>Tennis Sheet</h3>
+        <p>
+          <em>Loading...</em>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = ({

@@ -2,6 +2,7 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+
 import { Redirect } from "react-router-dom";
 import UpdateButton from "./LoadingButton";
 import { Link } from "./Link";

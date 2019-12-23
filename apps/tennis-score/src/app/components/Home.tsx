@@ -39,6 +39,7 @@ const Home = ({ user, groups, myGroups, ...props }) => {
                 key={p.groupId}
                 group={p}
                 user={user}
+                showIsMember={true}
               ></GroupCard>
             ))}
           </div>

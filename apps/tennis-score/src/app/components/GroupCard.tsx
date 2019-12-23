@@ -1,10 +1,9 @@
-import { GroupMembership } from "./GroupMembership";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { LinkContainer } from "react-router-bootstrap";
+import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
-
 const GroupCard = ({ index, group, user, showIsMember }) => {
   return (
     <LinkContainer to={`/leaderboard/${group.groupId}`}>
