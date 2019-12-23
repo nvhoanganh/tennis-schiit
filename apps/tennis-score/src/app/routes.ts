@@ -8,6 +8,7 @@ import UserProfile from "./containers/UserProfile";
 import EntryForm from "./containers/EntryForm";
 import EditProfile from "./containers/EditProfile";
 import NewGroup from './containers/NewGroup';
+import AddPlayer from './containers/AddPlayer';
 
 const routes = [
   {
@@ -32,6 +33,11 @@ const routes = [
         path: "/leaderboard/:group",
         exact: true,
         component: Leaderboard
+      },
+      {
+        path: "/groups/:group/newplayer",
+        exact: true,
+        component: AddPlayer
       },
       {
         path: "/newscore/:group",

@@ -121,7 +121,10 @@ const EntryForm = ({
                           <td>
                             <div className="row">
                               <div className="ml-3">
-                                <RoundGravatar size={37} email={p.email} />
+                                <RoundGravatar
+                                  size={37}
+                                  email={p.email || "0"}
+                                />
                               </div>
                               <div className="ml-2 font-weight-bold mr-auto mt-1">
                                 {p.name}

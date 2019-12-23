@@ -7,10 +7,12 @@ export function AppLoader({}) {
         <div className="mx-auto">
           <div className="text-center">
             <h1 className="display-4">Tennis Sheet</h1>
-            <p className="lead"><em>Loading...</em></p>
             <p className="lead">
-              <MySpinner />
+              <em>Loading...</em>
             </p>
+            <div className="lead">
+              <MySpinner />
+            </div>
           </div>
         </div>
       </div>

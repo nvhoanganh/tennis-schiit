@@ -24,7 +24,7 @@ export class AddPlayerToGroupAction implements IAction {
 
 export class AddGroupAction implements IAction {
   readonly type = GroupActionTypes.ADD_GROUP;
-  constructor(public group: IGroup) {}
+  constructor(public group: any) {}
 }
 export class UpdateGroupAction implements IAction {
   readonly type = GroupActionTypes.UPDATE_GROUP;
@@ -122,11 +122,12 @@ export function addGroup({ name, description }) {
       .firestore()
       .collection(GROUPS)
       .add(dat)
+      .then(d => d.get())
       .then(d => {
         dispatch(apiEnd());
         dispatch(<AddGroupAction>{
           type: GroupActionTypes.ADD_GROUP,
-          group: <any>d
+          group: { groupId: d.id, ...mapGroups(d.data()) }
         });
       });
   };

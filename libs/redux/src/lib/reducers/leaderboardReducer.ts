@@ -25,11 +25,13 @@ const leaderboard = (
         groupId: action.groupId,
         tournament: action.tournament
           ? {
-            startDate: action.tournament.startDate,
-            endDate: action.tournament.endDate
-          }
+              startDate: action.tournament.startDate,
+              endDate: action.tournament.endDate
+            }
           : null,
-        players: action.tournament ? action.tournament.players : {}
+        players: action.tournament
+          ? action.tournament.players
+          : Object.values(action.group.players)
       };
     default:
       return state;

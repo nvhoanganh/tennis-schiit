@@ -52,7 +52,10 @@ const LeaderboardCard = ({ player, ranking }) => {
           }}
         >
           <div className="float-left pr-3 pl-2">
-            <RoundGravatar size={50} email={player.email} />
+            <RoundGravatar
+              size={50}
+              email={player.email || "0"}
+            />
             <div className="text-center">
               <span className="badge badge-pill " style={top3}>
                 {ranking === 0
@@ -67,14 +70,16 @@ const LeaderboardCard = ({ player, ranking }) => {
           </div>
           <div className="mr-auto">
             <a className="h5 text-dark pl-0">{player.name}</a>
-            <div className="float-right">
-              <div className="h5">
-                {player.score}
-                {getArrow}
+            {player.played ? (
+              <div className="float-right">
+                <div className="h5">
+                  {player.score}
+                  {getArrow}
+                </div>
+                <div className="h6">{player.winPercentage}%</div>
+                <div className={prizeMoneyCls}>${player.prizeMoney}</div>
               </div>
-              <div className="h6">{player.winPercentage}%</div>
-              <div className={prizeMoneyCls}>${player.prizeMoney}</div>
-            </div>
+            ) : null}
             <ScoreCard {...player} />
           </div>
         </div>

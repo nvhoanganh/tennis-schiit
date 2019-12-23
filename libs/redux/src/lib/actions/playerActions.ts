@@ -3,7 +3,8 @@ import "firebase/auth";
 import "firebase/firestore";
 import { IPlayer, USERS, GROUPS } from "../models";
 import { apiEnd, apiStart } from "./appActions";
-import { IAction } from '@tennis-score/redux';
+import { IAction } from "@tennis-score/redux";
+import { loadLeaderboard } from "./leaderboardActions";
 export enum PlayerActionTypes {
   LOAD_PLAYERS = "LOAD_PLAYERS",
   LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
@@ -14,7 +15,6 @@ export enum PlayerActionTypes {
   UPDATE_PLAYER = "UPDATE_PLAYER",
   REMOVE_PLAYER = "REMOVE_PLAYER"
 }
-
 
 // actions
 export class AddPlayerAction implements IAction {
@@ -38,8 +38,25 @@ export class LoadPlayersSuccessAction implements IAction {
 export function removePlayer(playerId: string): RemovePlayerAction {
   return { type: PlayerActionTypes.REMOVE_PLAYER, playerId };
 }
-export function addPlayer(player: IPlayer): AddPlayerAction {
-  return { type: PlayerActionTypes.ADD_PLAYER, player };
+export function addPlayer({ name, groupId, playerId }) {
+  return (dispatch, getState) => {
+    dispatch(apiStart(PlayerActionTypes.ADD_PLAYER));
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .update({
+        players: firebase.firestore.FieldValue.arrayUnion({
+          name,
+          playerId,
+          joinDate: new Date()
+        })
+      })
+      .then(_ => {
+        dispatch(apiEnd());
+        loadLeaderboard(groupId);
+      });
+  };
 }
 
 // thunks

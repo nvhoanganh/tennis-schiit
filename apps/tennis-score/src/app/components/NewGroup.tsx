@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextInput from "./TextInput";
 import UpdateButton from "./LoadingButton";
 
-const NewGroup = ({ loading, addGroup }) => {
+const NewGroup = ({ loading, history, addGroup }) => {
   const [state, setState] = useState({
     name: "",
     nameValid: false,
@@ -26,7 +26,7 @@ const NewGroup = ({ loading, addGroup }) => {
   const validateAndSubmit = e => {
     e.preventDefault();
     if (state.formValid) {
-      addGroup(state);
+      addGroup(state).then(_ => history.goBack());
     }
   };
 
@@ -61,7 +61,7 @@ const NewGroup = ({ loading, addGroup }) => {
             <div className="form-group">
               <UpdateButton
                 loading={loading}
-                value="Sign up"
+                value="Create new group"
                 type="submit"
                 disabled={!state.formValid || loading}
                 className="btn btn-primary btn-block"

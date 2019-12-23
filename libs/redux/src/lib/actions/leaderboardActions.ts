@@ -15,17 +15,21 @@ export enum LeaderboardActionTypes {
 // actions
 export class LoadLeaderboardSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
-  constructor(public groupId: any, public tournament: any) { }
+  constructor(
+    public group: any,
+    public groupId: string,
+    public tournament: any
+  ) {}
 }
 
 export class LoadLeaderboardAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD;
-  constructor(public groupId: any) { }
+  constructor(public groupId: any) {}
 }
 
 export class SubmitScoreSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.SUBMIT_SCORE_SUCCESS;
-  constructor(public newScoreId: string) { }
+  constructor(public newScoreId: string) {}
 }
 
 // action creators
@@ -62,13 +66,15 @@ export function loadLeaderboard(groupId: string) {
 
       dispatch(<LoadLeaderboardSuccessAction>{
         type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
-        groupId: groupId,
+        group: fgroupData,
+        groupId,
         tournament: currentTournament.exists ? currentTournament.data() : null
       });
     } else {
       dispatch(<LoadLeaderboardSuccessAction>{
         type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
-        groupId: groupId,
+        group: fgroupData,
+        groupId,
         tournament: null
       });
     }
@@ -114,4 +120,6 @@ export function submitScore({
   };
 }
 
-export type LeaderboardAction = LoadLeaderboardSuccessAction | LoadLeaderboardAction;
+export type LeaderboardAction =
+  | LoadLeaderboardSuccessAction
+  | LoadLeaderboardAction;

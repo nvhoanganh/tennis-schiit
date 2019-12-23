@@ -1,4 +1,4 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faHamburger, faClipboardList, faUserPlus, faBars } from "@fortawesome/free-solid-svg-icons";
 import format from "date-fns/format";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
@@ -8,6 +8,7 @@ import GroupScoreCard from "./GroupScoreCard";
 import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
+import FloatActionsButton from "./FloatActionsButton";
 
 const Leaderboard = ({
   players,
@@ -19,6 +20,18 @@ const Leaderboard = ({
   history,
   ...props
 }) => {
+  const urls = [
+    {
+      url: `/newscore/${match.params.group}`,
+      tooltip: "New Score",
+      icon: faClipboardList
+    },
+    {
+      url: `/groups/${match.params.group}/newplayer`,
+      tooltip: "New Player",
+      icon: faUserPlus
+    }
+  ];
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
@@ -35,7 +48,7 @@ const Leaderboard = ({
 
           <div className="text-center pb-4">
             <GroupMembership user={user} group={group} showIsMember={true} />
-            <GroupScoreCard group={group} user={user}></GroupScoreCard>
+            <GroupScoreCard group={group} user={user} players={players}></GroupScoreCard>
             {tournament && (
               <em className="text-muted" style={{ fontSize: "0.7rem" }}>
                 Current tournament:{" "}
@@ -46,11 +59,10 @@ const Leaderboard = ({
           </div>
         </>
       )}
-      <FloatButton
-        icon={faPlus}
-        tooltip="Add new score"
-        url={`/newscore/${match.params.group}`}
-      ></FloatButton>
+      <FloatActionsButton
+        icon={faBars}
+        urls={urls}
+      ></FloatActionsButton>
       {pendingRequests === 0 && players ? (
         players.length > 0 ? (
           <div className="px-1 pb-5">
@@ -62,10 +74,14 @@ const Leaderboard = ({
               ></LeaderboardCard>
             ))}
           </div>
-        ) : <p className="text-center font-italic py-5">Click add buton to add your first match</p>
+        ) : (
+          <p className="text-center font-italic py-5">
+            Click add buton to add your first match
+          </p>
+        )
       ) : (
-          <MySpinner />
-        )}
+        <MySpinner />
+      )}
     </>
   );
 };
