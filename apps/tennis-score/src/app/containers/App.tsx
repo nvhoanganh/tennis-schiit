@@ -9,8 +9,7 @@ import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
-import MySpinner from "../components/MySpinner";
-import ParticlesBg from "particles-bg";
+import { AppLoader } from "../components/AppLoader";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -79,15 +78,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
       <div>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
-    <div className="py-5">
-      <MySpinner />
-      <div className="text-center">
-        <h3>Tennis Sheet</h3>
-        <p>
-          <em>Loading...</em>
-        </p>
-      </div>
-    </div>
+    <AppLoader />
   );
 };
 
