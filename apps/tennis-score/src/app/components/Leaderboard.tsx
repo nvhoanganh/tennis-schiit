@@ -1,4 +1,11 @@
-import { faPlus, faHamburger, faClipboardList, faUserPlus, faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faHamburger,
+  faClipboardList,
+  faUserPlus,
+  faBars,
+  faTrophy
+} from "@fortawesome/free-solid-svg-icons";
 import format from "date-fns/format";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
@@ -20,11 +27,11 @@ const Leaderboard = ({
   history,
   ...props
 }) => {
-  const urls = [
+  let urls = [
     {
-      url: `/newscore/${match.params.group}`,
-      tooltip: "New Score",
-      icon: faClipboardList
+      url: `/groups/${match.params.group}/newtour`,
+      tooltip: "New Tournament",
+      icon: faTrophy
     },
     {
       url: `/groups/${match.params.group}/newplayer`,
@@ -32,6 +39,14 @@ const Leaderboard = ({
       icon: faUserPlus
     }
   ];
+
+  if (tournament) {
+    urls.push({
+      url: `/newscore/${match.params.group}`,
+      tooltip: "New Score",
+      icon: faClipboardList
+    });
+  }
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
@@ -48,7 +63,11 @@ const Leaderboard = ({
 
           <div className="text-center pb-4">
             <GroupMembership user={user} group={group} showIsMember={true} />
-            <GroupScoreCard group={group} user={user} players={players}></GroupScoreCard>
+            <GroupScoreCard
+              group={group}
+              user={user}
+              players={players}
+            ></GroupScoreCard>
             {tournament && (
               <em className="text-muted" style={{ fontSize: "0.7rem" }}>
                 Current tournament:{" "}
@@ -59,10 +78,7 @@ const Leaderboard = ({
           </div>
         </>
       )}
-      <FloatActionsButton
-        icon={faBars}
-        urls={urls}
-      ></FloatActionsButton>
+      <FloatActionsButton icon={faBars} urls={urls}></FloatActionsButton>
       {pendingRequests === 0 && players ? (
         players.length > 0 ? (
           <div className="px-1 pb-5">
