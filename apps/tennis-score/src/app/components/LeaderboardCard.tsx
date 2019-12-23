@@ -63,8 +63,8 @@ const LeaderboardCard = ({ player, ranking }) => {
                   : ranking === 1
                   ? "2nd"
                   : ranking === 2
-                  ? "3krd"
-                  : ""}
+                  ? "3rd"
+                  : " "}
               </span>
             </div>
           </div>

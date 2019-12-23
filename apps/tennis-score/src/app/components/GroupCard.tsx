@@ -31,7 +31,11 @@ const GroupCard = ({ index, group, user, showIsMember }) => {
                 })}
               </em>
             </div>
-            <GroupScoreCard group={group} user={user}></GroupScoreCard>
+            <GroupScoreCard
+              group={group}
+              user={user}
+              players={Object.values(group.players)}
+            ></GroupScoreCard>
           </div>
         </div>
       </Card>
