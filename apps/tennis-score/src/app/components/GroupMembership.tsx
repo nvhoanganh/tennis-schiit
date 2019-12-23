@@ -1,6 +1,6 @@
 import React from "react";
-import { isMember, isOwner } from '@tennis-score/redux';
-export function GroupMembership({ user, group }) {
+import { isMember, isOwner } from "@tennis-score/redux";
+export function GroupMembership({ user, group, showIsMember }) {
   if (!user || !group) return null;
   return (
     <div
@@ -11,11 +11,11 @@ export function GroupMembership({ user, group }) {
         verticalAlign: "top"
       }}
     >
-      {isOwner(user, group) ? (
+      {isOwner(user, group)  ? (
         <span className="badge badge-warning ml-1">Owner</span>
       ) : null}
 
-      {isMember(user, group) ? (
+      {isMember(user, group) && showIsMember ? (
         <span className="badge badge-success ml-1">Member</span>
       ) : null}
     </div>

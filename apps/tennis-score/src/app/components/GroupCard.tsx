@@ -5,12 +5,12 @@ import Card from "react-bootstrap/Card";
 import { LinkContainer } from "react-router-bootstrap";
 import GroupScoreCard from "./GroupScoreCard";
 
-const GroupCard = ({ index, group, user }) => {
+const GroupCard = ({ index, group, user, showIsMember }) => {
   return (
-    <Card className="mt-1" body>
-      <div className="row px-2">
-        <div className="mr-auto">
-          <LinkContainer to={`/leaderboard/${group.groupId}`}>
+    <LinkContainer to={`/leaderboard/${group.groupId}`}>
+      <Card className="mt-1" body>
+        <div className="row px-2">
+          <div className="mr-auto">
             <a
               style={{
                 paddingLeft: 8
@@ -19,20 +19,24 @@ const GroupCard = ({ index, group, user }) => {
             >
               {group.name.toUpperCase()}
             </a>
-          </LinkContainer>
-          <GroupMembership user={user} group={group} />
-          <div>
-            <em className="text-muted" style={{ fontSize: "0.7rem" }}>
-              Created{" "}
-              {formatDistanceToNow(group.createdOn.toDate(), {
-                addSuffix: true
-              })}
-            </em>
+            <GroupMembership
+              user={user}
+              group={group}
+              showIsMember={showIsMember}
+            />
+            <div>
+              <em className="text-muted" style={{ fontSize: "0.7rem" }}>
+                Created{" "}
+                {formatDistanceToNow(group.createdOn.toDate(), {
+                  addSuffix: true
+                })}
+              </em>
+            </div>
+            <GroupScoreCard group={group} user={user}></GroupScoreCard>
           </div>
-          <GroupScoreCard group={group} user={user}></GroupScoreCard>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </LinkContainer>
   );
 };
 

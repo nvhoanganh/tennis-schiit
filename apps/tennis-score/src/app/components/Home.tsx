@@ -9,7 +9,9 @@ const Home = ({ user, groups, myGroups, ...props }) => {
 
   return (
     <>
-      {user && <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />}
+      {user && (
+        <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />
+      )}
       {myGroups.length > 0 && (
         <>
           <h4 className="text-center pt-3">My Groups</h4>
@@ -20,6 +22,7 @@ const Home = ({ user, groups, myGroups, ...props }) => {
                 key={p.groupId}
                 group={p}
                 user={user}
+                showIsMember={false}
               ></GroupCard>
             ))}
           </div>

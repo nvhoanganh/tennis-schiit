@@ -34,7 +34,7 @@ const Leaderboard = ({
           ></RouteNav>
 
           <div className="text-center pb-4">
-            <GroupMembership user={user} group={group} />
+            <GroupMembership user={user} group={group} showIsMember={true} />
             <GroupScoreCard group={group} user={user}></GroupScoreCard>
             {tournament && (
               <em className="text-muted" style={{ fontSize: "0.7rem" }}>
