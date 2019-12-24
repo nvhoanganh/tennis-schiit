@@ -14,7 +14,9 @@ export function GroupMemberDropdown({ user, group }) {
       id="group-menu"
     >
       {!isMember(user, group) && <Dropdown.Item>Join Group</Dropdown.Item>}
-      {isMember(user, group) && <Dropdown.Item>Leave Group</Dropdown.Item>}
+      {!isOwner(user, group) && isMember(user, group) && (
+        <Dropdown.Item>Leave Group</Dropdown.Item>
+      )}
       <Dropdown.Item>View Scores</Dropdown.Item>
       {isOwner(user, group) && (
         <>

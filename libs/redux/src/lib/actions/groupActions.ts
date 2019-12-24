@@ -118,6 +118,7 @@ export function addGroup({ name, description }) {
       description,
       createdOn: new Date(),
       owner: user.uid,
+      onwerName: user.displayName,
       played: 0,
       players: [
         {

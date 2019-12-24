@@ -56,7 +56,7 @@ const NewGroup = ({ loading, history, addGroup }) => {
           isValid={true}
         ></TextInput>
 
-        <div className="row">
+          <div className="row">
           <div className="col-md-6">
             <div className="form-group">
               <UpdateButton
