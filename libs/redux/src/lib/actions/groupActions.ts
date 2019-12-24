@@ -48,10 +48,6 @@ export function invitePlayerToGroup(
   return { type: GroupActionTypes.ADD_PLAYER_TO_GROUP, groupId, playerId };
 }
 
-export function deleteGroup(id: string): DeleteGroupAction {
-  return { type: GroupActionTypes.DELETE_GROUP, id };
-}
-
 export function updateGroup(group: IGroup): UpdateGroupAction {
   return { type: GroupActionTypes.UPDATE_GROUP, group };
 }
@@ -92,6 +88,21 @@ export function loadGroups() {
           type: GroupActionTypes.LOAD_GROUPS_SUCCESS,
           groups: data
         });
+      });
+  };
+}
+
+export function deleteGroup(groupId) {
+  return (dispatch, getState) => {
+    dispatch(apiStart(GroupActionTypes.DELETE_GROUP));
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .delete()
+      .then(_ => {
+        dispatch(apiEnd());
+        dispatch({ type: GroupActionTypes.DELETE_GROUP, id: groupId });
       });
   };
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import UpdateButton from "./LoadingButton";
 import TextInput from "./TextInput";
 import RouteNav from "./RouteNav";
+import { isValidEmail } from "@tennis-score/core";
 const AddPlayer = ({
   addPlayer,
   group,
@@ -15,6 +16,8 @@ const AddPlayer = ({
     props.loadLeaderboard(match.params.group);
   }, []);
   const [state, setState] = useState({
+    email: "",
+    emailValid: false,
     name: "",
     nameValid: false,
     formValid: false
@@ -35,14 +38,15 @@ const AddPlayer = ({
     setState(current => {
       const newS = {
         ...current,
-        nameValid: !!current.name
+        nameValid: !!state.name,
+        emailValid: isValidEmail(state.email)
       };
       return {
         ...newS,
-        formValid: newS.nameValid
+        formValid: newS.nameValid && newS.emailValid
       };
     });
-  }, [state.name]);
+  }, [state.name, state.email]);
 
   if (!group) return null;
   return (
@@ -50,20 +54,29 @@ const AddPlayer = ({
       <RouteNav
         history={history}
         center={
-          <span className="h3">
-            {group.name.toUpperCase()} - New Player
-          </span>
+          <span className="h3">{group.name.toUpperCase()} - New Player</span>
         }
       ></RouteNav>
       <div className="mt-4 mx-4">
         <form noValidate onSubmit={validateAndSubmit}>
+          <TextInput
+            type="email"
+            name="email"
+            label="Player Email"
+            value={state.email}
+            placeholder="Player email"
+            errorMessage="Valid email is required"
+            setValue={setValue}
+            isValid={state.emailValid}
+          ></TextInput>
+
           <TextInput
             type="text"
             name="name"
             label="Player Name"
             value={state.name}
             placeholder="Player Name"
-            errorMessage=""
+            errorMessage="Name is required"
             setValue={setValue}
             isValid={state.nameValid}
           ></TextInput>

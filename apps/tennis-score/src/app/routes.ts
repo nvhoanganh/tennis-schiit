@@ -7,8 +7,9 @@ import ForgotPassword from "./components/ForgotPassword";
 import UserProfile from "./containers/UserProfile";
 import EntryForm from "./containers/EntryForm";
 import EditProfile from "./containers/EditProfile";
-import NewGroup from './containers/NewGroup';
-import AddPlayer from './containers/AddPlayer';
+import NewGroup from "./containers/NewGroup";
+import AddPlayer from "./containers/AddPlayer";
+import ManageGroup from "./containers/ManageGroup";
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
         path: "/newgroup",
         exact: true,
         component: NewGroup
+      },
+      {
+        path: "/managegroup/:group",
+        exact: true,
+        component: ManageGroup
       },
       {
         path: "/leaderboard/:group",

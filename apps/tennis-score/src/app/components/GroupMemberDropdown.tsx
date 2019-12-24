@@ -4,7 +4,7 @@ import { isMember, isOwner } from "@tennis-score/redux";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-
+import { LinkContainer } from "react-router-bootstrap";
 export function GroupMemberDropdown({ user, group }) {
   return (
     <DropdownButton
@@ -19,7 +19,9 @@ export function GroupMemberDropdown({ user, group }) {
       {isOwner(user, group) && (
         <>
           <Dropdown.Divider />
-          <Dropdown.Item>Manage Group</Dropdown.Item>
+          <LinkContainer to={`/managegroup/${group.groupId}`}>
+            <Dropdown.Item>Manage Group</Dropdown.Item>
+          </LinkContainer>
         </>
       )}
     </DropdownButton>
