@@ -3,6 +3,7 @@ import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "./Button";
+import Confirm from "./Confirm";
 
 const ManageGroup = ({
   loading,
@@ -18,14 +19,13 @@ const ManageGroup = ({
   }, []);
 
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const deleteGroupHandler = () => {
     deleteGroup(match.params.group).then(_ => {
       setShow(false);
-      history.push('/home');
+      history.push("/home");
     });
   };
 
@@ -54,20 +54,16 @@ const ManageGroup = ({
         </div>
       </div>
 
-      <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to delete?</Modal.Body>
-        <Modal.Footer>
-          <Button className="btn btn-light" onClick={handleClose}>
-            Close
-          </Button>
-          <Button className="btn btn-danger" onClick={deleteGroupHandler}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Confirm
+        title="Permanent Delete?"
+        message="Are you sure you want to permanenl delete this group? All data will be lost"
+        close="Close"
+        mainAction="Delete"
+        mainActionClass="btn btn-danger"
+        onCancelAction={handleClose}
+        onConfirmAction={deleteGroupHandler}
+        show={show}
+      ></Confirm>
     </>
   );
 };
