@@ -4,7 +4,7 @@ import FloatButton from "./FloatButton";
 import GroupCard from "./GroupCard";
 const Home = ({ user, groups, myGroups, ...props }) => {
   useEffect(() => {
-    props.loadGroups();
+  props.loadGroups();
   }, []);
 
   return (

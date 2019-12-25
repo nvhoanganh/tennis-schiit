@@ -1,27 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import TextInput from "./TextInput";
 import UpdateButton from "./LoadingButton";
+import FileInput from "./FileInput";
+import AddressLookup from "./AddressLookup";
 
 const NewGroup = ({ loading, history, addGroup }) => {
   const [state, setState] = useState({
     name: "",
     nameValid: false,
+    location: "",
+    locationLongLat: null,
+    locationValid: false,
     description: "",
+    image: null,
     formValid: false
   });
 
-  const setValue = (field, value) =>
+  const setValue = (field, value) => {
     setState(curr => ({ ...curr, [field]: value }));
+  };
 
   useEffect(() => {
     setState(current => {
+      console.log(current);
       return {
         ...current,
         nameValid: !!state.name,
+        locationValid: !!state.locationLongLat && !!state.location,
         formValid: !!state.name
       };
     });
-  }, [state.name]);
+  }, [state.name, state.image, state.location, state.locationLongLat, state.location]);
 
   const validateAndSubmit = e => {
     e.preventDefault();
@@ -45,6 +54,15 @@ const NewGroup = ({ loading, history, addGroup }) => {
           isValid={state.nameValid}
         ></TextInput>
 
+        <AddressLookup
+          name="location"
+          label="Location"
+          errorMessage="Address is required"
+          value={state.location}
+          setValue={setValue}
+          isValid={state.locationValid}
+        ></AddressLookup>
+
         <TextInput
           type="text"
           name="description"
@@ -56,7 +74,16 @@ const NewGroup = ({ loading, history, addGroup }) => {
           isValid={true}
         ></TextInput>
 
-          <div className="row">
+        <FileInput
+          multiple={false}
+          name="image"
+          label="Group Photo"
+          errorMessage=""
+          setValue={setValue}
+          isValid={true}
+        ></FileInput>
+
+        <div className="row">
           <div className="col-md-6">
             <div className="form-group">
               <UpdateButton
