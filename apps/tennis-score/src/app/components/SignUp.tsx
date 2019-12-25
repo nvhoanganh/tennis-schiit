@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { strongPassword, isValidEmail } from "@tennis-score/core";
 import TextInput from "./TextInput";
 import UpdateButton from './LoadingButton';
+import { maxContainer } from './common';
 
 const SignUp = ({ loading, signupHandler }) => {
   const [state, setState] = useState({
@@ -43,7 +44,7 @@ const SignUp = ({ loading, signupHandler }) => {
   };
 
   return (
-    <div className="p-3 mt-4 mx-4 mx-auto" style={{ maxWidth: 400 }}>
+    <div>
       <h4 className="card-title mb-4 mt-1">Sign Up</h4>
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput

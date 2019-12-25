@@ -10,6 +10,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
+import { maxContainer } from '../components/common';
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -75,7 +76,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <div>{renderRoutes(route.routes)}</div>
+      <div {...maxContainer}>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
     <AppLoader />

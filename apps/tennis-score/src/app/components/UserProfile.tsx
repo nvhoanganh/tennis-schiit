@@ -4,11 +4,12 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
 import { Link } from "./Link";
 import UpdateButton from "./LoadingButton";
+import { maxContainer } from './common';
 const UserProfile = ({ signOutHandler, user, loading }) => {
   return !user ? (
     <Redirect to="/signin" />
   ) : (
-    <div className="container-fluid">
+    <div>
       <div className="row pt-3">
         <div className="col-sm-12 text-center">
           {user ? <Gravatar email={user.email} size={150} /> : null}
@@ -58,7 +59,7 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
         </div>
       </div>
       <div className="row pt-5 text-center">
-        <div className="col-xs-12 col-sm-4 emphasis">
+        <div className="col-xs-12 col-sm-6 emphasis">
           <div className="btn-group dropup btn-block">
             <UpdateButton
               loading={loading}
@@ -71,7 +72,7 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
         </div>
       </div>
       <div className="row pt-3">
-        <div className="col-md-6 text-center">
+        <div className="col-sm-6 text-center">
           <LinkContainer to="/account-details/edit">
             <Link title="Update Details" href="">
               Update Details
