@@ -14,7 +14,7 @@ const Home = ({ user, groups, myGroups, ...props }) => {
       )}
       {myGroups.length > 0 && (
         <>
-          <h4 className="pt-3">My groups</h4>
+          <h4 className="p-3">My groups</h4>
           <div className="px-2 pt-3 pb-5 row px-3">
             {myGroups.map((p, i) => (
               <GroupCard
@@ -31,7 +31,7 @@ const Home = ({ user, groups, myGroups, ...props }) => {
 
       {groups.length > 0 && (
         <>
-          <h4 className="pt-3">Groups near me</h4>
+          <h4 className="p-3">Groups near me</h4>
           <div className="px-2 pt-3 pb-5 row px-3">
             {groups.map((p, i) => (
               <GroupCard

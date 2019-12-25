@@ -29,7 +29,7 @@ const Leaderboard = ({
 }) => {
   let urls = [
     {
-      url: `/groups/${match.params.group}/newtour`,
+      url: `/groups/${match.params.group}/newtournament`,
       tooltip: "New Tournament",
       icon: faTrophy
     },

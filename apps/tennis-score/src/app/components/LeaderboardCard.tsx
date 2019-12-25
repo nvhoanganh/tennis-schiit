@@ -44,18 +44,10 @@ const LeaderboardCard = ({ player, ranking }) => {
 
   return (
     <LinkContainer to={`/player/${player.id}`}>
-      <div className="card mb-2">
-        <div
-          className="card-body"
-          style={{
-            margin: -9
-          }}
-        >
-          <div className="float-left pr-3 pl-2">
-            <RoundGravatar
-              size={50}
-              email={player.email || "0"}
-            />
+      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
+        <div className="card-body pl-0 py-3">
+          <div className="float-left pr-3 pl-0">
+            <RoundGravatar size={50} email={player.email || "0"} />
             <div className="text-center">
               <span className="badge badge-pill " style={top3}>
                 {ranking === 0

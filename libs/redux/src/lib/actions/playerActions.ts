@@ -38,7 +38,7 @@ export class LoadPlayersSuccessAction implements IAction {
 export function removePlayer(playerId: string): RemovePlayerAction {
   return { type: PlayerActionTypes.REMOVE_PLAYER, playerId };
 }
-export function addPlayer({ name, groupId, playerId }) {
+export function addPlayer({ name, email, groupId, playerId }) {
   return (dispatch, getState) => {
     dispatch(apiStart(PlayerActionTypes.ADD_PLAYER));
     return firebase
@@ -47,6 +47,7 @@ export function addPlayer({ name, groupId, playerId }) {
       .doc(groupId)
       .update({
         players: firebase.firestore.FieldValue.arrayUnion({
+          email,
           name,
           playerId,
           joinDate: new Date()

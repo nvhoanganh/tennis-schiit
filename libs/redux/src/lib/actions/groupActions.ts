@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-import { GROUPS, IGroup } from "../models";
+import { GROUPS, IGroup, TOURNAMENTS } from "../models";
 import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
 import { IAction } from "@tennis-score/redux";
@@ -11,6 +11,9 @@ export enum GroupActionTypes {
   LOAD_GROUPS_SUCCESS = "LOAD_GROUPS_SUCCESS",
 
   ADD_GROUP = "ADD_GROUP",
+
+  ADD_TOURNAMENT = "ADD_TOURNAMENT",
+
   DELETE_GROUP = "DELETE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
 
@@ -104,6 +107,31 @@ export function deleteGroup(groupId) {
       .then(_ => {
         dispatch(apiEnd());
         dispatch({ type: GroupActionTypes.DELETE_GROUP, id: groupId });
+      });
+  };
+}
+export function addTournament({
+  groupId,
+  startDate,
+  endDate,
+  description,
+  double
+}) {
+  return (dispatch, getState) => {
+    dispatch(apiStart(GroupActionTypes.ADD_TOURNAMENT));
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .collection(TOURNAMENTS)
+      .add({
+        startDate,
+        endDate,
+        description,
+        double
+      })
+      .then(_ => {
+        dispatch(apiEnd());
       });
   };
 }

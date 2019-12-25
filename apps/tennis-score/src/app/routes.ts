@@ -10,6 +10,7 @@ import EditProfile from "./containers/EditProfile";
 import NewGroup from "./containers/NewGroup";
 import AddPlayer from "./containers/AddPlayer";
 import ManageGroup from "./containers/ManageGroup";
+import AddEditTournament from "./containers/AddEditTournament";
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
         path: "/groups/:group/newplayer",
         exact: true,
         component: AddPlayer
+      },
+      {
+        path: "/groups/:group/newtournament",
+        exact: true,
+        component: AddEditTournament
       },
       {
         path: "/newscore/:group",
