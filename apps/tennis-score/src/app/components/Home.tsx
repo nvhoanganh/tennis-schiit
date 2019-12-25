@@ -4,9 +4,10 @@ import FloatButton from "./FloatButton";
 import GroupCard from "./GroupCard";
 const Home = ({ user, groups, myGroups, ...props }) => {
   useEffect(() => {
-  props.loadGroups();
+    props.loadGroups();
   }, []);
 
+  const cellStyle = { padding: "0.9rem" };
   return (
     <>
       {user && (
@@ -14,8 +15,8 @@ const Home = ({ user, groups, myGroups, ...props }) => {
       )}
       {myGroups.length > 0 && (
         <>
-          <h4 className="text-center pt-3">My Groups</h4>
-          <div className="px-2 pb-5">
+          <h4 className="text-center pt-3">My groups</h4>
+          <div className="px-2 pt-3 pb-5 row px-3">
             {myGroups.map((p, i) => (
               <GroupCard
                 index={i}
@@ -32,7 +33,7 @@ const Home = ({ user, groups, myGroups, ...props }) => {
       {groups.length > 0 && (
         <>
           <h4 className="text-center pt-3">Groups near me</h4>
-          <div className="px-2 pb-5">
+          <div className="px-2 pt-3 pb-5 row px-3">
             {groups.map((p, i) => (
               <GroupCard
                 index={i}

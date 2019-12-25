@@ -24,7 +24,7 @@ const GroupScoreCard = ({
           {(players || []).length}
         </span>{" "}
         players, <span className="text-dark font-weight-bold">{played}</span>{" "}
-        matches played
+        matches
       </div>
     </div>
   );

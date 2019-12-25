@@ -10,42 +10,35 @@ const GroupCard = ({ index, group, user, showIsMember }) => {
   )}?alt=media`;
   return (
     <LinkContainer to={`/leaderboard/${group.groupId}`}>
-      <div className="mt-2 card">
+      <div className="col-sm-6 col-md-4 col-lg-3">
         <img
           src={imgUrl}
-          style={{ height: 200, objectFit: "cover" }}
+          style={{ height: 140, objectFit: "cover" }}
           className="card-img-top"
         ></img>
         <div className="card-body">
-          <div className="row px-2 card-text">
+          <div className="row card-text">
             <div className="mr-auto">
-              <a
-                style={{
-                  paddingLeft: 8
-                }}
-                className="h5 text-dark pl-0"
-              >
-                {group.name.toUpperCase()}
-              </a>
+              <a className="text-nowrap text-dark">{group.name.toUpperCase()}</a>
               <GroupMembership
                 user={user}
                 group={group}
                 showIsMember={showIsMember}
               />
-              <div>
-                <em className="text-muted" style={{ fontSize: "0.7rem" }}>
-                  {group.location}
-                  {" - Created "}
-                  {formatDistanceToNow(group.createdOn.toDate(), {
-                    addSuffix: true
-                  })}
-                </em>
-              </div>
               <GroupScoreCard
                 group={group}
                 user={user}
                 players={Object.values(group.players)}
               ></GroupScoreCard>
+              <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+                {group.location}
+              </em>
+              <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+                Created{" "}
+                {formatDistanceToNow(group.createdOn.toDate(), {
+                  addSuffix: true
+                })}
+              </em>
             </div>
           </div>
         </div>
