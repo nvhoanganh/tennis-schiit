@@ -13,6 +13,7 @@ export enum GroupActionTypes {
   ADD_GROUP = "ADD_GROUP",
 
   ADD_TOURNAMENT = "ADD_TOURNAMENT",
+  ADD_TOURNAMENT_SUCCESS = "ADD_TOURNAMENT_SUCCESS",
 
   DELETE_GROUP = "DELETE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
@@ -29,6 +30,11 @@ export class AddPlayerToGroupAction implements IAction {
 export class AddGroupAction implements IAction {
   readonly type = GroupActionTypes.ADD_GROUP;
   constructor(public group: any) {}
+}
+
+export class AddTournamentSuccess implements IAction {
+  readonly type = GroupActionTypes.ADD_TOURNAMENT_SUCCESS;
+  constructor(public tournament: any) {}
 }
 export class UpdateGroupAction implements IAction {
   readonly type = GroupActionTypes.UPDATE_GROUP;
@@ -118,20 +124,37 @@ export function addTournament({
   double
 }) {
   return (dispatch, getState) => {
-    dispatch(apiStart(GroupActionTypes.ADD_TOURNAMENT));
-    return firebase
+    const newTour = firebase
       .firestore()
       .collection(GROUPS)
       .doc(groupId)
       .collection(TOURNAMENTS)
-      .add({
-        startDate,
-        endDate,
+      .doc();
+
+    dispatch(apiStart(GroupActionTypes.ADD_TOURNAMENT));
+    return newTour
+      .set({
+        startDate: new Date(startDate),
+        endDate: endDate ? new Date(endDate) : "",
         description,
         double
       })
-      .then(_ => {
+      .then(_ =>
+        // duplicate data
+        firebase
+          .firestore()
+          .collection(GROUPS)
+          .doc(groupId)
+          .update({
+            currentTournament: newTour.id
+          })
+      )
+      .then(doc => {
         dispatch(apiEnd());
+        dispatch({
+          type: GroupActionTypes.ADD_TOURNAMENT_SUCCESS,
+          tournament: { id: newTour.id, groupId }
+        });
       });
   };
 }
@@ -196,6 +219,7 @@ export function addGroup({
 
 export type GroupAction =
   | AddPlayerToGroupAction
+  | AddTournamentSuccess
   | LoadGroupsSuccessAction
   | AddGroupAction
   | UpdateGroupAction

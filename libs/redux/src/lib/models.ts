@@ -55,3 +55,4 @@ export const GROUPS = "groups";
 export const USERS = "users";
 export const TOURNAMENTS = "tournaments";
 export const SCORES = "scores";
+export const PLAYERS = "players";

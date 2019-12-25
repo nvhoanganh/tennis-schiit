@@ -51,7 +51,12 @@ const AddEditTournament = ({
     e.preventDefault();
     if (state.formValid) {
       console.log(state);
-      props.addTournament(state);
+      props
+        .addTournament({
+          ...state,
+          groupId: match.params.group
+        })
+        .then(_ => history.goBack());
     }
   };
 
@@ -75,22 +80,22 @@ const AddEditTournament = ({
           ></TextInput>
 
           <TextInput
-            type="text"
-            name="description"
-            label="Description"
-            value={state.description}
-            placeholder="Description (optional)"
-            errorMessage=""
-            setValue={setValue}
-            isValid={true}
-          ></TextInput>
-
-          <TextInput
             type="date"
             name="endDate"
             label="End Date"
             value={state.endDate}
             placeholder="dd/mm/yyyy"
+            errorMessage=""
+            setValue={setValue}
+            isValid={true}
+          ></TextInput>
+          
+          <TextInput
+            type="text"
+            name="description"
+            label="Description"
+            value={state.description}
+            placeholder="Description (optional)"
             errorMessage=""
             setValue={setValue}
             isValid={true}

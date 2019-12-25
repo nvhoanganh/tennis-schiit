@@ -18,7 +18,33 @@ import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
 import FloatActionsButton from "./FloatActionsButton";
 import { Link } from "./Link";
+import { isOwner, isMember } from "@tennis-score/redux";
+import { Button } from "./Button";
 
+const ShowAddTour = ({ groupId, isOwner }) => {
+  return isOwner ? (
+    <div className="text-center font-italic py-5">
+      No tournament created yet
+      <div className="row pt-3">
+        <div className="col-12 px-3">
+          <div className="form-group">
+            <LinkContainer to={`/groups/${groupId}/newtournament`}>
+              <Button className="btn btn-primary">Add Tournament</Button>
+            </LinkContainer>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <p className="text-center font-italic py-5">No tournament created yet</p>
+  );
+};
+
+const ShowAddFirstMatch = () => (
+  <p className="text-center font-italic py-5">
+    Click add buton to add your first match
+  </p>
+);
 const Leaderboard = ({
   players,
   group,
@@ -29,26 +55,46 @@ const Leaderboard = ({
   history,
   ...props
 }) => {
-  let urls = [
-    {
-      url: `/groups/${match.params.group}/newtournament`,
-      tooltip: "New Tournament",
-      icon: faTrophy
-    },
-    {
-      url: `/groups/${match.params.group}/newplayer`,
-      tooltip: "New Player",
-      icon: faUserPlus
+  const getPermittedActions = () => {
+    let urls = [];
+    if (isMember(user, group)) {
+      if (tournament) {
+        urls.push({
+          url: `/newscore/${match.params.group}`,
+          tooltip: "New Score",
+          icon: faClipboardList
+        });
+      } else {
+        urls.push({
+          url: `/groups/${match.params.group}/newtournament`,
+          tooltip: "New Score",
+          icon: faClipboardList
+        });
+      }
     }
-  ];
 
-  if (tournament) {
-    urls.push({
-      url: `/newscore/${match.params.group}`,
-      tooltip: "New Score",
-      icon: faClipboardList
-    });
-  }
+    if (isOwner(user, group)) {
+      urls.push({
+        url: `/groups/${match.params.group}/newplayer`,
+        tooltip: "New Player",
+        icon: faUserPlus
+      });
+    }
+    return urls;
+  };
+
+  const urls = getPermittedActions();
+  const showFallBack = () => {
+    if (!tournament) {
+      return (
+        <ShowAddTour
+          groupId={match.params.group}
+          isOwner={isOwner(user, group)}
+        ></ShowAddTour>
+      );
+    }
+    return <ShowAddFirstMatch />;
+  };
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
@@ -65,34 +111,36 @@ const Leaderboard = ({
 
           <div className="text-center pb-4">
             <GroupMembership user={user} group={group} showIsMember={true} />
-            <GroupScoreCard
-              group={group}
-              user={user}
-              players={players}
-            ></GroupScoreCard>
-            {tournament ? (
-              <em className="text-muted x-small">
-                Current tournament:{" "}
-                {format(tournament.startDate.toDate(), "dd/MM/yy")} -{" "}
-                {format(tournament.endDate.toDate(), "dd/MM/yy")}
-              </em>
-            ) : (
-              <em className="text-muted x-small">
-                No tournament created yet -{" "}
-                <LinkContainer
-                  to={`/groups/${match.params.group}/newtournament`}
-                >
-                  <Link title="Add tournament" href="">
-                    Add
-                  </Link>
-                </LinkContainer>
-              </em>
+            {tournament && (
+              <>
+                <GroupScoreCard
+                  group={group}
+                  user={user}
+                  players={players}
+                ></GroupScoreCard>
+                <em className="text-muted x-small">
+                  Current tournament:{" "}
+                  {format(tournament.startDate.toDate(), "dd/MM/yy")} -{" "}
+                  {tournament.endDate
+                    ? format(tournament.endDate.toDate(), "dd/MM/yy")
+                    : ""}
+                </em>
+              </>
             )}
           </div>
         </>
       )}
-      <FloatActionsButton icon={faBars} urls={urls}></FloatActionsButton>
-      {pendingRequests === 0 && players ? (
+
+      {/*  show float button */}
+      {user && urls.length > 0 && (
+        <FloatActionsButton
+          icon={faBars}
+          urls={getPermittedActions()}
+        ></FloatActionsButton>
+      )}
+
+      {/*  show leaderboard */}
+      {pendingRequests === 0 ? (
         players.length > 0 ? (
           <div className="px-1 pb-5">
             {players.map((k, i) => (
@@ -104,9 +152,7 @@ const Leaderboard = ({
             ))}
           </div>
         ) : (
-          <p className="text-center font-italic py-5">
-            Click add buton to add your first match
-          </p>
+          showFallBack()
         )
       ) : (
         <MySpinner />

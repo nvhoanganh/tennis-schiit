@@ -70,6 +70,7 @@ const EntryForm = ({
     submitScore({
       ...state,
       groupId: group.groupId,
+      group,
       currentTournament: group.currentTournament
     }).then(_ => {
       history.goBack();
@@ -116,7 +117,7 @@ const EntryForm = ({
                         <tr key={p.id}>
                           <td>
                             <div className="row">
-                              <div className="ml-3">
+                              <div className="">
                                 <RoundGravatar
                                   size={37}
                                   email={p.email || "0"}

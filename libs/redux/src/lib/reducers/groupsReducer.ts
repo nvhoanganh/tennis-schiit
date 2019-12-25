@@ -30,6 +30,15 @@ const groups = (
         [action.group.groupId]: action.group
       };
 
+    case GroupActionTypes.ADD_TOURNAMENT_SUCCESS:
+      return {
+        ...state,
+        [action.tournament.groupId]: {
+          ...state[action.tournament.groupId],
+          currentTournament: action.tournament.id
+        }
+      };
+
     case GroupActionTypes.DELETE_GROUP:
       const { [action.id]: deleted, ...newState } = state;
       return newState;

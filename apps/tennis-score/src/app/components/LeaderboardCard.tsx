@@ -32,7 +32,7 @@ const LeaderboardCard = ({ player, ranking }) => {
   const getArrow =
     player.lastWeekscore > player.score ? (
       <FontAwesomeIcon icon={faSortAmountDown} className="pl-1 text-danger" />
-    ) : player.lkastWeekscore < player.score ? (
+    ) : player.lastWeekscore < player.score ? (
       <FontAwesomeIcon icon={faSortAmountUp} className="pl-1 text-success" />
     ) : (
       <FontAwesomeIcon

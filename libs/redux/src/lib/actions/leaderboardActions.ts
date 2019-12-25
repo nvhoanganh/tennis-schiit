@@ -85,6 +85,7 @@ export function loadLeaderboard(groupId: string) {
 
 export function submitScore({
   groupId,
+  group,
   currentTournament,
   winners,
   losers,
@@ -95,20 +96,57 @@ export function submitScore({
 }) {
   return async (dispatch, getState) => {
     dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
-    const g = await firebase
+    const groupRef = firebase
       .firestore()
       .collection(GROUPS)
-      .doc(groupId)
-      .collection(TOURNAMENTS)
-      .doc(currentTournament)
-      .collection(SCORES)
-      .add({
-        winners,
-        losers,
-        gameWonByLostTeam,
-        reverseBagel,
-        matchDate: new Date(matchDate)
+      .doc(groupId);
+
+    const tourRef = groupRef.collection(TOURNAMENTS).doc(currentTournament);
+
+    const g = await tourRef.collection(SCORES).add({
+      winners,
+      losers,
+      gameWonByLostTeam,
+      reverseBagel,
+      matchDate: new Date(matchDate)
+    });
+
+    // update other -> this should be in firebase func
+    const batch = firebase.firestore().batch();
+    batch.update(groupRef, {
+      played: firebase.firestore.FieldValue.increment(1)
+    });
+    batch.update(groupRef, {
+      lastMatch: new Date()
+    });
+
+    const winnersK = Object.keys(winners);
+    const loserK = Object.keys(losers);
+    const winByBagel = gameWonByLostTeam === 0 || reverseBagel;
+    winnersK.forEach(k => {
+      batch.update(tourRef, {
+        [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1)
       });
+    });
+    loserK.forEach(k => {
+      batch.update(tourRef, {
+        [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1)
+      });
+    });
+
+    if (winByBagel) {
+      winnersK.forEach(k => {
+        batch.update(tourRef, {
+          [`players.${k}.bagelWon`]: firebase.firestore.FieldValue.increment(1)
+        });
+      });
+      loserK.forEach(k => {
+        batch.update(tourRef, {
+          [`players.${k}.bagelLost`]: firebase.firestore.FieldValue.increment(1)
+        });
+      });
+    }
+    await batch.commit();
 
     dispatch(apiEnd());
     dispatch(<SubmitScoreSuccessAction>{

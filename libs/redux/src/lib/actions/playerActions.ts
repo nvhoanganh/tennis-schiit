@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { IPlayer, USERS, GROUPS } from "../models";
+import { IPlayer, USERS, GROUPS, PLAYERS } from "../models";
 import { apiEnd, apiStart } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 import { loadLeaderboard } from "./leaderboardActions";
@@ -38,20 +38,32 @@ export class LoadPlayersSuccessAction implements IAction {
 export function removePlayer(playerId: string): RemovePlayerAction {
   return { type: PlayerActionTypes.REMOVE_PLAYER, playerId };
 }
-export function addPlayer({ name, email, groupId, playerId }) {
+export function addPlayer({ name, email, groupId, group }) {
   return (dispatch, getState) => {
     dispatch(apiStart(PlayerActionTypes.ADD_PLAYER));
     return firebase
       .firestore()
-      .collection(GROUPS)
-      .doc(groupId)
-      .update({
-        players: firebase.firestore.FieldValue.arrayUnion({
-          email,
-          name,
-          playerId,
-          joinDate: new Date()
-        })
+      .collection(PLAYERS)
+      .add({
+        email,
+        name,
+        groupName: group.name,
+        groupId,
+        joinDate: new Date()
+      })
+      .then(player => {
+        return firebase
+          .firestore()
+          .collection(GROUPS)
+          .doc(groupId)
+          .update({
+            players: firebase.firestore.FieldValue.arrayUnion({
+              email,
+              name,
+              userId: player.id,
+              joinDate: new Date()
+            })
+          });
       })
       .then(_ => {
         dispatch(apiEnd());

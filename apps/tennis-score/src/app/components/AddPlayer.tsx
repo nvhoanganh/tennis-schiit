@@ -30,7 +30,7 @@ const AddPlayer = ({
     e.preventDefault();
     addPlayer({
       ...state,
-      playerId: "",
+      group,
       groupId: match.params.group
     }).then(_ => history.goBack());
   };
@@ -52,10 +52,7 @@ const AddPlayer = ({
   if (!group) return null;
   return (
     <>
-      <RouteNav
-        history={history}
-        center="Add New Player"
-      ></RouteNav>
+      <RouteNav history={history} center="Add New Player"></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           <TextInput

@@ -81,7 +81,7 @@ const SignUp = ({ loading, signupHandler }) => {
         ></TextInput>
 
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-12">
             <div className="form-group">
               <UpdateButton
                 loading={loading}
