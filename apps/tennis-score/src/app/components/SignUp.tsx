@@ -44,7 +44,7 @@ const SignUp = ({ loading, signupHandler }) => {
   };
 
   return (
-    <div>
+    <div {...maxContainer}>
       <h4 className="card-title mb-4 mt-1">Sign Up</h4>
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput

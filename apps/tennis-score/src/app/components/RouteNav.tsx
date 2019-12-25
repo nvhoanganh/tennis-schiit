@@ -18,7 +18,9 @@ const RouteNav: React.SFC<{
           <FontAwesomeIcon icon={faChevronLeft} />
         </Button>
       </div>
-      <div className="p-2">{center}</div>
+      <div className="p-2 d-flex">
+        <span className="h5 align-self-center">{center}</span>
+      </div>
       <div className="p-2">
         {right ? (
           right

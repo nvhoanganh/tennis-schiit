@@ -3,6 +3,7 @@ import UpdateButton from "./LoadingButton";
 import TextInput from "./TextInput";
 import RouteNav from "./RouteNav";
 import { isValidEmail } from "@tennis-score/core";
+import { maxContainer } from "./common";
 const AddPlayer = ({
   addPlayer,
   group,
@@ -53,11 +54,9 @@ const AddPlayer = ({
     <>
       <RouteNav
         history={history}
-        center={
-          <span className="h3">{group.name.toUpperCase()} - New Player</span>
-        }
+        center={group.name.toUpperCase() + " - New Player"}
       ></RouteNav>
-      <div className="mt-4 mx-4">
+      <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           <TextInput
             type="email"

@@ -97,11 +97,7 @@ const EntryForm = ({
         <>
           <RouteNav
             history={history}
-            center={
-              <span className="h3">
-                {group.name.toUpperCase()} - New Result
-              </span>
-            }
+            center={group.name.toUpperCase() + " - New Result"}
           ></RouteNav>
           <div className="container">
             <form noValidate onSubmit={validateAndSubmit}>

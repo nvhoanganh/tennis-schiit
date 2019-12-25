@@ -7,7 +7,8 @@ import Modal from "react-bootstrap/Modal";
 import { Button } from "./Button";
 import Confirm from "./Confirm";
 import { formatDistanceToNow } from "date-fns";
-import { Link } from './Link';
+import { Link } from "./Link";
+import { maxContainer } from "./common";
 
 const ManageGroup = ({
   loading,
@@ -36,11 +37,8 @@ const ManageGroup = ({
   if (!group) return null;
   return (
     <>
-      <RouteNav
-        history={history}
-        center={<span className="h3">{group.name.toUpperCase()}</span>}
-      ></RouteNav>
-      <div className="mt-4 mx-4">
+      <RouteNav history={history} center={group.name.toUpperCase()}></RouteNav>
+      <div {...maxContainer}>
         <ReadOnlyForm label="Owner" value={group.onwerName} />
         <ReadOnlyForm
           label="Created"
@@ -67,8 +65,8 @@ const ManageGroup = ({
           </div>
         </div>
         <div className="row pb-5">
-          <div className="col-md-6 text-center">
-            <LinkContainer to={`/editgroup/${group.groupId}`} >
+          <div className="col-12 text-center">
+            <LinkContainer to={`/editgroup/${group.groupId}`}>
               <Link title="Update Details" href="">
                 Update Details
               </Link>

@@ -39,7 +39,7 @@ const AddressLookup: React.SFC<{
   const handleSelect = address => {
     geocodeByAddress(address)
       .then(results => {
-        console.log('address ', results);
+        setValue(name, address);
         return getLatLng(results[0]);
       })
       .then(latLng => {

@@ -14,7 +14,7 @@ const GroupCard = ({ index, group, user, showIsMember }) => {
         <img
           src={imgUrl}
           style={{ height: 140, objectFit: "cover" }}
-          className="card-img-top"
+          className="card-img-top border"
         ></img>
         <div className="card-body">
           <div className="row card-text">

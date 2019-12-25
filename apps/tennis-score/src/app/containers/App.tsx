@@ -76,7 +76,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <div {...maxContainer}>{renderRoutes(route.routes)}</div>
+      <div>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
     <AppLoader />

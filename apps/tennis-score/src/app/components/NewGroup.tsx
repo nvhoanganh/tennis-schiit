@@ -3,7 +3,9 @@ import AddressLookup from "./AddressLookup";
 import FileInput from "./FileInput";
 import UpdateButton from "./LoadingButton";
 import TextInput from "./TextInput";
-  
+import { maxContainer } from "./common";
+import RouteNav from "./RouteNav";
+
 const NewGroup = ({ loading, history, addGroup }) => {
   const [state, setState] = useState({
     // required
@@ -54,64 +56,66 @@ const NewGroup = ({ loading, history, addGroup }) => {
   };
 
   return (
-    <div className="mt-4 mx-4">
-      <h4 className="card-title mb-4 mt-1">Create New Group</h4>
-      <form noValidate onSubmit={validateAndSubmit}>
-        <TextInput
-          type="text"
-          name="name"
-          label="Name"
-          value={state.name}
-          placeholder="Name"
-          errorMessage="Name is required"
-          setValue={setValue}
-          isValid={state.nameValid}
-        ></TextInput>
+    <>
+      <RouteNav history={history} center="Create new group"></RouteNav>
+      <div {...maxContainer}>
+        <form noValidate onSubmit={validateAndSubmit}>
+          <TextInput
+            type="text"
+            name="name"
+            label="Name"
+            value={state.name}
+            placeholder="Name"
+            errorMessage="Name is required"
+            setValue={setValue}
+            isValid={state.nameValid}
+          ></TextInput>
 
-        <AddressLookup
-          name="location"
-          label="Location"
-          errorMessage="Address is required"
-          value={state.location}
-          setValue={setValue}
-          isValid={state.locationValid}
-        ></AddressLookup>
+          <AddressLookup
+            name="location"
+            label="Location"
+            errorMessage="Address is required"
+            value={state.location}
+            setValue={setValue}
+            isValid={state.locationValid}
+          ></AddressLookup>
 
-        <TextInput
-          type="text"
-          name="description"
-          label="Description"
-          value={state.description}
-          placeholder="Description (optional)"
-          errorMessage=""
-          setValue={setValue}
-          isValid={true}
-        ></TextInput>
+          <TextInput
+            type="text"
+            name="description"
+            label="Description"
+            value={state.description}
+            placeholder="Description (optional)"
+            errorMessage=""
+            setValue={setValue}
+            isValid={true}
+          ></TextInput>
 
-        <FileInput
-          multiple={false}
-          name="photo"
-          label="Group Photo"
-          errorMessage=""
-          setValue={setValue}
-          isValid={true}
-        ></FileInput>
+          <FileInput
+            multiple={false}
+            name="photo"
+            label="Group Photo"
+            errorMessage=""
+            setValue={setValue}
+            isValid={true}
+          ></FileInput>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div className="form-group">
-              <UpdateButton
-                loading={loading}
-                value="Create new group"
-                type="submit"
-                disabled={!state.formValid || loading}
-                className="btn btn-primary btn-block"
-              ></UpdateButton>
+          <div className="row">
+            <div className="col-12">
+              <div className="form-group">
+                <UpdateButton
+                  loading={loading}
+                  value="Create new group"
+                  type="submit"
+                  disabled={!state.formValid || loading}
+                  className="btn btn-primary btn-block"
+                ></UpdateButton>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 import UpdateButton from "./LoadingButton";
 import { Link } from "./Link";
 import TextInput from "./TextInput";
-import { maxContainer } from './common';
+import { maxContainer } from "./common";
 
 const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
   const [state, setState] = useState({
@@ -38,7 +38,7 @@ const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
   return user ? (
     <Redirect to="/home" />
   ) : (
-    <div>
+    <div {...maxContainer}>
       <LinkContainer to="/signup">
         <Link
           className="float-right btn btn-outline-primary"

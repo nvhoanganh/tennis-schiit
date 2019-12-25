@@ -57,7 +57,7 @@ const Leaderboard = ({
         <>
           <RouteNav
             history={history}
-            center={<span className="h3">{group.name.toUpperCase()}</span>}
+            center={group.name.toUpperCase()}
             right={<GroupMemberDropdown user={user} group={group} />}
           ></RouteNav>
 

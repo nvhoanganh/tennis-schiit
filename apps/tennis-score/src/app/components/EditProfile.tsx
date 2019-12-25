@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CheckBoxInput from "./CheckBoxInput";
+import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
-import TextInput from "./TextInput";
 import RouteNav from "./RouteNav";
+import TextInput from "./TextInput";
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const [state, setState] = useState({
     email: "",
@@ -51,11 +52,8 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
 
   return (
     <>
-      <RouteNav
-        history={history}
-        center={<span className="h3">Update my profile</span>}
-      ></RouteNav>
-      <div className="mt-4 mx-4">
+      <RouteNav history={history} center="Update my profile"></RouteNav>
+      <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           <TextInput
             type="email"
@@ -95,7 +93,7 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
           ></CheckBoxInput>
 
           <div className="row pt-4">
-            <div className="col-md-6">
+            <div className="col-12">
               <div className="form-group">
                 <UpdateButton
                   loading={pendingRequests > 0}
