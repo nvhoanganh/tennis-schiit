@@ -1,18 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
-import TextInput from "./TextInput";
-import UpdateButton from "./LoadingButton";
-import FileInput from "./FileInput";
+import React, { useEffect, useState } from "react";
 import AddressLookup from "./AddressLookup";
-
+import FileInput from "./FileInput";
+import UpdateButton from "./LoadingButton";
+import TextInput from "./TextInput";
+  
 const NewGroup = ({ loading, history, addGroup }) => {
   const [state, setState] = useState({
+    // required
     name: "",
     nameValid: false,
+
     location: "",
     locationLongLat: null,
     locationValid: false,
+
+    // optional
     description: "",
-    image: null,
+    photo: null,
+
     formValid: false
   });
 
@@ -22,15 +27,24 @@ const NewGroup = ({ loading, history, addGroup }) => {
 
   useEffect(() => {
     setState(current => {
-      console.log(current);
-      return {
+      const newS = {
         ...current,
         nameValid: !!state.name,
-        locationValid: !!state.locationLongLat && !!state.location,
-        formValid: !!state.name
+        locationValid: !!state.locationLongLat && !!state.location
+      };
+      console.log("new state", newS);
+      return {
+        ...newS,
+        formValid: newS.nameValid && newS.locationValid
       };
     });
-  }, [state.name, state.image, state.location, state.locationLongLat, state.location]);
+  }, [
+    state.name,
+    state.photo,
+    state.location,
+    state.locationLongLat,
+    state.location
+  ]);
 
   const validateAndSubmit = e => {
     e.preventDefault();
@@ -46,9 +60,9 @@ const NewGroup = ({ loading, history, addGroup }) => {
         <TextInput
           type="text"
           name="name"
-          label="Group Name"
+          label="Name"
           value={state.name}
-          placeholder="Group Name"
+          placeholder="Name"
           errorMessage="Name is required"
           setValue={setValue}
           isValid={state.nameValid}
@@ -76,7 +90,7 @@ const NewGroup = ({ loading, history, addGroup }) => {
 
         <FileInput
           multiple={false}
-          name="image"
+          name="photo"
           label="Group Photo"
           errorMessage=""
           setValue={setValue}

@@ -69,7 +69,7 @@ const AddressLookup: React.SFC<{
               {loading && <div>Loading...</div>}
               {suggestions.map(suggestion => {
                 const className = suggestion.active
-                  ? "suggestion-item--active py-1 px-1 text-secondary border"
+                  ? "suggestion-item--active py-1 px-1 font-weight-bold border"
                   : "suggestion-item py-1 px-2";
                 return (
                   <div

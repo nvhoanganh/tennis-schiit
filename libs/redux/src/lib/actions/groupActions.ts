@@ -1,6 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 import { GROUPS, IGroup } from "../models";
 import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
@@ -55,7 +56,7 @@ export function updateGroup(group: IGroup): UpdateGroupAction {
 const mapGroups = (data): IGroup => {
   return {
     ...data,
-    players: arrayToObject(data.players, x => x.playerId, x => x.joinDate)
+    players: arrayToObject(data.players, x => x.userId, x => x)
   };
 };
 
@@ -107,39 +108,59 @@ export function deleteGroup(groupId) {
   };
 }
 
-export function addGroup({ name, description }) {
-  return (dispatch, getState) => {
+export function addGroup({
+  name,
+  description,
+  location,
+  locationLongLat,
+  photo
+}) {
+  return async (dispatch, getState) => {
     const {
       app: { user }
     } = getState();
 
-    const dat = {
+    let dat = {
       name,
       description,
       createdOn: new Date(),
       owner: user.uid,
+      location,
+      locationLongLat,
       onwerName: user.displayName,
       played: 0,
+      groupImage: "",
       players: [
         {
           joinDate: new Date(),
+          email: user.email,
           name: user.displayName,
-          playerId: user.uid
+          userId: user.uid
         }
       ]
     };
-    console.log("adding group", dat);
     dispatch(apiStart(GroupActionTypes.ADD_GROUP));
-    return firebase
+    var newGroup = firebase
       .firestore()
       .collection(GROUPS)
-      .add(dat)
-      .then(d => d.get())
+      .doc();
+
+    if (photo) {
+      var storageRef = firebase.storage().ref();
+      var imageRef = await storageRef
+        .child(`images/${newGroup.id}-${photo.name}`)
+        .put(photo);
+      dat = { ...dat, groupImage: imageRef.metadata.fullPath };
+    }
+
+    return newGroup
+      .set(dat)
+      .then(_ => newGroup.get())
       .then(d => {
         dispatch(apiEnd());
         dispatch(<AddGroupAction>{
           type: GroupActionTypes.ADD_GROUP,
-          group: { groupId: d.id, ...mapGroups(d.data()) }
+          group: { groupId: newGroup.id, ...mapGroups(d.data()) }
         });
       });
   };
