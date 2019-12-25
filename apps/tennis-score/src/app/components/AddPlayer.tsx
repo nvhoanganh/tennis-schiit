@@ -54,7 +54,7 @@ const AddPlayer = ({
     <>
       <RouteNav
         history={history}
-        center={group.name.toUpperCase() + " - New Player"}
+        center="Add New Player"
       ></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>

@@ -7,6 +7,7 @@ import {
   faTrophy
 } from "@fortawesome/free-solid-svg-icons";
 import format from "date-fns/format";
+import { LinkContainer } from "react-router-bootstrap";
 import React, { useEffect } from "react";
 import FloatButton from "./FloatButton";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
@@ -16,6 +17,7 @@ import LeaderboardCard from "./LeaderboardCard";
 import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
 import FloatActionsButton from "./FloatActionsButton";
+import { Link } from "./Link";
 
 const Leaderboard = ({
   players,
@@ -68,11 +70,22 @@ const Leaderboard = ({
               user={user}
               players={players}
             ></GroupScoreCard>
-            {tournament && (
-              <em className="text-muted" style={{ fontSize: "0.7rem" }}>
+            {tournament ? (
+              <em className="text-muted x-small">
                 Current tournament:{" "}
                 {format(tournament.startDate.toDate(), "dd/MM/yy")} -{" "}
                 {format(tournament.endDate.toDate(), "dd/MM/yy")}
+              </em>
+            ) : (
+              <em className="text-muted x-small">
+                No tournament created yet -{" "}
+                <LinkContainer
+                  to={`/groups/${match.params.group}/newtournament`}
+                >
+                  <Link title="Add tournament" href="">
+                    Add
+                  </Link>
+                </LinkContainer>
               </em>
             )}
           </div>
