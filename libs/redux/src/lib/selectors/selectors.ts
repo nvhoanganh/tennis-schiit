@@ -41,6 +41,20 @@ export const getCurrLeaderTournament = createSelector(
   getLeaderboardState,
   s => s.tournament
 );
+
+export const getGroupPlayers = createSelector(
+  getCurrLeaderGroup,
+  s => {
+    if (!s) return [];
+    return Object.values(s.players).map(x => {
+      return {
+        id: (<any>x).userId,
+        email: (<any>x).email,
+        name: (<any>x).name
+      };
+    });
+  }
+);
 export const getLeaderboardPlayers = createSelector(
   getLeaderboardState,
   getCurrLeaderGroup,
@@ -53,20 +67,25 @@ export const getLeaderboardPlayers = createSelector(
     const p = Object.keys(players).map((k, i) => {
       const player = group.players[k];
       const won = players[k].won || 0;
-      const bagelwon = players[k].bagelWon || 0;
+      const bagelWon = players[k].bagelWon || 0;
       const lost = players[k].lost || 0;
-      const bagellost = players[k].bagelLost || 0;
+      const bagelLost = players[k].bagelLost || 0;
       return {
         id: k,
+        bagelLost,
+        bagelWon,
+        score: won * 5 + bagelWon * 10 - lost * 5 - bagelLost * 10, // for now
         played: won + lost,
         winPercentage: toPercent((won / (won + lost)) * 100),
-        name: player.name,
-        email: player.email,
-        prizeMoney: won * 5 + bagelwon * 10 - lost * 5 - bagellost * 10,
+        name: player ? player.name : "",
+        email: player ? player.email : "",
+        prizeMoney: won * 5 + bagelWon * 10 - lost * 5 - bagelLost * 10,
         ...players[k]
       };
     });
-    return p;
+    return p.sort((x, y) => {
+      return y.score - x.score;
+    });
   }
 );
 

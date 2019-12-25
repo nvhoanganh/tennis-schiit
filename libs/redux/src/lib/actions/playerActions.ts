@@ -5,6 +5,7 @@ import { IPlayer, USERS, GROUPS, PLAYERS } from "../models";
 import { apiEnd, apiStart } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 import { loadLeaderboard } from "./leaderboardActions";
+import { loadGroups } from "./groupActions";
 export enum PlayerActionTypes {
   LOAD_PLAYERS = "LOAD_PLAYERS",
   LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
@@ -68,6 +69,7 @@ export function addPlayer({ name, email, groupId, group }) {
       .then(_ => {
         dispatch(apiEnd());
         loadLeaderboard(groupId);
+        loadGroups(true);
       });
   };
 }

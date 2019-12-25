@@ -70,10 +70,10 @@ const mapGroups = (data): IGroup => {
 };
 
 // thunks
-export function loadGroups() {
+export function loadGroups(reload = false) {
   return (dispatch, getState) => {
     const { groups } = getState();
-    if (Object.keys(groups).length > 0) {
+    if (Object.keys(groups).length > 0 && !reload) {
       console.log("groups already loaded");
       return Promise.resolve();
     }

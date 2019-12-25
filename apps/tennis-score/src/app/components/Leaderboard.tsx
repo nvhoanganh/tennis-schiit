@@ -110,7 +110,6 @@ const Leaderboard = ({
           ></RouteNav>
 
           <div className="text-center pb-4">
-            <GroupMembership user={user} group={group} showIsMember={true} />
             {tournament && (
               <>
                 <GroupScoreCard

@@ -122,7 +122,7 @@ export function submitScore({
 
     const winnersK = Object.keys(winners);
     const loserK = Object.keys(losers);
-    const winByBagel = gameWonByLostTeam === 0 || reverseBagel;
+    const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
     winnersK.forEach(k => {
       batch.update(tourRef, {
         [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1)
@@ -147,13 +147,13 @@ export function submitScore({
       });
     }
     await batch.commit();
+    // end 
 
     dispatch(apiEnd());
     dispatch(<SubmitScoreSuccessAction>{
       type: LeaderboardActionTypes.SUBMIT_SCORE_SUCCESS,
       newScoreId: g.id
     });
-
     return Promise.resolve(g.id);
   };
 }
