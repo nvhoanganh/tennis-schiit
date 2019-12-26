@@ -6,9 +6,6 @@ interface ILeaderboardState {
   players?: any;
 }
 
-const unionWith = (leaderboard, players) => {
-  
-}
 const leaderboard = (
   state: ILeaderboardState = {},
   action: LeaderboardAction
@@ -23,6 +20,11 @@ const leaderboard = (
       };
 
     case LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS:
+      const getAllPlayers = () => {
+        return action.tournament && action.tournament.players
+          ? action.tournament.players
+          : Object.values(action.group.players);
+      };
       return {
         ...state,
         groupId: action.groupId,
@@ -32,10 +34,7 @@ const leaderboard = (
               endDate: action.tournament.endDate
             }
           : null,
-        players:
-          action.tournament && action.tournament.players
-            ? action.tournament.players
-            : Object.values(action.group.players)
+        players: getAllPlayers()
       };
     default:
       return state;

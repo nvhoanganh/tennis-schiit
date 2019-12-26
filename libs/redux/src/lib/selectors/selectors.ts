@@ -61,29 +61,34 @@ export const getLeaderboardPlayers = createSelector(
   (leaderboard, group) => {
     if (!leaderboard || !group) return [];
     if (!leaderboard.players) return [];
-
+    if (!group.players) return [];
     const toPercent = x => Math.floor(x * 100) / 100;
-    const players = leaderboard.players;
-    const p = Object.keys(players).map((k, i) => {
-      const player = group.players[k];
-      const won = players[k].won || 0;
-      const bagelWon = players[k].bagelWon || 0;
-      const lost = players[k].lost || 0;
-      const bagelLost = players[k].bagelLost || 0;
-      return {
-        id: k,
-        bagelLost,
-        bagelWon,
-        score: won * 5 + bagelWon * 10 - lost * 5 - bagelLost * 10, // for now
-        played: won + lost,
-        winPercentage: toPercent((won / (won + lost)) * 100),
-        name: player ? player.name : "",
-        email: player ? player.email : "",
-        prizeMoney: won * 5 + bagelWon * 10 - lost * 5 - bagelLost * 10,
-        ...players[k]
-      };
-    });
-    return p.sort((x, y) => {
+    // enhance the group player
+    let players = Object.values(group.players).map(
+      ({ userId, name, email }) => {
+        const player = leaderboard.players[userId];
+        if (!player) {
+          // not played yet
+          return { id: userId, name, email };
+        }
+        const won = player.won || 0;
+        const bagelWon = player.bagelWon || 0;
+        const lost = player.lost || 0;
+        const bagelLost = player.bagelLost || 0;
+        return {
+          ...player,
+          id: userId,
+          score: won * 5 + bagelWon * 5 - lost * 5 - bagelLost * 5, // for now
+          played: won + lost,
+          winPercentage: toPercent((won / (won + lost)) * 100),
+          name,
+          email,
+          prizeMoney: won * 5 + bagelWon * 5 - lost * 5 - bagelLost * 5
+        };
+      }
+    );
+
+    return players.sort((x, y) => {
       return y.score - x.score;
     });
   }

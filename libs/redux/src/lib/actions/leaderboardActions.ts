@@ -127,10 +127,16 @@ export function submitScore({
       batch.update(tourRef, {
         [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1)
       });
+      batch.update(tourRef, {
+        [`players.${k}.lastMatch`]: new Date()
+      });
     });
     loserK.forEach(k => {
       batch.update(tourRef, {
         [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1)
+      });
+      batch.update(tourRef, {
+        [`players.${k}.lastMatch`]: new Date()
       });
     });
 
@@ -147,7 +153,7 @@ export function submitScore({
       });
     }
     await batch.commit();
-    // end 
+    // end
 
     dispatch(apiEnd());
     dispatch(<SubmitScoreSuccessAction>{

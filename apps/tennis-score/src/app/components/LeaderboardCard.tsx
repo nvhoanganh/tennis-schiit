@@ -1,7 +1,9 @@
 import {
   faSortAmountDown,
   faSortAmountUp,
-  faEquals
+  faEquals,
+  faChevronDown,
+  faChevronUp
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
@@ -13,7 +15,7 @@ import RoundGravatar from "./RoundGravatar";
 
 const LeaderboardCard = ({ player, ranking }) => {
   const prizeMoneyCls = classNames({
-    h5: true,
+    h6: true,
     "text-success": player.prizeMoney > 0,
     "text-danger": player.prizeMoney < 0
   });
@@ -28,20 +30,20 @@ const LeaderboardCard = ({ player, ranking }) => {
         ? "chocolate"
         : ""
   };
-
+  const arrowClass = "pl-1 h6 align-middle mr-1 h6 ";
   const getArrow =
     player.lastWeekscore > player.score ? (
-      <FontAwesomeIcon icon={faSortAmountDown} className="pl-1 text-danger" />
-    ) : player.lastWeekscore < player.score ? (
-      <FontAwesomeIcon icon={faSortAmountUp} className="pl-1 text-success" />
-    ) : (
       <FontAwesomeIcon
-        icon={faEquals}
-        className="pl-1"
-        style={{ color: "transparent" }}
+        icon={faChevronDown}
+        className={arrowClass + "text-danger"}
       />
-    );
-
+    ) : player.lastWeekscore < player.score ? (
+      <FontAwesomeIcon
+        icon={faChevronUp}
+        className={arrowClass + "text-success"}
+      />
+    ) : null;
+  console.log(player);
   return (
     <LinkContainer to={`/player/${player.id}`}>
       <div className="col-sm-6 col-md-4 col-lg-3 border-bottom">
@@ -63,13 +65,23 @@ const LeaderboardCard = ({ player, ranking }) => {
           <div className="mr-auto">
             <a className="h5 text-dark pl-0">{player.name}</a>
             {player.played ? (
-              <div className="float-right" style={{ marginRight: -24 }}>
-                <div className="h5">
-                  {player.score}
+              <div
+                className="float-right text-right"
+                style={{ position: "relative", right: -23 }}
+              >
+                <div className="h4">
                   {getArrow}
+                  {player.score}
+                  <sup style={{ fontSize: "0.7rem", top: "-1rem" }}>pt</sup>
                 </div>
-                <div className="h6">{player.winPercentage}%</div>
-                <div className={prizeMoneyCls}>${player.prizeMoney}</div>
+                <div className="h6">
+                  {player.winPercentage}
+                  <sup>%</sup>
+                </div>
+                <div className={prizeMoneyCls}>
+                  {player.prizeMoney}
+                  <sup>$</sup>
+                </div>
               </div>
             ) : null}
             <ScoreCard {...player} />

@@ -109,7 +109,7 @@ const Leaderboard = ({
             right={<GroupMemberDropdown user={user} group={group} />}
           ></RouteNav>
 
-          <div className="text-center pb-4">
+          <div className="text-center pb-4" >
             {tournament && (
               <>
                 <GroupScoreCard
@@ -141,7 +141,7 @@ const Leaderboard = ({
       {/*  show leaderboard */}
       {pendingRequests === 0 ? (
         players.length > 0 ? (
-          <div className="px-1 pb-5">
+          <div className="px-1" style={{ marginBottom: 100 }}>
             {players.map((k, i) => (
               <LeaderboardCard
                 key={k.id}

@@ -68,8 +68,7 @@ export function addPlayer({ name, email, groupId, group }) {
       })
       .then(_ => {
         dispatch(apiEnd());
-        loadLeaderboard(groupId);
-        loadGroups(true);
+        dispatch(loadGroups(true));
       });
   };
 }

@@ -25,7 +25,7 @@ const EntryForm = ({
   }, []);
 
   const [state, setState] = useState({
-    gameWonByLostTeam: "0",
+    gameWonByLostTeam: "3",
     reverseBagel: false,
     winners: {},
     losers: {},
