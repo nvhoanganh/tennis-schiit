@@ -42,6 +42,11 @@ export const getCurrLeaderTournament = createSelector(
   s => s.tournament
 );
 
+export const getLoadingLeaderboard = createSelector(
+  getLeaderboardState,
+  s => s.loading
+);
+
 export const getGroupPlayers = createSelector(
   getCurrLeaderGroup,
   s => {

@@ -53,6 +53,7 @@ const Leaderboard = ({
   user,
   tournament,
   history,
+  loading,
   ...props
 }) => {
   const getPermittedActions = () => {
@@ -84,17 +85,6 @@ const Leaderboard = ({
   };
 
   const urls = getPermittedActions();
-  const showFallBack = () => {
-    if (!tournament) {
-      return (
-        <ShowAddTour
-          groupId={match.params.group}
-          isOwner={isOwner(user, group)}
-        ></ShowAddTour>
-      );
-    }
-    return <ShowAddFirstMatch />;
-  };
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
@@ -109,7 +99,7 @@ const Leaderboard = ({
             right={<GroupMemberDropdown user={user} group={group} />}
           ></RouteNav>
 
-          <div className="text-center pb-4" >
+          <div className="text-center pb-4">
             {tournament && (
               <>
                 <GroupScoreCard
@@ -139,7 +129,7 @@ const Leaderboard = ({
       )}
 
       {/*  show leaderboard */}
-      {pendingRequests === 0 ? (
+      {!loading ? (
         players.length > 0 ? (
           <div className="px-1" style={{ marginBottom: 100 }}>
             {players.map((k, i) => (
@@ -151,7 +141,7 @@ const Leaderboard = ({
             ))}
           </div>
         ) : (
-          showFallBack()
+          <div>Add new user first</div>
         )
       ) : (
         <MySpinner />

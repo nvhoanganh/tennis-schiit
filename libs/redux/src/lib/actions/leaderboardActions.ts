@@ -8,6 +8,8 @@ import { IAction } from "@tennis-score/redux";
 export enum LeaderboardActionTypes {
   LOAD_LEADERBOARD = "LOAD_LEADERBOARD",
   LOAD_LEADERBOARD_SUCCESS = "LOAD_LEADERBOARD_SUCCESS",
+  LOAD_LEADERBOARD_FAILED = "LOAD_LEADERBOARD_FAILED",
+
   SUBMIT_SCORE = "SUBMIT_SCORE",
   SUBMIT_SCORE_SUCCESS = "SUBMIT_SCORE_SUCCESS"
 }
@@ -20,6 +22,11 @@ export class LoadLeaderboardSuccessAction implements IAction {
     public groupId: string,
     public tournament: any
   ) {}
+}
+
+export class LoadLeaderboardFailedAction implements IAction {
+  readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_FAILED;
+  constructor(public erro: any) {}
 }
 
 export class LoadLeaderboardAction implements IAction {
@@ -50,6 +57,10 @@ export function loadLeaderboard(groupId: string) {
 
     dispatch(apiEnd());
     if (!group.exists) {
+      dispatch({
+        type: LeaderboardActionTypes.LOAD_LEADERBOARD_FAILED,
+        error: "group not found"
+      });
       return Promise.resolve();
     }
 
@@ -166,4 +177,5 @@ export function submitScore({
 
 export type LeaderboardAction =
   | LoadLeaderboardSuccessAction
+  | LoadLeaderboardFailedAction
   | LoadLeaderboardAction;
