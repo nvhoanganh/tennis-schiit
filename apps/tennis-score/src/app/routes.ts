@@ -11,6 +11,7 @@ import NewGroup from "./containers/NewGroup";
 import AddPlayer from "./containers/AddPlayer";
 import ManageGroup from "./containers/ManageGroup";
 import AddEditTournament from "./containers/AddEditTournament";
+import PlayerProfile from "./containers/PlayerProfile";
 
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
         path: "/leaderboard/:group",
         exact: true,
         component: Leaderboard
+      },
+      {
+        path: "/player/:id",
+        exact: true,
+        component: PlayerProfile
       },
       {
         path: "/groups/:group/newplayer",
