@@ -6,12 +6,12 @@ export function AppLoader({}) {
       <div className="row align-items-center h-100">
         <div className="mx-auto">
           <div className="text-center">
-            <h1 className="display-4">Tennis Sheet</h1>
+            <h1 className="display-4">Tennis</h1>
             <p className="lead">
-              <em>Loading...</em>
+              <em>Score Sheet</em>
             </p>
             <div className="lead">
-              <MySpinner />
+              <MySpinner fontSize="0.7rem" width={25} height={25} />
             </div>
           </div>
         </div>

@@ -19,13 +19,6 @@ const GroupScoreCard = ({
           </em>
         </div>
       )}
-      <div>
-        <span className="text-dark font-weight-bold">
-          {(players || []).length}
-        </span>{" "}
-        players, <span className="text-dark font-weight-bold">{played}</span>{" "}
-        matches
-      </div>
     </div>
   );
 };

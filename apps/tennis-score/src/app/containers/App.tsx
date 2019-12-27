@@ -10,7 +10,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
-import { maxContainer } from '../components/common';
+import { maxContainer } from "../components/common";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -42,7 +42,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
           href="#home"
           style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
         >
-          Tennis-Sheet
+          Tennis Score Sheet
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
@@ -79,7 +79,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
       <div>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
-    <AppLoader />
+    <AppLoader  />
   );
 };
 

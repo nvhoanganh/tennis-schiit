@@ -46,7 +46,7 @@ const LeaderboardCard = ({ player, ranking }) => {
   console.log(player);
   return (
     <LinkContainer to={`/player/${player.id}`}>
-      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom">
+      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
         <div className="card-body pl-0 py-3">
           <div className="float-left pr-3 pl-0">
             <RoundGravatar size={50} email={player.email || "0"} />

@@ -3,13 +3,19 @@ import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
+import {
+  faUsers,
+  faHandsHelping,
+  faHandshake
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const GroupCard = ({ index, group, user, showIsMember }) => {
   const imgUrl = `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
     group.groupImage
   )}?alt=media`;
   return (
     <LinkContainer to={`/leaderboard/${group.groupId}`}>
-      <div className="col-sm-6 col-md-4 col-lg-3">
+      <div className="py-3 my-2 col-sm-6 col-md-4 col-lg-3 border-top border-bottom">
         <img
           src={imgUrl}
           style={{ height: 140, objectFit: "cover" }}
@@ -18,26 +24,38 @@ const GroupCard = ({ index, group, user, showIsMember }) => {
         <div className="card-body">
           <div className="row card-text">
             <div className="mr-auto">
-              <a className="text-nowrap text-dark">{group.name.toUpperCase()}</a>
+              <a className="text-nowrap text-dark">
+                {group.name.toUpperCase()}
+              </a>
               <GroupMembership
                 user={user}
                 group={group}
                 showIsMember={showIsMember}
               />
+              <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+                {group.location}
+              </em>
               <GroupScoreCard
                 group={group}
                 user={user}
                 players={Object.values(group.players)}
               ></GroupScoreCard>
-              <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
-                {group.location}
-              </em>
-              <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+              {/* <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
                 Created{" "}
                 {formatDistanceToNow(group.createdOn.toDate(), {
                   addSuffix: true
                 })}
-              </em>
+              </em> */}
+            </div>
+
+            <div className="float-right text-right">
+              {Object.values(group.players).length}
+              <FontAwesomeIcon
+                className="pl-1 text-muted"
+                icon={faUsers}
+              />{" "}
+              {group.played}
+              <FontAwesomeIcon className="pl-1 text-muted" icon={faHandshake} />
             </div>
           </div>
         </div>
