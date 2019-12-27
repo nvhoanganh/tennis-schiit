@@ -66,7 +66,7 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
               onClick={signOutHandler}
               value="Sign Out"
               type="button"
-              className="btn btn-primary btn-block"
+              className="btn btn-primary btn-sm btn-block"
             ></UpdateButton>
           </div>
         </div>

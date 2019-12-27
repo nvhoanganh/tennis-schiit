@@ -116,7 +116,7 @@ const AddEditTournament = ({
                   value="Save"
                   type="submit"
                   disabled={!state.formValid || loading}
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-sm btn-block"
                 ></UpdateButton>
               </div>
             </div>

@@ -108,7 +108,7 @@ const NewGroup = ({ loading, history, addGroup }) => {
                   value="Create new group"
                   type="submit"
                   disabled={!state.formValid || loading}
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-sm btn-block"
                 ></UpdateButton>
               </div>
             </div>

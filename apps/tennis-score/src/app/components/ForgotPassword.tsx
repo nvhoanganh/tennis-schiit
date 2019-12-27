@@ -43,7 +43,7 @@ const ForgotPassword: React.SFC<{
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-block">
+              <button type="submit" className="btn btn-primary btn-sm btn-block">
                 {" "}
                 Login{" "}
               </button>

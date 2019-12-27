@@ -1,7 +1,9 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect } from "react";
-import FloatButton from "./FloatButton";
+import { LinkContainer } from "react-router-bootstrap";
 import GroupCard from "./GroupCard";
+import UpdateButton from "./LoadingButton";
+import { Button } from "./Button";
+
 const Home = ({ user, groups, myGroups, ...props }) => {
   useEffect(() => {
     props.loadGroups();
@@ -9,16 +11,14 @@ const Home = ({ user, groups, myGroups, ...props }) => {
 
   return (
     <>
-      {user && (
-        <FloatButton icon={faPlus} tooltip="Add new score" url={`/newgroup`} />
-      )}
       {myGroups.length > 0 && (
         <>
-          <h4 className="p-3">My groups</h4>
-          <div className="px-2 row px-3">
+          <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
+            My groups
+          </div>
+          <div className="px-2">
             {myGroups.map((p, i) => (
               <GroupCard
-                index={i}
                 key={p.groupId}
                 group={p}
                 user={user}
@@ -31,11 +31,12 @@ const Home = ({ user, groups, myGroups, ...props }) => {
 
       {groups.length > 0 && (
         <>
-          <h4 className="p-3">Groups near me</h4>
-          <div className="px-2 row px-3">
+          <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
+            Groups near me
+          </div>
+          <div className="px-2">
             {groups.map((p, i) => (
               <GroupCard
-                index={i}
                 key={p.groupId}
                 group={p}
                 user={user}
@@ -44,6 +45,18 @@ const Home = ({ user, groups, myGroups, ...props }) => {
             ))}
           </div>
         </>
+      )}
+      {user && (
+        <div className="text-center p-3">
+          <LinkContainer to={`/newgroup`}>
+            <Button
+              type="submit"
+              className="btn btn-primary btn-sm btn-block btn-sm"
+            >
+              Create Group
+            </Button>
+          </LinkContainer>
+        </div>
       )}
     </>
   );

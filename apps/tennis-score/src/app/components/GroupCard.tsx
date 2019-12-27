@@ -9,16 +9,19 @@ import {
   faHandshake
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const GroupCard = ({ index, group, user, showIsMember }) => {
+const GroupCard = ({ group, user, showIsMember }) => {
   const imgUrl = `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
     group.groupImage
   )}?alt=media`;
   return (
     <LinkContainer to={`/leaderboard/${group.groupId}`}>
-      <div className="py-3 my-2 col-sm-6 col-md-4 col-lg-3 border-top border-bottom">
+      <div className="py-3 my-2 col-sm-6 col-md-4 col-lg-3 border-top border-bottom shadow-sm bg-white rounded">
         <img
           src={imgUrl}
-          style={{ height: 140, objectFit: "cover" }}
+          style={{
+            height: 140,
+            objectFit: "cover"
+          }}
           className="card-img-top border"
         ></img>
         <div className="card-body">
@@ -32,20 +35,11 @@ const GroupCard = ({ index, group, user, showIsMember }) => {
                 group={group}
                 showIsMember={showIsMember}
               />
-              <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
-                {group.location}
-              </em>
               <GroupScoreCard
                 group={group}
                 user={user}
                 players={Object.values(group.players)}
               ></GroupScoreCard>
-              {/* <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
-                Created{" "}
-                {formatDistanceToNow(group.createdOn.toDate(), {
-                  addSuffix: true
-                })}
-              </em> */}
             </div>
 
             <div className="float-right text-right">

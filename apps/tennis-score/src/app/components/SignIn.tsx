@@ -93,7 +93,7 @@ const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
                 value="Sign In"
                 type="submit"
                 disabled={!state.formValid || loading}
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-sm btn-block"
               ></UpdateButton>
             </div>
           </div>

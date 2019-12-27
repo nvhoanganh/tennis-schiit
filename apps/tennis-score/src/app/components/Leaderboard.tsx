@@ -1,25 +1,25 @@
 import {
-  faPlus,
-  faHamburger,
+  faBars,
   faClipboardList,
   faUserPlus,
-  faBars,
-  faTrophy
+  faEllipsisH
 } from "@fortawesome/free-solid-svg-icons";
+import { isMember, isOwner } from "@tennis-score/redux";
 import format from "date-fns/format";
-import { LinkContainer } from "react-router-bootstrap";
 import React, { useEffect } from "react";
-import FloatButton from "./FloatButton";
+import { LinkContainer } from "react-router-bootstrap";
+
+import { Button } from "./Button";
+import FloatActionsButton from "./FloatActionsButton";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
-import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import LeaderboardCard from "./LeaderboardCard";
+import UpdateButton from "./LoadingButton";
 import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
-import FloatActionsButton from "./FloatActionsButton";
-import { Link } from "./Link";
-import { isOwner, isMember } from "@tennis-score/redux";
-import { Button } from "./Button";
+import HeaderCard from "./Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { TournamentDropDown } from "./TournamentDropdown";
 
 const ShowAddTour = ({ groupId, isOwner }) => {
   return isOwner ? (
@@ -29,7 +29,7 @@ const ShowAddTour = ({ groupId, isOwner }) => {
         <div className="col-12 px-3">
           <div className="form-group">
             <LinkContainer to={`/groups/${groupId}/newtournament`}>
-              <Button className="btn btn-primary">Add Tournament</Button>
+              <Button className="btn btn-primary btn-sm">Add Tournament</Button>
             </LinkContainer>
           </div>
         </div>
@@ -96,38 +96,56 @@ const Leaderboard = ({
           <RouteNav
             history={history}
             center={group.name.toUpperCase()}
-            right={<GroupMemberDropdown user={user} group={group} />}
+            right={
+              <GroupMemberDropdown
+                leaveGroup={props.leaveGroup}
+                joinGroup={props.joinGroup}
+                user={user}
+                group={group}
+              />
+            }
           ></RouteNav>
 
-          <div className="text-center pb-4">
-            {tournament && (
-              <>
-                <GroupScoreCard
-                  group={group}
-                  user={user}
-                  players={players}
-                ></GroupScoreCard>
-                <em className="text-muted x-small">
-                  Current tournament:{" "}
-                  {format(tournament.startDate.toDate(), "dd/MM/yy")} -{" "}
-                  {tournament.endDate
-                    ? format(tournament.endDate.toDate(), "dd/MM/yy")
-                    : ""}
-                </em>
-              </>
-            )}
+          <div className="px-3">
+            <GroupScoreCard
+              group={group}
+              user={user}
+              players={players}
+            ></GroupScoreCard>
           </div>
+
+          {!isMember(user, group) && (
+            <div className="text-center p-3">
+              <UpdateButton
+                loading={loading}
+                value="Join Group"
+                type="submit"
+                className="btn btn-primary btn-sm btn-block btn-sm"
+              ></UpdateButton>
+            </div>
+          )}
         </>
       )}
 
-      {/*  show float button */}
       {user && urls.length > 0 && (
         <FloatActionsButton
           icon={faBars}
           urls={getPermittedActions()}
         ></FloatActionsButton>
       )}
-
+      {tournament ? (
+        <HeaderCard right={<TournamentDropDown user={user} group={group} />}>
+          Current tournament:{" "}
+          {format(tournament.startDate.toDate(), "dd/MM/yy")} -{" "}
+          {tournament.endDate
+            ? format(tournament.endDate.toDate(), "dd/MM/yy")
+            : ""}
+        </HeaderCard>
+      ) : (
+        <HeaderCard right={<TournamentDropDown user={user} group={group} />}>
+          Members
+        </HeaderCard>
+      )}
       {/*  show leaderboard */}
       {!loading ? (
         players.length > 0 ? (

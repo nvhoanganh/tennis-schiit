@@ -16,23 +16,35 @@ const AddPlayer = ({
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
   }, []);
-  const [state, setState] = useState({
+  const initState = {
     email: "",
-    emailValid: false,
+    emailValid: true,
     name: "",
     nameValid: false,
     formValid: false
-  });
+  };
+  const [state, setState] = useState(initState);
   const setValue = (field, value) =>
     setState(curr => ({ ...curr, [field]: value }));
 
+  const saveAndThenAddNew = _ => {
+    addPlayer({
+      ...state,
+      group,
+      groupId: match.params.group
+    }).then(_ => {
+      setState(initState);
+    });
+  };
   const validateAndSubmit = e => {
     e.preventDefault();
     addPlayer({
       ...state,
       group,
       groupId: match.params.group
-    }).then(_ => history.goBack());
+    }).then(_ => {
+      history.goBack();
+    });
   };
 
   useEffect(() => {
@@ -56,17 +68,6 @@ const AddPlayer = ({
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           <TextInput
-            type="email"
-            name="email"
-            label="Player Email"
-            value={state.email}
-            placeholder="Player email"
-            errorMessage="Valid email is required"
-            setValue={setValue}
-            isValid={state.emailValid}
-          ></TextInput>
-
-          <TextInput
             type="text"
             name="name"
             label="Player Name"
@@ -77,8 +78,19 @@ const AddPlayer = ({
             isValid={state.nameValid}
           ></TextInput>
 
+          <TextInput
+            type="email"
+            name="email"
+            label="Player Email"
+            value={state.email}
+            placeholder="Player email (Optional)"
+            errorMessage="Valid email is required"
+            setValue={setValue}
+            isValid={state.emailValid}
+          ></TextInput>
+
           <div className="row pt-4">
-            <div className="col-md-6">
+            <div className="col-12">
               <div className="form-group">
                 <UpdateButton
                   loading={pendingRequests > 0}
@@ -86,7 +98,20 @@ const AddPlayer = ({
                   value="Add Player"
                   type="submit"
                   disabled={!state.formValid || pendingRequests > 0}
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-sm btn-block"
+                ></UpdateButton>
+              </div>
+            </div>
+            <div className="col-12">
+              <div className="form-group">
+                <UpdateButton
+                  loading={pendingRequests > 0}
+                  loadingText="Saving..."
+                  value="Add Player + another"
+                  type="button"
+                  onClick={saveAndThenAddNew}
+                  disabled={!state.formValid || pendingRequests > 0}
+                  className="btn btn-dark btn-sm btn-block"
                 ></UpdateButton>
               </div>
             </div>

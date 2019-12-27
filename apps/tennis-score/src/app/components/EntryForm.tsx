@@ -184,7 +184,7 @@ const EntryForm = ({
                   value="Submit"
                   type="submit"
                   disabled={!state.formValid || pendingRequests > 0}
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-sm btn-block"
                 ></UpdateButton>
               </div>
             </form>

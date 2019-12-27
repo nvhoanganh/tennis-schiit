@@ -1,23 +1,26 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import React from "react";
 const GroupScoreCard = ({
-  group: { played, lastMatch, owner },
+  group: { createdOn, location, played, lastMatch, owner },
   players,
   user
 }) => {
   return (
-    <div
-      style={{
-        marginTop: -5
-      }}
-    >
+    <div>
+      <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+        {location}
+      </em>
+      <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+        Created{" "}
+        {formatDistanceToNow(createdOn.toDate(), {
+          addSuffix: true
+        })}
+      </em>
       {lastMatch && (
-        <div>
-          <em className="text-muted" style={{ fontSize: "0.7rem" }}>
-            Last match:{" "}
-            {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
-          </em>
-        </div>
+        <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+          Last match:{" "}
+          {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
+        </em>
       )}
     </div>
   );

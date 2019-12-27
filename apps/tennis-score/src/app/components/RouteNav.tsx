@@ -1,4 +1,4 @@
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button } from "./Button";
@@ -9,14 +9,11 @@ const RouteNav: React.SFC<{
 }> = ({ history, center, right }) => {
   return (
     <div className="d-flex justify-content-between pb-1">
-      <div className="p-2">
-        <Button
-          type="button"
+      <div className="p-2 px-3">
+        <FontAwesomeIcon
           onClick={() => history.goBack()}
-          className="btn btn-light"
-        >
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </Button>
+          icon={faLongArrowAltLeft}
+        />
       </div>
       <div className="p-2 d-flex">
         <span className="h5 align-self-center">{center}</span>
@@ -25,7 +22,7 @@ const RouteNav: React.SFC<{
         {right ? (
           right
         ) : (
-          <Button type="button" className="btn btn-light invisible"></Button>
+          <Button type="button" className="btn btn-light invisible btn-sm"></Button>
         )}
       </div>
     </div>

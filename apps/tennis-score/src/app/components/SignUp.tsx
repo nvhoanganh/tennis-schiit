@@ -88,7 +88,7 @@ const SignUp = ({ loading, signupHandler }) => {
                 value="Sign up"
                 type="submit"
                 disabled={!state.formValid || loading}
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-sm btn-block"
               ></UpdateButton>
             </div>
           </div>
