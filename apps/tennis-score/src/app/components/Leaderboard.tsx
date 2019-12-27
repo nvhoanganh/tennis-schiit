@@ -7,11 +7,8 @@ import GroupScoreCard from "./GroupScoreCard";
 import HeaderCard from "./Header";
 import LeaderboardCard from "./LeaderboardCard";
 import UpdateButton from "./LoadingButton";
-import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faHandshake } from "@fortawesome/free-solid-svg-icons";
 
 const Leaderboard = ({
   players,
@@ -93,46 +90,51 @@ const Leaderboard = ({
         )}
       </HeaderCard>
       {/*  show leaderboard */}
-      {!loading ? (
-        players.length > 0 ? (
-          <div className="px-1">
-            {players.map((k, i) => (
-              <LeaderboardCard
-                key={k.id}
-                player={k}
-                ranking={i}
-              ></LeaderboardCard>
-            ))}
-            <div className="text-center p-3">
-              {canSubmitNewScore() && (
-                <LinkContainer to={`/newscore/${match.params.group}`}>
-                  <UpdateButton
-                    loading={loading}
-                    value="Submit Result"
-                    type="submit"
-                    className="btn btn-primary btn-sm btn-block btn-sm"
-                  ></UpdateButton>
-                </LinkContainer>
-              )}
+      {loading ? (
+        <div className="px-1">
+          {[1, 2, 3, 4, 5].map(k => (
+            <LeaderboardCard
+              key={k}
+              player={null}
+              ranking={null}
+              loading={true}
+            ></LeaderboardCard>
+          ))}
+        </div>
+      ) : players.length > 0 ? (
+        <div className="px-1">
+          {players.map((k, i) => (
+            <LeaderboardCard
+              key={k.id}
+              player={k}
+              ranking={i}
+            ></LeaderboardCard>
+          ))}
+          <div className="text-center p-3">
+            {canSubmitNewScore() && (
+              <LinkContainer to={`/newscore/${match.params.group}`}>
+                <UpdateButton
+                  loading={loading}
+                  value="Submit Result"
+                  type="submit"
+                  className="btn btn-primary btn-sm btn-block btn-sm"
+                ></UpdateButton>
+              </LinkContainer>
+            )}
 
-              {canCreateTour() && (
-                <LinkContainer
-                  to={`/groups/${match.params.group}/newtournament`}
-                >
-                  <UpdateButton
-                    loading={loading}
-                    value="Create Tournament"
-                    type="submit"
-                    className="btn btn-primary btn-sm btn-block btn-sm"
-                  ></UpdateButton>
-                </LinkContainer>
-              )}
-            </div>
+            {canCreateTour() && (
+              <LinkContainer to={`/groups/${match.params.group}/newtournament`}>
+                <UpdateButton
+                  loading={loading}
+                  value="Create Tournament"
+                  type="submit"
+                  className="btn btn-primary btn-sm btn-block btn-sm"
+                ></UpdateButton>
+              </LinkContainer>
+            )}
           </div>
-        ) : null
-      ) : (
-        <MySpinner />
-      )}
+        </div>
+      ) : null}
     </>
   );
 };

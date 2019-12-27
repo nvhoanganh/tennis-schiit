@@ -20,8 +20,8 @@ function MySpinner({ fontSize, height, width }) {
 }
 
 MySpinner.defaultProps = {
-  fontSize: "2rem",
-  height: 80,
-  width: 80,
+  fontSize: "1rem",
+  height: 40,
+  width: 40,
 };
 export default MySpinner;
