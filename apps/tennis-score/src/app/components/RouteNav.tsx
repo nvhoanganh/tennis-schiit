@@ -9,11 +9,14 @@ const RouteNav: React.SFC<{
 }> = ({ history, center, right }) => {
   return (
     <div className="d-flex justify-content-between pb-1">
-      <div className="p-2 px-3">
-        <FontAwesomeIcon
+      <div className="p-2">
+        <Button
+          type="button"
           onClick={() => history.goBack()}
-          icon={faLongArrowAltLeft}
-        />
+          className="btn btn-link btn-sm"
+        >
+          <FontAwesomeIcon icon={faLongArrowAltLeft} />
+        </Button>
       </div>
       <div className="p-2 d-flex">
         <span className="h5 align-self-center">{center}</span>
@@ -22,7 +25,7 @@ const RouteNav: React.SFC<{
         {right ? (
           right
         ) : (
-          <Button type="button" className="btn btn-light invisible btn-sm"></Button>
+          <Button type="button" className="btn btn-light btn-sm invisible"></Button>
         )}
       </div>
     </div>

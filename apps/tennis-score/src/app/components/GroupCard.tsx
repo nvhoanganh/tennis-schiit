@@ -1,14 +1,9 @@
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { faHandshake, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
-import {
-  faUsers,
-  faHandsHelping,
-  faHandshake
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const GroupCard = ({ group, user, showIsMember }) => {
   const imgUrl = `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
     group.groupImage

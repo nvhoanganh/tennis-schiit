@@ -1,9 +1,8 @@
 import React from "react";
 
 const checkBoxStyle = {
-  height: 24,
-  width: 24,
-  marginTop: 3
+  height: 18,
+  width: 18
 };
 
 const CheckBoxInput: React.SFC<{
@@ -28,7 +27,7 @@ const CheckBoxInput: React.SFC<{
         className="form-check-label"
         htmlFor={name}
         style={{
-          marginLeft: 20
+          marginLeft: 14
         }}
       >
         {label}

@@ -9,6 +9,7 @@ import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
 import RadioInput from "./RadioInput";
 import RadioInputButton from "./RadioInputButtons";
+import { maxContainer } from "./common";
 
 const EntryForm = ({
   pendingRequests,
@@ -24,7 +25,7 @@ const EntryForm = ({
     props.loadLeaderboard(match.params.group);
   }, []);
 
-  const [state, setState] = useState({
+  const initState = {
     gameWonByLostTeam: "3",
     reverseBagel: false,
     winners: {},
@@ -32,7 +33,8 @@ const EntryForm = ({
     matchDate: format(new Date(), "yyyy-MM-dd"),
     matchDateValid: null,
     formValid: false
-  });
+  };
+  const [state, setState] = useState(initState);
 
   const setValue = (field, value) => {
     const user = field.split("_")[1];
@@ -65,6 +67,16 @@ const EntryForm = ({
     });
   };
 
+  const submitAndAddNew = _ => {
+    submitScore({
+      ...state,
+      groupId: group.groupId,
+      group,
+      currentTournament: group.currentTournament
+    }).then(_ => {
+      setState(initState);
+    });
+  };
   const validateAndSubmit = e => {
     e.preventDefault();
     submitScore({
@@ -96,88 +108,84 @@ const EntryForm = ({
     <>
       {group ? (
         <>
-          <RouteNav
-            history={history}
-            center="Submit New Result"
-          ></RouteNav>
-          <div className="container">
+          <RouteNav history={history} center="Submit New Result"></RouteNav>
+          <div {...maxContainer}>
             <form noValidate onSubmit={validateAndSubmit}>
-              <div className="card mt-3">
-                <div className="card-body">
-                  <table className="table table-borderless pb-3">
-                    <thead>
-                      <tr>
-                        <td></td>
-                        <td className="text-center font-weight-bold">Winner</td>
-                        <td className="text-center font-weight-bold">Loser</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {players.map(p => (
-                        <tr key={p.id}>
-                          <td>
-                            <div className="row">
-                              <div className="">
-                                <RoundGravatar
-                                  size={37}
-                                  email={p.email || "0"}
-                                />
-                              </div>
-                              <div className="ml-2 font-weight-bold mr-auto mt-1">
-                                {p.name}
-                              </div>
+              <div className="mt-3">
+                <table className="table table-borderless pb-3">
+                  <thead>
+                    <tr>
+                      <td></td>
+                      <td className="text-center font-weight-bold">Winner</td>
+                      <td className="text-center font-weight-bold">Loser</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {players.map(p => (
+                      <tr
+                        className="shadow-sm bg-white rounded border"
+                        key={p.id}
+                      >
+                        <td>
+                          <div className="row ml-2">
+                            <div className="">
+                              <RoundGravatar size={37} email={p.email || "0"} />
                             </div>
-                          </td>
+                            <div className="ml-2 font-weight-bold mr-auto mt-1">
+                              {p.name}
+                            </div>
+                          </div>
+                        </td>
 
-                          <td className="text-center">
-                            <CheckBoxInput
-                              name={`w_${p.id}`}
-                              label=""
-                              value={state[`w_${p.id}`] || false}
-                              setValue={setValue}
-                            ></CheckBoxInput>
-                          </td>
-                          <td className="text-center">
-                            <CheckBoxInput
-                              name={`l_${p.id}`}
-                              label=""
-                              value={state[`l_${p.id}`] || false}
-                              setValue={setValue}
-                            ></CheckBoxInput>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                        <td className="text-center">
+                          <CheckBoxInput
+                            name={`w_${p.id}`}
+                            label=""
+                            value={state[`w_${p.id}`] || false}
+                            setValue={setValue}
+                          ></CheckBoxInput>
+                        </td>
+                        <td className="text-center">
+                          <CheckBoxInput
+                            name={`l_${p.id}`}
+                            label=""
+                            value={state[`l_${p.id}`] || false}
+                            setValue={setValue}
+                          ></CheckBoxInput>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-                  <RadioInputButton
-                    name="gameWonByLostTeam"
-                    label="Games won by losing team"
-                    value={state.gameWonByLostTeam}
-                    errorMessage=""
-                    setValue={setValue}
-                    options={["0", "1", "2", "3", "4", "5", "6"]}
-                    isValid={true}
-                  ></RadioInputButton>
-                  <TextInput
-                    type="date"
-                    name="matchDate"
-                    label="Date"
-                    value={state.matchDate}
-                    placeholder=""
-                    errorMessage=""
-                    setValue={setValue}
-                    isValid={state.matchDateValid}
-                  ></TextInput>
-                  <CheckBoxInput
-                    name="reverseBagel"
-                    label="Reversed Bagel?"
-                    value={state.reverseBagel}
-                    setValue={setValue}
-                  ></CheckBoxInput>
-                </div>
+                <RadioInputButton
+                  name="gameWonByLostTeam"
+                  label="Games won by losing team"
+                  value={state.gameWonByLostTeam}
+                  errorMessage=""
+                  setValue={setValue}
+                  options={["0", "1", "2", "3", "4", "5", "6"]}
+                  isValid={true}
+                ></RadioInputButton>
+                <TextInput
+                  type="date"
+                  name="matchDate"
+                  label="Date"
+                  value={state.matchDate}
+                  placeholder=""
+                  errorMessage=""
+                  setValue={setValue}
+                  isValid={state.matchDateValid}
+                ></TextInput>
+                <CheckBoxInput
+                  name="reverseBagel"
+                  label="Reversed Bagel?"
+                  value={state.reverseBagel}
+                  setValue={setValue}
+                ></CheckBoxInput>
               </div>
-              <div className="text-center py-3">
+
+              <div className="text-center pt-3 py-2">
                 <UpdateButton
                   loading={pendingRequests > 0}
                   loadingText="Saving..."
@@ -185,6 +193,18 @@ const EntryForm = ({
                   type="submit"
                   disabled={!state.formValid || pendingRequests > 0}
                   className="btn btn-primary btn-sm btn-block"
+                ></UpdateButton>
+              </div>
+
+              <div className="text-center pb-3">
+                <UpdateButton
+                  loading={pendingRequests > 0}
+                  loadingText="Saving..."
+                  value="Submit + Add another"
+                  onClick={submitAndAddNew}
+                  type="button"
+                  disabled={!state.formValid || pendingRequests > 0}
+                  className="btn btn-dark btn-sm btn-block"
                 ></UpdateButton>
               </div>
             </form>
