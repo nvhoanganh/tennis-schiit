@@ -4,7 +4,9 @@ import {
   getPlayerList,
   getUser,
   loadGroups,
-  getGroupNotMemberOff
+  getGroupNotMemberOff,
+  getLoadingLeaderboard,
+  getPendingRequests
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Home from "../components/Home";
@@ -15,6 +17,7 @@ const mapStateToProps = state => {
     groups: getGroupNotMemberOff(state),
     myGroups: getMyGroups(state),
     user: getUser(state),
+    loading: getPendingRequests(state),
     appLoaded: getAppIsLoaded(state)
   };
 };

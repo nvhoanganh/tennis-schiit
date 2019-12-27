@@ -187,7 +187,7 @@ const EntryForm = ({
 
               <div className="text-center pt-3 py-2">
                 <UpdateButton
-                  loading={pendingRequests > 0}
+                  loading={pendingRequests}
                   loadingText="Saving..."
                   value="Submit"
                   type="submit"
@@ -198,7 +198,7 @@ const EntryForm = ({
 
               <div className="text-center pb-3">
                 <UpdateButton
-                  loading={pendingRequests > 0}
+                  loading={pendingRequests}
                   loadingText="Saving..."
                   value="Submit + Add another"
                   onClick={submitAndAddNew}

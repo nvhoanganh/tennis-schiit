@@ -17,8 +17,9 @@ export const getPlayerList = createSelector(
 
 export const getPendingRequests = createSelector(
   getAppState,
-  s => s.pendingRequests
+  s => s.pendingRequests > 0
 );
+
 export const getAppLoaded = createSelector(
   getAppState,
   s => s.appLoaded

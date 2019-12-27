@@ -58,7 +58,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
               </LinkContainer>
             ) : null}
             <LinkContainer style={linkStyle} to="/home">
-              <NavDropdown.Item className="text-white">Groups</NavDropdown.Item>
+              <NavDropdown.Item className="text-white">Home</NavDropdown.Item>
             </LinkContainer>
             {!user ? (
               <LinkContainer style={linkStyle} to="/signin">

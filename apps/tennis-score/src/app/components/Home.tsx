@@ -1,13 +1,33 @@
 import React, { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
-import GroupCard from "./GroupCard";
-import UpdateButton from "./LoadingButton";
 import { Button } from "./Button";
+import GroupCard from "./GroupCard";
 
-const Home = ({ user, groups, myGroups, ...props }) => {
+const Home = ({ user, groups, myGroups, loading, ...props }) => {
   useEffect(() => {
     props.loadGroups();
   }, []);
+
+  if (loading)
+    return (
+      <>
+        <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
+          <Skeleton />
+        </div>
+        <div className="px-2">
+          {[1, 2, 3, 4].map((p, i) => (
+            <GroupCard
+              key={p}
+              group={null}
+              user={null}
+              showIsMember={true}
+              loading={true}
+            ></GroupCard>
+          ))}
+        </div>
+      </>
+    );
 
   return (
     <>
@@ -46,18 +66,16 @@ const Home = ({ user, groups, myGroups, ...props }) => {
           </div>
         </>
       )}
-      {user && (
-        <div className="text-center p-3">
-          <LinkContainer to={`/newgroup`}>
-            <Button
-              type="submit"
-              className="btn btn-primary btn-sm btn-block btn-sm"
-            >
-              Create Group
-            </Button>
-          </LinkContainer>
-        </div>
-      )}
+      <div className="text-center p-3">
+        <LinkContainer to={`/newgroup`}>
+          <Button
+            type="submit"
+            className="btn btn-primary btn-sm btn-block btn-sm"
+          >
+            Create Group
+          </Button>
+        </LinkContainer>
+      </div>
     </>
   );
 };

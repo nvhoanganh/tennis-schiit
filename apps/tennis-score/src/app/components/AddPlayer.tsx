@@ -93,11 +93,11 @@ const AddPlayer = ({
             <div className="col-12">
               <div className="form-group">
                 <UpdateButton
-                  loading={pendingRequests > 0}
+                  loading={pendingRequests}
                   loadingText="Saving..."
                   value="Add Player"
                   type="submit"
-                  disabled={!state.formValid || pendingRequests > 0}
+                  disabled={!state.formValid || pendingRequests}
                   className="btn btn-primary btn-sm btn-block"
                 ></UpdateButton>
               </div>
@@ -105,12 +105,12 @@ const AddPlayer = ({
             <div className="col-12">
               <div className="form-group">
                 <UpdateButton
-                  loading={pendingRequests > 0}
+                  loading={pendingRequests}
                   loadingText="Saving..."
                   value="Add Player + another"
                   type="button"
                   onClick={saveAndThenAddNew}
-                  disabled={!state.formValid || pendingRequests > 0}
+                  disabled={!state.formValid || pendingRequests}
                   className="btn btn-dark btn-sm btn-block"
                 ></UpdateButton>
               </div>
