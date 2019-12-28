@@ -14,7 +14,7 @@ export function GroupMemberDropdown({
 }) {
   const joinHandler = _ => {
     if (!user) {
-      history.push("/signin");
+      history.push("/signup");
     } else {
       joinGroup(group.groupId);
     }
