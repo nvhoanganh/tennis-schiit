@@ -45,63 +45,65 @@ const getArrow = player =>
     />
   ) : null;
 const LeaderboardCard = ({ player, ranking, ...props }) => {
+  if (props.loading) {
+    return (
+      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
+        <div className="pl-0 py-3">
+          <div>
+            <a className="h5 text-dark pl-0">
+              <Skeleton />
+            </a>
+            <Skeleton height={60} />
+          </div>
+
+        </div>
+      </div>
+    );
+  }
   return (
     <LinkContainer to={player ? `/player/${player.id}` : ""}>
-      {props.loading ? (
-        <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
-          <div className="card-body pl-0 py-3">
-            <div>
-              <a className="h5 text-dark pl-0">
-                <Skeleton />
-              </a>
-              <Skeleton height={60} />
+      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
+        <div className="card-body pl-0 py-3">
+          <div className="float-left pr-3 pl-0">
+            <RoundGravatar size={50} email={player.email || "0"} />
+            <div className="text-center">
+              <span className="badge badge-pill " style={top3(ranking)}>
+                {ranking === 0
+                  ? "1st"
+                  : ranking === 1
+                  ? "2nd"
+                  : ranking === 2
+                  ? "3rd"
+                  : " "}
+              </span>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
-          <div className="card-body pl-0 py-3">
-            <div className="float-left pr-3 pl-0">
-              <RoundGravatar size={50} email={player.email || "0"} />
-              <div className="text-center">
-                <span className="badge badge-pill " style={top3(ranking)}>
-                  {ranking === 0
-                    ? "1st"
-                    : ranking === 1
-                    ? "2nd"
-                    : ranking === 2
-                    ? "3rd"
-                    : " "}
-                </span>
-              </div>
-            </div>
-            <div className="mr-auto">
-              <a className="h5 text-dark pl-0">{player.name}</a>
-              {player.played ? (
-                <div
-                  className="float-right text-right"
-                  style={{ position: "relative", right: -23 }}
-                >
-                  <div className="h4">
-                    {getArrow(player)}
-                    {player.score}
-                    <sup style={{ fontSize: "0.7rem", top: "-1rem" }}>pt</sup>
-                  </div>
-                  <div className="h6">
-                    {player.winPercentage}
-                    <sup>%</sup>
-                  </div>
-                  <div className={prizeMoneyCls(player)}>
-                    {player.prizeMoney}
-                    <sup>$</sup>
-                  </div>
+          <div className="mr-auto">
+            <a className="h5 text-dark pl-0">{player.name}</a>
+            {player.played ? (
+              <div
+                className="float-right text-right"
+                style={{ position: "relative", right: -23 }}
+              >
+                <div className="h4">
+                  {getArrow(player)}
+                  {player.score}
+                  <sup style={{ fontSize: "0.7rem", top: "-1rem" }}>pt</sup>
                 </div>
-              ) : null}
-              <ScoreCard {...player} />
-            </div>
+                <div className="h6">
+                  {player.winPercentage}
+                  <sup>%</sup>
+                </div>
+                <div className={prizeMoneyCls(player)}>
+                  {player.prizeMoney}
+                  <sup>$</sup>
+                </div>
+              </div>
+            ) : null}
+            <ScoreCard {...player} />
           </div>
         </div>
-      )}
+      </div>
     </LinkContainer>
   );
 };

@@ -9,6 +9,7 @@ import LeaderboardCard from "./LeaderboardCard";
 import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
+import Skeleton from 'react-loading-skeleton';
 
 const Leaderboard = ({
   players,
@@ -46,13 +47,16 @@ const Leaderboard = ({
               />
             }
           ></RouteNav>
-
           <div className="px-3">
-            <GroupScoreCard
-              group={group}
-              user={user}
-              players={players}
-            ></GroupScoreCard>
+            {!loading ? (
+              <GroupScoreCard
+                group={group}
+                user={user}
+                players={players}
+              ></GroupScoreCard>
+            ) : (
+              <Skeleton height={90} />
+            )}
           </div>
 
           {!isMember(user, group) && !loading && (
