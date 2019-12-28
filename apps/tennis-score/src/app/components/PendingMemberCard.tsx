@@ -53,33 +53,35 @@ const getArrow = player =>
   ) : null;
 const PendingMemberCard = ({ player, ...props }) => {
   return (
-    <LinkContainer to={player ? `/player/${player.uid}` : ""}>
-      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm" >
-        <div className="card-body px-0 py-3">
-          <div className="float-left pr-3 pl-0">
+    <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
+      <div className="card-body px-0 py-3">
+        <div className="float-left pr-3 pl-0">
+          <LinkContainer to={player ? `/player/${player.uid}` : ""}>
             <RoundGravatar size={35} email={player.email || "0"} />
-          </div>
-          <div className="mr-auto">
+          </LinkContainer>
+        </div>
+        <div className="mr-auto">
+          <LinkContainer to={player ? `/player/${player.uid}` : ""}>
             <a className="h6 text-dark pl-0">{player.displayName}</a>
-            <div className="float-right text-right">
-              <Button type="button" className="btn btn-primary btn-sm">
-                <FontAwesomeIcon icon={faCheckCircle} />
-              </Button>
-              <Button type="button" className="btn ml-1 btn-danger btn-sm">
-                <FontAwesomeIcon icon={faTimesCircle} />
-              </Button>
-            </div>
-            <div>
-              <em className="d-block text-muted x-small">
-                {formatDistanceToNow(player.requestDate.toDate(), {
-                  addSuffix: true
-                })}
-              </em>
-            </div>
+          </LinkContainer>
+          <div className="float-right text-right">
+            <Button type="button" className="btn btn-primary btn-sm">
+              <FontAwesomeIcon icon={faCheckCircle} />
+            </Button>
+            <Button type="button" className="btn ml-1 btn-danger btn-sm">
+              <FontAwesomeIcon icon={faTimesCircle} />
+            </Button>
+          </div>
+          <div>
+            <em className="d-block text-muted x-small">
+              {formatDistanceToNow(player.requestDate.toDate(), {
+                addSuffix: true
+              })}
+            </em>
           </div>
         </div>
       </div>
-    </LinkContainer>
+    </div>
   );
 };
 

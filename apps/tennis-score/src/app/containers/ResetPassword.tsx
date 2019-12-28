@@ -1,6 +1,6 @@
+import { resetPassword, resetError } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import { signUp, resetError } from "@tennis-score/redux";
-import SignUp from "../components/SignUp";
+import ResetPassword from "../components/ResetPassword";
 
 const mapStateToProps = ({ app: { lastError, pendingRequests } }) => ({
   lastError,
@@ -8,11 +8,11 @@ const mapStateToProps = ({ app: { lastError, pendingRequests } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  resetError: _ => dispatch(resetError()),
-  signupHandler: data => dispatch(signUp(data))
+  resetPassword: email => dispatch(resetPassword(email)),
+  resetError: _ => dispatch(resetError())
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignUp);
+)(ResetPassword);

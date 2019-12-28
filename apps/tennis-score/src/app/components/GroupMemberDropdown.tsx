@@ -5,7 +5,20 @@ import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { LinkContainer } from "react-router-bootstrap";
-export function GroupMemberDropdown({ user, group, joinGroup, leaveGroup }) {
+export function GroupMemberDropdown({
+  history,
+  user,
+  group,
+  joinGroup,
+  leaveGroup
+}) {
+  const joinHandler = _ => {
+    if (!user) {
+      history.push("/signin");
+    } else {
+      joinGroup(group.groupId);
+    }
+  };
   return (
     <DropdownButton
       drop="left"
@@ -15,10 +28,7 @@ export function GroupMemberDropdown({ user, group, joinGroup, leaveGroup }) {
       id="group-menu"
     >
       {!isMember(user, group) && (
-        <Dropdown.Item onClick={() => joinGroup(group.groupId)}>Join Group</Dropdown.Item>
-      )}
-      {!isOwner(user, group) && isMember(user, group) && (
-        <Dropdown.Item onClick={leaveGroup}>Leave Group</Dropdown.Item>
+        <Dropdown.Item onClick={joinHandler}>Join Group</Dropdown.Item>
       )}
       {isMember(user, group) && (
         <LinkContainer to={`/groups/${group.groupId}/newplayer`}>

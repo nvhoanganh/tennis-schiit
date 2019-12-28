@@ -42,6 +42,13 @@ const app = (
         lastErrorAction: action.type,
         lastError: action.err
       };
+
+    case AppActionTypes.RESET_ERROR:
+      return {
+        ...state,
+        lastErrorAction: null,
+        lastError: null
+      };
     case AppActionTypes.API_END:
       return {
         ...state,

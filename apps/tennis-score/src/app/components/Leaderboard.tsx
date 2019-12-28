@@ -26,6 +26,13 @@ const Leaderboard = ({
   loading,
   ...props
 }) => {
+  const joinHandler = _ => {
+    if (!user) {
+      history.push("/signin");
+    } else {
+      props.joinGroup(group.groupId);
+    }
+  };
   const canSubmitNewScore = () =>
     user && isMember(user, group) && tournament && !loading;
   const canCreateTour = () =>
@@ -49,6 +56,7 @@ const Leaderboard = ({
             center={group.name.toUpperCase()}
             right={
               <GroupMemberDropdown
+                history
                 leaveGroup={props.leaveGroup}
                 joinGroup={props.joinGroup}
                 user={user}
@@ -75,7 +83,7 @@ const Leaderboard = ({
                   loading={pendingRequests}
                   disabled={pendingRequests}
                   value="Join Group"
-                  onClick={() => props.joinGroup(group.groupId)}
+                  onClick={joinHandler}
                   type="button"
                   className="btn btn-primary btn-sm btn-block btn-sm"
                 ></UpdateButton>

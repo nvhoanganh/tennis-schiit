@@ -9,7 +9,14 @@ import { Link } from "./Link";
 import TextInput from "./TextInput";
 import { maxContainer } from "./common";
 
-const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
+const SignIn = ({
+  resetError,
+  signInHandler,
+  lastError,
+  history,
+  loading,
+  user
+}) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -29,6 +36,10 @@ const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
       formValid: !!state.password.trim() && !!state.email.trim()
     }));
   }, [state.email, state.password]);
+
+  useEffect(() => {
+    resetError();
+  }, []);
 
   const validateAndSubmit = e => {
     e.preventDefault();
@@ -98,9 +109,11 @@ const SignIn = ({ signInHandler, lastError, history, loading, user }) => {
             </div>
           </div>
           <div className="col-md-6 text-right">
-            <Link title="Forgot password?" href="#">
-              Forgot password?
-            </Link>
+            <LinkContainer to={`/forgot-password`}>
+              <Link title="Forgot Password?" href="" className="small">
+                Forgot Password?
+              </Link>
+            </LinkContainer>
           </div>
         </div>
       </form>

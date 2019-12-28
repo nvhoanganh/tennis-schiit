@@ -18,7 +18,7 @@ console.log("initializing app");
 firebase.initializeApp(FBCONF);
 toast.configure({
   position: toast.POSITION.BOTTOM_CENTER,
-  autoClose: 1000,
+  autoClose: 2500,
   hideProgressBar: true
 });
 const store = configureStore({});

@@ -2,11 +2,12 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { ISignInModel } from "../models";
-import { IAction } from '@tennis-score/redux';
-
+import { ToastContainer, toast } from "react-toastify";
+import { IAction } from "@tennis-score/redux";
 
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
+  RESET_ERROR = "RESET_ERROR",
   API_START = "API_START",
   API_END = "API_END",
 
@@ -15,6 +16,10 @@ export enum AppActionTypes {
 
   SIGNIN = "SIGNIN",
   SIGNIN_SUCCESS = "SIGNIN_SUCCESS",
+
+  RESET_PASS = "RESET_PASS",
+  RESET_PASS_SUCCESS = "RESET_PASS_SUCCESS",
+  RESET_PASS_FAILED = "RESET_PASS_FAILED",
 
   SIGNOUT = "SIGNOUT",
   SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS",
@@ -38,6 +43,9 @@ export class AppLoadedAction implements IAction {
 }
 export class ApiEndAction implements IAction {
   readonly type = AppActionTypes.API_END;
+}
+export class ResetErrorAction implements IAction {
+  readonly type = AppActionTypes.RESET_ERROR;
 }
 export class ApiErrorAction implements IAction {
   readonly type = AppActionTypes.API_ERROR;
@@ -71,6 +79,9 @@ export function apiStart(action: string): ApiStartAction {
 export function apiEnd(): ApiEndAction {
   return { type: AppActionTypes.API_END };
 }
+export function resetError() {
+  return { type: AppActionTypes.RESET_ERROR };
+}
 export function apiError(action: string, err: any): ApiErrorAction {
   return { type: AppActionTypes.API_ERROR, action, err };
 }
@@ -89,6 +100,22 @@ export function signIn({ email, password, isGmail }) {
       .then(user => {
         dispatch(apiEnd());
         dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user: user.user });
+      })
+      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
+  };
+}
+
+export function resetPassword(email) {
+  return dispatch => {
+    dispatch(apiStart(AppActionTypes.RESET_PASS));
+    return firebase
+      .auth()
+      .sendPasswordResetEmail(email)
+      .then(_ => {
+        toast.success("Password reset sent");
+        dispatch(apiEnd());
+        dispatch({ type: AppActionTypes.RESET_PASS_SUCCESS });
+        window.history.back();
       })
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
@@ -223,6 +250,7 @@ export type AppAction =
   | ApiStartAction
   | ApiEndAction
   | ApiErrorAction
+  | ResetErrorAction
   | SignInSuccessAction
   | SignOutSuccessAction
   | SignUpSuccessAction;

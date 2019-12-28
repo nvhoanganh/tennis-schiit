@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { LinkContainer } from "react-router-bootstrap";
 import { strongPassword, isValidEmail } from "@tennis-score/core";
 import TextInput from "./TextInput";
-import UpdateButton from './LoadingButton';
-import { maxContainer } from './common';
+import UpdateButton from "./LoadingButton";
+import { maxContainer } from "./common";
+import { Link } from "./Link";
 
-const SignUp = ({ loading, signupHandler }) => {
+const SignUp = ({ loading, resetError, signupHandler }) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -43,6 +45,9 @@ const SignUp = ({ loading, signupHandler }) => {
     }
   };
 
+  useEffect(() => {
+    resetError();
+  }, []);
   return (
     <div {...maxContainer}>
       <h4 className="card-title mb-4 mt-1">Sign Up</h4>
@@ -81,7 +86,7 @@ const SignUp = ({ loading, signupHandler }) => {
         ></TextInput>
 
         <div className="row">
-          <div className="col-12">
+          <div className="col-md-6">
             <div className="form-group">
               <UpdateButton
                 loading={loading}
@@ -91,6 +96,13 @@ const SignUp = ({ loading, signupHandler }) => {
                 className="btn btn-primary btn-sm btn-block"
               ></UpdateButton>
             </div>
+          </div>
+          <div className="col-md-6 text-right">
+            <LinkContainer to={`/signin`}>
+              <Link title="Sign In" href="" className="small">
+                Already have an account? Sign in
+              </Link>
+            </LinkContainer>
           </div>
         </div>
       </form>
