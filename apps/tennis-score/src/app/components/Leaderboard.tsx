@@ -9,7 +9,8 @@ import LeaderboardCard from "./LeaderboardCard";
 import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import Skeleton from 'react-loading-skeleton';
+import Skeleton from "react-loading-skeleton";
+import { formatDistanceToNow } from "date-fns";
 
 const Leaderboard = ({
   players,
@@ -17,6 +18,7 @@ const Leaderboard = ({
   match,
   pendingRequests,
   user,
+  isPendingJoin,
   tournament,
   history,
   loading,
@@ -61,12 +63,35 @@ const Leaderboard = ({
 
           {!isMember(user, group) && !loading && (
             <div className="text-center p-3">
-              <UpdateButton
-                loading={loading}
-                value="Join Group"
-                type="submit"
-                className="btn btn-primary btn-sm btn-block btn-sm"
-              ></UpdateButton>
+              {!isPendingJoin ? (
+                <UpdateButton
+                  loading={pendingRequests}
+                  disabled={pendingRequests}
+                  value="Join Group"
+                  onClick={() => props.joinGroup(group.groupId)}
+                  type="button"
+                  className="btn btn-primary btn-sm btn-block btn-sm"
+                ></UpdateButton>
+              ) : (
+                <>
+                  <UpdateButton
+                    loading={pendingRequests}
+                    disabled={pendingRequests}
+                    value="Cancel Join Request"
+                    onClick={() => props.cancelJoinGroup(group.groupId)}
+                    type="button"
+                    className="btn btn-outline-dark btn-sm btn-block btn-sm"
+                  ></UpdateButton>
+                  <div className="text-center">
+                    <em className="text-muted x-small">
+                      Request sent{" "}
+                      {formatDistanceToNow(isPendingJoin.requestDate.toDate(), {
+                        addSuffix: true
+                      })}
+                    </em>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </>
@@ -96,14 +121,11 @@ const Leaderboard = ({
       {/*  show leaderboard */}
       {loading ? (
         <div className="px-1">
-          {[1, 2, 3, 4, 5].map(k => (
-            <LeaderboardCard
-              key={k}
-              player={null}
-              ranking={null}
-              loading={true}
-            ></LeaderboardCard>
-          ))}
+          <LeaderboardCard
+            player={null}
+            ranking={null}
+            loading={true}
+          ></LeaderboardCard>
         </div>
       ) : players.length > 0 ? (
         <div className="px-1">

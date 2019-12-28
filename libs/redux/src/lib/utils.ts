@@ -18,3 +18,8 @@ export const isOwner = (user, group) =>
   user && group && group.owner === user.uid;
 export const isMember = (user, group) =>
   user && group && !!group.players[user.uid];
+
+export const removeById = (id, obj) => {
+  const { [id]: removed, ...newState } = obj;
+  return newState;
+};

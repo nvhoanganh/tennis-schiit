@@ -109,6 +109,16 @@ export const getMyGroups = createSelector(
   }
 );
 
+export const getIsPendingJoin = createSelector(
+  getUser,
+  getCurrLeaderGroup,
+  (user, group) => {
+    if (!user || !group) return false;
+    if (!group.pendingJoinRequests) return false;
+    return group.pendingJoinRequests[user.uid];
+  }
+);
+
 export const getGroupNotMemberOff = createSelector(
   getUser,
   getGroups,

@@ -12,11 +12,11 @@ export function GroupMembership({ user, group, showIsMember }) {
       }}
     >
       {isOwner(user, group)  ? (
-        <span className="badge badge-warning ml-1">Owner</span>
+        <span className="badge x-small badge-warning ml-1">Owner</span>
       ) : null}
 
       {isMember(user, group) && showIsMember ? (
-        <span className="badge badge-success ml-1">Member</span>
+        <span className="badge x-small badge-success ml-1">Member</span>
       ) : null}
     </div>
   );

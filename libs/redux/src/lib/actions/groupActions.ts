@@ -18,6 +18,12 @@ export enum GroupActionTypes {
   DELETE_GROUP = "DELETE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
 
+  JOIN_GROUP = "JOIN_GROUP",
+  JOIN_GROUP_SUCCESS = "JOIN_GROUP_SUCCESS",
+
+  CANCEL_JOIN_GROUP = "CANCEL_JOIN_GROUP",
+  CANCEL_JOIN_GROUP_SUCCESS = "CANCEL_JOIN_GROUP_SUCCESS",
+
   ADD_PLAYER_TO_GROUP = "ADD_PLAYER_TO_GROUP"
 }
 
@@ -30,6 +36,24 @@ export class AddPlayerToGroupAction implements IAction {
 export class AddGroupAction implements IAction {
   readonly type = GroupActionTypes.ADD_GROUP;
   constructor(public group: any) {}
+}
+
+export class JoinGroupAction implements IAction {
+  readonly type = GroupActionTypes.JOIN_GROUP;
+  constructor(public group: any) {}
+}
+export class JoinGroupSuccessAction implements IAction {
+  readonly type = GroupActionTypes.JOIN_GROUP_SUCCESS;
+  constructor(public groupId: string, public user: any) {}
+}
+
+export class CancelJoinGroupAction implements IAction {
+  readonly type = GroupActionTypes.CANCEL_JOIN_GROUP;
+  constructor(public group: any) {}
+}
+export class CancelJoinGroupSuccessAction implements IAction {
+  readonly type = GroupActionTypes.CANCEL_JOIN_GROUP_SUCCESS;
+  constructor(public groupId: string, public user: any) {}
 }
 
 export class AddTournamentSuccess implements IAction {
@@ -116,6 +140,63 @@ export function deleteGroup(groupId) {
       });
   };
 }
+
+export function joinGroup(groupId) {
+  return (dispatch, getState) => {
+    const {
+      app: {
+        user: { uid, email, displayName }
+      }
+    } = getState();
+    dispatch(apiStart(GroupActionTypes.JOIN_GROUP));
+    const user = { uid, email, displayName, requestDate: new Date() };
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .update({
+        pendingJoinRequests: {
+          [uid]: user
+        }
+      })
+      .then(_ => {
+        dispatch(apiEnd());
+        dispatch(<JoinGroupSuccessAction>{
+          type: GroupActionTypes.JOIN_GROUP_SUCCESS,
+          groupId: groupId,
+          user
+        });
+      });
+  };
+}
+
+export function cancelJoinGroup(groupId) {
+  return (dispatch, getState) => {
+    const {
+      app: {
+        user: { uid, email, displayName }
+      }
+    } = getState();
+    dispatch(apiStart(GroupActionTypes.CANCEL_JOIN_GROUP));
+    const user = { uid, email, displayName, requestDate: new Date() };
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .update({
+        [`pendingJoinRequests.${uid}`]: firebase.firestore.FieldValue.delete()
+      })
+      .then(_ => {
+        dispatch(apiEnd());
+        dispatch(<CancelJoinGroupSuccessAction>{
+          type: GroupActionTypes.CANCEL_JOIN_GROUP_SUCCESS,
+          groupId: groupId,
+          user
+        });
+      });
+  };
+}
+
 export function addTournament({
   groupId,
   startDate,
@@ -222,5 +303,7 @@ export type GroupAction =
   | AddTournamentSuccess
   | LoadGroupsSuccessAction
   | AddGroupAction
+  | JoinGroupSuccessAction
+  | CancelJoinGroupSuccessAction
   | UpdateGroupAction
   | DeleteGroupAction;

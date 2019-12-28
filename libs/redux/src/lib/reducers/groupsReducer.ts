@@ -1,5 +1,8 @@
 import { IGroup } from "../models";
 import { GroupActionTypes, GroupAction } from "../actions";
+import { removeById } from "../utils";
+import * as firebase from 'firebase';
+
 
 export interface IGroupsState {
   [groupId: string]: IGroup;
@@ -36,6 +39,33 @@ const groups = (
         [action.tournament.groupId]: {
           ...state[action.tournament.groupId],
           currentTournament: action.tournament.id
+        }
+      };
+
+    case GroupActionTypes.JOIN_GROUP_SUCCESS:
+      return {
+        ...state,
+        [action.groupId]: {
+          ...state[action.groupId],
+          pendingJoinRequests: {
+            ...state[action.groupId].pendingJoinRequests,
+            [action.user.uid]: {
+              ...action.user,
+            requestDate:  firebase.firestore.Timestamp.fromDate(action.user.requestDate)}
+          }
+        }
+      };
+
+    case GroupActionTypes.CANCEL_JOIN_GROUP_SUCCESS:
+      const removed = removeById(
+        action.user.uid,
+        state[action.groupId].pendingJoinRequests || {}
+      );
+      return {
+        ...state,
+        [action.groupId]: {
+          ...state[action.groupId],
+          pendingJoinRequests: removed
         }
       };
 

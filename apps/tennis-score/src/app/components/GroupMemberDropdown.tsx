@@ -15,7 +15,7 @@ export function GroupMemberDropdown({ user, group, joinGroup, leaveGroup }) {
       id="group-menu"
     >
       {!isMember(user, group) && (
-        <Dropdown.Item onClick={leaveGroup}>Join Group</Dropdown.Item>
+        <Dropdown.Item onClick={() => joinGroup(group.groupId)}>Join Group</Dropdown.Item>
       )}
       {!isOwner(user, group) && isMember(user, group) && (
         <Dropdown.Item onClick={leaveGroup}>Leave Group</Dropdown.Item>

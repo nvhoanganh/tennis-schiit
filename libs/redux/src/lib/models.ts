@@ -21,6 +21,7 @@ export interface IGroup {
   owner: string;
   played?: number;
   players?: any[];
+  pendingJoinRequests?: any;
 }
 
 export interface IPlayer {
