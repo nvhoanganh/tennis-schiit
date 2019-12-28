@@ -43,6 +43,12 @@ const Leaderboard = ({
     pendingJoinRequests &&
     pendingJoinRequests.length > 0;
 
+  const rejectJoinRequestHandler = player => {
+    props.rejectJoinRequest(player, match.params.group);
+  };
+  const approveJoinRequestHandler = player => {
+    props.approveJoinRequest(player, match.params.group);
+  };
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
@@ -181,7 +187,12 @@ const Leaderboard = ({
           <HeaderCard>Approve pending members</HeaderCard>
           <div className="pb-4">
             {pendingJoinRequests.map((k, i) => (
-              <PendingMemberCard key={k.uid} player={k}></PendingMemberCard>
+              <PendingMemberCard
+                key={k.uid}
+                rejectJoinRequest={rejectJoinRequestHandler}
+                approveJoinRequest={approveJoinRequestHandler}
+                player={k}
+              ></PendingMemberCard>
             ))}
           </div>
         </>

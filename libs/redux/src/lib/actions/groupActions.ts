@@ -6,6 +6,7 @@ import { GROUPS, IGroup, TOURNAMENTS } from "../models";
 import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
 import { IAction } from "@tennis-score/redux";
+import { loadLeaderboard } from "./leaderboardActions";
 export enum GroupActionTypes {
   LOAD_GROUPS = "LOAD_GROUPS",
   LOAD_GROUPS_SUCCESS = "LOAD_GROUPS_SUCCESS",
@@ -20,6 +21,12 @@ export enum GroupActionTypes {
 
   JOIN_GROUP = "JOIN_GROUP",
   JOIN_GROUP_SUCCESS = "JOIN_GROUP_SUCCESS",
+
+  REJECT_JOIN_GROUP = "REJECT_JOIN_GROUP",
+  REJECT_JOIN_GROUP_SUCCESS = "REJECT_JOIN_GROUP_SUCCESS",
+
+  APPROVE_JOIN_GROUP = "APPROVE_JOIN_GROUP",
+  APPROVE_JOIN_GROUP_SUCCESS = "APPROVE_JOIN_GROUP_SUCCESS",
 
   CANCEL_JOIN_GROUP = "CANCEL_JOIN_GROUP",
   CANCEL_JOIN_GROUP_SUCCESS = "CANCEL_JOIN_GROUP_SUCCESS",
@@ -72,6 +79,15 @@ export class DeleteGroupAction implements IAction {
 export class LoadGroupsSuccessAction implements IAction {
   readonly type = GroupActionTypes.LOAD_GROUPS_SUCCESS;
   constructor(public groups: { [groupId: string]: IGroup }) {}
+}
+
+export class RejectJoinRequestAction implements IAction {
+  readonly type = GroupActionTypes.REJECT_JOIN_GROUP;
+  constructor(public payload: any) {}
+}
+export class RejectJoinRequestSuccessAction implements IAction {
+  readonly type = GroupActionTypes.REJECT_JOIN_GROUP_SUCCESS;
+  constructor(public payload: any) {}
 }
 
 // action creators
@@ -164,6 +180,88 @@ export function joinGroup(groupId) {
           groupId: groupId,
           user
         });
+      });
+  };
+}
+
+export function rejectJoinRequest(target, groupId) {
+  return (dispatch, getState) => {
+    const {
+      app: {
+        user: { uid, email, displayName }
+      }
+    } = getState();
+    dispatch(apiStart(GroupActionTypes.REJECT_JOIN_GROUP));
+    const user = { uid, email, displayName, requestDate: new Date() };
+    // delete from pending first
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .update({
+        [`pendingJoinRequests.${target.uid}`]: firebase.firestore.FieldValue.delete()
+      })
+      .then(_ =>
+        firebase
+          .firestore()
+          .collection(GROUPS)
+          .doc(groupId)
+          .update({
+            [`rejectedJoinRequests.${target.uid}`]: {
+              ...target,
+              rejectedBy: user
+            }
+          })
+      )
+      .then(_ => {
+        dispatch(apiEnd());
+        dispatch(<RejectJoinRequestSuccessAction>{
+          type: GroupActionTypes.REJECT_JOIN_GROUP_SUCCESS,
+          payload: {
+            groupId,
+            target
+          }
+        });
+      });
+  };
+}
+
+export function approveJoinRequest(target, groupId) {
+  return (dispatch, getState) => {
+    const {
+      app: {
+        user: { uid }
+      }
+    } = getState();
+    dispatch(apiStart(GroupActionTypes.APPROVE_JOIN_GROUP));
+    // delete from pending first
+    return firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId)
+      .update({
+        [`pendingJoinRequests.${target.uid}`]: firebase.firestore.FieldValue.delete()
+      })
+      .then(_ =>
+        // add player
+        firebase
+          .firestore()
+          .collection(GROUPS)
+          .doc(groupId)
+          .update({
+            players: firebase.firestore.FieldValue.arrayUnion({
+              email: target.email,
+              name: target.displayName,
+              userId: target.uid,
+              joinDate: new Date(),
+              addedBy: uid
+            })
+          })
+      )
+      .then(_ => {
+        dispatch(apiEnd());
+        dispatch(loadGroups(true));
+        dispatch(loadLeaderboard(groupId));
       });
   };
 }
@@ -303,5 +401,7 @@ export type GroupAction =
   | AddGroupAction
   | JoinGroupSuccessAction
   | CancelJoinGroupSuccessAction
+  | RejectJoinRequestAction
+  | RejectJoinRequestSuccessAction
   | UpdateGroupAction
   | DeleteGroupAction;

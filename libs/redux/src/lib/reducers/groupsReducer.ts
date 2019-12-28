@@ -1,8 +1,7 @@
 import { IGroup } from "../models";
 import { GroupActionTypes, GroupAction } from "../actions";
 import { removeById } from "../utils";
-import * as firebase from 'firebase';
-
+import * as firebase from "firebase";
 
 export interface IGroupsState {
   [groupId: string]: IGroup;
@@ -51,7 +50,10 @@ const groups = (
             ...state[action.groupId].pendingJoinRequests,
             [action.user.uid]: {
               ...action.user,
-            requestDate:  firebase.firestore.Timestamp.fromDate(action.user.requestDate)}
+              requestDate: firebase.firestore.Timestamp.fromDate(
+                action.user.requestDate
+              )
+            }
           }
         }
       };
@@ -66,6 +68,19 @@ const groups = (
         [action.groupId]: {
           ...state[action.groupId],
           pendingJoinRequests: removed
+        }
+      };
+
+    case GroupActionTypes.REJECT_JOIN_GROUP_SUCCESS:
+      const rejected = removeById(
+        action.payload.target.uid,
+        state[action.payload.groupId].pendingJoinRequests || {}
+      );
+      return {
+        ...state,
+        [action.payload.groupId]: {
+          ...state[action.payload.groupId],
+          pendingJoinRequests: rejected
         }
       };
 

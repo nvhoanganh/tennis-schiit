@@ -1,25 +1,16 @@
 import {
-  faSortAmountDown,
-  faSortAmountUp,
-  faEquals,
+  faCheckCircle,
   faChevronDown,
   faChevronUp,
-  faTicketAlt,
-  faCheck,
-  faCross,
-  faCheckCircle,
   faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
-import React from "react";
-import Gravatar from "react-gravatar";
-import { LinkContainer } from "react-router-bootstrap";
-import { ScoreCard } from "./ScoreCard";
-import RoundGravatar from "./RoundGravatar";
-import Skeleton from "react-loading-skeleton";
-import { Button } from "./Button";
 import { formatDistanceToNow } from "date-fns";
+import React from "react";
+import { LinkContainer } from "react-router-bootstrap";
+import { Button } from "./Button";
+import RoundGravatar from "./RoundGravatar";
 
 const prizeMoneyCls = player =>
   classNames({
@@ -65,10 +56,18 @@ const PendingMemberCard = ({ player, ...props }) => {
             <a className="h6 text-dark pl-0">{player.displayName}</a>
           </LinkContainer>
           <div className="float-right text-right">
-            <Button type="button" className="btn btn-primary btn-sm">
+            <Button
+              type="button"
+              onClick={() => props.approveJoinRequest(player)}
+              className="btn btn-primary btn-sm"
+            >
               <FontAwesomeIcon icon={faCheckCircle} />
             </Button>
-            <Button type="button" className="btn ml-1 btn-danger btn-sm">
+            <Button
+              type="button"
+              onClick={() => props.rejectJoinRequest(player)}
+              className="btn ml-1 btn-danger btn-sm"
+            >
               <FontAwesomeIcon icon={faTimesCircle} />
             </Button>
           </div>
