@@ -119,6 +119,15 @@ export const getIsPendingJoin = createSelector(
   }
 );
 
+export const getPendingJoinRequest = createSelector(
+  getCurrLeaderGroup,
+  group => {
+    if (!group) return [];
+    if (!group.pendingJoinRequests) return [];
+    return Object.values(group.pendingJoinRequests);
+  }
+);
+
 export const getGroupNotMemberOff = createSelector(
   getUser,
   getGroups,

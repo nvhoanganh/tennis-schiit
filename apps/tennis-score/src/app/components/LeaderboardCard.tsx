@@ -62,9 +62,9 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
   }
   return (
     <LinkContainer to={player ? `/player/${player.id}` : ""}>
-      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
-        <div className="card-body pl-0 py-3">
-          <div className="float-left pr-3 pl-0">
+      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
+        <div className="card-body py-3 px-0">
+          <div className="float-left pr-3">
             <RoundGravatar size={50} email={player.email || "0"} />
             <div className="text-center">
               <span className="badge badge-pill " style={top3(ranking)}>
@@ -83,7 +83,6 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
             {player.played ? (
               <div
                 className="float-right text-right"
-                style={{ position: "relative", right: -23 }}
               >
                 <div className="h4">
                   {getArrow(player)}

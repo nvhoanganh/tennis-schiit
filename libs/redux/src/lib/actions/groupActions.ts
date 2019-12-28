@@ -155,9 +155,7 @@ export function joinGroup(groupId) {
       .collection(GROUPS)
       .doc(groupId)
       .update({
-        pendingJoinRequests: {
-          [uid]: user
-        }
+        [`pendingJoinRequests.${uid}`]: user
       })
       .then(_ => {
         dispatch(apiEnd());

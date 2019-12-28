@@ -11,8 +11,10 @@ import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
 import Skeleton from "react-loading-skeleton";
 import { formatDistanceToNow } from "date-fns";
+import PendingMemberCard from "./PendingMemberCard";
 
 const Leaderboard = ({
+  pendingJoinRequests,
   players,
   group,
   match,
@@ -28,6 +30,11 @@ const Leaderboard = ({
     user && isMember(user, group) && tournament && !loading;
   const canCreateTour = () =>
     user && isOwner(user, group) && !tournament && !loading;
+  const showApprove = () =>
+    !loading &&
+    isMember(user, group) &&
+    pendingJoinRequests &&
+    pendingJoinRequests.length > 0;
 
   useEffect(() => {
     props.loadGroups();
@@ -120,7 +127,7 @@ const Leaderboard = ({
       </HeaderCard>
       {/*  show leaderboard */}
       {loading ? (
-        <div className="px-1">
+        <div className="pb-3">
           <LeaderboardCard
             player={null}
             ranking={null}
@@ -128,7 +135,7 @@ const Leaderboard = ({
           ></LeaderboardCard>
         </div>
       ) : players.length > 0 ? (
-        <div className="px-1">
+        <div className="pb-3">
           {players.map((k, i) => (
             <LeaderboardCard
               key={k.id}
@@ -160,6 +167,16 @@ const Leaderboard = ({
             )}
           </div>
         </div>
+      ) : null}
+      {showApprove() ? (
+        <>
+          <HeaderCard>Approve pending members</HeaderCard>
+          <div className="pb-4">
+            {pendingJoinRequests.map((k, i) => (
+              <PendingMemberCard key={k.uid} player={k}></PendingMemberCard>
+            ))}
+          </div>
+        </>
       ) : null}
     </>
   );

@@ -11,7 +11,8 @@ import {
   getLoadingLeaderboard,
   joinGroup,
   getIsPendingJoin,
-  cancelJoinGroup
+  cancelJoinGroup,
+  getPendingJoinRequest
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Leaderboard from "../components/Leaderboard";
@@ -24,6 +25,7 @@ const mapStateToProps = state => ({
   appLoaded: getAppLoaded(state),
   tournament: getCurrLeaderTournament(state),
   loading: getLoadingLeaderboard(state),
+  pendingJoinRequests: getPendingJoinRequest(state),
   isPendingJoin: getIsPendingJoin(state)
 });
 
