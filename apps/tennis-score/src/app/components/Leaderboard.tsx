@@ -152,7 +152,7 @@ const Leaderboard = ({
               key={k.id}
               player={k}
               group={group}
-              sortBy={tournament.sortBy}
+              sortBy={tournament ? tournament.sortBy : ""}
               ranking={i}
             ></LeaderboardCard>
           ))}
