@@ -23,3 +23,5 @@ export const removeById = (id, obj) => {
   const { [id]: removed, ...newState } = obj;
   return newState;
 };
+
+export const roundOff = roundOff => Math.floor(roundOff * 100) / 100;

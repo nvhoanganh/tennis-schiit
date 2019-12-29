@@ -44,7 +44,7 @@ const routes = [
         component: Leaderboard
       },
       {
-        path: "/player/:id",
+        path: "/group/:group/player/:id",
         exact: true,
         component: PlayerProfile
       },

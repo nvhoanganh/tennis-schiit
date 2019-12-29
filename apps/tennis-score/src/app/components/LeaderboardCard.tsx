@@ -122,7 +122,7 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
   return (
     <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
       <div className="card-body py-3 px-0">
-        <LinkContainer to={`/player/${player.id}`}>
+        <LinkContainer to={`/group/${props.group.groupId}/player/${player.id}`}>
           <div className="float-left pr-3">
             <RoundGravatar size={50} email={player.email || "0"} />
             <div className="text-center">
@@ -140,7 +140,9 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
         </LinkContainer>
 
         <div className="mr-auto">
-          <LinkContainer to={`/player/${player.id}`}>
+          <LinkContainer
+            to={`/group/${props.group.groupId}/player/${player.id}`}
+          >
             <a className="h5 text-dark pl-0">{player.name}</a>
           </LinkContainer>
           {player.played ? (

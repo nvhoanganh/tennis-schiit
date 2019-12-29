@@ -372,7 +372,8 @@ export function addGroup({
           joinDate: new Date(),
           email: user.email,
           name: user.displayName,
-          userId: user.uid
+          userId: user.uid,
+          linkedUserId: user.uid
         }
       ]
     };
