@@ -18,10 +18,12 @@ const mapStateToProps = (state, ownProps) => {
   const tour = getCurrLeaderTournament(state);
   const getPlayer = () => {
     if (g && tour && ownProps.match.params.group && ownProps.match.params.id) {
-      return {
-        ...g.players[ownProps.match.params.id],
-        ...tour.players[ownProps.match.params.id]
-      };
+      return tour.players
+        ? {
+            ...g.players[ownProps.match.params.id],
+            ...tour.players[ownProps.match.params.id]
+          }
+        : g.players[ownProps.match.params.id];
     }
     return null;
   };

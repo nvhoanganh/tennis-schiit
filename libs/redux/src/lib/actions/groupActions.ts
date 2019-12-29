@@ -314,12 +314,21 @@ export function addTournament({
       ? groupRef.collection(TOURNAMENTS).doc()
       : groupRef.collection(TOURNAMENTS).doc(tournamentId);
 
-    await newTour.update({
-      startDate: new Date(startDate),
-      prize,
-      sortBy,
-      description
-    });
+    if (!tournamentId) {
+      await newTour.set({
+        startDate: new Date(startDate),
+        prize,
+        sortBy,
+        description
+      });
+    } else {
+      await newTour.update({
+        startDate: new Date(startDate),
+        prize,
+        sortBy,
+        description
+      });
+    }
 
     if (!tournamentId) {
       await groupRef.update({
