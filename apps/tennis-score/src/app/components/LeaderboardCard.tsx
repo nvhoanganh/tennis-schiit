@@ -1,18 +1,11 @@
-import {
-  faSortAmountDown,
-  faSortAmountUp,
-  faEquals,
-  faChevronDown,
-  faChevronUp
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import React from "react";
-import Gravatar from "react-gravatar";
-import { LinkContainer } from "react-router-bootstrap";
-import { ScoreCard } from "./ScoreCard";
-import RoundGravatar from "./RoundGravatar";
 import Skeleton from "react-loading-skeleton";
+import { LinkContainer } from "react-router-bootstrap";
+import RoundGravatar from "./RoundGravatar";
+import { ScoreCard } from "./ScoreCard";
 
 const prizeMoneyCls = player =>
   classNames({
@@ -33,12 +26,12 @@ const top3 = ranking => ({
 });
 const arrowClass = "pl-1 h6 align-middle mr-1 h6 ";
 const getArrow = player =>
-  player.lastWeekscore > player.score ? (
+  player.previousScore > player.score ? (
     <FontAwesomeIcon
       icon={faChevronDown}
       className={arrowClass + "text-danger"}
     />
-  ) : player.lastWeekscore < player.score ? (
+  ) : player.previousScore < player.score ? (
     <FontAwesomeIcon
       icon={faChevronUp}
       className={arrowClass + "text-success"}
@@ -55,15 +48,14 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
             </a>
             <Skeleton height={60} />
           </div>
-
         </div>
       </div>
     );
   }
   return (
-    <LinkContainer to={player ? `/player/${player.id}` : ""}>
-      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
-        <div className="card-body py-3 px-0">
+    <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
+      <div className="card-body py-3 px-0">
+        <LinkContainer to={`/player/${player.id}`}>
           <div className="float-left pr-3">
             <RoundGravatar size={50} email={player.email || "0"} />
             <div className="text-center">
@@ -78,32 +70,33 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
               </span>
             </div>
           </div>
-          <div className="mr-auto">
+        </LinkContainer>
+
+        <div className="mr-auto">
+          <LinkContainer to={`/player/${player.id}`}>
             <a className="h5 text-dark pl-0">{player.name}</a>
-            {player.played ? (
-              <div
-                className="float-right text-right"
-              >
-                <div className="h4">
-                  {getArrow(player)}
-                  {player.score}
-                  <sup style={{ fontSize: "0.7rem", top: "-1rem" }}>pt</sup>
-                </div>
-                <div className="h6">
-                  {player.winPercentage}
-                  <sup>%</sup>
-                </div>
-                <div className={prizeMoneyCls(player)}>
-                  {player.prizeMoney}
-                  <sup>$</sup>
-                </div>
+          </LinkContainer>
+          {player.played ? (
+            <div className="float-right text-right">
+              <div className="h6">
+                {getArrow(player)}
+                {player.score}
+                <sup>pt</sup>
               </div>
-            ) : null}
-            <ScoreCard {...player} />
-          </div>
+              <div className="h6">
+                {player.winPercentage}
+                <sup>%</sup>
+              </div>
+              <div className={prizeMoneyCls(player)}>
+                {player.prizeMoney}
+                <sup>$</sup>
+              </div>
+            </div>
+          ) : null}
+          <ScoreCard {...player} />
         </div>
       </div>
-    </LinkContainer>
+    </div>
   );
 };
 

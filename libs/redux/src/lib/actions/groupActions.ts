@@ -294,45 +294,54 @@ export function cancelJoinGroup(groupId) {
 }
 
 export function addTournament({
-  groupId,
+  group,
+  tournamentId,
   startDate,
-  endDate,
+  prize,
   description,
-  double
+  sortBy
 }) {
-  return (dispatch, getState) => {
-    const newTour = firebase
+  return async (dispatch, getState) => {
+    dispatch(apiStart(GroupActionTypes.ADD_TOURNAMENT));
+
+    const groupRef = firebase
       .firestore()
       .collection(GROUPS)
-      .doc(groupId)
-      .collection(TOURNAMENTS)
-      .doc();
+      .doc(group.groupId);
 
-    dispatch(apiStart(GroupActionTypes.ADD_TOURNAMENT));
-    return newTour
-      .set({
-        startDate: new Date(startDate),
-        endDate: endDate ? new Date(endDate) : "",
-        description,
-        double
-      })
-      .then(_ =>
-        // duplicate data
-        firebase
-          .firestore()
-          .collection(GROUPS)
-          .doc(groupId)
-          .update({
-            currentTournament: newTour.id
-          })
-      )
-      .then(doc => {
-        dispatch(apiEnd());
-        dispatch({
-          type: GroupActionTypes.ADD_TOURNAMENT_SUCCESS,
-          tournament: { id: newTour.id, groupId }
-        });
+    // update tournament
+    const newTour = !tournamentId
+      ? groupRef.collection(TOURNAMENTS).doc()
+      : groupRef.collection(TOURNAMENTS).doc(tournamentId);
+
+    await newTour.update({
+      startDate: new Date(startDate),
+      prize,
+      sortBy,
+      description
+    });
+
+    if (!tournamentId) {
+      await groupRef.update({
+        currentTournament: newTour.id
       });
+
+      if (group.currentTournament) {
+        await groupRef
+          .collection(TOURNAMENTS)
+          .doc(group.currentTournament)
+          .update({
+            endDate: new Date()
+          });
+      }
+    }
+
+    dispatch(apiEnd());
+    dispatch({
+      type: GroupActionTypes.ADD_TOURNAMENT_SUCCESS,
+      tournament: { id: newTour.id, groupId: group.groupId }
+    });
+    return Promise.resolve();
   };
 }
 

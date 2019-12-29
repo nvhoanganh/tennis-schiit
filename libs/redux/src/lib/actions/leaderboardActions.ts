@@ -1,5 +1,6 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import { setNewScore } from "@tennis-score/api-interfaces";
 import "firebase/firestore";
 import { GROUPS, IGroup, TOURNAMENTS, SCORES } from "../models";
 import { arrayToObject } from "../utils";
@@ -95,9 +96,7 @@ export function loadLeaderboard(groupId: string) {
 }
 
 export function submitScore({
-  groupId,
   group,
-  currentTournament,
   winners,
   losers,
   gameWonByLostTeam,
@@ -106,13 +105,31 @@ export function submitScore({
   ...score
 }) {
   return async (dispatch, getState) => {
+    const {
+      leaderboard: { players }
+    } = getState();
     dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
+
+    /// calculate score based on previous
+    let mWinners = {};
+    let mLosers = {};
+    Object.keys(winners).forEach(key => {
+      mWinners[key] = players[key] || {};
+    });
+    Object.keys(losers).forEach(key => {
+      mLosers[key] = players[key] || {};
+    });
+    // update
+    setNewScore(mWinners, mLosers);
+
     const groupRef = firebase
       .firestore()
       .collection(GROUPS)
-      .doc(groupId);
+      .doc(group.groupId);
 
-    const tourRef = groupRef.collection(TOURNAMENTS).doc(currentTournament);
+    const tourRef = groupRef
+      .collection(TOURNAMENTS)
+      .doc(group.currentTournament);
 
     const g = await tourRef.collection(SCORES).add({
       winners,
@@ -131,22 +148,25 @@ export function submitScore({
       lastMatch: new Date()
     });
 
-    const winnersK = Object.keys(winners);
-    const loserK = Object.keys(losers);
+    const winnersK = Object.keys(mWinners);
+    const loserK = Object.keys(mLosers);
     const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
     winnersK.forEach(k => {
       batch.update(tourRef, {
-        [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1)
-      });
-      batch.update(tourRef, {
+        [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1),
+        [`players.${k}.previousScore`]: mWinners[k].previousScore,
+        [`players.${k}.score`]: mWinners[k].score,
+        [`players.${k}.skill`]: mWinners[k].skill,
         [`players.${k}.lastMatch`]: new Date()
       });
     });
+
     loserK.forEach(k => {
       batch.update(tourRef, {
-        [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1)
-      });
-      batch.update(tourRef, {
+        [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1),
+        [`players.${k}.previousScore`]: mLosers[k].previousScore,
+        [`players.${k}.score`]: mLosers[k].score,
+        [`players.${k}.skill`]: mLosers[k].skill,
         [`players.${k}.lastMatch`]: new Date()
       });
     });

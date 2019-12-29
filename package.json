@@ -42,6 +42,7 @@
     "free-gaussian": "0.1.0",
     "lodash": "^4.17.15",
     "query-string": "^6.9.0",
+    "ramda": "^0.26.1",
     "react": "16.10.2",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "16.10.2",
@@ -60,7 +61,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "trueskill": "^0.0.2"
+    "trueskill": "0.0.2"
   },
   "devDependencies": {
     "@babel/preset-react": "7.0.0",

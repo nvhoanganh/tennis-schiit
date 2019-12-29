@@ -36,12 +36,7 @@ const leaderboard = (
         ...state,
         groupId: action.groupId,
         loading: false,
-        tournament: action.tournament
-          ? {
-              startDate: action.tournament.startDate,
-              endDate: action.tournament.endDate
-            }
-          : null,
+        tournament: action.tournament,
         players: getAllPlayers()
       };
     default:

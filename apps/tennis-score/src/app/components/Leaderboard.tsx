@@ -129,11 +129,8 @@ const Leaderboard = ({
       >
         {tournament ? (
           <span>
-            Current tournament:{" "}
-            {format(tournament.startDate.toDate(), "dd/MM/yy")} -{" "}
-            {tournament.endDate
-              ? format(tournament.endDate.toDate(), "dd/MM/yy")
-              : ""}
+            {tournament.description || "Current tournament"}:{" started "}
+            {format(tournament.startDate.toDate(), "dd/MM/yy")}
           </span>
         ) : (
           "Members"

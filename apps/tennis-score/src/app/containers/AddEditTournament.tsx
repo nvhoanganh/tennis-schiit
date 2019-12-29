@@ -16,7 +16,7 @@ const mapStateToProps = ({
   players: getLeaderboardPlayers({ players }),
   user,
   group: groupId ? groups[groupId] : null,
-  pendingRequests,
+  loading: pendingRequests > 0,
   appLoaded,
   tournament
 });

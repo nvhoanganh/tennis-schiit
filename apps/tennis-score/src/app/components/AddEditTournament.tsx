@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import AddressLookup from "./AddressLookup";
-import FileInput from "./FileInput";
-import UpdateButton from "./LoadingButton";
-import TextInput from "./TextInput";
 import { maxContainer } from "./common";
+import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
-import CheckBoxInput from "./CheckBoxInput";
+import SelectInput from "./SelectInput";
+import TextInput from "./TextInput";
+import * as R from "ramda";
+import { isNumber } from "util";
+import { isValidNumber } from "@tennis-score/core";
+import {
+  SORT_TRUESKILL,
+  SORT_PRIZEMONEY,
+  SORT_WINPERCENT
+} from "@tennis-score/redux";
+import { format } from "date-fns";
 
 const AddEditTournament = ({
   loading,
@@ -20,13 +27,26 @@ const AddEditTournament = ({
     props.loadLeaderboard(match.params.group);
   }, []);
 
+  useEffect(() => {
+    if (tournament && match.params.tour) {
+      const d = format(tournament.startDate.toDate(), "yyyy-MM-dd");
+      setState(current => ({
+        ...tournament,
+        startDate: d,
+        prizeValid: true,
+        startDateValid: true
+      }));
+    }
+  }, [tournament]);
+
   const [state, setState] = useState({
     // required
     description: "",
+    prize: "5",
+    prizeValid: true,
+    sortBy: "",
     startDate: "",
     startDateValid: false,
-    endDate: "",
-    double: true,
     formValid: false
   });
 
@@ -38,14 +58,15 @@ const AddEditTournament = ({
     setState(current => {
       const newS = {
         ...current,
+        prizeValid: isValidNumber(state.prize),
         startDateValid: !!state.startDate
       };
       return {
         ...newS,
-        formValid: newS.startDateValid
+        formValid: newS.startDateValid && newS.prizeValid
       };
     });
-  }, [state.startDate]);
+  }, [state.startDate, state.prize, state.description, state.sortBy]);
 
   const validateAndSubmit = e => {
     e.preventDefault();
@@ -54,7 +75,8 @@ const AddEditTournament = ({
       props
         .addTournament({
           ...state,
-          groupId: match.params.group
+          tournamentId: match.params.tour,
+          group
         })
         .then(_ => history.goBack());
     }
@@ -64,7 +86,9 @@ const AddEditTournament = ({
     <>
       <RouteNav
         history={history}
-        center={tournament ? "Edit Tournament" : "Add Tournament"}
+        center={
+          tournament && match.params.tour ? "Edit Tournament" : "Add Tournament"
+        }
       ></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
@@ -80,16 +104,16 @@ const AddEditTournament = ({
           ></TextInput>
 
           <TextInput
-            type="date"
-            name="endDate"
-            label="End Date"
-            value={state.endDate}
-            placeholder="dd/mm/yyyy"
-            errorMessage=""
+            type="text"
+            name="prize"
+            label="Prize per match"
+            value={state.prize}
+            placeholder=""
+            errorMessage="Enter valid amount"
             setValue={setValue}
-            isValid={true}
+            isValid={state.prizeValid}
           ></TextInput>
-          
+
           <TextInput
             type="text"
             name="description"
@@ -101,12 +125,16 @@ const AddEditTournament = ({
             isValid={true}
           ></TextInput>
 
-          <CheckBoxInput
-            name="double"
-            label="Double Tournament"
-            value={state.double}
+          <SelectInput
+            name="sortBy"
+            label="Rank players using"
+            value={state.sortBy}
+            placeholder="Select ..."
+            errorMessage="Please select"
             setValue={setValue}
-          ></CheckBoxInput>
+            isValid={true}
+            options={[SORT_TRUESKILL, SORT_WINPERCENT, SORT_PRIZEMONEY]}
+          ></SelectInput>
 
           <div className="row py-3">
             <div className="col-12">

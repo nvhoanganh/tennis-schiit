@@ -57,3 +57,6 @@ export const USERS = "users";
 export const TOURNAMENTS = "tournaments";
 export const SCORES = "scores";
 export const PLAYERS = "players";
+export const SORT_TRUESKILL = "TrueSkill";
+export const SORT_WINPERCENT = "Win Percentage";
+export const SORT_PRIZEMONEY = "Prize Money";

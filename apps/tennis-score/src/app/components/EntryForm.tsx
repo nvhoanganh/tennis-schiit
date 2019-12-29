@@ -1,15 +1,12 @@
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
 import CheckBoxInput from "./CheckBoxInput";
+import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
+import RadioInputButton from "./RadioInputButtons";
 import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
-import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
-import RadioInput from "./RadioInput";
-import RadioInputButton from "./RadioInputButtons";
-import { maxContainer } from "./common";
 
 const EntryForm = ({
   pendingRequests,
@@ -70,9 +67,7 @@ const EntryForm = ({
   const submitAndAddNew = _ => {
     submitScore({
       ...state,
-      groupId: group.groupId,
-      group,
-      currentTournament: group.currentTournament
+      group
     }).then(_ => {
       setState(initState);
     });
@@ -81,9 +76,7 @@ const EntryForm = ({
     e.preventDefault();
     submitScore({
       ...state,
-      groupId: group.groupId,
-      group,
-      currentTournament: group.currentTournament
+      group
     }).then(_ => {
       history.goBack();
     });

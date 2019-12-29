@@ -28,9 +28,13 @@ export function TournamentDropDown({ user, group, tournament }) {
       {isOwner(user, group) && (
         <>
           <Dropdown.Divider />
-          {tournament && <Dropdown.Item>Stop current tournament</Dropdown.Item>}
+          {tournament ? (
+            <LinkContainer to={`/groups/${group.groupId}/tournament/${group.currentTournament}`}>
+              <Dropdown.Item>Edit tournament</Dropdown.Item>
+            </LinkContainer>
+          ) : null}
           <LinkContainer to={`/groups/${group.groupId}/newtournament`}>
-            <Dropdown.Item>Add new tournament</Dropdown.Item>
+            <Dropdown.Item>Start new tournament</Dropdown.Item>
           </LinkContainer>
         </>
       )}

@@ -37,6 +37,7 @@ const routes = [
         exact: true,
         component: ManageGroup
       },
+      
       {
         path: "/leaderboard/:group",
         exact: true,
@@ -54,6 +55,11 @@ const routes = [
       },
       {
         path: "/groups/:group/newtournament",
+        exact: true,
+        component: AddEditTournament
+      },
+      {
+        path: "/groups/:group/tournament/:tour",
         exact: true,
         component: AddEditTournament
       },

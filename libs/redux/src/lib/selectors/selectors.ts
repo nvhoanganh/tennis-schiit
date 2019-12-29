@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { isMember } from "../utils";
+import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 const getPlayers = state => state.players;
 const getGroups = state => state.groups;
 const getAppState = state => state.app;
@@ -68,7 +69,12 @@ export const getLeaderboardPlayers = createSelector(
     if (!leaderboard || !group) return [];
     if (!leaderboard.players) return [];
     if (!group.players) return [];
-    const toPercent = x => Math.floor(x * 100) / 100;
+    const { prize, sortBy } = leaderboard.tournament || {
+      prize: "5",
+      sortBy: SORT_TRUESKILL
+    };
+
+    const roundOff = roundOff => Math.floor(roundOff * 100) / 100;
     // enhance the group player
     let players = Object.values(group.players).map(
       ({ userId, name, email }) => {
@@ -84,18 +90,29 @@ export const getLeaderboardPlayers = createSelector(
         return {
           ...player,
           id: userId,
-          score: won * 5 + bagelWon * 5 - lost * 5 - bagelLost * 5, // for now
+          score: roundOff(player.score),
+          previousScore: roundOff(player.previousScore),
           played: won + lost,
-          winPercentage: toPercent((won / (won + lost)) * 100),
+          winPercentage: roundOff((won / (won + lost)) * 100),
           name,
           email,
-          prizeMoney: won * 5 + bagelWon * 5 - lost * 5 - bagelLost * 5
+          prizeMoney:
+            won * +prize +
+            bagelWon * +prize -
+            lost * +prize -
+            bagelLost * +prize
         };
       }
     );
 
     return players.sort((x, y) => {
-      return y.score - x.score;
+      const srtCol =
+        sortBy === SORT_TRUESKILL
+          ? "score"
+          : sortBy === SORT_WINPERCENT
+          ? "winPercentage"
+          : "prizeMoney";
+      return y[srtCol] - x[srtCol];
     });
   }
 );

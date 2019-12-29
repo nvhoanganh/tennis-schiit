@@ -8,3 +8,9 @@ export function isValidEmail(value) {
   const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   return value && pattern.test(value);
 }
+
+export function isValidNumber(value) {
+  if (!value) return false;
+  const pattern = /^\d+$/;
+  return value && pattern.test(value);
+}
