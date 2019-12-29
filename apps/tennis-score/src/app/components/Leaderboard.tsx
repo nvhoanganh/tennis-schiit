@@ -151,6 +151,7 @@ const Leaderboard = ({
             <LeaderboardCard
               key={k.id}
               player={k}
+              sortBy={tournament.sortBy}
               ranking={i}
             ></LeaderboardCard>
           ))}

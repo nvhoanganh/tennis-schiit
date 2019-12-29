@@ -6,6 +6,11 @@ import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import RoundGravatar from "./RoundGravatar";
 import { ScoreCard } from "./ScoreCard";
+import {
+  SORT_PRIZEMONEY,
+  SORT_TRUESKILL,
+  SORT_WINPERCENT
+} from "@tennis-score/redux";
 
 const prizeMoneyCls = player =>
   classNames({
@@ -37,6 +42,68 @@ const getArrow = player =>
       className={arrowClass + "text-success"}
     />
   ) : null;
+
+const getStats = (player, sortBy) => {
+  const point = (
+    <div className="h6">
+      {getArrow(player)}
+      {player.score}
+      <sup>pt</sup>
+    </div>
+  );
+  const pct = (
+    <div className="h6">
+      {player.winPercentage}
+      <sup>%</sup>
+    </div>
+  );
+
+  const money = (
+    <div className={prizeMoneyCls(player)}>
+      {player.prizeMoney}
+      <sup>$</sup>
+    </div>
+  );
+
+  switch (sortBy) {
+    case SORT_PRIZEMONEY:
+      return (
+        <>
+          {money} {pct} {point}
+        </>
+      );
+    case SORT_TRUESKILL:
+      return (
+        <>
+          {point} {pct} {money}
+        </>
+      );
+    case SORT_WINPERCENT:
+      return (
+        <>
+          {pct} {money} {point}
+        </>
+      );
+  }
+  return (
+    <>
+      <div className="h6">
+        {getArrow(player)}
+        {player.score}
+        <sup>pt</sup>
+      </div>
+      <div className="h6">
+        {player.winPercentage}
+        <sup>%</sup>
+      </div>
+      <div className={prizeMoneyCls(player)}>
+        {player.prizeMoney}
+        <sup>$</sup>
+      </div>
+    </>
+  );
+};
+
 const LeaderboardCard = ({ player, ranking, ...props }) => {
   if (props.loading) {
     return (
@@ -78,19 +145,7 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
           </LinkContainer>
           {player.played ? (
             <div className="float-right text-right">
-              <div className="h6">
-                {getArrow(player)}
-                {player.score}
-                <sup>pt</sup>
-              </div>
-              <div className="h6">
-                {player.winPercentage}
-                <sup>%</sup>
-              </div>
-              <div className={prizeMoneyCls(player)}>
-                {player.prizeMoney}
-                <sup>$</sup>
-              </div>
+              {getStats(player, props.sortBy)}
             </div>
           ) : null}
           <ScoreCard {...player} />
