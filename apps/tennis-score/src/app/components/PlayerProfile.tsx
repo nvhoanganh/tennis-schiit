@@ -3,11 +3,13 @@ import Gravatar from "react-gravatar";
 import { maxContainer } from "./common";
 import RouteNav from "./RouteNav";
 import { roundOff } from "@tennis-score/redux";
+import MySpinner from "./MySpinner";
 const PlayerProfile = ({
   player,
   user,
   match,
   group,
+  history,
   tournament,
   ...props
 }) => {
@@ -16,7 +18,7 @@ const PlayerProfile = ({
     props.loadLeaderboard(match.params.group);
   }, []);
 
-  if (!player) return null;
+  if (!player) return <MySpinner />;
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
@@ -57,7 +59,7 @@ const PlayerProfile = ({
           </div>
           <div className="col-xs-12 col-sm-4 emphasis">
             <h2>
-              <strong>{roundOff(player.score)}</strong>
+              <strong>{roundOff(player.score || 0)}</strong>
             </h2>
           </div>
         </div>
