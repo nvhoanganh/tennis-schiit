@@ -74,7 +74,7 @@ const PlayerProfile = ({
           <div className="col-xs-12 col-sm-4 emphasis">
             <h2>
               <strong>
-                {player.win || "0"}-{player.lost || "0"}
+                {player.won || "0"}-{player.lost || "0"}
               </strong>
             </h2>
           </div>
