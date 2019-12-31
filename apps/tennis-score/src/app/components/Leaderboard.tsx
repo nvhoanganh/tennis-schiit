@@ -1,6 +1,6 @@
 import { isMember, isOwner } from "@tennis-score/redux";
 import format from "date-fns/format";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
 import GroupScoreCard from "./GroupScoreCard";
@@ -12,6 +12,10 @@ import { TournamentDropDown } from "./TournamentDropdown";
 import Skeleton from "react-loading-skeleton";
 import { formatDistanceToNow } from "date-fns";
 import PendingMemberCard from "./PendingMemberCard";
+import Confirm from "./Confirm";
+import { Button } from "./Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 const Leaderboard = ({
   pendingJoinRequests,
@@ -47,8 +51,25 @@ const Leaderboard = ({
     props.rejectJoinRequest(player, match.params.group);
   };
   const approveJoinRequestHandler = player => {
-    props.approveJoinRequest(player, match.params.group);
+    if (players.filter(x => !x.linkedplayerId).length === 0) {
+      // approve as new
+      props.approveJoinRequest(player, match.params.group, null);
+    } else {
+      setapprovingPlayer(player);
+      handleShow();
+    }
   };
+
+  const approveJoinAndMergePlayer = asPlayer => {
+    props
+      .approveJoinRequest(approvingPlayer, match.params.group, asPlayer)
+      .then(_ => handleClose());
+  };
+  const [show, setShow] = useState(false);
+  const [approvingPlayer, setapprovingPlayer] = useState(null);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
@@ -196,6 +217,59 @@ const Leaderboard = ({
           </div>
         </>
       ) : null}
+
+      <Confirm
+        title="Add Player"
+        close="Cancel"
+        onCancelAction={handleClose}
+        message={
+          <>
+            <div>
+              <span className="h5">
+                {approvingPlayer ? approvingPlayer.displayName : ""}
+              </span>{" "}
+              is the same player as:
+            </div>
+            <div className="py-1 px-2">
+              {players
+                .filter(x => !x.linkedplayerId)
+                .map(p => (
+                  <HeaderCard
+                    key={p.id}
+                    right={
+                      <Button
+                        type="button"
+                        onClick={() => approveJoinAndMergePlayer(p)}
+                        className="btn btn-primary btn-sm"
+                      >
+                        <FontAwesomeIcon icon={faCheckCircle} /> Select
+                      </Button>
+                    }
+                  >
+                    <span>{p.name}</span>
+                  </HeaderCard>
+                ))}
+              <HeaderCard
+                key={0}
+                right={
+                  <Button
+                    type="button"
+                    onClick={() => approveJoinAndMergePlayer(null)}
+                    className="btn btn-primary btn-sm"
+                  >
+                    <FontAwesomeIcon icon={faCheckCircle} /> Select
+                  </Button>
+                }
+              >
+                <span>
+                  <em>None above, create new</em>
+                </span>
+              </HeaderCard>
+            </div>
+          </>
+        }
+        show={show}
+      ></Confirm>
     </>
   );
 };

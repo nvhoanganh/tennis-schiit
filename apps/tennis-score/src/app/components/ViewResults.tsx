@@ -64,7 +64,9 @@ const ViewResults = ({
                 ))}
               </InfiniteScroll>
             </div>
-          ) : null}
+          ) : (
+            <p className="text-center">No match found</p>
+          )}
         </>
       ) : (
         <>

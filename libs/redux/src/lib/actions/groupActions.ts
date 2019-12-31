@@ -239,38 +239,56 @@ export function rejectJoinRequest(target, groupId) {
   };
 }
 
-export function approveJoinRequest(target, groupId) {
+export function approveJoinRequest(target, groupId, createAs) {
   return (dispatch, getState) => {
     const {
       app: {
         user: { uid }
       }
     } = getState();
-    dispatch(apiStart(GroupActionTypes.APPROVE_JOIN_GROUP));
-    // delete from pending first
-    return firebase
+
+    const groupRef = firebase
       .firestore()
       .collection(GROUPS)
-      .doc(groupId)
+      .doc(groupId);
+    dispatch(apiStart(GroupActionTypes.APPROVE_JOIN_GROUP));
+    // delete from pending first
+    return groupRef
       .update({
         [`pendingJoinRequests.${target.uid}`]: firebase.firestore.FieldValue.delete()
       })
-      .then(_ =>
+      .then(_ => {
         // add player
-        firebase
-          .firestore()
-          .collection(GROUPS)
-          .doc(groupId)
-          .update({
+        if (createAs === null) {
+          return groupRef.update({
             players: firebase.firestore.FieldValue.arrayUnion({
               email: target.email,
               name: target.displayName,
               userId: target.uid,
+              linkedplayerId: target.uid,
               joinDate: new Date(),
               addedBy: uid
             })
-          })
-      )
+          });
+        } else {
+          return groupRef.get().then(d => {
+            const newPlayersList = d.data().players.map(x =>
+              x.userId === createAs.id
+                ? {
+                    ...x,
+                    email: target.email,
+                    name: target.displayName,
+                    linkedplayerId: target.uid,
+                    addedBy: uid
+                  }
+                : x
+            );
+            return groupRef.update({
+              players: newPlayersList
+            });
+          });
+        }
+      })
       .then(_ => {
         dispatch(apiEnd());
         dispatch(loadGroups(true));

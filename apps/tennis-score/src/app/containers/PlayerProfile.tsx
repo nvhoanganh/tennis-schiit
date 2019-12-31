@@ -8,28 +8,17 @@ import {
   signOut,
   loadGroups,
   loadLeaderboard,
-  getCurrLeaderTournament
+  getCurrLeaderTournament,
+  getUser,
+  getLeaderBoardGroupUser
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import PlayerProfile from "../components/PlayerProfile";
 
 const mapStateToProps = (state, ownProps) => {
-  const g = getCurrLeaderGroup(state);
-  const tour = getCurrLeaderTournament(state);
-  const getPlayer = () => {
-    if (g && ownProps.match.params.group && ownProps.match.params.id) {
-      return tour && tour.players
-        ? {
-            ...g.players[ownProps.match.params.id],
-            ...tour.players[ownProps.match.params.id]
-          }
-        : g.players[ownProps.match.params.id];
-    }
-    return null;
-  };
   return {
     user: getCurrentUser(state),
-    player: getPlayer(),
+    player: getLeaderBoardGroupUser(state),
     group: getCurrLeaderGroup(state),
     tournament: getCurrLeaderTournament(state),
     pendingRequests: getPendingRequests(state),
@@ -40,7 +29,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   loadGroups: _ => dispatch(loadGroups()),
-  getUser: u => dispatch(getCurrentUser(u)),
+  getUser: u => dispatch(getUser(u)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 

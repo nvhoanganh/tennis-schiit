@@ -37,8 +37,8 @@ const mapDispatchToProps = dispatch => ({
   joinGroup: groupId => dispatch(joinGroup(groupId)),
   rejectJoinRequest: (user, groupId) =>
     dispatch(rejectJoinRequest(user, groupId)),
-  approveJoinRequest: (user, groupId) =>
-    dispatch(approveJoinRequest(user, groupId)),
+  approveJoinRequest: (user, groupId, createAs) =>
+    dispatch(approveJoinRequest(user, groupId, createAs)),
   cancelJoinGroup: groupId => dispatch(cancelJoinGroup(groupId)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });

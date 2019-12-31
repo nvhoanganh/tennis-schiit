@@ -1,4 +1,4 @@
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";

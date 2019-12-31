@@ -143,7 +143,14 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
           <LinkContainer
             to={`/group/${props.group.groupId}/player/${player.id}`}
           >
-            <a className="h5 text-dark pl-0">{player.name}</a>
+            <a className="h5 text-dark pl-0">
+              {player.name}
+              {!player.linkedplayerId && (
+                <span className="badge x-small badge-light ml-1 x-small">
+                  G
+                </span>
+              )}
+            </a>
           </LinkContainer>
           {player.played ? (
             <div className="float-right text-right">

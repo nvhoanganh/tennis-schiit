@@ -78,7 +78,7 @@ const ManageGroup = ({
       <Confirm
         title="Permanent Delete?"
         message="Are you sure you want to permanently delete this group? All data will be lost"
-        close="Close"
+        close="Cancel"
         mainAction="Delete"
         mainActionClass="btn btn-danger"
         onCancelAction={handleClose}

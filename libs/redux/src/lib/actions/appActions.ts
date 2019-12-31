@@ -73,7 +73,7 @@ export class UpdateProfileSuccessAction implements IAction {
   constructor(public user: any) {}
 }
 
-export function apiStart(action: string , payload?: any): ApiStartAction {
+export function apiStart(action: string, payload?: any): ApiStartAction {
   return { type: AppActionTypes.API_START, action, payload };
 }
 export function apiEnd(): ApiEndAction {
@@ -88,11 +88,15 @@ export function apiError(action: string, err: any): ApiErrorAction {
 
 // thunks
 
-export function signIn({ email, password, isGmail }) {
+export function signIn({ email, password, isGmail, isFacebook }) {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.SIGNIN));
     if (isGmail) {
       const provider = new firebase.auth.GoogleAuthProvider();
+      return firebase.auth().signInWithRedirect(provider);
+    }
+    if (isFacebook) {
+      const provider = new firebase.auth.FacebookAuthProvider();
       return firebase.auth().signInWithRedirect(provider);
     }
     return firebase

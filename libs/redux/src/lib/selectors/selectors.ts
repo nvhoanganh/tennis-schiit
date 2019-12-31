@@ -16,6 +16,10 @@ export const getScores = createSelector(
   getScoresState,
   s => s.entities
 );
+export const getGroupUser = createSelector(
+  getGroups,
+  s => s.user
+);
 
 export const getHasMore = createSelector(
   getScoresState,
@@ -92,11 +96,12 @@ export const getLeaderboardPlayers = createSelector(
     const roundOff = roundOff => Math.floor(roundOff * 100) / 100;
     // enhance the group player
     let players = Object.values(group.players).map(
-      ({ userId, name, email }) => {
+      ({ userId, name, email, linkedplayerId }) => {
         const player = leaderboard.players[userId];
+
         if (!player) {
           // not played yet
-          return { id: userId, name, email };
+          return { id: userId, name, email, linkedplayerId };
         }
         const won = player.won || 0;
         const bagelWon = player.bagelWon || 0;
@@ -106,6 +111,7 @@ export const getLeaderboardPlayers = createSelector(
           ...player,
           id: userId,
           score: roundOff(player.score),
+          linkedplayerId,
           previousScore: roundOff(player.previousScore),
           played: won + lost,
           winPercentage: roundOff((won / (won + lost)) * 100),
@@ -135,6 +141,11 @@ export const getLeaderboardPlayers = createSelector(
 export const getLeaderboardPlayersObj = createSelector(
   getLeaderboardPlayers,
   players => arrayToObject(players, x => x.id, x => x)
+);
+export const getLeaderBoardGroupUser = createSelector(
+  getLeaderboardPlayersObj,
+  getGroupUser,
+  (players, user) => (!user ? null : players[user.uid])
 );
 export const getMyGroups = createSelector(
   getCurrentUser,

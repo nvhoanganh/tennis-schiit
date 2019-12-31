@@ -47,7 +47,7 @@ const PlayerProfile = ({
                 </p>
               ) : (
                 <div className="col-12">
-                  <Button className="btn btn-primary btn-sm">Link User</Button>
+                  <em>Ghost Player</em>
                 </div>
               )}
             </div>
@@ -80,6 +80,20 @@ const PlayerProfile = ({
               <strong>
                 {player.won || "0"}-{player.lost || "0"}
               </strong>
+            </h2>
+          </div>
+        </div>
+        <div className="row text-center">
+          <div className="col-xs-12 col-sm-4 text-center">
+            <figure>
+              <figcaption className="ratings">
+                <h5>Prize Money</h5>
+              </figcaption>
+            </figure>
+          </div>
+          <div className="col-xs-12 col-sm-4 emphasis">
+            <h2>
+              <strong>${player.prizeMoney || "0"}</strong>
             </h2>
           </div>
         </div>

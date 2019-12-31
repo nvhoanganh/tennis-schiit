@@ -52,7 +52,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
       {groups.length > 0 && (
         <>
           <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
-            Groups near me
+            Discover Groups
           </div>
           <div className="px-2">
             {groups.map((p, i) => (
