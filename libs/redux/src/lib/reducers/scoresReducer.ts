@@ -4,6 +4,8 @@ export interface IScoresState {
   entities: {
     [scoreId: string]: any;
   };
+  lastDoc?: any;
+  hasMore?: boolean;
   loading?: boolean;
 }
 
@@ -31,7 +33,14 @@ const scores = (
       return {
         ...state,
         loading: false,
-        entities: action.results
+        lastDoc: action.results.lastDoc,
+        entities: action.results.after
+          ? {
+              ...state.entities,
+              ...action.results.data
+            }
+          : action.results.data,
+        hasMore: action.results.hasMore
       };
 
     default:

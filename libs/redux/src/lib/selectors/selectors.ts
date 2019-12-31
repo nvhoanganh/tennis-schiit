@@ -17,6 +17,15 @@ export const getScores = createSelector(
   s => s.entities
 );
 
+export const getHasMore = createSelector(
+  getScoresState,
+  s => s.hasMore
+);
+export const getLastDoc = createSelector(
+  getScoresState,
+  s => s.lastDoc
+);
+
 export const getPlayerList = createSelector(
   getPlayers,
   s => Object.values(s)

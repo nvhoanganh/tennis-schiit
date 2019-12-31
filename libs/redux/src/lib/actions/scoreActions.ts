@@ -2,7 +2,7 @@ import { IScore, GROUPS, TOURNAMENTS, SCORES } from "../models";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-
+import * as R from "ramda";
 import { delay, arrayToObject } from "../utils";
 import { apiStart, apiEnd } from "./appActions";
 import { IAction } from "@tennis-score/redux";
@@ -59,34 +59,43 @@ export function updateScore(score: IScore): UpdateScoreAction {
 }
 
 // thunks
-export function loadResults(groupId, tourId) {
+export function loadResults(groupId, tourId, after) {
   return (dispatch, getState) => {
-    dispatch(apiStart(ScoreActionTypes.LOAD_RESULTS));
+    dispatch(
+      apiStart(ScoreActionTypes.LOAD_RESULTS, { groupId, tourId, after })
+    );
     const groupRef = firebase
       .firestore()
       .collection(GROUPS)
       .doc(groupId);
 
     const tourRef = groupRef.collection(TOURNAMENTS).doc(tourId);
+    const queryRef = !after
+      ? tourRef
+          .collection(SCORES)
+          .orderBy("matchDate", "desc")
+          .limit(10)
+      : tourRef
+          .collection(SCORES)
+          .orderBy("matchDate", "desc")
+          .startAfter(after)
+          .limit(10);
 
-    return tourRef
-      .collection(SCORES)
-      .orderBy("matchDate", "desc")
-      .limit(10)
-      .get()
-      .then(querySnapshot => {
-        const data = arrayToObject(
-          querySnapshot.docs,
-          x => x.id,
-          x => x.data()
-        );
+    return queryRef.get().then(querySnapshot => {
+      const data = arrayToObject(querySnapshot.docs, x => x.id, x => x.data());
 
-        dispatch(apiEnd());
-        dispatch(<LoadResultsSuccessAction>{
-          type: ScoreActionTypes.LOAD_RESULTS_SUCCESS,
-          results: data
-        });
+      dispatch(apiEnd());
+      dispatch(<LoadResultsSuccessAction>{
+        type: ScoreActionTypes.LOAD_RESULTS_SUCCESS,
+
+        results: {
+          data,
+          after,
+          lastDoc: R.last(querySnapshot.docs),
+          hasMore: !querySnapshot.empty
+        }
       });
+    });
   };
 }
 

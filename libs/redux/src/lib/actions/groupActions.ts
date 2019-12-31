@@ -98,7 +98,6 @@ export class GetUserAction implements IAction {
   constructor(public user: any) {}
 }
 
-
 export class GetUserSuccessAction implements IAction {
   readonly type = GroupActionTypes.GET_USER_SUCCESS;
   constructor(public user: any) {}

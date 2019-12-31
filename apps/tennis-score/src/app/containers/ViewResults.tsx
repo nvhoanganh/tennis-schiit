@@ -17,7 +17,9 @@ import {
   loadPlayers,
   loadResults,
   rejectJoinRequest,
-  getLeaderboardPlayersObj
+  getLeaderboardPlayersObj,
+  getHasMore,
+  getLastDoc
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import ViewResults from "../components/ViewResults";
@@ -32,11 +34,14 @@ const mapStateToProps = state => ({
   loading: getLoadingLeaderboard(state),
   pendingJoinRequests: getPendingJoinRequest(state),
   scores: getScores(state),
+  lastDoc: getLastDoc(state),
+  hasMore: getHasMore(state),
   isPendingJoin: getIsPendingJoin(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadResult: (groupId, tourid) => dispatch(loadResults(groupId, tourid)),
+  loadResult: (groupId, tourid, more) =>
+    dispatch(loadResults(groupId, tourid, more)),
   loadGroups: _ => dispatch(loadGroups()),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });

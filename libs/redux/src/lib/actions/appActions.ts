@@ -33,7 +33,7 @@ export enum AppActionTypes {
 
 export class ApiStartAction implements IAction {
   readonly type = AppActionTypes.API_START;
-  constructor(public action: string) {}
+  constructor(public action: string, public payload?: any) {}
 }
 export class AppLoadAction implements IAction {
   readonly type = AppActionTypes.APP_LOAD;
@@ -73,8 +73,8 @@ export class UpdateProfileSuccessAction implements IAction {
   constructor(public user: any) {}
 }
 
-export function apiStart(action: string): ApiStartAction {
-  return { type: AppActionTypes.API_START, action };
+export function apiStart(action: string , payload?: any): ApiStartAction {
+  return { type: AppActionTypes.API_START, action, payload };
 }
 export function apiEnd(): ApiEndAction {
   return { type: AppActionTypes.API_END };
@@ -85,7 +85,6 @@ export function resetError() {
 export function apiError(action: string, err: any): ApiErrorAction {
   return { type: AppActionTypes.API_ERROR, action, err };
 }
-
 
 // thunks
 
@@ -106,7 +105,6 @@ export function signIn({ email, password, isGmail }) {
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
-
 
 export function resetPassword(email) {
   return dispatch => {
@@ -246,7 +244,6 @@ export function appLoad() {
 }
 
 export type AppAction =
-
   | AppLoadAction
   | AppLoadedAction
   | UpdateProfileAction
