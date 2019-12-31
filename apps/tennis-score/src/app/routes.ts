@@ -12,6 +12,7 @@ import AddPlayer from "./containers/AddPlayer";
 import ManageGroup from "./containers/ManageGroup";
 import AddEditTournament from "./containers/AddEditTournament";
 import PlayerProfile from "./containers/PlayerProfile";
+import ViewResults from './containers/ViewResults';
 
 const routes = [
   {
@@ -37,7 +38,7 @@ const routes = [
         exact: true,
         component: ManageGroup
       },
-      
+
       {
         path: "/leaderboard/:group",
         exact: true,
@@ -87,6 +88,11 @@ const routes = [
         path: "/account-details/edit",
         exact: true,
         component: EditProfile
+      },
+      {
+        path: "/groups/:group/tournament/:tour/results",
+        exact: true,
+        component: ViewResults
       },
       {
         path: "/forgot-password",

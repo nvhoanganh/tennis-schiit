@@ -1,12 +1,12 @@
+import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { IPlayer, USERS, GROUPS, PLAYERS } from "../models";
-import { apiEnd, apiStart } from "./appActions";
-import { IAction } from "@tennis-score/redux";
-import { loadLeaderboard } from "./leaderboardActions";
+import { GROUPS, IPlayer, PLAYERS, USERS } from "../models";
+import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { loadGroups } from "./groupActions";
 export enum PlayerActionTypes {
+  
   LOAD_PLAYERS = "LOAD_PLAYERS",
   LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
 
@@ -16,7 +16,6 @@ export enum PlayerActionTypes {
   UPDATE_PLAYER = "UPDATE_PLAYER",
   REMOVE_PLAYER = "REMOVE_PLAYER"
 }
-
 // actions
 export class AddPlayerAction implements IAction {
   readonly type = PlayerActionTypes.ADD_PLAYER;

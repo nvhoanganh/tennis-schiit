@@ -1,9 +1,9 @@
+import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { ISignInModel } from "../models";
-import { ToastContainer, toast } from "react-toastify";
-import { IAction } from "@tennis-score/redux";
+import { toast } from "react-toastify";
+import { ISignInModel, USERS } from "../models";
 
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
@@ -86,7 +86,9 @@ export function apiError(action: string, err: any): ApiErrorAction {
   return { type: AppActionTypes.API_ERROR, action, err };
 }
 
+
 // thunks
+
 export function signIn({ email, password, isGmail }) {
   return dispatch => {
     dispatch(apiStart(AppActionTypes.SIGNIN));
@@ -104,6 +106,7 @@ export function signIn({ email, password, isGmail }) {
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
+
 
 export function resetPassword(email) {
   return dispatch => {
@@ -243,6 +246,7 @@ export function appLoad() {
 }
 
 export type AppAction =
+
   | AppLoadAction
   | AppLoadedAction
   | UpdateProfileAction

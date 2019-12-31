@@ -1,48 +1,39 @@
-import { ScoreActionTypes, ScoreAction } from "../actions/scoreActions";
-import { IScore } from "../models";
+import { ScoreAction, ScoreActionTypes } from "../actions/scoreActions";
 
 export interface IScoresState {
   entities: {
-    [scoreId: string]: IScore;
+    [scoreId: string]: any;
   };
-  scoreCount: number;
-  offset: number;
+  loading?: boolean;
 }
 
 const initialState: IScoresState = {
-  entities: {},
-  scoreCount: 0,
-  offset: 0
+  entities: {}
 };
 const scores = (
   state: IScoresState = initialState,
   action: ScoreAction
 ): IScoresState => {
   switch (action.type) {
-    case ScoreActionTypes.ADD_SCORE:
+    case ScoreActionTypes.LOAD_RESULTS_FAILED:
       return {
         ...state,
-        [action.score.scoreId]: action.score
-      };
-    case ScoreActionTypes.LOAD_SCORE_SUCCESS:
-      return {
-        ...state,
-        entities: action.scores.scores,
-        scoreCount: action.scores.total,
-        offset: action.scores.offset
-      };
-    case ScoreActionTypes.DELETE_SCORE:
-      const { [action.id]: deleted, ...newEntities } = state.entities;
-      return {
-        ...state,
-        entities: newEntities
+        loading: true
       };
 
-    case ScoreActionTypes.UPDATE_SCORE:
+    case ScoreActionTypes.LOAD_RESULTS:
       return {
         ...state,
-        [action.score.scoreId]: action.score
+        loading: true
       };
+
+    case ScoreActionTypes.LOAD_RESULTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        entities: action.results
+      };
+
     default:
       return state;
   }

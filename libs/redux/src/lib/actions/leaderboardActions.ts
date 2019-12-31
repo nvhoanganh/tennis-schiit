@@ -7,6 +7,7 @@ import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 export enum LeaderboardActionTypes {
+
   LOAD_LEADERBOARD = "LOAD_LEADERBOARD",
   LOAD_LEADERBOARD_SUCCESS = "LOAD_LEADERBOARD_SUCCESS",
   LOAD_LEADERBOARD_FAILED = "LOAD_LEADERBOARD_FAILED",
@@ -16,6 +17,7 @@ export enum LeaderboardActionTypes {
 }
 
 // actions
+
 export class LoadLeaderboardSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
   constructor(

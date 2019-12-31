@@ -16,6 +16,7 @@ const players = (
       return newEntities;
     case PlayerActionTypes.LOAD_PLAYERS_SUCCESS:
       return action.players;
+    
     case PlayerActionTypes.ADD_PLAYER:
       return {
         ...state,

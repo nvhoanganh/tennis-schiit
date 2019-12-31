@@ -4,7 +4,7 @@ import {
   getCurrLeaderTournament,
   getLeaderboardPlayers,
   getPendingRequests,
-  getUser,
+  getCurrentUser,
   loadGroups,
   loadLeaderboard,
   loadPlayers,
@@ -18,7 +18,7 @@ import ProtectedComponent from "../components/ProtectedComponent";
 const mapStateToProps = state => ({
   component: EntryForm,
   players: getGroupPlayers(state),
-  user: getUser(state),
+  user: getCurrentUser(state),
   group: getCurrLeaderGroup(state),
   pendingRequests: getPendingRequests(state),
   appLoaded: getAppLoaded(state),

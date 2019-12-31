@@ -1,14 +1,20 @@
 import { createSelector } from "reselect";
-import { isMember } from "../utils";
+import { isMember, arrayToObject } from "../utils";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
+import players from "../reducers/playersReducer";
 const getPlayers = state => state.players;
 const getGroups = state => state.groups;
+const getScoresState = state => state.scores;
 const getAppState = state => state.app;
 const getLeaderboardState = state => state.leaderboard;
 
-export const getUser = createSelector(
+export const getCurrentUser = createSelector(
   getAppState,
   s => s.user
+);
+export const getScores = createSelector(
+  getScoresState,
+  s => s.entities
 );
 
 export const getPlayerList = createSelector(
@@ -117,8 +123,12 @@ export const getLeaderboardPlayers = createSelector(
   }
 );
 
+export const getLeaderboardPlayersObj = createSelector(
+  getLeaderboardPlayers,
+  players => arrayToObject(players, x => x.id, x => x)
+);
 export const getMyGroups = createSelector(
-  getUser,
+  getCurrentUser,
   getGroups,
   (user, groups) => {
     if (!user) return [];
@@ -127,7 +137,7 @@ export const getMyGroups = createSelector(
 );
 
 export const getIsPendingJoin = createSelector(
-  getUser,
+  getCurrentUser,
   getCurrLeaderGroup,
   (user, group) => {
     if (!user || !group) return false;
@@ -146,7 +156,7 @@ export const getPendingJoinRequest = createSelector(
 );
 
 export const getGroupNotMemberOff = createSelector(
-  getUser,
+  getCurrentUser,
   getGroups,
   (user, groups) => {
     if (!user) return Object.values(groups);

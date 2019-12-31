@@ -1,26 +1,29 @@
 import {
+  approveJoinRequest,
+  cancelJoinGroup,
   getAppLoaded,
   getCurrLeaderGroup,
   getCurrLeaderTournament,
+  getIsPendingJoin,
   getLeaderboardPlayers,
+  getLoadingLeaderboard,
+  getPendingJoinRequest,
   getPendingRequests,
+  getScores,
+  getCurrentUser,
+  joinGroup,
   loadGroups,
   loadLeaderboard,
   loadPlayers,
-  getCurrentUser,
-  getLoadingLeaderboard,
-  joinGroup,
-  getIsPendingJoin,
-  cancelJoinGroup,
-  getPendingJoinRequest,
+  loadResults,
   rejectJoinRequest,
-  approveJoinRequest
+  getLeaderboardPlayersObj
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import Leaderboard from "../components/Leaderboard";
+import ViewResults from "../components/ViewResults";
 
 const mapStateToProps = state => ({
-  players: getLeaderboardPlayers(state),
+  players: getLeaderboardPlayersObj(state),
   user: getCurrentUser(state),
   group: getCurrLeaderGroup(state),
   pendingRequests: getPendingRequests(state),
@@ -28,22 +31,17 @@ const mapStateToProps = state => ({
   tournament: getCurrLeaderTournament(state),
   loading: getLoadingLeaderboard(state),
   pendingJoinRequests: getPendingJoinRequest(state),
+  scores: getScores(state),
   isPendingJoin: getIsPendingJoin(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadPlayers: _ => dispatch(loadPlayers()),
+  loadResult: (groupId, tourid) => dispatch(loadResults(groupId, tourid)),
   loadGroups: _ => dispatch(loadGroups()),
-  joinGroup: groupId => dispatch(joinGroup(groupId)),
-  rejectJoinRequest: (user, groupId) =>
-    dispatch(rejectJoinRequest(user, groupId)),
-  approveJoinRequest: (user, groupId) =>
-    dispatch(approveJoinRequest(user, groupId)),
-  cancelJoinGroup: groupId => dispatch(cancelJoinGroup(groupId)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Leaderboard);
+)(ViewResults);

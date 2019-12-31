@@ -4,7 +4,8 @@ import {
   loadGroups,
   loadLeaderboard,
   getLeaderboardPlayers,
-  addPlayer
+  addPlayer,
+  getCurrentUser
 } from "@tennis-score/redux";
 import Leaderboard from "../components/Leaderboard";
 import AddPlayer from "../components/AddPlayer";
@@ -26,6 +27,7 @@ const mapDispatchToProps = dispatch => ({
   loadPlayers: _ => dispatch(loadPlayers()),
   loadGroups: _ => dispatch(loadGroups()),
   addPlayer: d => dispatch(addPlayer(d)),
+  getUser: u => dispatch(getCurrentUser(u)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 

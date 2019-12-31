@@ -2,9 +2,9 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-import { GROUPS, IGroup, TOURNAMENTS } from "../models";
+import { GROUPS, IGroup, TOURNAMENTS, USERS } from "../models";
 import { arrayToObject } from "../utils";
-import { apiEnd, apiStart } from "./appActions";
+import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 import { loadLeaderboard } from "./leaderboardActions";
 export enum GroupActionTypes {
@@ -15,6 +15,9 @@ export enum GroupActionTypes {
 
   ADD_TOURNAMENT = "ADD_TOURNAMENT",
   ADD_TOURNAMENT_SUCCESS = "ADD_TOURNAMENT_SUCCESS",
+
+  GET_USER = "GET_USER",
+  GET_USER_SUCCESS = "GET_USER_SUCCESS",
 
   DELETE_GROUP = "DELETE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
@@ -88,6 +91,17 @@ export class RejectJoinRequestAction implements IAction {
 export class RejectJoinRequestSuccessAction implements IAction {
   readonly type = GroupActionTypes.REJECT_JOIN_GROUP_SUCCESS;
   constructor(public payload: any) {}
+}
+
+export class GetUserAction implements IAction {
+  readonly type = GroupActionTypes.GET_USER;
+  constructor(public user: any) {}
+}
+
+
+export class GetUserSuccessAction implements IAction {
+  readonly type = GroupActionTypes.GET_USER_SUCCESS;
+  constructor(public user: any) {}
 }
 
 // action creators
@@ -413,7 +427,27 @@ export function addGroup({
   };
 }
 
+export function getUser(uid) {
+  return dispatch => {
+    dispatch(apiStart(GroupActionTypes.GET_USER));
+    return firebase
+      .firestore()
+      .collection(USERS)
+      .doc(uid)
+      .get()
+      .then(user => {
+        dispatch(apiEnd());
+        dispatch({
+          type: GroupActionTypes.GET_USER_SUCCESS,
+          user: { ...user.data(), uid }
+        });
+      })
+      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
+  };
+}
+
 export type GroupAction =
+  | GetUserSuccessAction
   | AddPlayerToGroupAction
   | AddTournamentSuccess
   | LoadGroupsSuccessAction

@@ -4,21 +4,25 @@ import { maxContainer } from "./common";
 import RouteNav from "./RouteNav";
 import { roundOff } from "@tennis-score/redux";
 import MySpinner from "./MySpinner";
+import UpdateButton from "./LoadingButton";
+import { Button } from "./Button";
 const PlayerProfile = ({
   player,
   user,
   match,
   group,
   history,
+  pendingRequests,
   tournament,
   ...props
 }) => {
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
+    props.getUser(match.params.id);
   }, []);
 
-  if (!player) return <MySpinner />;
+  if (!player || pendingRequests) return <MySpinner />;
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
@@ -42,9 +46,9 @@ const PlayerProfile = ({
                   </strong>
                 </p>
               ) : (
-                <p>
-                  <em>Ghost player</em>
-                </p>
+                <div className="col-12">
+                  <Button className="btn btn-primary btn-sm">Link User</Button>
+                </div>
               )}
             </div>
           </div>

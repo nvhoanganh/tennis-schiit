@@ -2,7 +2,7 @@ import {
   getAppIsLoaded,
   getMyGroups,
   getPlayerList,
-  getUser,
+  getCurrentUser,
   loadGroups,
   getGroupNotMemberOff,
   getLoadingLeaderboard,
@@ -16,7 +16,7 @@ const mapStateToProps = state => {
     players: getPlayerList(state),
     groups: getGroupNotMemberOff(state),
     myGroups: getMyGroups(state),
-    user: getUser(state),
+    user: getCurrentUser(state),
     loading: getPendingRequests(state),
     appLoaded: getAppIsLoaded(state)
   };

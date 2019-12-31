@@ -4,7 +4,7 @@ import {
   getLeaderboardPlayers,
   getLoadingLeaderboard,
   getPendingRequests,
-  getUser,
+  getCurrentUser,
   signOut,
   loadGroups,
   loadLeaderboard,
@@ -17,8 +17,8 @@ const mapStateToProps = (state, ownProps) => {
   const g = getCurrLeaderGroup(state);
   const tour = getCurrLeaderTournament(state);
   const getPlayer = () => {
-    if (g && tour && ownProps.match.params.group && ownProps.match.params.id) {
-      return tour.players
+    if (g && ownProps.match.params.group && ownProps.match.params.id) {
+      return tour && tour.players
         ? {
             ...g.players[ownProps.match.params.id],
             ...tour.players[ownProps.match.params.id]
@@ -28,7 +28,7 @@ const mapStateToProps = (state, ownProps) => {
     return null;
   };
   return {
-    user: getUser(state),
+    user: getCurrentUser(state),
     player: getPlayer(),
     group: getCurrLeaderGroup(state),
     tournament: getCurrLeaderTournament(state),
@@ -40,6 +40,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   loadGroups: _ => dispatch(loadGroups()),
+  getUser: u => dispatch(getCurrentUser(u)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 

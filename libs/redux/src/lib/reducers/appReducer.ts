@@ -59,6 +59,7 @@ const app = (
         ...state,
         user: action.user
       };
+
     case AppActionTypes.UPDATE_PROFILE_SUCCESS:
       return {
         ...state,

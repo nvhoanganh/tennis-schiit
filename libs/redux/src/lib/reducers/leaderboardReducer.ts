@@ -3,6 +3,7 @@ import { LeaderboardAction, LeaderboardActionTypes } from "../actions";
 interface ILeaderboardState {
   groupId?: any;
   tournament?: any;
+  results?: any;
   loading?: boolean;
   players?: any;
 }
@@ -12,6 +13,8 @@ const leaderboard = (
   action: LeaderboardAction
 ): ILeaderboardState => {
   switch (action.type) {
+    
+
     case LeaderboardActionTypes.LOAD_LEADERBOARD:
       return {
         ...state,

@@ -1,11 +1,15 @@
-import { IScore } from "../models";
-import { delay } from "../utils";
+import { IScore, GROUPS, TOURNAMENTS, SCORES } from "../models";
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+
+import { delay, arrayToObject } from "../utils";
 import { apiStart, apiEnd } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 export enum ScoreActionTypes {
-  LOAD_SCORE = "LOAD_SCORE_SUCCESS",
-  LOAD_SCORE_FAILED = "LOAD_SCORE_FAILED",
-  LOAD_SCORE_SUCCESS = "LOAD_SCORE_SUCCESS",
+  LOAD_RESULTS = "LOAD_RESULTS",
+  LOAD_RESULTS_FAILED = "LOAD_RESULTS_FAILED",
+  LOAD_RESULTS_SUCCESS = "LOAD_RESULTS_SUCCESS",
 
   ADD_SCORE = "ADD_SCORE",
   DELETE_SCORE = "DELETE_SCORE",
@@ -26,17 +30,19 @@ export class UpdateScoreAction implements IAction {
   constructor(public score: IScore) {}
 }
 
-export class LoadScoresSuccessAction implements IAction {
-  readonly type = ScoreActionTypes.LOAD_SCORE_SUCCESS;
-  constructor(
-    public scores: {
-      total: number;
-      scores: {
-        [scoreId: string]: IScore;
-      };
-      offset: number;
-    }
-  ) {}
+export class LoadResultsSuccessAction implements IAction {
+  readonly type = ScoreActionTypes.LOAD_RESULTS_SUCCESS;
+  constructor(public results: any) {}
+}
+
+export class LoadResultsAction implements IAction {
+  readonly type = ScoreActionTypes.LOAD_RESULTS;
+  constructor(public groupId: string) {}
+}
+
+export class LoadResultsFailedAction implements IAction {
+  readonly type = ScoreActionTypes.LOAD_RESULTS_FAILED;
+  constructor(public error: any) {}
 }
 
 // action creators
@@ -53,20 +59,41 @@ export function updateScore(score: IScore): UpdateScoreAction {
 }
 
 // thunks
-export function loadScores() {
-  return dispatch => {
-    dispatch(apiStart(ScoreActionTypes.LOAD_SCORE));
-    return delay(2000).then(_ => {
-      dispatch(apiEnd());
-      dispatch(<LoadScoresSuccessAction>{
-        type: ScoreActionTypes.LOAD_SCORE_SUCCESS
+export function loadResults(groupId, tourId) {
+  return (dispatch, getState) => {
+    dispatch(apiStart(ScoreActionTypes.LOAD_RESULTS));
+    const groupRef = firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId);
+
+    const tourRef = groupRef.collection(TOURNAMENTS).doc(tourId);
+
+    return tourRef
+      .collection(SCORES)
+      .orderBy("matchDate", "desc")
+      .limit(10)
+      .get()
+      .then(querySnapshot => {
+        const data = arrayToObject(
+          querySnapshot.docs,
+          x => x.id,
+          x => x.data()
+        );
+
+        dispatch(apiEnd());
+        dispatch(<LoadResultsSuccessAction>{
+          type: ScoreActionTypes.LOAD_RESULTS_SUCCESS,
+          results: data
+        });
       });
-    });
   };
 }
 
 export type ScoreAction =
+  | LoadResultsAction
+  | LoadResultsSuccessAction
+  | LoadResultsFailedAction
   | AddScoreAction
   | UpdateScoreAction
-  | DeleteScoreAction
-  | LoadScoresSuccessAction;
+  | DeleteScoreAction;

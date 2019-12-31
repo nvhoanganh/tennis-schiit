@@ -60,7 +60,11 @@ const EntryForm = ({
           }
         }
       });
-      return { ...ns, winners, losers };
+      let toreturn = { ...ns, winners, losers };
+      if (field === "gameWonByLostTeam" && value === "0") {
+        toreturn = { ...toreturn, reverseBagel: false };
+      }
+      return toreturn;
     });
   };
 
@@ -92,7 +96,9 @@ const EntryForm = ({
         formValid:
           newS.matchDateValid &&
           Object.keys(state.winners).length > 0 &&
+          Object.keys(state.winners).length <= 2 &&
           Object.keys(state.losers).length > 0 &&
+          Object.keys(state.losers).length <= 2 &&
           Object.keys(state.losers).length === Object.keys(state.winners).length
       };
     });
@@ -172,6 +178,7 @@ const EntryForm = ({
                 ></TextInput>
                 <CheckBoxInput
                   name="reverseBagel"
+                  disabled={state.gameWonByLostTeam === "0"}
                   label="Reversed Bagel?"
                   value={state.reverseBagel}
                   setValue={setValue}
