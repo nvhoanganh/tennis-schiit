@@ -31,7 +31,9 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
             <div>
               <div className="d-flex mt-3">
                 <div className="flex-grow-1">
-                  <a className="text-dark">{group.name.toUpperCase()}</a>
+                  <a className="text-dark">
+                    {(group.name || "").toUpperCase()}
+                  </a>
                   <GroupMembership
                     user={user}
                     group={group}

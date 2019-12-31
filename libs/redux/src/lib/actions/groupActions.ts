@@ -413,7 +413,7 @@ export function addGroup({
           email: user.email,
           name: user.displayName,
           userId: user.uid,
-          linkedUserId: user.uid
+          linkedplayerId: user.uid
         }
       ]
     };

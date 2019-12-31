@@ -30,34 +30,6 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
           </div>
         </div>
       </div>
-      <div className="row pt-4 text-center">
-        <div className="col-xs-12 col-sm-4 text-center">
-          <figure>
-            <figcaption className="ratings">
-              <h5>Total Prize Money</h5>
-            </figcaption>
-          </figure>
-        </div>
-        <div className="col-xs-12 col-sm-4 emphasis">
-          <h2>
-            <strong>$40.00</strong>
-          </h2>
-        </div>
-      </div>
-      <div className="row text-center">
-        <div className="col-xs-12 col-sm-4 text-center">
-          <figure>
-            <figcaption className="ratings">
-              <h5>Perentage Win</h5>
-            </figcaption>
-          </figure>
-        </div>
-        <div className="col-xs-12 col-sm-4 emphasis">
-          <h2>
-            <strong>40.99%</strong>
-          </h2>
-        </div>
-      </div>
       <div className="row pt-5 text-center">
         <div className="col-12 emphasis">
           <div className="btn-group dropup btn-block">
