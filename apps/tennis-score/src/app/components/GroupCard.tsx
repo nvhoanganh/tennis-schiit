@@ -1,17 +1,21 @@
 import { faHandshake, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
-import Skeleton from "react-loading-skeleton";
+
 const GroupCard = ({ group, user, showIsMember, ...props }) => {
   const loading = props.loading;
   const imgUrl = `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
     loading ? "" : group.groupImage
   )}?alt=media`;
+
   return (
-    <LinkContainer to={loading ? "" : `/leaderboard/${group.groupId}`}>
+    <LinkContainer
+      to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
+    >
       <div className="py-3 my-2 col-sm-6 col-md-4 col-lg-3 border-top border-bottom shadow-sm bg-white rounded">
         {loading ? (
           <>
@@ -31,9 +35,7 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
             <div>
               <div className="d-flex mt-3">
                 <div className="flex-grow-1">
-                  <a className="text-dark">
-                    {(group.name || "").toUpperCase()}
-                  </a>
+                  <a className="text-dark">{group.name.toUpperCase()}</a>
                   <GroupMembership
                     user={user}
                     group={group}
@@ -53,8 +55,10 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
                   />
                 </div>
               </div>
+              
               <GroupScoreCard
                 group={group}
+                loc={props.loc}
                 user={user}
                 players={Object.values(group.players)}
               ></GroupScoreCard>

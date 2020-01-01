@@ -1,11 +1,33 @@
-import React, { useEffect } from "react";
+import geohash from "ngeohash";
+import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 import GroupCard from "./GroupCard";
 
 const Home = ({ user, groups, myGroups, loading, ...props }) => {
+  const getUserLoc = () => {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const { latitude, longitude } = pos.coords;
+        setLoc(geohash.encode(latitude, longitude));
+        console.log("Your current position is:", loc);
+      },
+      err => {
+        console.warn(
+          `Cant get user location, ERROR(${err.code}): ${err.message}`
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    );
+  };
+  const [loc, setLoc] = useState(null);
   useEffect(() => {
+    getUserLoc();
     props.loadGroups();
   }, []);
 
@@ -23,6 +45,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
               user={null}
               showIsMember={true}
               loading={true}
+              loc={loc}
             ></GroupCard>
           ))}
         </div>
@@ -42,6 +65,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
                 key={p.groupId}
                 group={p}
                 user={user}
+                loc={loc}
                 showIsMember={false}
               ></GroupCard>
             ))}
@@ -59,6 +83,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
               <GroupCard
                 key={p.groupId}
                 group={p}
+                loc={loc}
                 user={user}
                 showIsMember={true}
               ></GroupCard>

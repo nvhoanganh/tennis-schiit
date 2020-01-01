@@ -2,11 +2,13 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import { setNewScore } from "@tennis-score/api-interfaces";
 import "firebase/firestore";
-import { GROUPS, IGroup, TOURNAMENTS, SCORES } from "../models";
+import { GROUPS, IGroup, TOURNAMENTS, SCORES, USERS } from "../models";
 import { arrayToObject } from "../utils";
-import { apiEnd, apiStart } from "./appActions";
+import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 export enum LeaderboardActionTypes {
+  GET_USER = "GET_USER",
+  GET_USER_SUCCESS = "GET_USER_SUCCESS",
 
   LOAD_LEADERBOARD = "LOAD_LEADERBOARD",
   LOAD_LEADERBOARD_SUCCESS = "LOAD_LEADERBOARD_SUCCESS",
@@ -18,6 +20,15 @@ export enum LeaderboardActionTypes {
 
 // actions
 
+export class GetUserAction implements IAction {
+  readonly type = LeaderboardActionTypes.GET_USER;
+  constructor(public user: any) {}
+}
+
+export class GetUserSuccessAction implements IAction {
+  readonly type = LeaderboardActionTypes.GET_USER_SUCCESS;
+  constructor(public user: any) {}
+}
 export class LoadLeaderboardSuccessAction implements IAction {
   readonly type = LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
   constructor(
@@ -45,6 +56,25 @@ export class SubmitScoreSuccessAction implements IAction {
 // action creators
 
 // thunks
+export function getUser(uid) {
+  return dispatch => {
+    dispatch(apiStart(LeaderboardActionTypes.GET_USER));
+    return firebase
+      .firestore()
+      .collection(USERS)
+      .doc(uid)
+      .get()
+      .then(user => {
+        dispatch(apiEnd());
+        dispatch({
+          type: LeaderboardActionTypes.GET_USER_SUCCESS,
+          user: { ...user.data(), uid }
+        });
+      })
+      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
+  };
+}
+
 export function loadLeaderboard(groupId: string) {
   return async dispatch => {
     dispatch(<LoadLeaderboardAction>{
@@ -198,6 +228,7 @@ export function submitScore({
 }
 
 export type LeaderboardAction =
+  | GetUserSuccessAction
   | LoadLeaderboardSuccessAction
   | LoadLeaderboardFailedAction
   | LoadLeaderboardAction;

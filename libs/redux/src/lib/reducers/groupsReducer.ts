@@ -26,11 +26,7 @@ const groups = (
           }
         }
       };
-    case GroupActionTypes.GET_USER_SUCCESS:
-      return {
-        ...state,
-        user: action.user
-      };
+    
     case GroupActionTypes.ADD_GROUP:
       return {
         ...state,

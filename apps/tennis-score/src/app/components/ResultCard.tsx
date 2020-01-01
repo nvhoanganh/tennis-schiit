@@ -50,7 +50,7 @@ const ResultCard = props => {
       </div>
       <div className="p-2 align-self-center">
         <span className="h5">
-          {gameWonByLostTeam === 6 ? "7" : "6"} - {gameWonByLostTeam}
+          {gameWonByLostTeam === "6" ? "7" : "6"} - {gameWonByLostTeam}
         </span>
       </div>
     </div>

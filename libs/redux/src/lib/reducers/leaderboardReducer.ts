@@ -2,6 +2,7 @@ import { LeaderboardAction, LeaderboardActionTypes } from "../actions";
 
 interface ILeaderboardState {
   groupId?: any;
+  user?: any;
   tournament?: any;
   results?: any;
   loading?: boolean;
@@ -13,7 +14,11 @@ const leaderboard = (
   action: LeaderboardAction
 ): ILeaderboardState => {
   switch (action.type) {
-    
+    case LeaderboardActionTypes.GET_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.user
+      };    
 
     case LeaderboardActionTypes.LOAD_LEADERBOARD:
       return {

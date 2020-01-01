@@ -17,7 +17,7 @@ export const getScores = createSelector(
   s => s.entities
 );
 export const getGroupUser = createSelector(
-  getGroups,
+  getLeaderboardState,
   s => s.user
 );
 

@@ -30,7 +30,7 @@ const ManageGroup = ({
   const deleteGroupHandler = () => {
     deleteGroup(match.params.group).then(_ => {
       setShow(false);
-      window.location.href = "/home";
+      history.push("/home");
     });
   };
 
