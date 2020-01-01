@@ -42,6 +42,7 @@
     "free-gaussian": "0.1.0",
     "geohash-distance": "^1.0.2",
     "lodash": "^4.17.15",
+    "lottie-web": "^5.5.10",
     "ngeohash": "^0.6.3",
     "query-string": "^6.9.0",
     "ramda": "^0.26.1",

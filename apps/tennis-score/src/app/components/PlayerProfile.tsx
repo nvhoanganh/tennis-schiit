@@ -23,6 +23,7 @@ const PlayerProfile = ({
   }, []);
 
   if (!player || pendingRequests) return <MySpinner />;
+  console.log("player is", player);
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
