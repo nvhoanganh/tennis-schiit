@@ -4,12 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 const SelectInput: React.SFC<{
   label: string;
   name: string;
-  value: string;
+  value: any;
   placeholder: string;
   isValid?: boolean;
   errorMessage: string;
   disabled?: boolean;
   options?: any[];
+  values?: any[];
   setValue(name: string, value: string);
 }> = ({
   label,
@@ -20,7 +21,8 @@ const SelectInput: React.SFC<{
   isValid,
   setValue,
   errorMessage,
-  options
+  options,
+  values
 }) => {
   const inputRef = useRef<HTMLSelectElement>(null);
   const [className, setClassName] = useState("form-control");
@@ -49,8 +51,8 @@ const SelectInput: React.SFC<{
         value={value}
         placeholder={placeholder}
       >
-        {options.map(o => (
-          <option value={o} key={o}>
+        {options.map((o, i) => (
+          <option value={values ? values[i] : o} key={o}>
             {o}
           </option>
         ))}

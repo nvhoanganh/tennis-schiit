@@ -7,6 +7,7 @@ import RadioInputButton from "./RadioInputButtons";
 import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import TextInput from "./TextInput";
+import SelectInput from "./SelectInput";
 
 const EntryForm = ({
   pendingRequests,
@@ -25,6 +26,7 @@ const EntryForm = ({
   const initState = {
     gameWonByLostTeam: "3",
     reverseBagel: false,
+    headStart: 0,
     winners: {},
     losers: {},
     matchDate: format(new Date(), "yyyy-MM-dd"),
@@ -156,6 +158,47 @@ const EntryForm = ({
                     ))}
                   </tbody>
                 </table>
+
+                <SelectInput
+                  name="headStart"
+                  label="With head start"
+                  value={state.headStart}
+                  placeholder=""
+                  errorMessage=""
+                  setValue={setValue}
+                  isValid={true}
+                  options={[
+                    "-- no head start --",
+                    "15pt for winning team",
+                    "1 game for winning team",
+                    "1 game + 15pt for winning team",
+                    "2 games for winning team",
+                    "2 games + 15pt for winning team",
+                    "30pt for winning team",
+
+                    "15pt for losing team",
+                    "1 game for losing team",
+                    "1 game + 15pt for losing team",
+                    "2 games for losing team",
+                    "2 games + 15pt for losing team",
+                    "30pt for losing team"
+                  ]}
+                  values={[
+                    0,
+                    0.15,
+                    1,
+                    1.15,
+                    2,
+                    2.15,
+                    0.3,
+                    -0.15,
+                    -1,
+                    -1.15,
+                    -2,
+                    -2.15,
+                    -0.3
+                  ]}
+                ></SelectInput>
 
                 <RadioInputButton
                   name="gameWonByLostTeam"

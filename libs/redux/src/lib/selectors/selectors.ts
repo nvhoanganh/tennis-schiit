@@ -133,7 +133,7 @@ export const getLeaderboardPlayers = createSelector(
           : sortBy === SORT_WINPERCENT
           ? "winPercentage"
           : "prizeMoney";
-      return y[srtCol] - x[srtCol];
+      return (y[srtCol] || 0) - (x[srtCol] || 0);
     });
   }
 );

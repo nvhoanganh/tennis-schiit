@@ -134,6 +134,7 @@ export function submitScore({
   gameWonByLostTeam,
   reverseBagel,
   matchDate,
+  headStart,
   ...score
 }) {
   return async (dispatch, getState) => {
@@ -166,6 +167,7 @@ export function submitScore({
     const g = await tourRef.collection(SCORES).add({
       winners,
       losers,
+      headStart,
       gameWonByLostTeam,
       reverseBagel,
       matchDate: new Date(matchDate)
