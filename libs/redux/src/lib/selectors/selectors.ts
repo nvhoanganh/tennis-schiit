@@ -145,7 +145,7 @@ export const getLeaderboardPlayersObj = createSelector(
 export const getLeaderBoardGroupUser = createSelector(
   getLeaderboardPlayersObj,
   getGroupUser,
-  (players, user) => (!user ? null : players[user.uid])
+  (players, user) => (!user ? null : { ...players[user.playerId], ...user })
 );
 export const getMyGroups = createSelector(
   getCurrentUser,

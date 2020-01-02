@@ -1,16 +1,14 @@
 import {
   getAppLoaded,
+  getCurrentUser,
   getCurrLeaderGroup,
-  getLeaderboardPlayers,
+  getCurrLeaderTournament,
+  getLeaderBoardGroupUser,
   getLoadingLeaderboard,
   getPendingRequests,
-  getCurrentUser,
-  signOut,
+  getPlayer,
   loadGroups,
-  loadLeaderboard,
-  getCurrLeaderTournament,
-  getUser,
-  getLeaderBoardGroupUser
+  loadLeaderboard
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import PlayerProfile from "../components/PlayerProfile";
@@ -29,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   loadGroups: _ => dispatch(loadGroups()),
-  getUser: u => dispatch(getUser(u)),
+  getPlayer: (playerId, userId) => dispatch(getPlayer(playerId, userId)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 

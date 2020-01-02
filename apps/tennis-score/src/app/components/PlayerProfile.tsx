@@ -1,25 +1,25 @@
+import { roundOff } from "@tennis-score/redux";
+import queryString from "query-string";
 import React, { useEffect } from "react";
 import Gravatar from "react-gravatar";
 import { maxContainer } from "./common";
-import RouteNav from "./RouteNav";
-import { roundOff } from "@tennis-score/redux";
 import MySpinner from "./MySpinner";
-import UpdateButton from "./LoadingButton";
-import { Button } from "./Button";
+import RouteNav from "./RouteNav";
 const PlayerProfile = ({
   player,
-  user,
   match,
   group,
   history,
   pendingRequests,
   tournament,
+  location,
   ...props
 }) => {
   useEffect(() => {
     props.loadGroups();
     props.loadLeaderboard(match.params.group);
-    props.getUser(match.params.id);
+    const q = queryString.parse(location.search)
+    props.getPlayer(match.params.id, q.userId);
   }, []);
 
   if (!player || pendingRequests) return <MySpinner />;

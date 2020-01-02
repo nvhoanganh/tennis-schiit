@@ -54,21 +54,24 @@ export class SubmitScoreSuccessAction implements IAction {
 }
 
 // action creators
+export function getGroupPlayerSuccess(user): GetUserSuccessAction {
+  return { type: LeaderboardActionTypes.GET_USER_SUCCESS, user };
+}
 
 // thunks
-export function getUser(uid) {
+export function getPlayer(playerId, userId) {
   return dispatch => {
     dispatch(apiStart(LeaderboardActionTypes.GET_USER));
     return firebase
       .firestore()
       .collection(USERS)
-      .doc(uid)
+      .doc(userId)
       .get()
       .then(user => {
         dispatch(apiEnd());
         dispatch({
           type: LeaderboardActionTypes.GET_USER_SUCCESS,
-          user: { ...user.data(), uid }
+          user: { ...user.data(), playerId, userId }
         });
       })
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
