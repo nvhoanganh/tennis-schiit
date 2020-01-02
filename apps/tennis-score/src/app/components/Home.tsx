@@ -37,7 +37,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
         <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
           <Skeleton />
         </div>
-        <div className="px-2">
+        <div className="px-2 py-3">
           {[1, 2, 3, 4].map((p, i) => (
             <GroupCard
               key={p}
