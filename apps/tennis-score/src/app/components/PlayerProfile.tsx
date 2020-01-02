@@ -16,7 +16,6 @@ const PlayerProfile = ({
   ...props
 }) => {
   useEffect(() => {
-    props.loadGroups();
     props.loadLeaderboard(match.params.group);
     const q = queryString.parse(location.search)
     props.getPlayer(match.params.id, q.userId);

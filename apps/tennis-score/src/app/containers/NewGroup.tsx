@@ -1,20 +1,24 @@
 import { connect } from "react-redux";
-import { signUp, addGroup } from "@tennis-score/redux";
+import { signUp, addGroup, editGroup } from "@tennis-score/redux";
 import NewGroup from "../components/NewGroup";
 import ProtectedComponent from "../components/ProtectedComponent";
 
-const mapStateToProps = ({
-  app: { appLoaded, lastError, pendingRequests, user }
-}) => ({
+const getGroup = (groups, id) =>
+  groups && id && groups[id] ? groups[id] : null;
+const mapStateToProps = (
+  { app: { appLoaded, lastError, pendingRequests, user }, groups },
+  ownprops
+) => ({
   component: NewGroup,
   user,
-  lastError,
+  group: getGroup(groups, ownprops.match.params.group),
   appLoaded,
   loading: pendingRequests > 0
 });
 
 const mapDispatchToProps = dispatch => ({
-  addGroup: data => dispatch(addGroup(data))
+  addGroup: data => dispatch(addGroup(data)),
+  editGroup: data => dispatch(editGroup(data)),
 });
 
 export default connect(

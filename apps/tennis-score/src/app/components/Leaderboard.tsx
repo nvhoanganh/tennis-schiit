@@ -71,7 +71,6 @@ const Leaderboard = ({
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    props.loadGroups();
     props.loadLeaderboard(match.params.group);
   }, []);
   return (

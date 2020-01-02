@@ -5,12 +5,10 @@ import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
+import { getGroupImageUrl } from '@tennis-score/redux';
 
 const GroupCard = ({ group, user, showIsMember, ...props }) => {
   const loading = props.loading;
-  const imgUrl = `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
-    loading ? "" : group.groupImage
-  )}?alt=media`;
 
   return (
     <LinkContainer
@@ -26,7 +24,7 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
         ) : (
           <>
             <img
-              src={imgUrl}
+              src={getGroupImageUrl(group.groupImage)}
               style={{
                 height: 140,
                 objectFit: "cover",

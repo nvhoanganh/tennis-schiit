@@ -2,8 +2,8 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import { setNewScore } from "@tennis-score/api-interfaces";
 import "firebase/firestore";
-import { GROUPS, IGroup, TOURNAMENTS, SCORES, USERS } from "../models";
-import { arrayToObject } from "../utils";
+import { GROUPS, IGroup, TOURNAMENTS, SCORES, USERS, STATS } from "../models";
+import { arrayToObject, calculateStats } from "../utils";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 export enum LeaderboardActionTypes {
@@ -142,7 +142,10 @@ export function submitScore({
 }) {
   return async (dispatch, getState) => {
     const {
-      leaderboard: { players }
+      leaderboard: {
+        players,
+        tournament: { prize }
+      }
     } = getState();
     dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
 
@@ -189,6 +192,13 @@ export function submitScore({
     const loserK = Object.keys(mLosers);
     const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
     winnersK.forEach(k => {
+      // update each
+      mWinners[k] = {
+        ...mWinners[k],
+        ...calculateStats(mWinners[k], prize),
+        playerId: k,
+        timestamp: new Date(matchDate)
+      };
       batch.update(tourRef, {
         [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1),
         [`players.${k}.previousScore`]: mWinners[k].previousScore,
@@ -196,9 +206,18 @@ export function submitScore({
         [`players.${k}.skill`]: mWinners[k].skill,
         [`players.${k}.lastMatch`]: new Date()
       });
+      // add hisoric data
+      const newHistoricRef = tourRef.collection(STATS).doc();
+      batch.set(newHistoricRef, mWinners[k]);
     });
 
     loserK.forEach(k => {
+      mLosers[k] = {
+        ...mLosers[k],
+        ...calculateStats(mLosers[k], prize),
+        playerId: k,
+        timestamp: new Date(matchDate)
+      };
       batch.update(tourRef, {
         [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1),
         [`players.${k}.previousScore`]: mLosers[k].previousScore,
@@ -206,6 +225,9 @@ export function submitScore({
         [`players.${k}.skill`]: mLosers[k].skill,
         [`players.${k}.lastMatch`]: new Date()
       });
+      // add hisoric data
+      const newHistoricRef = tourRef.collection(STATS).doc();
+      batch.set(newHistoricRef, mLosers[k]);
     });
 
     if (winByBagel) {

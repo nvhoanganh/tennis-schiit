@@ -374,6 +374,47 @@ export function addTournament({
   };
 }
 
+export function editGroup({
+  group,
+  name,
+  description,
+  location,
+  locationLongLat,
+  photo
+}) {
+  return async (dispatch, getState) => {
+    const {
+      app: { user }
+    } = getState();
+
+    let dat = {
+      name,
+      description,
+      location,
+      locationLongLat,
+      hashedLocation: geohash.encode(locationLongLat.lat, locationLongLat.lng)
+    };
+
+    dispatch(apiStart(GroupActionTypes.UPDATE_GROUP));
+    var editGroup = firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(group.groupId);
+
+    if (photo) {
+      var storageRef = firebase.storage().ref();
+      var imageRef = await storageRef
+        .child(`images/${editGroup.id}-${photo.name}`)
+        .put(photo);
+      dat = { ...(<any>dat), groupImage: imageRef.metadata.fullPath };
+    }
+
+    return editGroup.update(dat).then(_ => {
+      dispatch(apiEnd());
+      dispatch(loadGroups(true));
+    });
+  };
+}
 export function addGroup({
   name,
   description,
@@ -421,13 +462,10 @@ export function addGroup({
       dat = { ...dat, groupImage: imageRef.metadata.fullPath };
     }
 
-    return newGroup
-      .set(dat)
-      .then(_ => newGroup.get())
-      .then(d => {
-        dispatch(apiEnd());
-        dispatch(loadGroups(true));
-      });
+    return newGroup.set(dat).then(_ => {
+      dispatch(apiEnd());
+      dispatch(loadGroups(true));
+    });
   };
 }
 

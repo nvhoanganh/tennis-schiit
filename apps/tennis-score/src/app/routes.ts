@@ -12,7 +12,7 @@ import AddPlayer from "./containers/AddPlayer";
 import ManageGroup from "./containers/ManageGroup";
 import AddEditTournament from "./containers/AddEditTournament";
 import PlayerProfile from "./containers/PlayerProfile";
-import ViewResults from './containers/ViewResults';
+import ViewResults from "./containers/ViewResults";
 
 const routes = [
   {
@@ -30,6 +30,11 @@ const routes = [
       },
       {
         path: "/newgroup",
+        exact: true,
+        component: NewGroup
+      },
+      {
+        path: "/editgroup/:group",
         exact: true,
         component: NewGroup
       },

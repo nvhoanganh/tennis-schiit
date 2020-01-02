@@ -23,7 +23,6 @@ const AddEditTournament = ({
   ...props
 }) => {
   useEffect(() => {
-    props.loadGroups();
     props.loadLeaderboard(match.params.group);
   }, []);
 

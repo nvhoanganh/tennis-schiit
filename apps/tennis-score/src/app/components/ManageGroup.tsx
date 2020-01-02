@@ -1,14 +1,13 @@
-import { ReadOnlyForm } from "./ReadOnlyForm";
-import { LinkContainer } from "react-router-bootstrap";
-import React, { useState, useEffect } from "react";
-import UpdateButton from "./LoadingButton";
-import RouteNav from "./RouteNav";
-import Modal from "react-bootstrap/Modal";
-import { Button } from "./Button";
-import Confirm from "./Confirm";
 import { formatDistanceToNow } from "date-fns";
-import { Link } from "./Link";
+import React, { useEffect, useState } from "react";
+import { LinkContainer } from "react-router-bootstrap";
 import { maxContainer } from "./common";
+import Confirm from "./Confirm";
+import { Link } from "./Link";
+import UpdateButton from "./LoadingButton";
+import { ReadOnlyForm } from "./ReadOnlyForm";
+import RouteNav from "./RouteNav";
+import { getGroupImageUrl } from '@tennis-score/redux';
 
 const ManageGroup = ({
   loading,
@@ -19,7 +18,6 @@ const ManageGroup = ({
   ...props
 }) => {
   useEffect(() => {
-    props.loadGroups();
     props.loadLeaderboard(match.params.group);
   }, []);
 
@@ -39,6 +37,18 @@ const ManageGroup = ({
     <>
       <RouteNav history={history} center={group.name.toUpperCase()}></RouteNav>
       <div {...maxContainer}>
+        {group && (
+          <div className="pb-2">
+            <img
+              src={getGroupImageUrl(group.groupImage)}
+              style={{
+                height: 140,
+                objectFit: "cover"
+              }}
+              className="card-img-top border"
+            ></img>
+          </div>
+        )}
         <ReadOnlyForm label="Owner" value={group.onwerName} />
         <ReadOnlyForm
           label="Created"

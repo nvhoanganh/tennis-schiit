@@ -13,7 +13,6 @@ const AddPlayer = ({
   ...props
 }) => {
   useEffect(() => {
-    props.loadGroups();
     props.loadLeaderboard(match.params.group);
   }, []);
   const initState = {

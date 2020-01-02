@@ -28,7 +28,6 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
   const [loc, setLoc] = useState(null);
   useEffect(() => {
     getUserLoc();
-    props.loadGroups();
   }, []);
 
   if (loading)

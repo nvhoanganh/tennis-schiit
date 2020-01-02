@@ -24,7 +24,6 @@ const ViewResults = ({
   ...props
 }) => {
   useEffect(() => {
-    props.loadGroups();
     props.loadLeaderboard(match.params.group);
     props.loadResult(match.params.group, match.params.tour, null);
   }, []);

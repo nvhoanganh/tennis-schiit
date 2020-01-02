@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { isMember, arrayToObject } from "../utils";
+import { isMember, arrayToObject, roundOff, calculateStats } from "../utils";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 import players from "../reducers/playersReducer";
 const getPlayers = state => state.players;
@@ -93,7 +93,6 @@ export const getLeaderboardPlayers = createSelector(
       sortBy: SORT_TRUESKILL
     };
 
-    const roundOff = roundOff => Math.floor(roundOff * 100) / 100;
     // enhance the group player
     let players = Object.values(group.players).map(
       ({ userId, name, email, linkedplayerId }) => {
@@ -103,25 +102,15 @@ export const getLeaderboardPlayers = createSelector(
           // not played yet
           return { id: userId, name, email, linkedplayerId };
         }
-        const won = player.won || 0;
-        const bagelWon = player.bagelWon || 0;
-        const lost = player.lost || 0;
-        const bagelLost = player.bagelLost || 0;
         return {
           ...player,
           id: userId,
           score: roundOff(player.score),
           linkedplayerId,
           previousScore: roundOff(player.previousScore),
-          played: won + lost,
-          winPercentage: roundOff((won / (won + lost)) * 100),
           name,
           email,
-          prizeMoney:
-            won * +prize +
-            bagelWon * +prize -
-            lost * +prize -
-            bagelLost * +prize
+          ...calculateStats(player, prize)
         };
       }
     );

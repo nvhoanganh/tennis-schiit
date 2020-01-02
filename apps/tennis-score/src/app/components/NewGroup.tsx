@@ -5,8 +5,9 @@ import UpdateButton from "./LoadingButton";
 import TextInput from "./TextInput";
 import { maxContainer } from "./common";
 import RouteNav from "./RouteNav";
+import { getGroupImageUrl } from "@tennis-score/redux";
 
-const NewGroup = ({ loading, history, addGroup }) => {
+const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
   const [state, setState] = useState({
     // required
     name: "",
@@ -19,6 +20,7 @@ const NewGroup = ({ loading, history, addGroup }) => {
     // optional
     description: "",
     photo: null,
+    photoValid: false,
 
     formValid: false
   });
@@ -28,13 +30,21 @@ const NewGroup = ({ loading, history, addGroup }) => {
   };
 
   useEffect(() => {
+    if (group) {
+      setState(curr => ({
+        ...group,
+        photoValid: true
+      }));
+    }
+  }, [group]);
+
+  useEffect(() => {
     setState(current => {
       const newS = {
         ...current,
         nameValid: !!state.name,
         locationValid: !!state.locationLongLat && !!state.location
       };
-      console.log("new state", newS);
       return {
         ...newS,
         formValid: newS.nameValid && newS.locationValid
@@ -51,13 +61,20 @@ const NewGroup = ({ loading, history, addGroup }) => {
   const validateAndSubmit = e => {
     e.preventDefault();
     if (state.formValid) {
-      addGroup(state).then(_ => history.goBack());
+      if (!group) {
+        addGroup(state).then(_ => history.goBack());
+      } else {
+        editGroup({ ...state, group }).then(_ => history.goBack());
+      }
     }
   };
 
   return (
     <>
-      <RouteNav history={history} center="Create new group"></RouteNav>
+      <RouteNav
+        history={history}
+        center={group ? "Edit Group" : "Create new group"}
+      ></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           <TextInput
@@ -91,13 +108,25 @@ const NewGroup = ({ loading, history, addGroup }) => {
             isValid={true}
           ></TextInput>
 
+          {group && (
+            <div>
+              <img
+                src={getGroupImageUrl(group.groupImage)}
+                style={{
+                  height: 140,
+                  objectFit: "cover",
+                }}
+                className="card-img-top border"
+              ></img>
+            </div>
+          )}
           <FileInput
             multiple={false}
             name="photo"
-            label="Group Photo"
-            errorMessage=""
+            label={group ? "Change Group Photo" : "Group Photo"}
+            errorMessage="Group photo is required"
             setValue={setValue}
-            isValid={true}
+            isValid={state.photoValid}
           ></FileInput>
 
           <div className="row">
@@ -105,7 +134,7 @@ const NewGroup = ({ loading, history, addGroup }) => {
               <div className="form-group">
                 <UpdateButton
                   loading={loading}
-                  value="Create new group"
+                  value={group ? "Update Group" : "Create new group"}
                   type="submit"
                   disabled={!state.formValid || loading}
                   className="btn btn-primary btn-sm btn-block"

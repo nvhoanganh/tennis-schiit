@@ -1,4 +1,4 @@
-import { appLoad } from "@tennis-score/redux";
+import { appLoad, loadGroups } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect } from "react";
@@ -15,9 +15,10 @@ const linkStyle = {
   lineHeight: "2rem"
 };
 
-const App = ({ route, user, appLoad, appLoaded, history }) => {
+const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
   useEffect(() => {
     appLoad();
+    loadGroups();
   }, []);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const App = ({ route, user, appLoad, appLoaded, history }) => {
       <div>{renderRoutes(route.routes)}</div>
     </div>
   ) : (
-    <AppLoader  />
+    <AppLoader />
   );
 };
 
@@ -93,7 +94,8 @@ const mapStateToProps = ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  appLoad: _ => dispatch(appLoad())
+  appLoad: _ => dispatch(appLoad()),
+  loadGroups: _ => dispatch(loadGroups())
 });
 
 export default connect(
