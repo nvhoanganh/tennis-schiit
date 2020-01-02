@@ -14,9 +14,10 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
 
   return (
     <LinkContainer
+      style={{ borderRadius: 13 }}
       to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
     >
-      <div className="card shadow-sm my-2">
+      <div className="card shadow my-2">
         {loading ? (
           <>
             <Skeleton height={140} />
@@ -28,11 +29,12 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
               src={imgUrl}
               style={{
                 height: 140,
-                objectFit: "cover"
+                objectFit: "cover",
+                borderRadius: "13px 13px 0px 0px"
               }}
               className="card-img-top border"
             ></img>
-            <div className="card-body pt-1">
+            <div className="card-body pt-0 pb-3">
               <div className="d-flex mt-3">
                 <div className="flex-grow-1">
                   <a className="text-dark">{group.name.toUpperCase()}</a>
@@ -55,7 +57,7 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
                   />
                 </div>
               </div>
-              
+
               <GroupScoreCard
                 group={group}
                 loc={props.loc}
