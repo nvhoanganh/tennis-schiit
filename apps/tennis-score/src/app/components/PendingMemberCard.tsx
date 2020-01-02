@@ -48,7 +48,11 @@ const PendingMemberCard = ({ player, ...props }) => {
       <div className="card-body px-0 py-3">
         <div className="float-left pr-3 pl-0">
           <LinkContainer to={player ? `/player/${player.uid}` : ""}>
-            <RoundGravatar size={35} email={player.email || "0"} />
+            <RoundGravatar
+              avatarUrl={player.avatarUrl}
+              size={35}
+              email={player.email || "0"}
+            />
           </LinkContainer>
         </div>
         <div className="mr-auto">

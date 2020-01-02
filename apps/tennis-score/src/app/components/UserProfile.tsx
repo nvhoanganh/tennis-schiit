@@ -4,7 +4,8 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
 import { Link } from "./Link";
 import UpdateButton from "./LoadingButton";
-import { maxContainer } from './common';
+import { maxContainer } from "./common";
+import RoundGravatar from "./RoundGravatar";
 const UserProfile = ({ signOutHandler, user, loading }) => {
   return !user ? (
     <Redirect to="/signin" />
@@ -12,7 +13,13 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
     <div {...maxContainer}>
       <div className="row pt-3">
         <div className="col-sm-12 text-center">
-          {user ? <Gravatar email={user.email} size={150} /> : null}
+          {user ? (
+            <RoundGravatar
+              avatarUrl={user.avatarUrl}
+              email={user.email}
+              size={150}
+            />
+          ) : null}
         </div>
       </div>
       <div className="row pt-3">

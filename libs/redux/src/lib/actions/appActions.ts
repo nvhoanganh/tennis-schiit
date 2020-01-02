@@ -144,11 +144,21 @@ export function updateProfile({
   displayName,
   leftHanded,
   singleHandedBackhand,
+  avatar,
   uid,
   history
 }) {
-  return dispatch => {
+  return async dispatch => {
     dispatch(apiStart(AppActionTypes.UPDATE_PROFILE));
+    const blob = avatar ? await (await fetch(avatar)).blob() : null;
+    let avatarUrl = "";
+    if (blob) {
+      var storageRef = firebase.storage().ref();
+      var imageRef = await storageRef
+        .child(`images/avatar_${uid}.png`)
+        .put(blob);
+      avatarUrl = imageRef.metadata.fullPath;
+    }
     var user = firebase.auth().currentUser;
     return user
       .updateProfile({
@@ -159,10 +169,11 @@ export function updateProfile({
           .firestore()
           .collection("users")
           .doc(uid)
-          .set({
+          .update({
             displayName,
             leftHanded,
-            singleHandedBackhand
+            singleHandedBackhand,
+            ...(avatarUrl && { avatarUrl })
           })
       )
       .then(function() {

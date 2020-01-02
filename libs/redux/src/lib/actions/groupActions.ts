@@ -255,6 +255,7 @@ export function approveJoinRequest(target, groupId, createAs) {
               name: target.displayName,
               userId: target.uid,
               linkedplayerId: target.uid,
+              avatarUrl: target.avatarUrl,
               joinDate: new Date(),
               addedBy: uid
             })
@@ -444,6 +445,7 @@ export function addGroup({
           email: user.email,
           name: user.displayName,
           userId: user.uid,
+          avatarUrl: user.avatarUrl,
           linkedplayerId: user.uid
         }
       ]

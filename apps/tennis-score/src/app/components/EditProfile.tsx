@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import AvatarEditor from "react-avatar-editor";
+import RoundGravatar from "./RoundGravatar";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
 import TextInput from "./TextInput";
+import FileInput from "./FileInput";
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
+  const avatarRef = useRef<any>(null);
   const [state, setState] = useState({
     email: "",
     displayName: "",
     displayNameValid: false,
     leftHanded: false,
     singleHandedBackhand: false,
+    photo: null,
     formValid: false
   });
   const setValue = (field, value) =>
@@ -18,13 +23,18 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
 
   const validateAndSubmit = e => {
     e.preventDefault();
-    updateProfile({
+    let profile = {
       uid: user.uid,
       displayName: state.displayName,
       leftHanded: state.leftHanded,
       singleHandedBackhand: state.singleHandedBackhand,
-      history
-    });
+      history,
+      avatar: "" // existing
+    };
+    if (state.photo) {
+      profile.avatar = avatarRef.current.getImageScaledToCanvas().toDataURL();
+    }
+    updateProfile(profile);
   };
 
   useEffect(() => {
@@ -55,6 +65,39 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       <RouteNav history={history} center="Update my profile"></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
+          <div className="text-center">
+            <RoundGravatar
+              size={150}
+              avatarUrl={user.avatarUrl}
+              email={user.email || "0"}
+            />
+          </div>
+          <div>
+            <div className="pb-1">Change Avatar</div>
+            {state.photo && (
+              <div className="mr-auto border shadow-sm">
+                <AvatarEditor
+                  ref={avatarRef}
+                  image={state.photo}
+                  width={200}
+                  borderRadius={100}
+                  height={200}
+                  border={50}
+                  color={[255, 255, 255, 0.6]} // RGBA
+                  scale={1.2}
+                  rotate={0}
+                />
+              </div>
+            )}
+            <FileInput
+              multiple={false}
+              name="photo"
+              label=""
+              errorMessage=""
+              setValue={setValue}
+              isValid={true}
+            ></FileInput>
+          </div>
           <TextInput
             type="email"
             name="email"

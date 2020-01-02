@@ -94,26 +94,22 @@ export const getLeaderboardPlayers = createSelector(
     };
 
     // enhance the group player
-    let players = Object.values(group.players).map(
-      ({ userId, name, email, linkedplayerId }) => {
-        const player = leaderboard.players[userId];
+    let players = Object.values(group.players).map(({ ...gp }) => {
+      const player = leaderboard.players[gp.userId];
 
-        if (!player) {
-          // not played yet
-          return { id: userId, name, email, linkedplayerId };
-        }
-        return {
-          ...player,
-          id: userId,
-          score: roundOff(player.score),
-          linkedplayerId,
-          previousScore: roundOff(player.previousScore),
-          name,
-          email,
-          ...calculateStats(player, prize)
-        };
+      if (!player) {
+        // not played yet
+        return { id: gp.userId, ...gp };
       }
-    );
+      return {
+        ...player,
+        ...gp,
+        id: gp.userId,
+        score: roundOff(player.score),
+        previousScore: roundOff(player.previousScore),
+        ...calculateStats(player, prize)
+      };
+    });
 
     return players.sort((x, y) => {
       const srtCol =

@@ -126,7 +126,11 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
       <div className="card-body py-3 px-0">
         <LinkContainer to={getUserLink()}>
           <div className="float-left pr-3">
-            <RoundGravatar size={50} email={player.email || "0"} />
+            <RoundGravatar
+              size={50}
+              avatarUrl={player.avatarUrl}
+              email={player.email || "0"}
+            />
             <div className="text-center">
               <span className="badge badge-pill " style={top3(ranking)}>
                 {ranking === 0

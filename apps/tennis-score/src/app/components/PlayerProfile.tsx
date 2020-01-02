@@ -5,6 +5,7 @@ import Gravatar from "react-gravatar";
 import { maxContainer } from "./common";
 import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
+import RoundGravatar from "./RoundGravatar";
 const PlayerProfile = ({
   player,
   match,
@@ -17,7 +18,7 @@ const PlayerProfile = ({
 }) => {
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
-    const q = queryString.parse(location.search)
+    const q = queryString.parse(location.search);
     props.getPlayer(match.params.id, q.userId);
   }, []);
 
@@ -29,7 +30,13 @@ const PlayerProfile = ({
       <div {...maxContainer}>
         <div className="row pt-3">
           <div className="col-sm-12 text-center">
-            {player ? <Gravatar email={player.email} size={150} /> : null}
+            {player ? (
+              <RoundGravatar
+                avatarUrl={player.avatarUrl}
+                email={player.email}
+                size={150}
+              />
+            ) : null}
           </div>
         </div>
         <div className="row pt-3">
