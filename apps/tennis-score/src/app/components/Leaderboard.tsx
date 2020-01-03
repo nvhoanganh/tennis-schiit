@@ -13,6 +13,7 @@ import Skeleton from "react-loading-skeleton";
 import { formatDistanceToNow } from "date-fns";
 import PendingMemberCard from "./PendingMemberCard";
 import Confirm from "./Confirm";
+import * as R from "ramda";
 import { Button } from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
@@ -159,11 +160,13 @@ const Leaderboard = ({
       {/*  show leaderboard */}
       {loading ? (
         <div className="pb-3">
-          <LeaderboardCard
-            player={null}
-            ranking={null}
-            loading={true}
-          ></LeaderboardCard>
+          {R.range(0, 6).map((k, i) => (
+            <LeaderboardCard
+              player={null}
+              ranking={null}
+              loading={true}
+            ></LeaderboardCard>
+          ))}
         </div>
       ) : players.length > 0 ? (
         <div className="pb-3">

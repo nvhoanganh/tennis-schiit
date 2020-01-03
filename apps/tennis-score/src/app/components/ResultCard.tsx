@@ -4,35 +4,45 @@ import React from "react";
 const getHeadStartText = val => {
   switch (+val) {
     case 0.15:
-      return "Head Start: 15pt for winning team";
+      return "Handicap: 15pt for winning team";
     case 1:
-      return "Head Start: 1 game for winning team";
+      return "Handicap: 1 game for winning team";
     case 1.15:
-      return "Head Start: 1 game + 15pt for winning team";
+      return "Handicap: 1 game + 15pt for winning team";
     case 2:
-      return "Head Start: 2 games for winning team";
+      return "Handicap: 2 games for winning team";
     case 2.15:
-      return "Head Start: 2 game + 15pt for winning team";
+      return "Handicap: 2 game + 15pt for winning team";
     case 0.3:
-      return "Head Start: 30pt for winning team";
+      return "Handicap: 30pt for winning team";
 
     case -0.15:
-      return "Head Start: 15pt for losing team";
+      return "Handicap: 15pt for losing team";
     case -1:
-      return "Head Start: 1 game for losing team";
+      return "Handicap: 1 game for losing team";
     case -1.15:
-      return "Head Start: 1 game + 15pt for losing team";
+      return "Handicap: 1 game + 15pt for losing team";
     case -2:
-      return "Head Start: 2 games for losing team";
+      return "Handicap: 2 games for losing team";
     case -2.15:
-      return "Head Start: 2 game + 15pt for losing team";
+      return "Handicap: 2 game + 15pt for losing team";
     case -0.3:
-      return "Head Start: 30pt for losing team";
+      return "Handicap: 30pt for losing team";
 
     default:
       return "";
   }
 };
+
+const getHeadStartWinner = headStart =>
+  headStart && headStart.toString() !== "0" && !headStart.startsWith("-")
+    ? headStart
+    : "";
+
+const getHeadStartLoser = headStart =>
+  headStart && headStart.toString() !== "0" && headStart.startsWith("-")
+    ? headStart
+    : "";
 const ResultCard = props => {
   const {
     group,
@@ -56,36 +66,43 @@ const ResultCard = props => {
     );
   };
   return (
-    <div className="d-flex justify-content-between pb-1 border-bottom">
+    <div className="d-flex justify-content-between pb-1 border-bottom pr-2 shadow-sm">
       <div className="p-2">
         <div>
+          <span className="text-success mr-2">W:</span>
           {getPlayers(winners)}{" "}
-          <em className="text-muted font=weight-bold">def.</em>{" "}
-          {getPlayers(losers)}
-        </div>
-        {headStart ? (
-          <div>
-            <span className="x-small text-info ml-0">
-              {getHeadStartText(headStart)}
+          {getHeadStartWinner(headStart) && (
+            <span className="badge x-small badge-success ml-1">
+              {getHeadStartWinner(headStart)}
             </span>
+          )}
+          <br />
+          <span className="text-danger mr-2" style={{ paddingRight: 8 }}>
+            L:
+          </span>
+          {getPlayers(losers)}
+          {getHeadStartLoser(headStart) && (
+            <span className="badge x-small badge-success ml-1">
+              {getHeadStartLoser(headStart).replace("-", "")}
+            </span>
+          )}
+        </div>
+        <div>
+          <em className="text-muted x-small">
+            {formatDistanceToNow(matchDate.toDate(), {
+              addSuffix: true
+            })}
             {gameWonByLostTeam === "0" && (
               <span className="badge x-small badge-warning ml-1">Bagel</span>
             )}
             {reverseBagel && (
               <span className="badge x-small badge-danger ml-1">R-Bagel</span>
             )}
-          </div>
-        ) : null}
-        <div>
-          <em className="text-muted x-small">
-            {formatDistanceToNow(matchDate.toDate(), {
-              addSuffix: true
-            })}
           </em>
         </div>
       </div>
       <div className="pl-0 pr-0 align-self-center">
-        <span className="h6">
+        <span className="h6 text-nowrap">
           {gameWonByLostTeam === "6" || gameWonByLostTeam === "5" ? "7" : "6"} -{" "}
           {gameWonByLostTeam}
         </span>

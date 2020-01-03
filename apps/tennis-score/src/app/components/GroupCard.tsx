@@ -2,10 +2,11 @@ import { faHandshake, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Skeleton from "react-loading-skeleton";
+import Img from "react-image";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
-import { getGroupImageUrl } from '@tennis-score/redux';
+import { getGroupImageUrl } from "@tennis-score/redux";
 
 const GroupCard = ({ group, user, showIsMember, ...props }) => {
   const loading = props.loading;
@@ -23,15 +24,16 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
           </>
         ) : (
           <>
-            <img
+            <Img
               src={getGroupImageUrl(group.groupImage)}
               style={{
                 height: 140,
                 objectFit: "cover",
                 borderRadius: "9px 9px 0px 0px"
               }}
+              loader={<Skeleton height={140} />}
               className="card-img-top border-bottom"
-            ></img>
+            ></Img>
             <div className="card-body pt-0 pb-3">
               <div className="d-flex mt-3">
                 <div className="flex-grow-1">

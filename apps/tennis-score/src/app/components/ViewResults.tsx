@@ -1,13 +1,11 @@
+import { format } from "date-fns";
 import React, { useEffect } from "react";
-import Skeleton from "react-loading-skeleton";
-import GroupScoreCard from "./GroupScoreCard";
 import InfiniteScroll from "react-infinite-scroller";
+import Skeleton from "react-loading-skeleton";
 import HeaderCard from "./Header";
+import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard";
 import RouteNav from "./RouteNav";
-import { TournamentDropDown } from "./TournamentDropdown";
-import { format } from "date-fns";
-import MySpinner from "./MySpinner";
 
 const ViewResults = ({
   scores,
@@ -44,7 +42,7 @@ const ViewResults = ({
             </HeaderCard>
           ) : null}
           {scores && Object.keys(scores).length > 0 ? (
-            <div className="pb-3 pl-3 pr-3">
+            <div className="pb-3 pl-1 pr-1">
               <InfiniteScroll
                 pageStart={0}
                 loadMore={loadFunc}
@@ -73,7 +71,7 @@ const ViewResults = ({
             <Skeleton />
           </HeaderCard>
           <div className="pb-3 pl-3 pr-3">
-            <Skeleton height={50} count={10} />
+            <Skeleton height={90} count={10} />
           </div>
         </>
       )}
