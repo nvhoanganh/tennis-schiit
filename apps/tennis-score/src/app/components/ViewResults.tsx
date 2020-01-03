@@ -1,4 +1,6 @@
 import { format } from "date-fns";
+import { LinkContainer } from "react-router-bootstrap";
+import Dropdown from "react-bootstrap/Dropdown";
 import React, { useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "react-loading-skeleton";
@@ -6,6 +8,7 @@ import HeaderCard from "./Header";
 import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard";
 import RouteNav from "./RouteNav";
+import { DropDownMenu } from "./DropDownMenu";
 
 const ViewResults = ({
   scores,
@@ -28,13 +31,29 @@ const ViewResults = ({
   const loadFunc = e => {
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
+  const viewH2hHandler = () => {
+    console.log("view h2d");
+  };
   return (
     <>
       <RouteNav history={history} center="Match Results"></RouteNav>
       {!loading ? (
         <>
           {tournament ? (
-            <HeaderCard>
+            <HeaderCard
+              right={
+                <DropDownMenu
+                  options={[
+                    <LinkContainer
+                      key="filter"
+                      to={`/headtohead/${group.groupId}/tournament/${match.params.tour}`}
+                    >
+                      <Dropdown.Item>Check H2H</Dropdown.Item>
+                    </LinkContainer>
+                  ]}
+                />
+              }
+            >
               <span>
                 {tournament.description || "Current tournament"}:{" started "}
                 {format(tournament.startDate.toDate(), "dd/MM/yy")}

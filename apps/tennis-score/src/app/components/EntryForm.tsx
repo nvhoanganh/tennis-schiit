@@ -129,7 +129,11 @@ const EntryForm = ({
                         <td>
                           <div className="row ml-2">
                             <div className="">
-                              <RoundGravatar size={37} avatarUrl={p.avatarUrl} email={p.email || "0"} />
+                              <RoundGravatar
+                                size={37}
+                                avatarUrl={p.avatarUrl}
+                                email={p.email || "0"}
+                              />
                             </div>
                             <div className="ml-2 font-weight-bold mr-auto mt-1">
                               {p.name}
@@ -160,43 +164,22 @@ const EntryForm = ({
 
                 <SelectInput
                   name="headStart"
-                  label="With head start"
+                  label="Handicap"
                   value={state.headStart}
                   placeholder=""
                   errorMessage=""
                   setValue={setValue}
                   isValid={true}
                   options={[
-                    "-- no head start --",
-                    "15pt for winning team",
-                    "1 game for winning team",
-                    "1 game + 15pt for winning team",
-                    "2 games for winning team",
-                    "2 games + 15pt for winning team",
-                    "30pt for winning team",
-
-                    "15pt for losing team",
-                    "1 game for losing team",
-                    "1 game + 15pt for losing team",
-                    "2 games for losing team",
-                    "2 games + 15pt for losing team",
-                    "30pt for losing team"
+                    "-- no handicap --",
+                    "1-0",
+                    "2-0",
+                    "3-0",
+                    "0-1",
+                    "0-2",
+                    "0-3"
                   ]}
-                  values={[
-                    0,
-                    0.15,
-                    1,
-                    1.15,
-                    2,
-                    2.15,
-                    0.3,
-                    -0.15,
-                    -1,
-                    -1.15,
-                    -2,
-                    -2.15,
-                    -0.3
-                  ]}
+                  values={[0, 1, 2, 3, -1, -2, -3]}
                 ></SelectInput>
 
                 <RadioInputButton

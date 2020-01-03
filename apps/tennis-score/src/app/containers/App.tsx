@@ -39,19 +39,18 @@ const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
           padding: 0
         }}
       >
-        <Navbar.Brand
-          href="/"
-          style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
-        >
-          <img
-            width="30"
-            src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
-            height="30"
-            className="d-inline-block align-top"
-            alt="React Bootstrap logo"
-          />{" "}
-          Tennis Score
-        </Navbar.Brand>
+        <LinkContainer to={"/"}>
+          <Navbar.Brand style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}>
+            <img
+              width="30"
+              src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
+              height="30"
+              className="d-inline-block align-top"
+              alt="React Bootstrap logo"
+            />{" "}
+            Tennis Score
+          </Navbar.Brand>
+        </LinkContainer>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           style={{ marginRight: "0.4rem" }}

@@ -75,6 +75,11 @@ const routes = [
         component: EntryForm
       },
       {
+        path: "/headtohead/:group/tournament/:tour",
+        exact: true,
+        component: EntryForm
+      },
+      {
         path: "/signin",
         exact: true,
         component: SignIn

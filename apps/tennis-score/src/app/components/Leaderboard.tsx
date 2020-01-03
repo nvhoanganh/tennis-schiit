@@ -162,6 +162,7 @@ const Leaderboard = ({
         <div className="pb-3">
           {R.range(0, 6).map((k, i) => (
             <LeaderboardCard
+              key={k}
               player={null}
               ranking={null}
               loading={true}

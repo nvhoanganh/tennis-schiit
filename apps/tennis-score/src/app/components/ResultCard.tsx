@@ -1,39 +1,15 @@
+import { faFrown, faSmile } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDistanceToNow } from "date-fns";
 import React from "react";
 
-const getHeadStartText = val => {
-  switch (+val) {
-    case 0.15:
-      return "Handicap: 15pt for winning team";
-    case 1:
-      return "Handicap: 1 game for winning team";
-    case 1.15:
-      return "Handicap: 1 game + 15pt for winning team";
-    case 2:
-      return "Handicap: 2 games for winning team";
-    case 2.15:
-      return "Handicap: 2 game + 15pt for winning team";
-    case 0.3:
-      return "Handicap: 30pt for winning team";
-
-    case -0.15:
-      return "Handicap: 15pt for losing team";
-    case -1:
-      return "Handicap: 1 game for losing team";
-    case -1.15:
-      return "Handicap: 1 game + 15pt for losing team";
-    case -2:
-      return "Handicap: 2 games for losing team";
-    case -2.15:
-      return "Handicap: 2 game + 15pt for losing team";
-    case -0.3:
-      return "Handicap: 30pt for losing team";
-
-    default:
-      return "";
+const styles = {
+  headstart: {
+    top: "-0.3rem",
+    marginLeft: -2,
+    position: "relative"
   }
 };
-
 const getHeadStartWinner = headStart =>
   headStart && headStart.toString() !== "0" && !headStart.startsWith("-")
     ? headStart
@@ -69,23 +45,30 @@ const ResultCard = props => {
     <div className="d-flex justify-content-between pb-1 border-bottom pr-2 shadow-sm">
       <div className="p-2">
         <div>
-          <span className="text-success mr-2">W:</span>
-          {getPlayers(winners)}{" "}
-          {getHeadStartWinner(headStart) && (
-            <span className="badge x-small badge-success ml-1">
-              {getHeadStartWinner(headStart)}
-            </span>
-          )}
-          <br />
-          <span className="text-danger mr-2" style={{ paddingRight: 8 }}>
-            L:
-          </span>
-          {getPlayers(losers)}
-          {getHeadStartLoser(headStart) && (
-            <span className="badge x-small badge-success ml-1">
-              {getHeadStartLoser(headStart).replace("-", "")}
-            </span>
-          )}
+          <div>
+            <FontAwesomeIcon className="text-success mr-2" icon={faSmile} />
+            {getPlayers(winners)}{" "}
+            {getHeadStartWinner(headStart) && (
+              <span
+                className="badge x-small badge-success"
+                style={styles.headstart}
+              >
+                {getHeadStartWinner(headStart)}
+              </span>
+            )}
+          </div>
+          <div>
+            <FontAwesomeIcon className="text-danger mr-2" icon={faFrown} />
+            {getPlayers(losers)}
+            {getHeadStartLoser(headStart) && (
+              <span
+                className="badge x-small badge-success ml-1"
+                style={styles.headstart}
+              >
+                {getHeadStartLoser(headStart).replace("-", "")}
+              </span>
+            )}
+          </div>
         </div>
         <div>
           <em className="text-muted x-small">

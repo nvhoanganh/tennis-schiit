@@ -23,6 +23,11 @@ export function TournamentDropDown({ user, group, tournament }) {
         </LinkContainer>
       )}
       <LinkContainer
+        to={`/headtohead/${group.groupId}/tournament/${group.currentTournament}`}
+      >
+        <Dropdown.Item>Check H2H</Dropdown.Item>
+      </LinkContainer>
+      <LinkContainer
         to={`/groups/${group.groupId}/tournament/${group.currentTournament}/results`}
       >
         <Dropdown.Item>View Results</Dropdown.Item>
