@@ -10,7 +10,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
-import { maxContainer } from "../components/common";
+
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -40,7 +40,7 @@ const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
         }}
       >
         <Navbar.Brand
-          href="#home"
+          href="/"
           style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
         >
           Tennis Score Sheet

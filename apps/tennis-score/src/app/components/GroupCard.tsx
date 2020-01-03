@@ -12,7 +12,7 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
 
   return (
     <LinkContainer
-      style={{ borderRadius: 13 }}
+      style={{ borderRadius: 9 }}
       to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
     >
       <div className="card shadow my-2">
@@ -28,9 +28,9 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
               style={{
                 height: 140,
                 objectFit: "cover",
-                borderRadius: "13px 13px 0px 0px"
+                borderRadius: "9px 9px 0px 0px"
               }}
-              className="card-img-top border"
+              className="card-img-top border-bottom"
             ></img>
             <div className="card-body pt-0 pb-3">
               <div className="d-flex mt-3">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
+import { body } from "./common";
 import GroupCard from "./GroupCard";
 
 const Home = ({ user, groups, myGroups, loading, ...props }) => {
@@ -52,7 +53,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
     );
 
   return (
-    <>
+    <div {...body}>
       {myGroups.length > 0 && (
         <>
           <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
@@ -90,7 +91,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
           </div>
         </>
       )}
-      <div className="text-center p-3">
+      <div className="text-center p-2">
         <LinkContainer to={`/newgroup`}>
           <Button
             type="submit"
@@ -100,7 +101,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
           </Button>
         </LinkContainer>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -103,7 +103,7 @@ const Leaderboard = ({
           </div>
 
           {!isMember(user, group) && !loading && (
-            <div className="text-center p-3">
+            <div className="text-center p-2">
               {!isPendingJoin ? (
                 <UpdateButton
                   loading={pendingRequests}
@@ -176,7 +176,7 @@ const Leaderboard = ({
               ranking={i}
             ></LeaderboardCard>
           ))}
-          <div className="text-center p-3">
+          <div className="text-center p-2">
             {canSubmitNewScore() && (
               <LinkContainer to={`/newscore/${match.params.group}`}>
                 <UpdateButton
