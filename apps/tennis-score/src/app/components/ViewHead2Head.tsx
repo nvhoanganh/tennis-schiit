@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
@@ -27,6 +27,7 @@ const ViewHead2Head = ({
     losers: {},
     formValid: false
   };
+  const divRef = useRef<any>();
   const [state, setState] = useState(initState);
   const [scores, setScores] = useState({});
   const [searched, setSearched] = useState(false);
@@ -39,9 +40,8 @@ const ViewHead2Head = ({
       ...state
     }).then(result => {
       setSearched(true);
-      console.log(players);
-      console.log(result);
       setScores(result);
+      divRef.current.scrollIntoView({ behavior: "smooth" });
     });
   };
 
@@ -110,6 +110,7 @@ const ViewHead2Head = ({
           ) : null}
         </>
       ) : null}
+      <div ref={divRef} style={{ float: "left", clear: "both" }}></div>
     </>
   );
 };

@@ -52,7 +52,7 @@ export function PlayerPicker({ players, state, setValue, ...props }) {
               <div className="row ml-2">
                 <div className="">
                   <RoundGravatar
-                    size={37}
+                    size={30}
                     avatarUrl={p.avatarUrl}
                     email={p.email || "0"}
                   />
