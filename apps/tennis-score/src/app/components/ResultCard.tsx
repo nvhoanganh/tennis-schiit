@@ -3,13 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDistanceToNow } from "date-fns";
 import React from "react";
 
-const styles = {
-  headstart: {
-    top: "-0.3rem",
-    marginLeft: -2,
-    position: "relative"
-  }
-};
 const getHeadStartWinner = headStart =>
   headStart && headStart.toString() !== "0" && !headStart.startsWith("-")
     ? headStart
@@ -51,7 +44,11 @@ const ResultCard = props => {
             {getHeadStartWinner(headStart) && (
               <span
                 className="badge x-small badge-success"
-                style={styles.headstart}
+                style={{
+                  top: "-0.3rem",
+                  marginLeft: -2,
+                  position: "relative"
+                }}
               >
                 {getHeadStartWinner(headStart)}
               </span>
@@ -63,7 +60,11 @@ const ResultCard = props => {
             {getHeadStartLoser(headStart) && (
               <span
                 className="badge x-small badge-success ml-1"
-                style={styles.headstart}
+                style={{
+                  top: "-0.3rem",
+                  marginLeft: -2,
+                  position: "relative"
+                }}
               >
                 {getHeadStartLoser(headStart).replace("-", "")}
               </span>

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
+import { PlayerPicker } from "./PlayerPicker";
 import RadioInputButton from "./RadioInputButtons";
-import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
-import TextInput from "./TextInput";
 import SelectInput from "./SelectInput";
+import TextInput from "./TextInput";
 
 const EntryForm = ({
   pendingRequests,
@@ -33,35 +33,9 @@ const EntryForm = ({
     formValid: false
   };
   const [state, setState] = useState(initState);
-
   const setValue = (field, value) => {
-    const user = field.split("_")[1];
-    const inverse = field.split("_")[0] === "w" ? "l" : "w";
-    const inverseK = inverse + "_" + user;
     setState(curr => {
-      let ns = null;
-      if (value && curr[inverseK]) {
-        ns = {
-          ...curr,
-          [field]: value,
-          [inverseK]: false
-        };
-      } else {
-        ns = { ...curr, [field]: value };
-      }
-      let winners = {};
-      let losers = {};
-      Object.keys(ns).forEach(k => {
-        if ((k.startsWith("w_") || k.startsWith("l_")) && ns[k]) {
-          if (k.startsWith("w_") && ns[k]) {
-            winners[k.split("_")[1]] = true;
-          }
-          if (k.startsWith("l_") && ns[k]) {
-            losers[k.split("_")[1]] = true;
-          }
-        }
-      });
-      let toreturn = { ...ns, winners, losers };
+      let toreturn = { ...curr, [field]: value };
       if (field === "gameWonByLostTeam" && value === "0") {
         toreturn = { ...toreturn, reverseBagel: false };
       }
@@ -112,56 +86,11 @@ const EntryForm = ({
           <div {...maxContainer}>
             <form noValidate onSubmit={validateAndSubmit}>
               <div className="mt-3">
-                <table className="table table-borderless pb-3">
-                  <thead>
-                    <tr>
-                      <td></td>
-                      <td className="text-center font-weight-bold">Winner</td>
-                      <td className="text-center font-weight-bold">Loser</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {players.map(p => (
-                      <tr
-                        className="shadow-sm bg-white rounded border"
-                        key={p.id}
-                      >
-                        <td>
-                          <div className="row ml-2">
-                            <div className="">
-                              <RoundGravatar
-                                size={37}
-                                avatarUrl={p.avatarUrl}
-                                email={p.email || "0"}
-                              />
-                            </div>
-                            <div className="ml-2 font-weight-bold mr-auto mt-1">
-                              {p.name}
-                            </div>
-                          </div>
-                        </td>
-
-                        <td className="text-center">
-                          <CheckBoxInput
-                            name={`w_${p.id}`}
-                            label=""
-                            value={state[`w_${p.id}`] || false}
-                            setValue={setValue}
-                          ></CheckBoxInput>
-                        </td>
-                        <td className="text-center">
-                          <CheckBoxInput
-                            name={`l_${p.id}`}
-                            label=""
-                            value={state[`l_${p.id}`] || false}
-                            setValue={setValue}
-                          ></CheckBoxInput>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
+                <PlayerPicker
+                  players={players}
+                  state={state}
+                  setValue={setState}
+                />
                 <SelectInput
                   name="headStart"
                   label="Handicap"
