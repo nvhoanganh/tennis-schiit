@@ -48,7 +48,7 @@ const ViewResults = ({
                       key="filter"
                       to={`/headtohead/${group.groupId}/tournament/${match.params.tour}`}
                     >
-                      <Dropdown.Item>Check H2H</Dropdown.Item>
+                      <Dropdown.Item>Check Head 2 Head</Dropdown.Item>
                     </LinkContainer>
                   ]}
                 />

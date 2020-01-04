@@ -1,11 +1,12 @@
+import { setNewScore } from "@tennis-score/api-interfaces";
+import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
-import { setNewScore } from "@tennis-score/api-interfaces";
 import "firebase/firestore";
-import { GROUPS, IGroup, TOURNAMENTS, SCORES, USERS, STATS } from "../models";
-import { arrayToObject, calculateStats } from "../utils";
+import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
+import { calculateStats, arrayToObject } from "../utils";
+import * as R from "ramda";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
-import { IAction } from "@tennis-score/redux";
 export enum LeaderboardActionTypes {
   GET_USER = "GET_USER",
   GET_USER_SUCCESS = "GET_USER_SUCCESS",
@@ -254,6 +255,38 @@ export function submitScore({
   };
 }
 
+export async function SearchScore({
+  groupId,
+  tourId,
+  winners,
+  losers,
+}) {
+  const groupRef = firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId);
+
+  const tourRef = groupRef.collection(TOURNAMENTS).doc(tourId);
+
+  const left = tourRef
+    .collection(SCORES)
+    .where("winners", "==", winners)
+    .where("losers", "==", losers)
+    .get();
+  const right = tourRef
+    .collection(SCORES)
+    .where("winners", "==", losers)
+    .where("losers", "==", winners)
+    .get();
+
+  return Promise.all([left, right]).then(results => {
+    const d = results.map(r =>
+      arrayToObject(r.docs, x => x.id, x => ({ ...x.data(), id: x.id }))
+    );
+    const merged = R.merge(d[0], d[1]);
+    return merged;
+  });
+}
 export type LeaderboardAction =
   | GetUserSuccessAction
   | LoadLeaderboardSuccessAction
