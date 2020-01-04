@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import RoundGravatar from "./RoundGravatar";
+import React from "react";
 import CheckBoxInput from "./CheckBoxInput";
-export function PlayerPicker({ players, state, setValue }) {
+import RoundGravatar from "./RoundGravatar";
+export function PlayerPicker({ players, state, setValue, ...props }) {
   const setValueHandler = (field, value) => {
     const user = field.split("_")[1];
     const inverse = field.split("_")[0] === "w" ? "l" : "w";
@@ -37,8 +37,12 @@ export function PlayerPicker({ players, state, setValue }) {
       <thead>
         <tr>
           <td></td>
-          <td className="text-center font-weight-bold">Winner</td>
-          <td className="text-center font-weight-bold">Loser</td>
+          <td className="text-center font-weight-bold">
+            {props.winnerText || "Winner"}
+          </td>
+          <td className="text-center font-weight-bold">
+            {props.loserText || "Loser"}
+          </td>
         </tr>
       </thead>
       <tbody>

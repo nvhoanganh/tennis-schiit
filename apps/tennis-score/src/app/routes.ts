@@ -13,6 +13,7 @@ import ManageGroup from "./containers/ManageGroup";
 import AddEditTournament from "./containers/AddEditTournament";
 import PlayerProfile from "./containers/PlayerProfile";
 import ViewResults from "./containers/ViewResults";
+import ViewHead2Head from "./containers/ViewHead2Head";
 
 const routes = [
   {
@@ -77,7 +78,7 @@ const routes = [
       {
         path: "/headtohead/:group/tournament/:tour",
         exact: true,
-        component: EntryForm
+        component: ViewHead2Head
       },
       {
         path: "/signin",
