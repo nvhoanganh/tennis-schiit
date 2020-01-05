@@ -52,6 +52,12 @@ const ViewHead2Head = ({
     }
   }, []);
 
+  const handlePlayerPick = s => {
+    setState(s);
+    // reset
+    setScores({});
+    setSearched(false);
+  };
   const [state, setState] = useState(getInitState());
   const [scores, setScores] = useState({});
   const [searched, setSearched] = useState(false);
@@ -108,7 +114,7 @@ const ViewHead2Head = ({
                 <PlayerPicker
                   players={players}
                   state={state}
-                  setValue={setState}
+                  setValue={handlePlayerPick}
                   winnerText="Team 1"
                   loserText="Team 2"
                 />
@@ -127,7 +133,7 @@ const ViewHead2Head = ({
             </form>
           </div>
           <div ref={divRef} style={{ float: "left", clear: "both" }}></div>
-          {Object.keys(scores).length ? (
+          {state.formValid && Object.keys(scores).length ? (
             <>
               <HeaderCard>
                 {getPlayers(state.winners, playersAsObject)} vs.{" "}
@@ -152,7 +158,7 @@ const ViewHead2Head = ({
                 ))}
               </div>
             </>
-          ) : searched ? (
+          ) : searched && state.formValid ? (
             <div className="text-center pb-3 px-2 text-muted small">
               <em>No Result Found</em>
             </div>
