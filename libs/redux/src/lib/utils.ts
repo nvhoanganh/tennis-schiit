@@ -60,3 +60,40 @@ export const getFileNameAndExt = url => {
   } = <any>/^(?<file>.*)\.(?<ext>.*)$/.exec(url);
   return [file, ext];
 };
+
+export const getHandyCap = val => {
+  switch (+val) {
+    case 0.15:
+      return "15:0";
+    case 1:
+      return "1-0";
+    case 1.15:
+      return "1-0 + 15:0";
+    case 2:
+      return "2-0";
+    case 2.15:
+      return "2-0 + 15:0";
+    case 0.3:
+      return "30:0";
+    case 3:
+      return "3-0";
+
+    case -0.15:
+      return "0:15";
+    case -1:
+      return "0-1";
+    case -1.15:
+      return "0-1 + 0:15";
+    case -2:
+      return "0-2";
+    case -2.15:
+      return "0-2 + 0:15";
+    case -0.3:
+      return "0:30";
+    case -3:
+      return "0-3";
+
+    default:
+      return "";
+  }
+};
