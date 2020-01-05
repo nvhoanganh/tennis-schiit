@@ -1,12 +1,21 @@
-import { SearchScore, roundOff, getHandyCap } from "@tennis-score/redux";
-import React, { useEffect, useRef, useState } from "react";
+import {
+  getPlayersName,
+  roundOff,
+  SearchScore,
+  getHandyCap
+} from "@tennis-score/redux";
+import ReactEcharts from "echarts-for-react";
 import * as R from "ramda";
+import React, { useEffect, useRef, useState } from "react";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
 import ResultCard from "./ResultCard";
 import RouteNav from "./RouteNav";
-import ReactEcharts from "echarts-for-react";
+const getPlayers = (p, allP) => (
+  <span>{getPlayersName(p, allP).join("/")}</span>
+);
+const getPlayersNameAsString = (p, allP) => getPlayersName(p, allP).join("/");
 const ViewHead2Head = ({
   pendingRequests,
   group,
@@ -30,18 +39,11 @@ const ViewHead2Head = ({
   const [scores, setScores] = useState({});
   const [searched, setSearched] = useState(false);
 
-  const team1 = "Team 1";
-  const team2 = "Team 2";
-  const team1Color = { color: "#45A6C1" };
-  const team2Color = { color: "#F7F2B9" };
-  const team1TxtColor = { color: "#fff" };
-  const team2TxtColor = { color: "#1f2d3d" };
   const divRef = useRef<any>();
 
   const chartOption = categories => ({
     title: {
-      text: "Winning %",
-      left: "center"
+      show: false
     },
     tooltip: {
       trigger: "axis",
@@ -50,14 +52,17 @@ const ViewHead2Head = ({
       }
     },
     legend: {
-      top: "bottom",
-      data: ["Team 1", "Team 2"]
+      top: "top",
+      data: [
+        getPlayersNameAsString(state.winners, playersAsObject),
+        getPlayersNameAsString(state.losers, playersAsObject)
+      ]
     },
     grid: {
       left: "2%",
-      top: "5%",
+      top: "10%",
       right: "5%",
-      bottom: "5%",
+      bottom: "0%",
       containLabel: true
     },
     xAxis: {
@@ -71,84 +76,82 @@ const ViewHead2Head = ({
   });
   const getDataSeries = scores => {
     let stats = {};
+    const team1 = "team1Win";
+    const team2 = "team2Win";
+    // summarise data
     Object.values(scores).forEach(x => {
       const r = x as any;
       if (R.equals(r.winners, state.winners)) {
         stats = R.assocPath(
-          ["overall", "team1Win"],
-          (R.path(["overall", "team1Win"], stats) || 0) + 1,
+          ["overall", team1],
+          (R.path(["overall", team1], stats) || 0) + 1,
           stats
         );
-        if (r.headStart) {
-          stats = R.assocPath(
-            [r.headStart, "team1Win"],
-            (R.path([r.headStart, "team1Win"], stats) || 0) + 1,
-            stats
-          );
-        }
-      }
-      if (R.equals(r.winners, state.losers)) {
         stats = R.assocPath(
-          ["overall", "team2Win"],
-          (R.path(["overall", "team2Win"], stats) || 0) + 1,
+          [r.headStart || "0", team1],
+          (R.path([r.headStart || "0", team1], stats) || 0) + 1,
           stats
         );
-        if (r.headStart) {
-          stats = R.assocPath(
-            [r.headStart, "team2Win"],
-            (R.path([r.headStart, "team2Win"], stats) || 0) + 1,
-            stats
-          );
-        }
+      } else if (R.equals(r.winners, state.losers)) {
+        stats = R.assocPath(
+          ["overall", team2],
+          (R.path(["overall", team2], stats) || 0) + 1,
+          stats
+        );
+        // need to invert the headstart value in this case
+        stats = R.assocPath(
+          [+r.headStart * -1 || "0", team2],
+          (R.path([+r.headStart * -1 || "", team2], stats) || 0) + 1,
+          stats
+        );
       }
     });
-    console.log(stats);
-    const toreturnP1 = [];
-    const toreturnP2 = [];
+    let cats = {};
     Object.keys(stats).map(k => {
       let total = 0;
       Object.keys(stats[k]).forEach(t => {
         total = total + stats[k][t];
       });
-
-      toreturnP1.push(
-        stats[k]["team1Win"]
-          ? roundOff((stats[k]["team1Win"] / total) * 100)
+      cats[k] = {
+        total,
+        team1Win: stats[k][team1]
+          ? roundOff((stats[k][team1] / total) * 100)
+          : 0,
+        team2Win: stats[k][team2]
+          ? roundOff((stats[k][team2] / total) * 100)
           : 0
-      );
-      toreturnP2.push(
-        stats[k]["team2Win"]
-          ? roundOff((stats[k]["team2Win"] / total) * 100)
-          : 0
-      );
+      };
     });
-
+    // sort Y-Axis
+    const sortedCat = Object.keys(cats).sort();
     return {
       series: [
         {
-          name: team1,
+          name: getPlayersNameAsString(state.winners, playersAsObject),
           type: "bar",
           stack: "f",
           label: {
             show: true,
-            formatter: "{c}%",
+            formatter: "{a}:{c}%",
             position: "insideLeft"
           },
-          data: toreturnP1
+          data: sortedCat.map(x => cats[x][team1])
         },
         {
-          name: team2,
+          name: getPlayersNameAsString(state.losers, playersAsObject),
           type: "bar",
           stack: "f",
           label: {
             show: true,
-            formatter: "{c}%",
+            formatter: "{a}:{c}%",
             position: "insideRight"
           },
-          data: toreturnP2
+          data: sortedCat.map(x => cats[x][team2])
         }
       ],
-      categories: Object.keys(stats)
+      categories: sortedCat.map(
+        k => `${k != "overall" ? getHandyCap(k) : "overall"} [${cats[k].total}]`
+      )
     };
   };
 
@@ -220,12 +223,15 @@ const ViewHead2Head = ({
           </div>
           {Object.keys(scores).length ? (
             <>
-              <HeaderCard>Head 2 Head Stats</HeaderCard>
               <div ref={divRef} style={{ float: "left", clear: "both" }}></div>
+              <HeaderCard>
+                {getPlayers(state.winners, playersAsObject)} vs.{" "}
+                {getPlayers(state.losers, playersAsObject)}
+              </HeaderCard>
               <div className="mt-5">
                 <ReactEcharts option={getOption()} style={{ height: 350 }} />
               </div>
-              <HeaderCard>Previous Results</HeaderCard>
+              <HeaderCard>Results</HeaderCard>
               <div>
                 {Object.keys(scores).map(k => (
                   <ResultCard

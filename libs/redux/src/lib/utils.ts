@@ -94,6 +94,12 @@ export const getHandyCap = val => {
       return "0-3";
 
     default:
-      return "";
+      return "0-0";
   }
+};
+
+export const getPlayersName = (players, allPlayers) => {
+  return Object.keys(players).map(x =>
+    allPlayers[x] ? allPlayers[x].name : "NA"
+  );
 };
