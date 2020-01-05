@@ -1,179 +1,84 @@
-import {
-  getPlayersName,
-  roundOff,
-  SearchScore,
-  getHandyCap
-} from "@tennis-score/redux";
+import { getPlayersName, SearchScore } from "@tennis-score/redux";
 import ReactEcharts from "echarts-for-react";
-import * as R from "ramda";
+import queryString from "query-string";
 import React, { useEffect, useRef, useState } from "react";
+import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
 import ResultCard from "./ResultCard";
 import RouteNav from "./RouteNav";
+
 const getPlayers = (p, allP) => (
   <span>{getPlayersName(p, allP).join("/")}</span>
 );
-const getPlayersNameAsString = (p, allP) => getPlayersName(p, allP).join("/");
 const ViewHead2Head = ({
   pendingRequests,
   group,
   players,
   playersAsObject,
   match,
+  location,
   submitScore,
   history,
   ...props
 }) => {
+  const getInitState = () => {
+    const q = queryString.parse(location.search);
+    if (q.team1 && q.team2) {
+      let toretun = {
+        winners: {},
+        losers: {},
+        formValid: true
+      };
+
+      (q.team1 as string).split("|").forEach(x => {
+        toretun.winners[x] = true;
+        toretun[`w_${x}`] = true;
+      });
+      (q.team2 as string).split("|").forEach(x => {
+        toretun.losers[x] = true;
+        toretun[`l_${x}`] = true;
+      });
+      return toretun;
+    }
+    return { winners: {}, losers: {}, formValid: false };
+  };
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
+    const q = queryString.parse(location.search);
+    if (q.team1 && q.team2) {
+      searchNow();
+    }
   }, []);
 
-  const initState = {
-    winners: {},
-    losers: {},
-    formValid: false
-  };
-  const [state, setState] = useState(initState);
+  const [state, setState] = useState(getInitState());
   const [scores, setScores] = useState({});
   const [searched, setSearched] = useState(false);
 
   const divRef = useRef<any>();
-
-  const chartOption = categories => ({
-    title: {
-      show: false
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow"
-      }
-    },
-    legend: {
-      top: "top",
-      data: [
-        getPlayersNameAsString(state.winners, playersAsObject),
-        getPlayersNameAsString(state.losers, playersAsObject)
-      ]
-    },
-    grid: {
-      left: "2%",
-      top: "10%",
-      right: "5%",
-      bottom: "0%",
-      containLabel: true
-    },
-    xAxis: {
-      type: "value",
-      max: 100
-    },
-    yAxis: {
-      type: "category",
-      data: categories
-    }
-  });
-  const getDataSeries = scores => {
-    let stats = {};
-    const team1 = "team1Win";
-    const team2 = "team2Win";
-    // summarise data
-    Object.values(scores).forEach(x => {
-      const r = x as any;
-      if (R.equals(r.winners, state.winners)) {
-        stats = R.assocPath(
-          ["overall", team1],
-          (R.path(["overall", team1], stats) || 0) + 1,
-          stats
-        );
-        stats = R.assocPath(
-          [r.headStart || "0", team1],
-          (R.path([r.headStart || "0", team1], stats) || 0) + 1,
-          stats
-        );
-      } else if (R.equals(r.winners, state.losers)) {
-        stats = R.assocPath(
-          ["overall", team2],
-          (R.path(["overall", team2], stats) || 0) + 1,
-          stats
-        );
-        // need to invert the headstart value in this case
-        stats = R.assocPath(
-          [+r.headStart * -1 || "0", team2],
-          (R.path([+r.headStart * -1 || "", team2], stats) || 0) + 1,
-          stats
-        );
-      }
-    });
-    let cats = {};
-    Object.keys(stats).map(k => {
-      let total = 0;
-      Object.keys(stats[k]).forEach(t => {
-        total = total + stats[k][t];
-      });
-      cats[k] = {
-        total,
-        team1Win: stats[k][team1]
-          ? roundOff((stats[k][team1] / total) * 100)
-          : 0,
-        team2Win: stats[k][team2]
-          ? roundOff((stats[k][team2] / total) * 100)
-          : 0
-      };
-    });
-    // sort Y-Axis
-    const sortedCat = Object.keys(cats).sort();
-    return {
-      series: [
-        {
-          name: getPlayersNameAsString(state.winners, playersAsObject),
-          type: "bar",
-          stack: "f",
-          label: {
-            show: true,
-            formatter: "{a}:{c}%",
-            position: "insideLeft"
-          },
-          data: sortedCat.map(x => cats[x][team1])
-        },
-        {
-          name: getPlayersNameAsString(state.losers, playersAsObject),
-          type: "bar",
-          stack: "f",
-          label: {
-            show: true,
-            formatter: "{a}:{c}%",
-            position: "insideRight"
-          },
-          data: sortedCat.map(x => cats[x][team2])
-        }
-      ],
-      categories: sortedCat.map(
-        k => `${k != "overall" ? getHandyCap(k) : "overall"} [${cats[k].total}]`
-      )
-    };
-  };
-
-  const getOption = () => {
-    const { series, categories } = getDataSeries(scores);
-    return {
-      ...chartOption(categories),
-      series
-    };
-  };
-
-  const validateAndSubmit = e => {
-    e.preventDefault();
+  const searchNow = () => {
     SearchScore({
       groupId: match.params.group,
       tourId: match.params.tour,
       ...state
     }).then(result => {
+      history.push({
+        search:
+          "?team1=" +
+          Object.keys(state.winners).join("|") +
+          "&team2=" +
+          Object.keys(state.losers).join("|")
+      });
       setSearched(true);
       setScores(result);
       divRef.current.scrollIntoView({ behavior: "smooth" });
     });
+  };
+
+  const validateAndSubmit = e => {
+    e.preventDefault();
+    searchNow();
   };
 
   useEffect(() => {
@@ -221,15 +126,20 @@ const ViewHead2Head = ({
               </div>
             </form>
           </div>
+          <div ref={divRef} style={{ float: "left", clear: "both" }}></div>
           {Object.keys(scores).length ? (
             <>
-              <div ref={divRef} style={{ float: "left", clear: "both" }}></div>
               <HeaderCard>
                 {getPlayers(state.winners, playersAsObject)} vs.{" "}
                 {getPlayers(state.losers, playersAsObject)}
               </HeaderCard>
               <div className="mt-5">
-                <ReactEcharts option={getOption()} style={{ height: 350 }} />
+                <Head2HeadChart
+                  scores={scores}
+                  winners={state.winners}
+                  losers={state.losers}
+                  players={playersAsObject}
+                />
               </div>
               <HeaderCard>Results</HeaderCard>
               <div>
@@ -254,3 +164,14 @@ const ViewHead2Head = ({
 };
 
 export default ViewHead2Head;
+
+function undefined({ getOption }) {
+  return (
+    <ReactEcharts
+      option={getOption()}
+      style={{
+        height: 350
+      }}
+    />
+  );
+}

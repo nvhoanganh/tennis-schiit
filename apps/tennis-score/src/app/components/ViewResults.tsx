@@ -9,6 +9,7 @@ import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard";
 import RouteNav from "./RouteNav";
 import { DropDownMenu } from "./DropDownMenu";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 const ViewResults = ({
   scores,
@@ -43,6 +44,7 @@ const ViewResults = ({
             <HeaderCard
               right={
                 <DropDownMenu
+                  icon={faEllipsisH}
                   options={[
                     <LinkContainer
                       key="filter"
@@ -75,6 +77,9 @@ const ViewResults = ({
                   <ResultCard
                     key={k}
                     players={players}
+                    groupId={match.params.group}
+                    showHead2Head={true}
+                    tournamentId={match.params.tour}
                     {...scores[k]}
                   ></ResultCard>
                 ))}

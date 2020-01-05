@@ -103,3 +103,4 @@ export const getPlayersName = (players, allPlayers) => {
     allPlayers[x] ? allPlayers[x].name : "NA"
   );
 };
+export const getPlayersNameAsString = (p, allP) => getPlayersName(p, allP).join("/");
