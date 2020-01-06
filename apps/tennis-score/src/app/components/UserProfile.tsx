@@ -15,7 +15,7 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
         <div className="col-sm-12 text-center">
           {user ? (
             <RoundGravatar
-              avatarUrl={user.avatarUrl}
+              uid={user.uid}
               email={user.email}
               size={150}
             />

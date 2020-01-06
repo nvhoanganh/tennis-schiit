@@ -43,6 +43,7 @@
     "formik": "^2.0.6",
     "free-gaussian": "0.1.0",
     "geohash-distance": "^1.0.2",
+    "gravatar": "^1.8.0",
     "lodash": "^4.17.15",
     "lottie-web": "^5.5.10",
     "ngeohash": "^0.6.3",

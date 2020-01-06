@@ -79,11 +79,7 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
         <form noValidate onSubmit={validateAndSubmit}>
           {!state.photo ? (
             <div className="text-center">
-              <RoundGravatar
-                size={150}
-                avatarUrl={user.avatarUrl}
-                email={user.email || "0"}
-              />
+              <RoundGravatar size={150} uid={user.uid} email={user.email} />
               <FloatingFileInput
                 icon={faCamera}
                 name="photo"

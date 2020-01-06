@@ -128,8 +128,8 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
           <div className="float-left pr-3">
             <RoundGravatar
               size={50}
-              avatarUrl={player.avatarUrl}
-              email={player.email || "0"}
+              email={player.email}
+              uid={player.linkedplayerId}
             />
             <div className="text-center">
               <span className="badge badge-pill " style={top3(ranking)}>

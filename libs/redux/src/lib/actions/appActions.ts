@@ -235,7 +235,6 @@ export function appLoad() {
         .then(function(doc) {
           if (doc.exists) {
             const userProfile = doc.data();
-            console.log("user profile is ", userProfile);
             dispatch({
               type: AppActionTypes.SIGNIN_SUCCESS,
               user: {

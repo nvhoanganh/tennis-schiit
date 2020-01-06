@@ -416,6 +416,11 @@ export function editGroup({
     });
   };
 }
+
+export function checkFileExist(url) {
+  var storageRef = firebase.storage().refFromURL(url);
+  return storageRef.getDownloadURL();
+}
 export function addGroup({
   name,
   description,

@@ -1,7 +1,6 @@
 import { roundOff } from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect } from "react";
-import Gravatar from "react-gravatar";
 import { maxContainer } from "./common";
 import MySpinner from "./MySpinner";
 import RouteNav from "./RouteNav";
@@ -22,8 +21,9 @@ const PlayerProfile = ({
     props.getPlayer(match.params.id, q.userId);
   }, []);
 
-  if (!player || pendingRequests) return <MySpinner />;
-  console.log("player is", player);
+  if (!player || pendingRequests || (player && !player.name))
+    return <MySpinner />;
+  console.log("player", player);
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
@@ -32,7 +32,7 @@ const PlayerProfile = ({
           <div className="col-sm-12 text-center">
             {player ? (
               <RoundGravatar
-                avatarUrl={player.avatarUrl}
+                uid={player.linkedplayerId}
                 email={player.email}
                 size={150}
               />

@@ -1,4 +1,5 @@
 import { appLoad, loadGroups } from "@tennis-score/redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect } from "react";
@@ -10,6 +11,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
+import { faSyncAlt, faBars } from "@fortawesome/free-solid-svg-icons";
 
 const linkStyle = {
   lineHeight: "2rem"
@@ -54,6 +56,7 @@ const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           style={{ marginRight: "0.4rem" }}
+          children={<FontAwesomeIcon icon={faBars} />}
         />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
