@@ -1,12 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
+import {
+  faCamera,
+  faSyncAlt,
+  faSearchPlus,
+  faSearchMinus
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LinkContainer } from "react-router-bootstrap";
+import React, { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import RoundGravatar from "./RoundGravatar";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";
+import FloatingFileInput from "./FloatingFileInput";
 import UpdateButton from "./LoadingButton";
+import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import TextInput from "./TextInput";
-import FileInput from "./FileInput";
+import { Link } from "./Link";
+
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const avatarRef = useRef<any>(null);
   const [state, setState] = useState({
@@ -16,6 +26,8 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
     leftHanded: false,
     singleHandedBackhand: false,
     photo: null,
+    rotate: 0,
+    zoom: 1.2,
     formValid: false
   });
   const setValue = (field, value) =>
@@ -65,38 +77,69 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       <RouteNav history={history} center="Update my profile"></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
-          <div className="text-center">
-            <RoundGravatar
-              size={150}
-              avatarUrl={user.avatarUrl}
-              email={user.email || "0"}
-            />
-          </div>
+          {!state.photo ? (
+            <div className="text-center">
+              <RoundGravatar
+                size={150}
+                avatarUrl={user.avatarUrl}
+                email={user.email || "0"}
+              />
+              <FloatingFileInput
+                icon={faCamera}
+                name="photo"
+                label=""
+                errorMessage=""
+                setValue={setValue}
+                disabled={false}
+                isValid={true}
+              ></FloatingFileInput>
+            </div>
+          ) : null}
           <div>
-            <div className="pb-1">Change Avatar</div>
             {state.photo && (
-              <div className="mr-auto border shadow-sm">
-                <AvatarEditor
-                  ref={avatarRef}
-                  image={state.photo}
-                  width={200}
-                  borderRadius={100}
-                  height={200}
-                  border={50}
-                  color={[255, 255, 255, 0.6]} // RGBA
-                  scale={1.2}
-                  rotate={0}
-                />
-              </div>
+              <>
+                <div className="mr-auto border shadow-sm">
+                  <AvatarEditor
+                    ref={avatarRef}
+                    image={state.photo}
+                    width={200}
+                    borderRadius={100}
+                    height={200}
+                    border={50}
+                    color={[255, 255, 255, 0.6]} // RGBA
+                    scale={state.zoom}
+                    rotate={state.rotate}
+                  />
+                </div>
+                <div className="py-2 mx-auto text-center">
+                  <div className="btn-group" role="group">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setValue("rotate", (90 + state.rotate) % 360)
+                      }
+                      className="btn btn-secondary"
+                    >
+                      <FontAwesomeIcon icon={faSyncAlt} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setValue("zoom", state.zoom + 0.2)}
+                      className="btn btn-secondary"
+                    >
+                      <FontAwesomeIcon icon={faSearchPlus} />
+                    </button>
+                    <button
+                      onClick={() => setValue("zoom", state.zoom - 0.2)}
+                      type="button"
+                      className="btn btn-secondary"
+                    >
+                      <FontAwesomeIcon icon={faSearchMinus} />
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
-            <FileInput
-              multiple={false}
-              name="photo"
-              label=""
-              errorMessage=""
-              setValue={setValue}
-              isValid={true}
-            ></FileInput>
           </div>
           <TextInput
             type="email"
@@ -147,6 +190,13 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
                   className="btn btn-primary btn-sm btn-block"
                 ></UpdateButton>
               </div>
+            </div>
+            <div className="col-12 text-center">
+              <LinkContainer to={`/account-details`}>
+                <Link title="Cancel" className="small">
+                  Cancel
+                </Link>
+              </LinkContainer>
             </div>
           </div>
         </form>
