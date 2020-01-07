@@ -6,7 +6,7 @@ import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
-import ResultCard from "./ResultCard";
+import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
 
 const getPlayers = (p, allP) => (

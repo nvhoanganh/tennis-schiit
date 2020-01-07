@@ -46,7 +46,7 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
     if (state.photo) {
       profile.avatar = avatarRef.current.getImageScaledToCanvas().toDataURL();
     }
-    updateProfile(profile);
+    updateProfile(profile).then(_ => history.push("/account-details"));
   };
 
   useEffect(() => {
