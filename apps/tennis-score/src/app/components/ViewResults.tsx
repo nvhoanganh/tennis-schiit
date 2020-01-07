@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "react-loading-skeleton";
 import HeaderCard from "./Header";
 import MySpinner from "./MySpinner";
-import ResultCard from "./ResultCard";
+import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
 import { DropDownMenu } from "./DropDownMenu";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";

@@ -106,7 +106,7 @@ const ViewHead2Head = ({
         <>
           <RouteNav
             history={history}
-            center="View Head 2 Head Results"
+            center="View Head 2 Head Result"
           ></RouteNav>
           <div className="pb-3 px-2">
             <form noValidate onSubmit={validateAndSubmit}>

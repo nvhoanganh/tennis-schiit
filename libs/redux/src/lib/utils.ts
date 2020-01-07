@@ -60,9 +60,9 @@ export const getFileNameAndExt = url => {
   } = <any>/^(?<file>.*)\.(?<ext>.*)$/.exec(url);
   return [file, ext];
 };
-
+  
 export const getHandyCap = val => {
-  switch (+val) {
+  switch (+val) { 
     case 0.15:
       return "15:0";
     case 1:
