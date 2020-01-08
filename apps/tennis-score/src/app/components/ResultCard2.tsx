@@ -17,7 +17,8 @@ const ResultCard = props => {
     matchDate,
     tournamentId,
     players,
-    hideMenu
+    hideMenu,
+    showHead2Head
   } = props;
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
@@ -58,20 +59,22 @@ const ResultCard = props => {
       <div className="pr-1 w-100 flex-grow-1 align-self-center">
         {getPlayers(losers, true)}
       </div>
-
       {!hideMenu && (
         <div className="p-1 align-self-center">
           <DropDownMenu
             icon={faEllipsisV}
             options={[
-              <LinkContainer
+              <Dropdown.Item
                 key="filter"
-                to={`/headtohead/${groupId}/tournament/${tournamentId}/?team1=${Object.keys(
-                  winners
-                ).join("|")}&team2=${Object.keys(losers).join("|")}`}
+                onClick={() =>
+                  showHead2Head({
+                    winners,
+                    losers
+                  })
+                }
               >
-                <Dropdown.Item>View Head 2 Head</Dropdown.Item>
-              </LinkContainer>
+                View Head 2 Head
+              </Dropdown.Item>
             ]}
           />
         </div>

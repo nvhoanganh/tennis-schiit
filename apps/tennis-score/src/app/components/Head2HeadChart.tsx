@@ -99,8 +99,7 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
           stack: "f",
           label: {
             show: true,
-            formatter: "{a}:{c}%",
-            position: "insideLeft"
+            formatter: "{c}%"
           },
           data: sortedCat.map(x => cats[x][team1])
         },
@@ -110,8 +109,7 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
           stack: "f",
           label: {
             show: true,
-            formatter: "{a}:{c}%",
-            position: "insideRight"
+            formatter: "{c}%"
           },
           data: sortedCat.map(x => cats[x][team2])
         }

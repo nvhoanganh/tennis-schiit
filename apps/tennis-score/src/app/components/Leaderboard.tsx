@@ -99,7 +99,7 @@ const Leaderboard = ({
                 players={players}
               ></GroupScoreCard>
             ) : (
-              <Skeleton height={90} />
+              <Skeleton height={48} />
             )}
           </div>
 

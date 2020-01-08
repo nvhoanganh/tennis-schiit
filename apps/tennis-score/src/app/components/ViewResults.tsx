@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { LinkContainer } from "react-router-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "react-loading-skeleton";
 import HeaderCard from "./Header";
@@ -10,6 +10,9 @@ import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
 import { DropDownMenu } from "./DropDownMenu";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import Confirm from "./Confirm";
+import { Head2HeadChart } from "./Head2HeadChart";
+import { SearchScore } from "@tennis-score/redux";
 
 const ViewResults = ({
   scores,
@@ -32,9 +35,33 @@ const ViewResults = ({
   const loadFunc = e => {
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
-  const viewH2hHandler = () => {
-    console.log("view h2d");
+  const [h2h, seth2h] = useState<any>({});
+  const viewHead2Head = state => {
+    setShow(true);
+    SearchScore({
+      groupId: match.params.group,
+      tourId: match.params.tour,
+      ...state
+    }).then(result => {
+      seth2h({
+        winners: state.winners,
+        losers: state.losers,
+        scores: result
+      });
+    });
   };
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShowMore = () =>
+    history.push(
+      `/headtohead/${match.params.group}/tournament/${
+        match.params.tour
+      }/?team1=${Object.keys(h2h.winners).join("|")}&team2=${Object.keys(
+        h2h.losers
+      ).join("|")}`
+    );
+
   return (
     <>
       <RouteNav history={history} center="Match Results"></RouteNav>
@@ -79,6 +106,7 @@ const ViewResults = ({
                     players={players}
                     groupId={match.params.group}
                     tournamentId={match.params.tour}
+                    showHead2Head={viewHead2Head}
                     {...scores[k]}
                   ></ResultCard>
                 ))}
@@ -98,6 +126,27 @@ const ViewResults = ({
           </div>
         </>
       )}
+      <Confirm
+        title="Head 2 Head Stats"
+        message={
+          h2h.scores ? (
+            <Head2HeadChart
+              scores={h2h.scores}
+              winners={h2h.winners}
+              losers={h2h.losers}
+              players={players}
+            />
+          ) : (
+            <Skeleton height={350} />
+          )
+        }
+        close="Cancel"
+        mainAction="Show All"
+        mainActionClass="btn btn-primary"
+        onCancelAction={handleClose}
+        onConfirmAction={handleShowMore}
+        show={show}
+      ></Confirm>
     </>
   );
 };

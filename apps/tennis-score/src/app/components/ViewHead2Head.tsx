@@ -171,14 +171,3 @@ const ViewHead2Head = ({
 };
 
 export default ViewHead2Head;
-
-function undefined({ getOption }) {
-  return (
-    <ReactEcharts
-      option={getOption()}
-      style={{
-        height: 350
-      }}
-    />
-  );
-}
