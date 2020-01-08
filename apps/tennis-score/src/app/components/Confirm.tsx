@@ -12,7 +12,7 @@ const Confirm = ({ title, message, show, ...props }) => {
         <Modal.Body>{message}</Modal.Body>
         {!props.hideFooter ? (
           <Modal.Footer>
-            <Button className="btn btn-light" onClick={props.onCancelAction}>
+            <Button className="btn btn-link" onClick={props.onCancelAction}>
               {props.close}
             </Button>
             {props.mainAction ? (

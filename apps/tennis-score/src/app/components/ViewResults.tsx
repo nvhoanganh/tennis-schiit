@@ -142,7 +142,7 @@ const ViewResults = ({
         }
         close="Cancel"
         mainAction="Show All"
-        mainActionClass="btn btn-primary"
+        mainActionClass="btn btn-primary btn-sm"
         onCancelAction={handleClose}
         onConfirmAction={handleShowMore}
         show={show}
