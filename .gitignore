@@ -8,7 +8,7 @@
 # dependencies
 /node_modules
 
-*.cache
+.cache
 # IDEs and editors
 /.idea
 .project

@@ -148,10 +148,11 @@ const ViewHead2Head = ({
                 />
               </div>
               <HeaderCard>Results</HeaderCard>
-              <div>
+              <div className="pb-5">
                 {Object.keys(scores).map(k => (
                   <ResultCard
                     key={k}
+                    hideMenu={true}
                     players={playersAsObject}
                     {...scores[k]}
                   ></ResultCard>

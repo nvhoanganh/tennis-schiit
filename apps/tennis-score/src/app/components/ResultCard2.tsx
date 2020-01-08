@@ -16,7 +16,8 @@ const ResultCard = props => {
     reverseBagel,
     matchDate,
     tournamentId,
-    players
+    players,
+    hideMenu
   } = props;
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
@@ -30,7 +31,6 @@ const ResultCard = props => {
       <div className="pl-1 w-100 flex-grow-1 align-self-center">
         {getPlayers(winners, false)}
       </div>
-
       <div className="p-2 text-center align-self-center score text-nowrap">
         <em className="h5">
           {gameWonByLostTeam === "6" || gameWonByLostTeam === "5" ? "7" : "6"} -{" "}
@@ -55,25 +55,27 @@ const ResultCard = props => {
           )}
         </span>
       </div>
-
-      <div className="pl-1 w-100 flex-grow-1 align-self-center">
+      <div className="pr-1 w-100 flex-grow-1 align-self-center">
         {getPlayers(losers, true)}
       </div>
-      <div className="p-1 align-self-center">
-        <DropDownMenu
-          icon={faEllipsisV}
-          options={[
-            <LinkContainer
-              key="filter"
-              to={`/headtohead/${groupId}/tournament/${tournamentId}?team1=${Object.keys(
-                winners
-              ).join("|")}&team2=${Object.keys(losers).join("|")}`}
-            >
-              <Dropdown.Item>View Head 2 Head</Dropdown.Item>
-            </LinkContainer>
-          ]}
-        />
-      </div>
+
+      {!hideMenu && (
+        <div className="p-1 align-self-center">
+          <DropDownMenu
+            icon={faEllipsisV}
+            options={[
+              <LinkContainer
+                key="filter"
+                to={`/headtohead/${groupId}/tournament/${tournamentId}/?team1=${Object.keys(
+                  winners
+                ).join("|")}&team2=${Object.keys(losers).join("|")}`}
+              >
+                <Dropdown.Item>View Head 2 Head</Dropdown.Item>
+              </LinkContainer>
+            ]}
+          />
+        </div>
+      )}
     </div>
   );
 };

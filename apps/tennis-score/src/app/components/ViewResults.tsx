@@ -78,7 +78,6 @@ const ViewResults = ({
                     key={k}
                     players={players}
                     groupId={match.params.group}
-                    showHead2Head={true}
                     tournamentId={match.params.tour}
                     {...scores[k]}
                   ></ResultCard>
