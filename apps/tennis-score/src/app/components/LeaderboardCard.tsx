@@ -107,7 +107,7 @@ const getStats = (player, sortBy) => {
 const LeaderboardCard = ({ player, ranking, ...props }) => {
   if (props.loading) {
     return (
-      <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top">
+      <div className="px-2 border-bottom border-top">
         <div className="pl-0 py-3">
           <div>
             <a className="h5 text-dark pl-0">
@@ -122,7 +122,7 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
   const getUserLink = () =>
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
   return (
-    <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
+    <div className="px-2 border-bottom border-top shadow-sm">
       <div className="card-body py-3 px-0">
         <LinkContainer to={getUserLink()}>
           <div className="float-left pr-3">

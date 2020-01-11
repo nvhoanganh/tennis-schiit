@@ -53,7 +53,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
     );
 
   return (
-    <div {...body}>
+    <div>
       {myGroups.length > 0 && (
         <>
           <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
