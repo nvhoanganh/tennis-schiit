@@ -11,16 +11,11 @@ import MyLoadingSkeleton from "./MyLoadingSekeleton";
 const bgHeight = 200;
 const types = [
   "color",
-  "ball",
   "lines",
   "thick",
   "circle",
   "cobweb",
-  "polygon",
-  "square",
-  "tadpole",
-  "fountain",
-  "custom"
+  "square"
 ];
 
 const getTypeFromName = name =>
