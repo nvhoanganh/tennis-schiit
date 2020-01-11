@@ -60,9 +60,9 @@ export const getFileNameAndExt = url => {
   } = <any>/^(?<file>.*)\.(?<ext>.*)$/.exec(url);
   return [file, ext];
 };
-  
+
 export const getHandyCap = val => {
-  switch (+val) { 
+  switch (+val) {
     case 0.15:
       return "15:0";
     case 1:
@@ -103,4 +103,11 @@ export const getPlayersName = (players, allPlayers) => {
     allPlayers[x] ? allPlayers[x].name : "NA"
   );
 };
-export const getPlayersNameAsString = (p, allP) => getPlayersName(p, allP).join("/");
+export const getPlayersNameAsString = (p, allP) =>
+  getPlayersName(p, allP).join("/");
+
+export const hashCode = s =>
+  s.split("").reduce((a, b) => {
+    a = (a << 5) - a + b.charCodeAt(0);
+    return a & a;
+  }, 0);

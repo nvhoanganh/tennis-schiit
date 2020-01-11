@@ -2,8 +2,9 @@ import gravatar from "gravatar";
 import React from "react";
 import Img from "react-image";
 import Skeleton from "react-loading-skeleton";
+import MyLoadingSkeleton from "./MyLoadingSekeleton";
 
-function RoundGravatar({ email, uid, size }) {
+function RoundGravatar({ email, uid, size, ...props }) {
   const userAvatar = `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2Favatar_${uid}_200x200.png?alt=media`;
   const gravatarUrl = gravatar.url(
     email || "0",
@@ -12,15 +13,29 @@ function RoundGravatar({ email, uid, size }) {
   );
   return uid ? (
     <Img
-      loader={<Skeleton height={size} circle={true} width={size} />}
+      loader={
+        <MyLoadingSkeleton
+          height={size}
+          circle={true}
+          width={size}
+          style={props.style}
+        />
+      }
       src={[userAvatar, gravatarUrl]}
-      style={{ borderRadius: "50%", width: size, height: size }}
+      style={{ borderRadius: "50%", width: size, height: size, ...props.style }}
     />
   ) : (
     <Img
-      loader={<Skeleton height={size} circle={true} width={size} />}
+      loader={
+        <MyLoadingSkeleton
+          height={size}
+          circle={true}
+          width={size}
+          style={props.style}
+        />
+      }
       src={gravatarUrl}
-      style={{ borderRadius: "50%", width: size, height: size }}
+      style={{ borderRadius: "50%", width: size, height: size, ...props.style }}
     />
   );
 }

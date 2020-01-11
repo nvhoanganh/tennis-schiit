@@ -150,6 +150,7 @@ export function updateProfile({
 }) {
   return async dispatch => {
     dispatch(apiStart(AppActionTypes.UPDATE_PROFILE));
+    // get blob from File API
     const blob = avatar ? await (await fetch(avatar)).blob() : null;
     let avatarUrl = "";
     if (blob) {
@@ -169,7 +170,7 @@ export function updateProfile({
           .firestore()
           .collection("users")
           .doc(uid)
-          .update({
+          .set({
             displayName,
             leftHanded,
             singleHandedBackhand,

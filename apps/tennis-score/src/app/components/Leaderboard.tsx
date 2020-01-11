@@ -139,6 +139,22 @@ const Leaderboard = ({
         </>
       )}
 
+      {showApprove() ? (
+        <>
+          <HeaderCard>Approve pending members</HeaderCard>
+          <div className="pb-4">
+            {pendingJoinRequests.map((k, i) => (
+              <PendingMemberCard
+                key={k.uid}
+                rejectJoinRequest={rejectJoinRequestHandler}
+                approveJoinRequest={approveJoinRequestHandler}
+                player={k}
+              ></PendingMemberCard>
+            ))}
+          </div>
+        </>
+      ) : null}
+
       <HeaderCard
         right={
           <TournamentDropDown
@@ -204,21 +220,6 @@ const Leaderboard = ({
             )}
           </div>
         </div>
-      ) : null}
-      {showApprove() ? (
-        <>
-          <HeaderCard>Approve pending members</HeaderCard>
-          <div className="pb-4">
-            {pendingJoinRequests.map((k, i) => (
-              <PendingMemberCard
-                key={k.uid}
-                rejectJoinRequest={rejectJoinRequestHandler}
-                approveJoinRequest={approveJoinRequestHandler}
-                player={k}
-              ></PendingMemberCard>
-            ))}
-          </div>
-        </>
       ) : null}
 
       <Confirm
