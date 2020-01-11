@@ -55,7 +55,7 @@ const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
         </LinkContainer>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
-          style={{ marginRight: "0.4rem" }}
+          style={{ marginRight: "0.4rem", border: "none" }}
           children={<FontAwesomeIcon icon={faBars} />}
         />
         <Navbar.Collapse id="responsive-navbar-nav">

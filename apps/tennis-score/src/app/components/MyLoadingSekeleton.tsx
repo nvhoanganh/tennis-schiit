@@ -3,7 +3,7 @@ import React from "react";
 function MyLoadingSkeleton({ height, ...props }) {
   return (
     <span
-      className="css-19bon8n react-loading-skeleton"
+      className={"css-19bon8n react-loading-skeleton " + props.class}
       style={{
         height,
         width: props.width || "100%",

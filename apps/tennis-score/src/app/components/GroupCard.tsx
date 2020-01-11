@@ -7,6 +7,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import { getGroupImageUrl } from "@tennis-score/redux";
+import MyLoadingSkeleton from "./MyLoadingSekeleton";
 
 const GroupCard = ({ group, user, showIsMember, ...props }) => {
   const loading = props.loading;
@@ -15,11 +16,14 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
     <LinkContainer
       to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
     >
-      <div className="card shadow my-2">
+      <div className="card shadow my-2 rounded-0">
         {loading ? (
           <>
-            <Skeleton height={140} />
-            <Skeleton height={80} />
+            <MyLoadingSkeleton
+              height={140}
+              class="card-img-top border-bottom"
+            />
+            <MyLoadingSkeleton height={104} class="card-body pt-0 pb-3" />
           </>
         ) : (
           <>

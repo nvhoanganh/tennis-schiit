@@ -1,22 +1,24 @@
-import { roundOff, hashCode } from "@tennis-score/redux";
+import {
+  faAtom,
+  faClipboardCheck,
+  faDollarSign,
+  faPercentage
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { hashCode } from "@tennis-score/redux";
 import ParticlesBg, { TypeProp } from "particles-bg";
 import queryString from "query-string";
 import React, { useEffect } from "react";
-import { maxContainer } from "./common";
-import MySpinner from "./MySpinner";
-import RouteNav from "./RouteNav";
-import RoundGravatar from "./RoundGravatar";
-import Skeleton from "react-loading-skeleton";
+import AnimatedBg from "react-animated-bg";
+import HeaderCard from "./Header";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
+import MySpinner from "./MySpinner";
+import RoundGravatar from "./RoundGravatar";
+import RouteNav from "./RouteNav";
+import { StatsCard } from "./StatsCard";
+
 const bgHeight = 200;
-const types = [
-  "color",
-  "lines",
-  "thick",
-  "circle",
-  "cobweb",
-  "square"
-];
+const types = ["color", "lines", "thick", "circle", "cobweb", "square"];
 
 const getTypeFromName = name =>
   types[hashCode(name) % types.length] as TypeProp;
@@ -60,55 +62,30 @@ const PlayerProfile = ({
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
-      <div
-        className="text-center"
-        style={{
-          height: bgHeight,
-          position: "relative",
-          top: -13,
-          marginBottom: 40
-        }}
-      >
+      <div className="text-center">
         <>
-          <ParticlesBg type={getTypeFromName(player.name)} config={bgConfig} />
           {player ? (
             <RoundGravatar
               uid={player.linkedplayerId}
               email={player.email}
               size={156}
-              style={{
-                position: "relative",
-                top: -103,
-                border: "6px solid white"
-              }}
             />
           ) : (
-            <MyLoadingSkeleton
-              height={156}
-              width={156}
-              circle={true}
-              style={{
-                position: "relative",
-                top: -103,
-                border: "6px solid white"
-              }}
-            ></MyLoadingSkeleton>
+            <MyLoadingSkeleton height={156} circle={true}></MyLoadingSkeleton>
           )}
         </>
       </div>
-      <div {...maxContainer}>
+      <div>
         <div className="row pt-3">
           <div className="col-sm-12 text-center">
             <div>
-              <h2>{player.name}</h2>
+              <span className="h4">{player.name}</span>
               {player.linkedplayerId ? (
                 <p>
-                  <strong>
-                    {player.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
-                    {player.singleHandedBackhand
-                      ? "One-Handed Backhand"
-                      : "Two-Handed Backhand"}
-                  </strong>
+                  {player.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
+                  {player.singleHandedBackhand
+                    ? "One-Handed Backhand"
+                    : "Two-Handed Backhand"}
                 </p>
               ) : (
                 <div className="col-12">
@@ -118,48 +95,40 @@ const PlayerProfile = ({
             </div>
           </div>
         </div>
-        <div className="row pt-4 text-center">
-          <div className="col-xs-12 col-sm-4 text-center">
-            <figure>
-              <figcaption className="ratings">
-                <h5>True Skill Point</h5>
-              </figcaption>
-            </figure>
+
+        <HeaderCard>Statistics</HeaderCard>
+        <div className="row m-2">
+          <div className="col-6 p-2">
+            <StatsCard
+              cardClass="bg-success text-white"
+              icon={<FontAwesomeIcon icon={faAtom} />}
+              number={player.score}
+              name="Points"
+            />
           </div>
-          <div className="col-xs-12 col-sm-4 emphasis">
-            <h2>
-              <strong>{roundOff(player.score || 0)}</strong>
-            </h2>
+          <div className="col-6 p-2">
+            <StatsCard
+              cardClass="bg-dark text-white"
+              icon={<FontAwesomeIcon icon={faClipboardCheck} />}
+              number={player.won + player.lost}
+              name="Match played"
+            />
           </div>
-        </div>
-        <div className="row text-center">
-          <div className="col-xs-12 col-sm-4 text-center">
-            <figure>
-              <figcaption className="ratings">
-                <h5>Win/Lost</h5>
-              </figcaption>
-            </figure>
+          <div className="col-6 p-2">
+            <StatsCard
+              cardClass="bg-info text-white"
+              icon={<FontAwesomeIcon icon={faPercentage} />}
+              number={player.winPercentage}
+              name="Win percentage"
+            />
           </div>
-          <div className="col-xs-12 col-sm-4 emphasis">
-            <h2>
-              <strong>
-                {player.won || "0"}-{player.lost || "0"}
-              </strong>
-            </h2>
-          </div>
-        </div>
-        <div className="row text-center">
-          <div className="col-xs-12 col-sm-4 text-center">
-            <figure>
-              <figcaption className="ratings">
-                <h5>Prize Money</h5>
-              </figcaption>
-            </figure>
-          </div>
-          <div className="col-xs-12 col-sm-4 emphasis">
-            <h2>
-              <strong>${player.prizeMoney || "0"}</strong>
-            </h2>
+          <div className="col-6 p-2">
+            <StatsCard
+              cardClass="bg-warning text-dark"
+              icon={<FontAwesomeIcon icon={faDollarSign} />}
+              number={"$" + (player.prizeMoney || "0")}
+              name="Total prize money"
+            />
           </div>
         </div>
       </div>
