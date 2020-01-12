@@ -12,7 +12,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import routes from "./app/routes";
 import { FBCONF } from "@tennis-score/api-interfaces";
-
+import chakraTheme from "./theme";
+import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 // init
 console.log("initializing app");
 firebase.initializeApp(FBCONF);
@@ -25,7 +26,10 @@ const store = configureStore({});
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>{renderRoutes(routes)}</Router>
+    <ThemeProvider>
+      <CSSReset />
+      <Router>{renderRoutes(routes)}</Router>
+    </ThemeProvider>
   </Provider>,
   document.getElementById("root")
 );

@@ -29,6 +29,9 @@
   },
   "private": true,
   "dependencies": {
+    "@chakra-ui/core": "^0.5.2",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
@@ -38,6 +41,7 @@
     "document-register-element": "1.13.1",
     "echarts": "^4.6.0",
     "echarts-for-react": "^2.0.15-beta.1",
+    "emotion-theming": "^10.0.27",
     "express": "4.17.1",
     "firebase": "^7.5.2",
     "formik": "^2.0.6",
