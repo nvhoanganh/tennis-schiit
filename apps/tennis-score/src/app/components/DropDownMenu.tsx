@@ -23,6 +23,9 @@ export function DropDownMenu({ options, icon }) {
               <span
                 key={o.key}
                 onClick={() => {
+                  if (o.props.onClick) {
+                    o.props.onClick();
+                  }
                   onToggle();
                 }}
               >

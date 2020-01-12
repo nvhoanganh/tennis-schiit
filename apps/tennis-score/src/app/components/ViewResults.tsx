@@ -73,12 +73,16 @@ const ViewResults = ({
                 <DropDownMenu
                   icon={faEllipsisH}
                   options={[
-                    <LinkContainer
-                      key="filter"
-                      to={`/headtohead/${group.groupId}/tournament/${match.params.tour}`}
+                    <DrawerLink
+                      key="menu"
+                      onClick={() =>
+                        history.push(
+                          `/headtohead/${group.groupId}/tournament/${match.params.tour}`
+                        )
+                      }
                     >
-                      <DrawerLink>Check Head 2 Head</DrawerLink>
-                    </LinkContainer>
+                      Check Head 2 Head
+                    </DrawerLink>
                   ]}
                 />
               }
