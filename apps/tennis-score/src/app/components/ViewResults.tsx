@@ -8,7 +8,7 @@ import HeaderCard from "./Header";
 import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
-import { DropDownMenu } from "./DropDownMenu";
+import { DropDownMenu, DrawerLink } from "./DropDownMenu";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import Confirm from "./Confirm";
 import { Head2HeadChart } from "./Head2HeadChart";
@@ -77,7 +77,7 @@ const ViewResults = ({
                       key="filter"
                       to={`/headtohead/${group.groupId}/tournament/${match.params.tour}`}
                     >
-                      <Dropdown.Item>Check Head 2 Head</Dropdown.Item>
+                      <DrawerLink>Check Head 2 Head</DrawerLink>
                     </LinkContainer>
                   ]}
                 />

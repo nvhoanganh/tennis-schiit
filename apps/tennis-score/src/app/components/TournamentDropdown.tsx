@@ -1,52 +1,57 @@
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isOwner, isMember } from "@tennis-score/redux";
+import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isMember, isOwner } from "@tennis-score/redux";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { LinkContainer } from "react-router-bootstrap";
+
 export function TournamentDropDown({ user, group, tournament }) {
   const canSubmitNewScore = () => user && isMember(user, group) && tournament;
   if (!group) return null;
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <DropdownButton
-      drop="left"
-      variant="link"
-      size="sm"
-      title={<FontAwesomeIcon icon={faEllipsisH} />}
-      id="group-menu"
-    >
-      {canSubmitNewScore() && (
-        <LinkContainer to={`/newscore/${group.groupId}`}>
-          <Dropdown.Item>Submit Result</Dropdown.Item>
-        </LinkContainer>
-      )}
-      <LinkContainer
-        to={`/headtohead/${group.groupId}/tournament/${group.currentTournament}`}
-      >
-        <Dropdown.Item>Check Head 2 Head</Dropdown.Item>
-      </LinkContainer>
-      <LinkContainer
-        to={`/groups/${group.groupId}/tournament/${group.currentTournament}/results`}
-      >
-        <Dropdown.Item>View Results</Dropdown.Item>
-      </LinkContainer>
-      {isOwner(user, group) && (
-        <>
-          <Dropdown.Divider />
-          {tournament ? (
+    <>
+      <button onClick={onOpen} type="button" className="btn btn-link btn-sm">
+        <FontAwesomeIcon icon={faEllipsisH} />
+      </button>
+      <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerBody className="py-4 pb-5">
+            {canSubmitNewScore() && (
+              <LinkContainer to={`/newscore/${group.groupId}`}>
+                <a className="h5 py-2 d-block">Submit Result</a>
+              </LinkContainer>
+            )}
             <LinkContainer
-              to={`/groups/${group.groupId}/tournament/${group.currentTournament}`}
+              to={`/headtohead/${group.groupId}/tournament/${group.currentTournament}`}
             >
-              <Dropdown.Item>Edit tournament</Dropdown.Item>
+              <a className="h5 py-2 d-block">Check Head 2 Head</a>
             </LinkContainer>
-          ) : null}
-          <LinkContainer to={`/groups/${group.groupId}/newtournament`}>
-            <Dropdown.Item>Start new tournament</Dropdown.Item>
-          </LinkContainer>
-        </>
-      )}
-    </DropdownButton>
+            <LinkContainer
+              to={`/groups/${group.groupId}/tournament/${group.currentTournament}/results`}
+            >
+              <a className="h5 py-2 d-block">View Results</a>
+            </LinkContainer>
+            {isOwner(user, group) && (
+              <>
+                <Dropdown.Divider />
+                {tournament ? (
+                  <LinkContainer
+                    to={`/groups/${group.groupId}/tournament/${group.currentTournament}`}
+                  >
+                    <a className="h5 py-2 d-block">Edit tournament</a>
+                  </LinkContainer>
+                ) : null}
+                <LinkContainer to={`/groups/${group.groupId}/newtournament`}>
+                  <a className="h5 py-2 d-block">Start new tournament</a>
+                </LinkContainer>
+              </>
+            )}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }

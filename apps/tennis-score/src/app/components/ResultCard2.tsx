@@ -64,7 +64,7 @@ const ResultCard = props => {
           <DropDownMenu
             icon={faEllipsisV}
             options={[
-              <Dropdown.Item
+              <a
                 key="filter"
                 onClick={() =>
                   showHead2Head({
@@ -72,9 +72,10 @@ const ResultCard = props => {
                     losers
                   })
                 }
+                className="h5 py-2 d-block"
               >
                 View Head 2 Head
-              </Dropdown.Item>
+              </a>
             ]}
           />
         </div>
