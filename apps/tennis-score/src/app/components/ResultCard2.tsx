@@ -2,8 +2,6 @@ import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { getHandyCap } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
 import React from "react";
-import Dropdown from "react-bootstrap/Dropdown";
-import { LinkContainer } from "react-router-bootstrap";
 import { DropDownMenu } from "./DropDownMenu";
 
 const ResultCard = props => {

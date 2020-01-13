@@ -1,15 +1,9 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerOverlay,
-  useDisclosure
-} from "@chakra-ui/core";
+import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Children } from "react";
+import React from "react";
 
 export function DropDownMenu({ options, icon }) {
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <button onClick={onOpen} type="button" className="btn btn-link btn-sm">
@@ -23,10 +17,10 @@ export function DropDownMenu({ options, icon }) {
               <span
                 key={o.key}
                 onClick={() => {
+                  onClose();
                   if (o.props.onClick) {
                     o.props.onClick();
                   }
-                  onToggle();
                 }}
               >
                 {o}

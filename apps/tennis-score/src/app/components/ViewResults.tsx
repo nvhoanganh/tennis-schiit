@@ -1,18 +1,23 @@
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { SearchScore } from "@tennis-score/redux";
 import { format } from "date-fns";
-import { LinkContainer } from "react-router-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "react-loading-skeleton";
+import Confirm from "./Confirm";
+import { DrawerLink, DropDownMenu } from "./DropDownMenu";
+import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
 import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
-import { DropDownMenu, DrawerLink } from "./DropDownMenu";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import Confirm from "./Confirm";
-import { Head2HeadChart } from "./Head2HeadChart";
-import { SearchScore } from "@tennis-score/redux";
 
 const ViewResults = ({
   scores,
@@ -32,12 +37,13 @@ const ViewResults = ({
     props.loadLeaderboard(match.params.group);
     props.loadResult(match.params.group, match.params.tour, null);
   }, []);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const loadFunc = e => {
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
   const [h2h, seth2h] = useState<any>({});
   const viewHead2Head = state => {
-    setShow(true);
+    onOpen();
     SearchScore({
       groupId: match.params.group,
       tourId: match.params.tour,
@@ -51,8 +57,6 @@ const ViewResults = ({
     });
   };
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
   const handleShowMore = () =>
     history.push(
       `/headtohead/${match.params.group}/tournament/${
@@ -130,27 +134,24 @@ const ViewResults = ({
           </div>
         </>
       )}
-      <Confirm
-        title="Head 2 Head Stats"
-        message={
-          h2h.scores ? (
-            <Head2HeadChart
-              scores={h2h.scores}
-              winners={h2h.winners}
-              losers={h2h.losers}
-              players={players}
-            />
-          ) : (
-            <Skeleton height={350} />
-          )
-        }
-        close="Cancel"
-        mainAction="Show All"
-        mainActionClass="btn btn-primary btn-sm"
-        onCancelAction={handleClose}
-        onConfirmAction={handleShowMore}
-        show={show}
-      ></Confirm>
+
+      <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerBody className="py-4 pb-5">
+            {h2h.scores ? (
+              <Head2HeadChart
+                scores={h2h.scores}
+                winners={h2h.winners}
+                losers={h2h.losers}
+                players={players}
+              />
+            ) : (
+              <Skeleton height={350} />
+            )}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 };
