@@ -3,10 +3,12 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
-  useDisclosure
+  useDisclosure,
+  DrawerHeader
 } from "@chakra-ui/core";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { SearchScore } from "@tennis-score/redux";
+import { LinkContainer } from "react-router-bootstrap";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -18,6 +20,9 @@ import HeaderCard from "./Header";
 import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
+import Dropdown from "react-bootstrap/Dropdown";
+import UpdateButton from "./LoadingButton";
+import { Button } from "./Button";
 
 const ViewResults = ({
   scores,
@@ -56,15 +61,6 @@ const ViewResults = ({
       });
     });
   };
-
-  const handleShowMore = () =>
-    history.push(
-      `/headtohead/${match.params.group}/tournament/${
-        match.params.tour
-      }/?team1=${Object.keys(h2h.winners).join("|")}&team2=${Object.keys(
-        h2h.losers
-      ).join("|")}`
-    );
 
   return (
     <>
@@ -138,14 +134,31 @@ const ViewResults = ({
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
+          <DrawerHeader>Head 2 Head Result</DrawerHeader>
           <DrawerBody className="py-4 pb-5">
             {h2h.scores ? (
-              <Head2HeadChart
-                scores={h2h.scores}
-                winners={h2h.winners}
-                losers={h2h.losers}
-                players={players}
-              />
+              <>
+                <Head2HeadChart
+                  scores={h2h.scores}
+                  winners={h2h.winners}
+                  losers={h2h.losers}
+                  players={players}
+                />
+                <Button
+                  onClick={() =>
+                    history.push(
+                      `/headtohead/${match.params.group}/tournament/${
+                        match.params.tour
+                      }/?team1=${Object.keys(h2h.winners).join(
+                        "|"
+                      )}&team2=${Object.keys(h2h.losers).join("|")}`
+                    )
+                  }
+                  value="Sign Out"
+                  type="button"
+                  className="mt-3 btn btn-primary btn-sm btn-block"
+                >Show Detailed Results</Button>
+              </>
             ) : (
               <Skeleton height={350} />
             )}
