@@ -229,7 +229,7 @@ export function rejectJoinRequest(target, groupId) {
 }
 
 export function approveJoinRequest(target, groupId, createAs) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const {
       app: {
         user: { uid }
@@ -240,12 +240,24 @@ export function approveJoinRequest(target, groupId, createAs) {
       .firestore()
       .collection(GROUPS)
       .doc(groupId);
+
+    const userRef = firebase
+      .firestore()
+      .collection(USERS)
+      .doc(target.uid);
+
     dispatch(apiStart(GroupActionTypes.APPROVE_JOIN_GROUP));
+
     // delete from pending first
     return groupRef
       .update({
         [`pendingJoinRequests.${target.uid}`]: firebase.firestore.FieldValue.delete()
       })
+      .then(_ =>
+        userRef.update({
+          [`groups.${groupId}`]: true
+        })
+      )
       .then(_ => {
         // add player
         if (createAs === null) {
@@ -255,7 +267,7 @@ export function approveJoinRequest(target, groupId, createAs) {
               name: target.displayName,
               userId: target.uid,
               linkedplayerId: target.uid,
-              avatarUrl: target.avatarUrl,
+              avatarUrl: target.avatarUrl || "",
               joinDate: new Date(),
               addedBy: uid
             })
@@ -410,7 +422,9 @@ export function editGroup({
       dat = { ...(<any>dat), groupImage: imageRef.metadata.fullPath };
     }
 
-    return editGroup.update(dat).then(_ => {
+    const g = await (await editGroup.get()).data();
+
+    return editGroup.update({ dat }).then(_ => {
       dispatch(apiEnd());
       dispatch(loadGroups(true));
     });
@@ -469,6 +483,14 @@ export function addGroup({
       dat = { ...dat, groupImage: imageRef.metadata.fullPath };
     }
 
+    // set user
+    await firebase
+      .firestore()
+      .collection(USERS)
+      .doc(user.uid)
+      .update({
+        [`groups.${newGroup.id}`]: true
+      });
     return newGroup.set(dat).then(_ => {
       dispatch(apiEnd());
       dispatch(loadGroups(true));

@@ -9,7 +9,7 @@ export const setNewScore = (winners, losers) => {
   Object.keys(winners).forEach(k => {
     const p = winners[k];
     p.rank = 1;
-    p.previousScore = !p.previousScore ? 0 : p.previousScore;
+    p.previousScore = p.score || 0;
     p.skill = !p.skill ? initialScore : p.skill;
     players.push(p);
   });
@@ -17,7 +17,7 @@ export const setNewScore = (winners, losers) => {
   Object.keys(losers).forEach(k => {
     const p = losers[k];
     p.rank = 2; // loser
-    p.previousScore = !p.previousScore ? 0 : p.previousScore;
+    p.previousScore = p.score || 0;
     p.skill = !p.skill ? initialScore : p.skill;
     players.push(p);
   });

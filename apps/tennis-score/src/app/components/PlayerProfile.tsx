@@ -5,52 +5,29 @@ import {
   faPercentage
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { hashCode } from "@tennis-score/redux";
-import ParticlesBg, { TypeProp } from "particles-bg";
 import queryString from "query-string";
 import React, { useEffect } from "react";
-import AnimatedBg from "react-animated-bg";
 import HeaderCard from "./Header";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import MySpinner from "./MySpinner";
 import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import { StatsCard } from "./StatsCard";
-
-const bgHeight = 200;
-const types = ["color", "lines", "thick", "circle", "cobweb", "square"];
-
-const getTypeFromName = name =>
-  types[hashCode(name) % types.length] as TypeProp;
-
-const bgConfig = {
-  num: [4, 7],
-  rps: 0.1,
-  radius: [5, 40],
-  life: [1.5, 3],
-  v: [2, 3],
-  tha: [-40, 40],
-  // body: "./img/icon.png", // Whether to render pictures
-  // rotate: [0, 20],
-  alpha: [0.6, 0],
-  scale: [1, 0.1],
-  color: ["random", "#ff0000"],
-  cross: "dead", // cross or bround
-  random: 15, // or null,
-  g: 5, // gravity
-  position: { x: 1, y: 1, width: "100%", height: bgHeight }
-};
+import GroupCard from "./GroupCard";
+import useLocation from "../hooks/useLocation";
 
 const PlayerProfile = ({
   player,
   match,
   group,
+  groups,
   history,
   pendingRequests,
   tournament,
   location,
   ...props
 }) => {
+  const loc = useLocation();
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
     const q = queryString.parse(location.search);
@@ -62,40 +39,45 @@ const PlayerProfile = ({
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
-      <div className="text-center">
+      <div className="d-flex">
         <>
           {player ? (
             <RoundGravatar
               uid={player.linkedplayerId}
               email={player.email}
               size={156}
+              style={{ margin: "auto" }}
             />
           ) : (
-            <MyLoadingSkeleton height={156} circle={true}></MyLoadingSkeleton>
+            <MyLoadingSkeleton
+              height={156}
+              width={156}
+              style={{ margin: "auto" }}
+              circle={true}
+            ></MyLoadingSkeleton>
           )}
         </>
       </div>
-      <div>
-        <div className="row pt-3">
-          <div className="col-sm-12 text-center">
-            <div>
-              <span className="h4">{player.name}</span>
-              {player.linkedplayerId ? (
-                <p>
-                  {player.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
-                  {player.singleHandedBackhand
-                    ? "One-Handed Backhand"
-                    : "Two-Handed Backhand"}
-                </p>
-              ) : (
-                <div className="col-12">
-                  <em>Ghost Player</em>
-                </div>
-              )}
-            </div>
+      <div className="row pt-3">
+        <div className="col-sm-12 text-center">
+          <div>
+            <span className="h4">{player.name}</span>
+            {player.linkedplayerId ? (
+              <p>
+                {player.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
+                {player.singleHandedBackhand
+                  ? "One-Handed Backhand"
+                  : "Two-Handed Backhand"}
+              </p>
+            ) : (
+              <div className="col-12">
+                <em>Ghost Player</em>
+              </div>
+            )}
           </div>
         </div>
-
+      </div>
+      <>
         <HeaderCard>Statistics</HeaderCard>
         <div className="row m-2">
           <div className="col-6 p-2">
@@ -110,7 +92,7 @@ const PlayerProfile = ({
             <StatsCard
               cardClass="bg-dark text-white"
               icon={<FontAwesomeIcon icon={faClipboardCheck} />}
-              number={player.won + player.lost}
+              number={(player.won || 0) + (player.lost || 0)}
               name="Match played"
             />
           </div>
@@ -131,7 +113,26 @@ const PlayerProfile = ({
             />
           </div>
         </div>
-      </div>
+      </>
+
+      {player.groups ? (
+        <>
+          <HeaderCard>Groups</HeaderCard>
+          <div className="row m-2">
+            {Object.keys(player.groups).map((p, i) => (
+              <div key={p} className="col-6 p-2">
+                <GroupCard
+                  group={groups[p]}
+                  loc={loc}
+                  user={player}
+                  showIsMember={false}
+                  hideDetails={true}
+                ></GroupCard>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

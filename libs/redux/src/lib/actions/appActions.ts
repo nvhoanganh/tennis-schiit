@@ -3,7 +3,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { toast } from "react-toastify";
-import { ISignInModel, USERS } from "../models";
+import { ISignInModel, USERS, GROUPS } from "../models";
 
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
@@ -216,16 +216,16 @@ export function appLoad() {
       }
 
       // send email verification
-      if (!user.emailVerified) {
-        user
-          .sendEmailVerification()
-          .then(function() {
-            console.log("Sent email verification");
-          })
-          .catch(function(error) {
-            console.log("cannot send email verification", error);
-          });
-      }
+      // if (!user.emailVerified) {
+      //   user
+      //     .sendEmailVerification()
+      //     .then(function() {
+      //       console.log("Sent email verification");
+      //     })
+      //     .catch(function(error) {
+      //       console.log("cannot send email verification", error);
+      //     });
+      // }
 
       // get additional details from firestore
       firebase

@@ -12,6 +12,11 @@ export const getCurrentUser = createSelector(
   getAppState,
   s => s.user
 );
+
+export const getAllGroups = createSelector(
+  getGroups,
+  s => s
+);
 export const getScores = createSelector(
   getScoresState,
   s => s.entities

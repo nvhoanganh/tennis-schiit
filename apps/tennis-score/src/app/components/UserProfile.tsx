@@ -1,43 +1,92 @@
-import React from "react";
-import Gravatar from "react-gravatar";
-import { LinkContainer } from "react-router-bootstrap";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
-import { Link } from "./Link";
-import UpdateButton from "./LoadingButton";
-import { maxContainer } from "./common";
+import { LinkContainer } from "react-router-bootstrap";
+import useLocation from "../hooks/useLocation";
+import GroupCard from "./GroupCard";
+import HeaderCard from "./Header";
+import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import RoundGravatar from "./RoundGravatar";
-const UserProfile = ({ signOutHandler, user, loading }) => {
+import RouteNav from "./RouteNav";
+import UpdateButton from "./LoadingButton";
+import { Link } from '@chakra-ui/core';
+const UserProfile = ({
+  signOutHandler,
+  history,
+  user,
+  loading,
+  groups,
+  ...props
+}) => {
+  const loc = useLocation();
+  useEffect(() => {
+    console.log("user groups", user.groups);
+    console.log("all groups", groups);
+  }, []);
   return !user ? (
     <Redirect to="/signin" />
   ) : (
-    <div {...maxContainer}>
-      <div className="row pt-3">
-        <div className="col-sm-12 text-center">
+    <div>
+      <RouteNav history={history} center="User Profile"></RouteNav>
+      <div className="d-flex">
+        <>
           {user ? (
             <RoundGravatar
               uid={user.uid}
               email={user.email}
-              size={150}
+              size={156}
+              style={{ margin: "auto" }}
             />
-          ) : null}
-        </div>
+          ) : (
+            <MyLoadingSkeleton
+              height={156}
+              width={156}
+              style={{ margin: "auto" }}
+              circle={true}
+            ></MyLoadingSkeleton>
+          )}
+        </>
       </div>
+
       <div className="row pt-3">
         <div className="col-sm-12 text-center">
           <div>
-            <h2>{user.displayName}</h2>
-            <p>
-              <strong>
+            <span className="h4">{user.displayName}</span>
+            {user.uid ? (
+              <p>
                 {user.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
                 {user.singleHandedBackhand
                   ? "One-Handed Backhand"
                   : "Two-Handed Backhand"}
-              </strong>
-            </p>
+              </p>
+            ) : (
+              <div className="col-12">
+                <em>Ghost Player</em>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <div className="row pt-5 text-center">
+
+      {user.groups ? (
+        <>
+          <HeaderCard>My Groups</HeaderCard>
+          <div className="row m-2">
+            {Object.keys(user.groups).map((p, i) => (
+              <div key={p} className="col-6 p-2">
+                <GroupCard
+                  group={groups[p]}
+                  loc={loc}
+                  user={user}
+                  showIsMember={false}
+                  hideDetails={true}
+                ></GroupCard>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      <div className="row pt-5 px-2 text-center">
         <div className="col-12 emphasis">
           <div className="btn-group dropup btn-block">
             <UpdateButton
@@ -50,7 +99,7 @@ const UserProfile = ({ signOutHandler, user, loading }) => {
           </div>
         </div>
       </div>
-      <div className="row pt-3">
+      <div className="row pt-2 px-2">
         <div className="col-12 text-center">
           <LinkContainer to="/account-details/edit">
             <Link title="Update Details" href="">

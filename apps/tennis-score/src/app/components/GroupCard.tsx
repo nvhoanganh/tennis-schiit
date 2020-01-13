@@ -16,7 +16,7 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
     <LinkContainer
       to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
     >
-      <div className="card shadow my-2 rounded-0">
+      <div className="card shadow my-2 rounded">
         {loading ? (
           <>
             <MyLoadingSkeleton
@@ -59,13 +59,14 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
                   />
                 </div>
               </div>
-
-              <GroupScoreCard
-                group={group}
-                loc={props.loc}
-                user={user}
-                players={Object.values(group.players)}
-              ></GroupScoreCard>
+              {!props.hideDetails ? (
+                <GroupScoreCard
+                  group={group}
+                  loc={props.loc}
+                  user={user}
+                  players={Object.values(group.players)}
+                ></GroupScoreCard>
+              ) : null}
             </div>
           </>
         )}
