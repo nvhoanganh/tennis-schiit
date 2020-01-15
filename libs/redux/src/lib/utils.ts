@@ -17,7 +17,11 @@ export const arrayToObject = (array: any[], keymap, valuemap) => {
 export const isOwner = (user, group) =>
   user && group && group.owner === user.uid;
 export const isMember = (user, group) =>
-  user && group && group.players && !!group.players[user.uid];
+  user &&
+  group &&
+  group.players &&
+  Object.values(group.players).filter(x => x["linkedplayerId"] === user.uid)
+    .length > 0;
 
 export const removeById = (id, obj) => {
   const { [id]: removed, ...newState } = obj;
