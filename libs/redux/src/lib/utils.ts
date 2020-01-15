@@ -1,3 +1,4 @@
+import * as R from "ramda";
 export function delay(duration): Promise<void> {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -16,6 +17,7 @@ export const arrayToObject = (array: any[], keymap, valuemap) => {
 
 export const isOwner = (user, group) =>
   user && group && group.owner === user.uid;
+
 export const isMember = (user, group) =>
   user &&
   group &&
@@ -109,6 +111,17 @@ export const getPlayersName = (players, allPlayers) => {
 };
 export const getPlayersNameAsString = (p, allP) =>
   getPlayersName(p, allP).join("/");
+
+export const getPossibleVerse = (players, group1, group2) =>
+  R.flatten(
+    Object.keys(group1).map(x =>
+      Object.keys(group2).map(y => ({
+        label: `${players[x].name} vs ${players[y].name}`,
+        player1: { [x]: true },
+        player2: { [y]: true }
+      }))
+    )
+  );
 
 export const hashCode = s =>
   s.split("").reduce((a, b) => {

@@ -273,6 +273,7 @@ export async function SearchScore({
     .where("winners", "==", winners)
     .where("losers", "==", losers)
     .get();
+    
   const right = tourRef
     .collection(SCORES)
     .where("winners", "==", losers)

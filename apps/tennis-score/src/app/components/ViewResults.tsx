@@ -2,27 +2,24 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerHeader,
   DrawerOverlay,
-  useDisclosure,
-  DrawerHeader
+  useDisclosure
 } from "@chakra-ui/core";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import { SearchScore } from "@tennis-score/redux";
-import { LinkContainer } from "react-router-bootstrap";
+import { getPossibleVerse, SearchScore } from "@tennis-score/redux";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "react-loading-skeleton";
-import Confirm from "./Confirm";
+import { Button } from "./Button";
 import { DrawerLink, DropDownMenu } from "./DropDownMenu";
 import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
 import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
-import Dropdown from "react-bootstrap/Dropdown";
-import UpdateButton from "./LoadingButton";
-import { Button } from "./Button";
+import { ScrollPills } from "./ScrollPills";
 
 const ViewResults = ({
   scores,
@@ -47,18 +44,22 @@ const ViewResults = ({
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
   const [h2h, seth2h] = useState<any>({});
-  const viewHead2Head = state => {
+  const viewHead2Head = ({ winners, losers, showAll }) => {
     onOpen();
     SearchScore({
       groupId: match.params.group,
       tourId: match.params.tour,
-      ...state
+      ...{ winners, losers }
     }).then(result => {
-      seth2h({
-        winners: state.winners,
-        losers: state.losers,
-        scores: result
-      });
+      seth2h(state => ({
+        ...state,
+        ...{ winners, losers },
+        scores: result,
+        ...(showAll && {
+          originalWinners: winners,
+          originalLosers: losers
+        })
+      }));
     });
   };
 
@@ -135,6 +136,38 @@ const ViewResults = ({
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader>Head 2 Head Result</DrawerHeader>
+          <div>
+            <ScrollPills>
+              <span
+                className="badge ml-1 badge-pill badge-primary font-weight-normal"
+                onClick={() =>
+                  viewHead2Head({
+                    winners: h2h.originalWinners,
+                    losers: h2h.originalLosers,
+                    showAll: true
+                  })
+                }
+              >
+                All
+              </span>
+              {h2h.scores &&
+                getPossibleVerse(players, h2h.winners, h2h.losers).map(x => (
+                  <span
+                    key={x.label}
+                    className="badge ml-1 badge-pill badge-light font-weight-normal border"
+                    onClick={() =>
+                      viewHead2Head({
+                        winners: x.player1,
+                        losers: x.player2,
+                        showAll: false
+                      })
+                    }
+                  >
+                    {x.label}
+                  </span>
+                ))}
+            </ScrollPills>
+          </div>
           <DrawerBody className="py-4 pb-5">
             {h2h.scores ? (
               <>
@@ -157,7 +190,9 @@ const ViewResults = ({
                   value="Sign Out"
                   type="button"
                   className="mt-3 btn btn-primary btn-sm btn-block"
-                >Show Detailed Results</Button>
+                >
+                  Show Detailed Results
+                </Button>
               </>
             ) : (
               <Skeleton height={350} />
