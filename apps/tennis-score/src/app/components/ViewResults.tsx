@@ -44,15 +44,17 @@ const ViewResults = ({
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
   const [h2h, seth2h] = useState<any>({});
-  const viewHead2Head = ({ winners, losers, showAll }) => {
+  const [activeLbl, setactiveLbl] = useState<string>("All");
+  const viewHead2Head = ({ winners, losers, showAll, label }) => {
     console.log("checking head 2 head for ", { winners, losers });
     onOpen();
+    setactiveLbl(label);
     SearchScore({
       groupId: match.params.group,
       tourId: match.params.tour,
       ...{ winners, losers }
     }).then(result => {
-      console.log(result)
+      console.log(result);
       seth2h(state => ({
         ...state,
         ...{ winners, losers },
@@ -141,27 +143,39 @@ const ViewResults = ({
           <div>
             <ScrollPills>
               <span
-                className="badge ml-1 badge-pill badge-primary font-weight-normal"
+                className={
+                  "badge ml-1 badge-pill  font-weight-normal border " +
+                  (!activeLbl ? "badge-primary" : "badge-light")
+                }
                 onClick={() =>
                   viewHead2Head({
                     winners: h2h.originalWinners,
                     losers: h2h.originalLosers,
-                    showAll: true
+                    showAll: true,
+                    label: null
                   })
                 }
               >
                 All
               </span>
               {h2h.scores &&
-                getPossibleVerse(players, h2h.originalWinners, h2h.originalLosers).map(x => (
+                getPossibleVerse(
+                  players,
+                  h2h.originalWinners,
+                  h2h.originalLosers
+                ).map(x => (
                   <span
                     key={x.label}
-                    className="badge ml-1 badge-pill badge-light font-weight-normal border"
+                    className={
+                      "badge ml-1 badge-pill  font-weight-normal border " +
+                      (activeLbl === x.label ? "badge-primary" : "badge-light")
+                    }
                     onClick={() =>
                       viewHead2Head({
                         winners: x.player1,
                         losers: x.player2,
-                        showAll: false
+                        showAll: false,
+                        label: x.label
                       })
                     }
                   >
