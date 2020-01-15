@@ -52,6 +52,7 @@ const ViewResults = ({
       tourId: match.params.tour,
       ...{ winners, losers }
     }).then(result => {
+      console.log(result)
       seth2h(state => ({
         ...state,
         ...{ winners, losers },
@@ -152,7 +153,7 @@ const ViewResults = ({
                 All
               </span>
               {h2h.scores &&
-                getPossibleVerse(players, h2h.winners, h2h.losers).map(x => (
+                getPossibleVerse(players, h2h.originalWinners, h2h.originalLosers).map(x => (
                   <span
                     key={x.label}
                     className="badge ml-1 badge-pill badge-light font-weight-normal border"

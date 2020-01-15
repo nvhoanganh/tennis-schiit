@@ -48,7 +48,9 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
     // summarise data
     Object.values(scores).forEach(x => {
       const r = x as any;
-      if (R.equals(r.winners, winners)) {
+      if (
+        R.intersection(Object.keys(r.winners), Object.keys(winners)).length > 0
+      ) {
         stats = R.assocPath(
           ["overall", team1],
           (R.path(["overall", team1], stats) || 0) + 1,
@@ -59,7 +61,9 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
           (R.path([r.headStart || "0", team1], stats) || 0) + 1,
           stats
         );
-      } else if (R.equals(r.winners, losers)) {
+      } else if (
+        R.intersection(Object.keys(r.winners), Object.keys(losers)).length > 0
+      ) {
         stats = R.assocPath(
           ["overall", team2],
           (R.path(["overall", team2], stats) || 0) + 1,

@@ -290,7 +290,6 @@ export async function SearchScore({ groupId, tourId, winners, losers }) {
       arrayToObject(r.docs, x => x.id, x => ({ ...x.data(), id: x.id }))
     );
     const merged = R.merge(d[0], d[1]);
-    console.log("data", merged);
     return merged;
   });
 }
