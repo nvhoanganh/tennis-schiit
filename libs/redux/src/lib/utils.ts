@@ -123,6 +123,16 @@ export const getPossibleVerse = (players, group1, group2) =>
     )
   );
 
+export const getPlayers = players => {
+  const keys = Object.keys(players);
+  return {
+    player1: keys[0],
+    ...(keys.length > 1 && {
+      player2: keys[1]
+    })
+  };
+};
+
 export const hashCode = s =>
   s.split("").reduce((a, b) => {
     a = (a << 5) - a + b.charCodeAt(0);

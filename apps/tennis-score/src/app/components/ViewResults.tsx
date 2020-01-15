@@ -45,6 +45,7 @@ const ViewResults = ({
   };
   const [h2h, seth2h] = useState<any>({});
   const viewHead2Head = ({ winners, losers, showAll }) => {
+    console.log("checking head 2 head for ", { winners, losers });
     onOpen();
     SearchScore({
       groupId: match.params.group,
