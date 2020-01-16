@@ -6,12 +6,13 @@ export function delay(duration): Promise<void> {
   });
 }
 export const arrayToObject = (array: any[], keymap, valuemap) => {
-  return array.reduce((presV, currV) => {
-    return {
+  return array.reduce(
+    (presV, currV) => ({
       ...presV,
       [keymap(currV)]: valuemap(currV)
-    };
-  }, {});
+    }),
+    {}
+  );
 };
 
 export const isOwner = (user, group) =>
