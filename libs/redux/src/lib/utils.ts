@@ -1,3 +1,4 @@
+import * as R from "ramda";
 export function delay(duration): Promise<void> {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -17,8 +18,13 @@ export const arrayToObject = (array: any[], keymap, valuemap) => {
 
 export const isOwner = (user, group) =>
   user && group && group.owner === user.uid;
+
 export const isMember = (user, group) =>
-  user && group && group.players && !!group.players[user.uid];
+  user &&
+  group &&
+  group.players &&
+  Object.values(group.players).filter(x => x["linkedplayerId"] === user.uid)
+    .length > 0;
 
 export const removeById = (id, obj) => {
   const { [id]: removed, ...newState } = obj;
@@ -106,6 +112,27 @@ export const getPlayersName = (players, allPlayers) => {
 };
 export const getPlayersNameAsString = (p, allP) =>
   getPlayersName(p, allP).join("/");
+
+export const getPossibleVerse = (players, group1, group2) =>
+  R.flatten(
+    Object.keys(group1).map(x =>
+      Object.keys(group2).map(y => ({
+        label: `${players[x].name} vs ${players[y].name}`,
+        player1: { [x]: true },
+        player2: { [y]: true }
+      }))
+    )
+  );
+
+export const getPlayers = players => {
+  const keys = Object.keys(players);
+  return {
+    player1: keys[0],
+    ...(keys.length > 1 && {
+      player2: keys[1]
+    })
+  };
+};
 
 export const hashCode = s =>
   s.split("").reduce((a, b) => {

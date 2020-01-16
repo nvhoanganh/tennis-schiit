@@ -99,7 +99,7 @@ const UserProfile = ({
           </div>
         </div>
       </div>
-      <div className="row pt-2 px-2">
+      <div className="row pt-2 pb-5 px-2">
         <div className="col-12 text-center">
           <LinkContainer to="/account-details/edit">
             <Link title="Update Details" href="">

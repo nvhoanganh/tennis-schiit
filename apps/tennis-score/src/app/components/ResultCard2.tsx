@@ -67,7 +67,8 @@ const ResultCard = props => {
                 onClick={() =>
                   showHead2Head({
                     winners,
-                    losers
+                    losers,
+                    showAll: true
                   })
                 }
                 className="h5 py-2 d-block"

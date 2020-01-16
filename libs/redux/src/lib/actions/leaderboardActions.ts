@@ -4,7 +4,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
-import { calculateStats, arrayToObject } from "../utils";
+import { calculateStats, arrayToObject, getPlayers } from "../utils";
 import * as R from "ramda";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 export enum LeaderboardActionTypes {
@@ -255,29 +255,35 @@ export function submitScore({
   };
 }
 
-export async function SearchScore({
-  groupId,
-  tourId,
-  winners,
-  losers,
-}) {
+export async function SearchScore({ groupId, tourId, winners, losers }) {
   const groupRef = firebase
     .firestore()
     .collection(GROUPS)
     .doc(groupId);
 
   const tourRef = groupRef.collection(TOURNAMENTS).doc(tourId);
+  const winnersG = getPlayers(winners);
+  const loserG = getPlayers(losers);
+  const scoresRef = tourRef.collection(SCORES);
+  const left = winnersG.player2 /// 2 players
+    ? scoresRef
+        .where("winners", "==", winners)
+        .where("losers", "==", losers)
+        .get()
+    : scoresRef
+        .where(`winners.${winnersG.player1}`, "==", true)
+        .where(`losers.${loserG.player1}`, "==", true)
+        .get();
 
-  const left = tourRef
-    .collection(SCORES)
-    .where("winners", "==", winners)
-    .where("losers", "==", losers)
-    .get();
-  const right = tourRef
-    .collection(SCORES)
-    .where("winners", "==", losers)
-    .where("losers", "==", winners)
-    .get();
+  const right = loserG.player2 /// 2 players
+    ? scoresRef
+        .where("winners", "==", losers)
+        .where("losers", "==", winners)
+        .get()
+    : scoresRef
+        .where(`winners.${loserG.player1}`, "==", true)
+        .where(`losers.${winnersG.player1}`, "==", true)
+        .get();
 
   return Promise.all([left, right]).then(results => {
     const d = results.map(r =>
