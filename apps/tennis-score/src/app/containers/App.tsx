@@ -1,27 +1,16 @@
-import { appLoad, loadGroups, signOut } from "@tennis-score/redux";
-import { Button } from "@chakra-ui/core";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerOverlay,
-  useDisclosure,
-  DrawerHeader,
-  DrawerFooter
-} from "@chakra-ui/core";
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { appLoad, loadGroups, signOut } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect } from "react";
-import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
-import { faSyncAlt, faBars } from "@fortawesome/free-solid-svg-icons";
 
 const linkStyle = {
   lineHeight: "2rem"
