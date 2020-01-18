@@ -38,7 +38,6 @@ export function TournamentStatsChart({ players, stats, title, value }) {
     const result = Object.keys(userScores).map(k => ({
       name: players[k].name,
       type: "line",
-      smooth: true,
       showSymbol: true,
       hoverAnimation: true,
       data: R.sortBy(u => u.timestamp.toDate(), userScores[k]).map(
