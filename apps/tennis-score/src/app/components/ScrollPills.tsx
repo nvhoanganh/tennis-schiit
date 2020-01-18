@@ -5,14 +5,13 @@ export function ScrollPills({ children }) {
       className="container-fluid border div1 shadow-sm"
       style={{
         width: "100%",
-        height: 38,
+        height: 44,
         overflow: "hidden"
       }}
     >
       <div
         className="row flex-nowrap p-2 div2"
         style={{
-          width: "100%",
           overflowX: "auto",
           overflowY: "hidden",
           marginBottom: "10px !important"

@@ -144,7 +144,7 @@ const ViewResults = ({
             <ScrollPills>
               <span
                 className={
-                  "badge ml-1 badge-pill  font-weight-normal border " +
+                  "md badge ml-1 badge-pill font-weight-normal border " +
                   (!activeLbl ? "badge-primary" : "badge-light")
                 }
                 onClick={() =>
@@ -167,7 +167,7 @@ const ViewResults = ({
                   <span
                     key={x.label}
                     className={
-                      "badge ml-1 badge-pill  font-weight-normal border " +
+                      "md badge ml-1 badge-pill  font-weight-normal border " +
                       (activeLbl === x.label ? "badge-primary" : "badge-light")
                     }
                     onClick={() =>

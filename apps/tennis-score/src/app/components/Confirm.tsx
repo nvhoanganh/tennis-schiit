@@ -1,31 +1,51 @@
-import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import { Button } from "./Button";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button
+} from "@chakra-ui/core";
+import React, { useRef } from "react";
 
 const Confirm = ({ title, message, show, ...props }) => {
+  const cancelRef = useRef<any>();
   return (
     <>
-      <Modal show={show} onHide={props.onCancelAction} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{message}</Modal.Body>
-        {!props.hideFooter ? (
-          <Modal.Footer>
-            <Button className="btn btn-link" onClick={props.onCancelAction}>
-              {props.close}
-            </Button>
-            {props.mainAction ? (
-              <Button
-                className={props.mainActionClass}
-                onClick={props.onConfirmAction}
-              >
-                {props.mainAction}
+      <AlertDialog
+        isOpen={show}
+        size="xs"
+        isCentered={true}
+        leastDestructiveRef={cancelRef}
+        onClose={props.onCancelAction}
+      >
+        <AlertDialogOverlay />
+        <AlertDialogContent>
+          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            {title}
+          </AlertDialogHeader>
+
+          <AlertDialogBody>{message}</AlertDialogBody>
+
+          {!props.hideFooter ? (
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={props.onCancelAction}>
+                {props.close}
               </Button>
-            ) : null}
-          </Modal.Footer>
-        ) : null}
-      </Modal>
+              {props.mainAction ? (
+                <Button
+                  variantColor={props.mainActionClass}
+                  onClick={props.onConfirmAction}
+                  ml={3}
+                >
+                  {props.mainAction}
+                </Button>
+              ) : null}
+            </AlertDialogFooter>
+          ) : null}
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

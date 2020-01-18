@@ -1,3 +1,4 @@
+import { getGroupImageUrl } from '@tennis-score/redux';
 import { formatDistanceToNow } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
@@ -7,7 +8,6 @@ import { Link } from "./Link";
 import UpdateButton from "./LoadingButton";
 import { ReadOnlyForm } from "./ReadOnlyForm";
 import RouteNav from "./RouteNav";
-import { getGroupImageUrl } from '@tennis-score/redux';
 
 const ManageGroup = ({
   loading,
@@ -69,7 +69,7 @@ const ManageGroup = ({
                 value="Delete Group"
                 type="button"
                 onClick={handleShow}
-                className="btn btn-danger btn-block"
+                className="btn btn-danger btn-block btn-sm"
               ></UpdateButton>
             </div>
           </div>
@@ -90,7 +90,7 @@ const ManageGroup = ({
         message="Are you sure you want to permanently delete this group? All data will be lost"
         close="Cancel"
         mainAction="Delete"
-        mainActionClass="btn btn-danger"
+        mainActionClass="red"
         onCancelAction={handleClose}
         onConfirmAction={deleteGroupHandler}
         show={show}
