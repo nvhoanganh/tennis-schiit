@@ -8,7 +8,8 @@ import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import UpdateButton from "./LoadingButton";
-import { Link } from '@chakra-ui/core';
+import { Link } from "@chakra-ui/core";
+import { ScrollPills } from "./ScrollPills";
 const UserProfile = ({
   signOutHandler,
   history,
@@ -47,41 +48,23 @@ const UserProfile = ({
         </>
       </div>
 
-      <div className="row pt-3">
-        <div className="col-sm-12 text-center">
-          <div>
-            <span className="h4">{user.displayName}</span>
-            {user.uid ? (
-              <p>
-                {user.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
-                {user.singleHandedBackhand
-                  ? "One-Handed Backhand"
-                  : "Two-Handed Backhand"}
-              </p>
-            ) : (
-              <div className="col-12">
-                <em>Ghost Player</em>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
       {user.groups ? (
         <>
           <HeaderCard>My Groups</HeaderCard>
-          <div className="row m-2">
-            {Object.keys(user.groups).map((p, i) => (
-              <div key={p} className="col-6 p-2">
+          <div>
+            <ScrollPills height={300}>
+              {Object.keys(user.groups).map((p, i) => (
                 <GroupCard
+                  style={{ minWidth: 300 }}
+                  key={p}
                   group={groups[p]}
                   loc={loc}
                   user={user}
                   showIsMember={false}
                   hideDetails={true}
                 ></GroupCard>
-              </div>
-            ))}
+              ))}
+            </ScrollPills>
           </div>
         </>
       ) : null}

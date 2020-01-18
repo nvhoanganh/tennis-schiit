@@ -88,30 +88,18 @@ const App = ({
           </DrawerHeader>
           <DrawerBody>
             <LinkContainer style={linkStyle} to="/home">
-              <a className="h5 py-2 d-block">Home</a>
+              <a className="h5 py-1 d-block">Home</a>
             </LinkContainer>
             {!user ? (
               <LinkContainer style={linkStyle} to="/signin">
-                <a className="h5 py-2 d-block">Sign In</a>
+                <a className="h5 py-1 d-block">Sign In</a>
               </LinkContainer>
             ) : (
               <LinkContainer style={linkStyle} to="/account-details">
-                <a className="h5 py-2 d-block">My Profile</a>
+                <a className="h5 py-1 d-block">My Profile</a>
               </LinkContainer>
             )}
           </DrawerBody>
-          {user ? (
-            <DrawerFooter borderTopWidth="1px">
-              <Button
-                size="sm"
-                onClick={signOutHandler}
-                className="btn-block"
-                variantColor="red"
-              >
-                Sign Out
-              </Button>
-            </DrawerFooter>
-          ) : null}
         </DrawerContent>
       </Drawer>
     </div>

@@ -141,7 +141,7 @@ const ViewResults = ({
         <DrawerContent>
           <DrawerHeader>Head 2 Head Result</DrawerHeader>
           <div>
-            <ScrollPills>
+            <ScrollPills height={44}>
               <span
                 className={
                   "md badge ml-1 badge-pill font-weight-normal border " +

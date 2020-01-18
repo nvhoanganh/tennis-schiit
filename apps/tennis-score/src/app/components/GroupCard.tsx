@@ -14,13 +14,14 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
 
   return (
     <LinkContainer
+      style={{ ...props.style }}
       to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
     >
-      <div className="card shadow my-2 rounded">
+      <div className="card shadow my-2 rounded mx-2">
         {loading ? (
           <>
             <MyLoadingSkeleton
-              height={140}
+              height={150}
               class="card-img-top border-bottom"
             />
             <MyLoadingSkeleton height={104} class="card-body pt-0 pb-3" />

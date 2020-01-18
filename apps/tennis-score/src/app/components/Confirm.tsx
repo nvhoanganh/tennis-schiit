@@ -15,7 +15,7 @@ const Confirm = ({ title, message, show, ...props }) => {
     <>
       <AlertDialog
         isOpen={show}
-        size="xs"
+        size={ props.size || "xs"}
         isCentered={true}
         leastDestructiveRef={cancelRef}
         onClose={props.onCancelAction}

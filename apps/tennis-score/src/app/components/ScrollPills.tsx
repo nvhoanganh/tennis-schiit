@@ -1,11 +1,10 @@
 import React from "react";
-export function ScrollPills({ children }) {
+export function ScrollPills({ children, height }) {
   return (
     <div
       className="container-fluid border div1 shadow-sm"
       style={{
         width: "100%",
-        height: 44,
         overflow: "hidden"
       }}
     >
