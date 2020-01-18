@@ -198,7 +198,7 @@ export function submitScore({
         ...mWinners[k],
         ...calculateStats(mWinners[k], prize),
         playerId: k,
-        timestamp: new Date(matchDate)
+        timestamp: new Date()
       };
       batch.update(tourRef, {
         [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1),

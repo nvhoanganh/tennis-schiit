@@ -2,6 +2,7 @@ import ReactEcharts from "echarts-for-react";
 import * as R from "ramda";
 import React from "react";
 import { format } from "date-fns";
+import { roundOff } from "@tennis-score/redux";
 
 export function TournamentStatsChart({ players, stats, title, value }) {
   const chartOption = () => ({
@@ -19,8 +20,11 @@ export function TournamentStatsChart({ players, stats, title, value }) {
     legend: {},
     xAxis: {
       type: "category",
-      boundaryGap: false
-      // data: timestamps()
+      boundaryGap: false,
+      data: timestamps()
+    },
+    tooltip: {
+      trigger: "axis"
     },
     yAxis: {
       type: "value"
@@ -29,9 +33,14 @@ export function TournamentStatsChart({ players, stats, title, value }) {
   });
 
   const timestamps = () => {
-    return Object.keys(
-      R.groupBy(p => format(p.timestamp.toDate(), "dd/MM/yyyy"), stats)
+    const d = R.sortBy(
+      u => u,
+      Object.keys(
+        R.groupBy(p => format(p.timestamp.toDate(), "dd/MM"), stats)
+      )
     );
+    console.log(d);
+    return d;
   };
   const getDataSeries = () => {
     const userScores = R.groupBy(p => p.playerId, stats);
@@ -40,10 +49,17 @@ export function TournamentStatsChart({ players, stats, title, value }) {
       type: "line",
       showSymbol: true,
       hoverAnimation: true,
-      data: R.sortBy(u => u.timestamp.toDate(), userScores[k]).map(
-        u => u[value] || 0
-      )
+      data: Object.values(
+        R.groupBy(
+          u => u.date,
+          R.sortBy(u => u.timestamp, userScores[k]).map(u => ({
+            val: roundOff(u[value]) || 0,
+            date: format(u.timestamp.toDate(), "dd/MM")
+          }))
+        )
+      ).map(u => u[0].val)
     }));
+    console.log(result);
     return result;
   };
 
