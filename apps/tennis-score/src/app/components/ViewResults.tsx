@@ -131,7 +131,7 @@ const ViewResults = ({
             <Skeleton />
           </HeaderCard>
           <div className="pb-3 pl-3 pr-3">
-            <Skeleton height={90} count={10} />
+            <Skeleton height={56} count={10} />
           </div>
         </>
       )}

@@ -1,21 +1,21 @@
+import { Button } from "@chakra-ui/core";
 import {
-  faCamera,
-  faSyncAlt,
+  faSearchMinus,
   faSearchPlus,
-  faSearchMinus
+  faSyncAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LinkContainer } from "react-router-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
+import { LinkContainer } from "react-router-bootstrap";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";
-import FloatingFileInput from "./FloatingFileInput";
+import { Link } from "./Link";
 import UpdateButton from "./LoadingButton";
 import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import TextInput from "./TextInput";
-import { Link } from "./Link";
+import FloatingFileInput from "./FloatingFileInput";
 
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const avatarRef = useRef<any>(null);
@@ -78,18 +78,25 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           {!state.photo ? (
-            <div className="text-center">
-              <RoundGravatar size={150} uid={user.uid} email={user.email} />
-              <FloatingFileInput
-                icon={faCamera}
-                name="photo"
-                label=""
-                errorMessage=""
-                setValue={setValue}
-                disabled={false}
-                isValid={true}
-              ></FloatingFileInput>
-            </div>
+            <>
+              <div className="d-flex justify-content-center">
+                <RoundGravatar size={150} uid={user.uid} email={user.email} />
+              </div>
+              <div className="d-flex justify-content-center pt-1">
+                <FloatingFileInput
+                  name="photo"
+                  errorMessage=""
+                  setValue={setValue}
+                  disabled={false}
+                  isValid={true}
+                  button={
+                    <Button size="sm" leftIcon="edit" variant="outline">
+                      edit
+                    </Button>
+                  }
+                ></FloatingFileInput>
+              </div>
+            </>
           ) : null}
           <div>
             {state.photo && (

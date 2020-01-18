@@ -8,8 +8,8 @@ const HeaderCard: React.SFC<{
 }> = ({ children, right }) => {
   return (
     <div className="d-flex shadow-sm p-2 mt-3 bg-white border-top border-bottom">
-      <div className="flex-grow-1">{children}</div>
-      <div>
+      <div className="flex-grow-1 align-self-center">{children}</div>
+      <div className="align-self-center">
         {right ? (
           right
         ) : (
