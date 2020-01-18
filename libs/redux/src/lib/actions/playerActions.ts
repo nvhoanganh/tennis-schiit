@@ -1,12 +1,11 @@
-import { IAction } from "@tennis-score/redux";
+import { IAction, arrayToObject } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { GROUPS, IPlayer, PLAYERS, USERS } from "../models";
+import { GROUPS, IPlayer, PLAYERS, USERS, TOURNAMENTS, STATS } from "../models";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { loadGroups } from "./groupActions";
 export enum PlayerActionTypes {
-  
   LOAD_PLAYERS = "LOAD_PLAYERS",
   LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
 
@@ -101,6 +100,19 @@ export function loadPlayers() {
         });
       });
   };
+}
+
+export function getStatsByPlayer({ groupId, tourId, playerId }) {
+  return firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId)
+    .collection(TOURNAMENTS)
+    .doc(tourId)
+    .collection(STATS)
+    .where("playerId", "==", playerId)
+    .get()
+    .then(x => x.docs.map(y => y.data()));
 }
 
 export type PlayerAction =
