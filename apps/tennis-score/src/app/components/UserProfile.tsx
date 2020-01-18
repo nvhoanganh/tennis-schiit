@@ -1,14 +1,14 @@
+import { Link } from "@chakra-ui/core";
 import React, { useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
+import { Redirect } from "react-router-dom";
 import useLocation from "../hooks/useLocation";
 import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
+import UpdateButton from "./LoadingButton";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
-import UpdateButton from "./LoadingButton";
-import { Link } from "@chakra-ui/core";
 import { ScrollPills } from "./ScrollPills";
 const UserProfile = ({
   signOutHandler,
@@ -28,7 +28,7 @@ const UserProfile = ({
   ) : (
     <div>
       <RouteNav history={history} center="User Profile"></RouteNav>
-      <div className="d-flex">
+      <div className="d-flex pb-4">
         <>
           {user ? (
             <RoundGravatar

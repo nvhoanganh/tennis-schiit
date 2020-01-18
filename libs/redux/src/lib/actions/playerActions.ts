@@ -13,7 +13,10 @@ export enum PlayerActionTypes {
   INVITE_PLAYER = "INVITE_PLAYER",
 
   UPDATE_PLAYER = "UPDATE_PLAYER",
-  REMOVE_PLAYER = "REMOVE_PLAYER"
+  REMOVE_PLAYER = "REMOVE_PLAYER",
+
+  LOAD_STATS_SUCCESS = "LOAD_STATS_SUCCESS",
+
 }
 // actions
 export class AddPlayerAction implements IAction {
@@ -115,6 +118,18 @@ export function getStatsByPlayer({ groupId, tourId, playerId }) {
     .then(x => x.docs.map(y => y.data()));
 }
 
+
+export function getStats(groupId, tourId) {
+  return firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId)
+    .collection(TOURNAMENTS)
+    .doc(tourId)
+    .collection(STATS)
+    .get()
+    .then(x => x.docs.map(y => y.data()));
+}
 export type PlayerAction =
   | LoadPlayersSuccessAction
   | AddPlayerAction

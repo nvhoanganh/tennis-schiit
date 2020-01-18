@@ -1,4 +1,4 @@
-import { isMember, isOwner } from "@tennis-score/redux";
+import { isMember, isOwner, getStats } from "@tennis-score/redux";
 import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
@@ -18,6 +18,8 @@ import { Button } from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/core";
+import { TournamentStatsChart } from "./TournamentStatsChart";
+import groups from "libs/redux/src/lib/reducers/groupsReducer";
 const Leaderboard = ({
   pendingJoinRequests,
   players,
@@ -29,8 +31,24 @@ const Leaderboard = ({
   tournament,
   history,
   loading,
+  hasMore,
+  lastDoc,
   ...props
 }) => {
+  useEffect(() => {
+    props.loadLeaderboard(match.params.group);
+  }, []);
+
+  const [tabIndex, setTabIndex] = useState(0);
+  const [stats, setStats] = useState(null);
+  useEffect(() => {
+    if (tabIndex === 1 && !stats) {
+      getStats(match.params.group, group.currentTournament).then(x => {
+        setStats(x);
+      });
+    }
+  }, [tabIndex]);
+
   const joinHandler = _ => {
     if (!user) {
       history.push("/signup");
@@ -38,7 +56,6 @@ const Leaderboard = ({
       props.joinGroup(group.groupId);
     }
   };
-
   const canSubmitNewScore = () =>
     user && isMember(user, group) && tournament && !loading;
 
@@ -75,9 +92,6 @@ const Leaderboard = ({
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    props.loadLeaderboard(match.params.group);
-  }, []);
   return (
     <>
       {/* top nav */}
@@ -162,11 +176,10 @@ const Leaderboard = ({
       ) : null}
 
       {/* tabs */}
-      <Tabs isFitted className="py-2">
+      <Tabs isFitted className="py-2" onChange={index => setTabIndex(index)}>
         <TabList>
           <Tab>Leaderboard</Tab>
           <Tab>Stats</Tab>
-          <Tab>Scores</Tab>
         </TabList>
 
         <TabPanels>
@@ -241,10 +254,36 @@ const Leaderboard = ({
             ) : null}
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
-          </TabPanel>
-          <TabPanel>
-            <p>three!</p>
+            {group && stats && (
+              <>
+                <div className="py-3">
+                  <TournamentStatsChart
+                    title="Prize Money"
+                    value="prizeMoney"
+                    players={group.players}
+                    stats={stats}
+                  ></TournamentStatsChart>
+                </div>
+
+                <div className="py-3">
+                  <TournamentStatsChart
+                    title="Win Percentage"
+                    value="winPercentage"
+                    players={group.players}
+                    stats={stats}
+                  ></TournamentStatsChart>
+                </div>
+
+                <div className="py-3">
+                  <TournamentStatsChart
+                    title="TrueSkill Points"
+                    value="score"
+                    players={group.players}
+                    stats={stats}
+                  ></TournamentStatsChart>
+                </div>
+              </>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>

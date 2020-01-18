@@ -14,7 +14,12 @@ import {
   cancelJoinGroup,
   getPendingJoinRequest,
   rejectJoinRequest,
-  approveJoinRequest
+  approveJoinRequest,
+  loadResults,
+  getScores,
+  getLastDoc,
+  getHasMore,
+  getStats
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Leaderboard from "../components/Leaderboard";
@@ -40,7 +45,9 @@ const mapDispatchToProps = dispatch => ({
   approveJoinRequest: (user, groupId, createAs) =>
     dispatch(approveJoinRequest(user, groupId, createAs)),
   cancelJoinGroup: groupId => dispatch(cancelJoinGroup(groupId)),
-  loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
+  loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId)),
+  loadResult: (groupId, tourid, more) =>
+    dispatch(loadResults(groupId, tourid, more))
 });
 
 export default connect(
