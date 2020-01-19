@@ -146,3 +146,4 @@ export const toChartDate = d => {
   const now = addSeconds(new Date(1970, 1, 1), d);
   return [now.getFullYear(), now.getMonth(), now.getDate()].join("/");
 };
+

@@ -1,25 +1,26 @@
-import { isMember, isOwner, getStats } from "@tennis-score/redux";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getStats, isMember, isOwner } from "@tennis-score/redux";
+import { formatDistanceToNow } from "date-fns";
 import format from "date-fns/format";
+import queryString from "query-string";
+import * as R from "ramda";
 import React, { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
+import setQuery from "set-query-string";
+import { Button } from "./Button";
+import Confirm from "./Confirm";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
 import GroupScoreCard from "./GroupScoreCard";
 import HeaderCard from "./Header";
 import LeaderboardCard from "./LeaderboardCard";
 import UpdateButton from "./LoadingButton";
+import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import Skeleton from "react-loading-skeleton";
-import { formatDistanceToNow } from "date-fns";
-import PendingMemberCard from "./PendingMemberCard";
-import Confirm from "./Confirm";
-import * as R from "ramda";
-import { Button } from "./Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/core";
 import { TournamentStatsChart } from "./TournamentStatsChart";
-import groups from "libs/redux/src/lib/reducers/groupsReducer";
 const Leaderboard = ({
   pendingJoinRequests,
   players,
@@ -35,19 +36,24 @@ const Leaderboard = ({
   lastDoc,
   ...props
 }) => {
+  // states
+  const q = queryString.parse(location.search);
+  const [tabIndex, setTabIndex] = useState(+q.tab || 0);
+  const [stats, setStats] = useState(null);
+  const [show, setShow] = useState(false);
+  const [approvingPlayer, setapprovingPlayer] = useState(null);
+
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
   }, []);
 
-  const [tabIndex, setTabIndex] = useState(0);
-  const [stats, setStats] = useState(null);
   useEffect(() => {
-    if (tabIndex === 1 && !stats) {
-      getStats(match.params.group, group.currentTournament).then(x => {
-        setStats(x);
-      });
+    console.log("tab index changed to:", tabIndex);
+    if (tabIndex === 1 && !stats && group) {
+      getStats(match.params.group, group.currentTournament).then(setStats);
     }
-  }, [tabIndex]);
+    setQuery({ tab: tabIndex });
+  }, [tabIndex, group, stats]);
 
   const joinHandler = _ => {
     if (!user) {
@@ -87,8 +93,6 @@ const Leaderboard = ({
       .approveJoinRequest(approvingPlayer, match.params.group, asPlayer)
       .then(_ => handleClose());
   };
-  const [show, setShow] = useState(false);
-  const [approvingPlayer, setapprovingPlayer] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -176,7 +180,12 @@ const Leaderboard = ({
       ) : null}
 
       {/* tabs */}
-      <Tabs isFitted className="py-2" onChange={index => setTabIndex(index)}>
+      <Tabs
+        isFitted
+        className="py-2"
+        defaultIndex={tabIndex}
+        onChange={index => setTabIndex(index)}
+      >
         <TabList>
           <Tab>Leaderboard</Tab>
           <Tab>Stats</Tab>
@@ -254,7 +263,7 @@ const Leaderboard = ({
             ) : null}
           </TabPanel>
           <TabPanel>
-            {group && stats && (
+            {group && stats ? (
               <>
                 <div className="py-4 border-bottom shadow-sm">
                   <TournamentStatsChart
@@ -287,6 +296,16 @@ const Leaderboard = ({
                     players={group.players}
                     stats={stats}
                   ></TournamentStatsChart>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="py-4 border-bottom shadow-sm">
+                  <Skeleton height={400} />
+                </div>
+
+                <div className="py-4 border-bottom shadow-sm">
+                  <Skeleton height={400} />
                 </div>
               </>
             )}
