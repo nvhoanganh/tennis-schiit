@@ -1,4 +1,6 @@
 import * as R from "ramda";
+import addSeconds from "date-fns/addSeconds";
+
 export function delay(duration): Promise<void> {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -139,3 +141,8 @@ export const hashCode = s =>
     a = (a << 5) - a + b.charCodeAt(0);
     return a & a;
   }, 0);
+
+export const toChartDate = d => {
+  const now = addSeconds(new Date(1970, 1, 1), d);
+  return [now.getFullYear(), now.getMonth(), now.getDate()].join("/");
+};

@@ -256,28 +256,34 @@ const Leaderboard = ({
           <TabPanel>
             {group && stats && (
               <>
-                <div className="py-3">
+                <div className="py-4 border-bottom shadow-sm">
                   <TournamentStatsChart
                     title="Prize Money"
                     value="prizeMoney"
+                    prefix="$"
+                    suffix=""
                     players={group.players}
                     stats={stats}
                   ></TournamentStatsChart>
                 </div>
 
-                <div className="py-3">
+                <div className="py-4 border-bottom shadow-sm">
                   <TournamentStatsChart
                     title="Win Percentage"
                     value="winPercentage"
+                    prefix="%"
+                    suffix=""
                     players={group.players}
                     stats={stats}
                   ></TournamentStatsChart>
                 </div>
 
-                <div className="py-3">
+                <div className="py-4 border-bottom shadow-sm">
                   <TournamentStatsChart
                     title="TrueSkill Points"
                     value="score"
+                    prefix=""
+                    suffix="pt."
                     players={group.players}
                     stats={stats}
                   ></TournamentStatsChart>
