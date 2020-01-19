@@ -15,6 +15,7 @@ import RouteNav from "./RouteNav";
 import { StatsCard } from "./StatsCard";
 import GroupCard from "./GroupCard";
 import useLocation from "../hooks/useLocation";
+import { ScrollPills } from "./ScrollPills";
 
 const PlayerProfile = ({
   player,
@@ -83,7 +84,7 @@ const PlayerProfile = ({
           <div className="col-6 p-2">
             <StatsCard
               cardClass="bg-success text-white"
-              icon={<FontAwesomeIcon icon={faAtom} />}
+              icon={<FontAwesomeIcon className="h5" icon={faAtom} />}
               number={player.score}
               name="Points"
             />
@@ -91,7 +92,7 @@ const PlayerProfile = ({
           <div className="col-6 p-2">
             <StatsCard
               cardClass="bg-dark text-white"
-              icon={<FontAwesomeIcon icon={faClipboardCheck} />}
+              icon={<FontAwesomeIcon className="h5" icon={faClipboardCheck} />}
               number={(player.won || 0) + (player.lost || 0)}
               name="Match played"
             />
@@ -99,17 +100,17 @@ const PlayerProfile = ({
           <div className="col-6 p-2">
             <StatsCard
               cardClass="bg-info text-white"
-              icon={<FontAwesomeIcon icon={faPercentage} />}
+              icon={<FontAwesomeIcon className="h5" icon={faPercentage} />}
               number={player.winPercentage}
-              name="Win percentage"
+              name="Win Pct."
             />
           </div>
           <div className="col-6 p-2">
             <StatsCard
               cardClass="bg-warning text-dark"
-              icon={<FontAwesomeIcon icon={faDollarSign} />}
-              number={"$" + (player.prizeMoney || "0")}
-              name="Total prize money"
+              icon={<FontAwesomeIcon className="h5" icon={faDollarSign} />}
+              number={player.prizeMoney || "0"}
+              name="Prize money"
             />
           </div>
         </div>
@@ -118,18 +119,20 @@ const PlayerProfile = ({
       {player.groups ? (
         <>
           <HeaderCard>Groups</HeaderCard>
-          <div className="row m-2">
-            {Object.keys(player.groups).map((p, i) => (
-              <div key={p} className="col-6 p-2">
+          <div className="pb-5">
+            <ScrollPills height={300}>
+              {Object.keys(player.groups).map((p, i) => (
                 <GroupCard
+                  style={{ minWidth: 300 }}
+                  key={p}
                   group={groups[p]}
                   loc={loc}
                   user={player}
                   showIsMember={false}
                   hideDetails={true}
                 ></GroupCard>
-              </div>
-            ))}
+              ))}
+            </ScrollPills>
           </div>
         </>
       ) : null}

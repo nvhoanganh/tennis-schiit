@@ -1,5 +1,6 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getStats, isMember, isOwner } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
@@ -218,6 +219,7 @@ const Leaderboard = ({
                   <LeaderboardCard
                     key={k}
                     player={null}
+                    history={null}
                     ranking={null}
                     loading={true}
                   ></LeaderboardCard>
@@ -229,6 +231,7 @@ const Leaderboard = ({
                   <LeaderboardCard
                     key={k.id}
                     player={k}
+                    history={history}
                     group={group}
                     sortBy={tournament ? tournament.sortBy : ""}
                     ranking={i}

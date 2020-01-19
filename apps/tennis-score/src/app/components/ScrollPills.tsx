@@ -9,7 +9,7 @@ export function ScrollPills({ children, height }) {
       }}
     >
       <div
-        className="row flex-nowrap p-2 div2"
+        className="row flex-nowrap p-2 div2 mr-1"
         style={{
           overflowX: "auto",
           overflowY: "hidden",
