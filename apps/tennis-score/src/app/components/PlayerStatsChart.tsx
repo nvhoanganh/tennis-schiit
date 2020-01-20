@@ -57,7 +57,6 @@ export function PlayerStatsChart({ stats }) {
       getScore("prizeMoney"),
       getScore("winPercentage")
     ];
-    console.log(d);
     return d;
   };
 

@@ -45,7 +45,6 @@ const PlayerProfile = ({
         tourId: group.currentTournament,
         playerId: player.playerId
       }).then(x => {
-        console.log(x);
         setMyStats(x);
       });
     }
