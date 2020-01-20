@@ -1,5 +1,4 @@
-import { toChartDate, roundOff } from "@tennis-score/redux";
-import { format } from "date-fns";
+import { roundOff, toChartDate } from "@tennis-score/redux";
 import ReactEcharts from "echarts-for-react";
 import * as R from "ramda";
 import React from "react";

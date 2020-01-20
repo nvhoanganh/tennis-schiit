@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import queryString from "query-string";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderCard from "./Header";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import MySpinner from "./MySpinner";
@@ -16,6 +16,9 @@ import { StatsCard } from "./StatsCard";
 import GroupCard from "./GroupCard";
 import useLocation from "../hooks/useLocation";
 import { ScrollPills } from "./ScrollPills";
+import { getStatsByPlayer } from "@tennis-score/redux";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/core";
+import { PlayerStatsChart } from "./PlayerStatsChart";
 
 const PlayerProfile = ({
   player,
@@ -28,15 +31,29 @@ const PlayerProfile = ({
   location,
   ...props
 }) => {
+  const [myStats, setMyStats] = useState<any>(null);
   const loc = useLocation();
+  const q = queryString.parse(location.search);
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
-    const q = queryString.parse(location.search);
     props.getPlayer(match.params.id, q.userId);
   }, []);
+  useEffect(() => {
+    if (group && player) {
+      getStatsByPlayer({
+        groupId: group.groupId,
+        tourId: group.currentTournament,
+        playerId: player.playerId
+      }).then(x => {
+        console.log(x);
+        setMyStats(x);
+      });
+    }
+  }, [group, player]);
 
   if (!player || pendingRequests || (player && !player.name))
     return <MySpinner />;
+
   return (
     <>
       <RouteNav history={history} center="Player Profile"></RouteNav>
@@ -80,39 +97,67 @@ const PlayerProfile = ({
       </div>
       <>
         <HeaderCard>Statistics</HeaderCard>
-        <div className="row m-2">
-          <div className="col-6 p-2">
-            <StatsCard
-              cardClass="bg-success text-white"
-              icon={<FontAwesomeIcon className="h5" icon={faAtom} />}
-              number={player.score}
-              name="Points"
-            />
-          </div>
-          <div className="col-6 p-2">
-            <StatsCard
-              cardClass="bg-dark text-white"
-              icon={<FontAwesomeIcon className="h5" icon={faClipboardCheck} />}
-              number={(player.won || 0) + (player.lost || 0)}
-              name="Match played"
-            />
-          </div>
-          <div className="col-6 p-2">
-            <StatsCard
-              cardClass="bg-info text-white"
-              icon={<FontAwesomeIcon className="h5" icon={faPercentage} />}
-              number={player.winPercentage}
-              name="Win Pct."
-            />
-          </div>
-          <div className="col-6 p-2">
-            <StatsCard
-              cardClass="bg-warning text-dark"
-              icon={<FontAwesomeIcon className="h5" icon={faDollarSign} />}
-              number={player.prizeMoney || "0"}
-              name="Prize money"
-            />
-          </div>
+        <div className="m-2 mx-3">
+          <Tabs variant="soft-rounded" variantColor="facebook" size="sm">
+            <TabList>
+              <Tab>Overall</Tab>
+              <Tab>Chart</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <div className="row m-2">
+                  <div className="col-6 p-2">
+                    <StatsCard
+                      cardClass="bg-success text-white"
+                      icon={<FontAwesomeIcon className="h5" icon={faAtom} />}
+                      number={player.score}
+                      name="Points"
+                    />
+                  </div>
+                  <div className="col-6 p-2">
+                    <StatsCard
+                      cardClass="bg-dark text-white"
+                      icon={
+                        <FontAwesomeIcon
+                          className="h5"
+                          icon={faClipboardCheck}
+                        />
+                      }
+                      number={(player.won || 0) + (player.lost || 0)}
+                      name="Match played"
+                    />
+                  </div>
+                  <div className="col-6 p-2">
+                    <StatsCard
+                      cardClass="bg-info text-white"
+                      icon={
+                        <FontAwesomeIcon className="h5" icon={faPercentage} />
+                      }
+                      number={player.winPercentage}
+                      name="Win Pct."
+                    />
+                  </div>
+                  <div className="col-6 p-2">
+                    <StatsCard
+                      cardClass="bg-warning text-dark"
+                      icon={
+                        <FontAwesomeIcon className="h5" icon={faDollarSign} />
+                      }
+                      number={player.prizeMoney || "0"}
+                      name="Prize money"
+                    />
+                  </div>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                {myStats && (
+                  <div className="m-2">
+                    <PlayerStatsChart stats={myStats}></PlayerStatsChart>
+                  </div>
+                )}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </div>
       </>
 

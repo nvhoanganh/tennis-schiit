@@ -118,18 +118,6 @@ export function getStatsByPlayer({ groupId, tourId, playerId }) {
     .then(x => x.docs.map(y => y.data()));
 }
 
-
-export function getStats(groupId, tourId) {
-  return firebase
-    .firestore()
-    .collection(GROUPS)
-    .doc(groupId)
-    .collection(TOURNAMENTS)
-    .doc(tourId)
-    .collection(STATS)
-    .get()
-    .then(x => x.docs.map(y => y.data()));
-}
 export type PlayerAction =
   | LoadPlayersSuccessAction
   | AddPlayerAction
