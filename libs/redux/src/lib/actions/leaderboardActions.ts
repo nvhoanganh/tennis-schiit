@@ -177,7 +177,8 @@ export function submitScore({
       headStart,
       gameWonByLostTeam,
       reverseBagel,
-      matchDate: new Date(matchDate)
+      matchDate: new Date(matchDate),
+      timestamp: new Date()
     });
 
     // update other -> this should be in firebase func
