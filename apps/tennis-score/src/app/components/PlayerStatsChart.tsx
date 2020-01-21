@@ -16,8 +16,7 @@ export function PlayerStatsChart({ stats }) {
       type: "time",
       splitLine: {
         show: false
-      },
-      minInterval: 10
+      }
     },
     tooltip: {
       trigger: "axis"
