@@ -8,27 +8,73 @@ export function PlayerStatsChart({ stats }) {
     grid: {
       left: "3%",
       right: "4%",
-      top: "10%",
+      top: "20%",
       containLabel: true
     },
     legend: {},
     xAxis: {
       type: "time",
       splitLine: {
-        show: true
-      }
+        show: false
+      },
+      minInterval: 10
     },
     tooltip: {
       trigger: "axis"
     },
-    yAxis: {
-      type: "value"
-    },
+    yAxis: [
+      {
+        splitLine: {
+          show: false
+        },
+        type: "value"
+      },
+      {
+        splitLine: {
+          show: true
+        },
+        type: "value"
+      }
+    ],
     series: getDataSeries()
   });
 
   const getDataSeries = () => {
-    const getSummary = v =>
+    const calcWinLost = (stats, winOrlost) =>
+      R.pipe(
+        // start with stats = an Array of match result
+        R.pipe(
+          // group by match date
+          R.groupBy(m => m.timestamp.seconds),
+          // for each date, sort by match count ascendant
+          R.map(R.pipe(R.sortBy(x => x.played))),
+          // get the values array
+          Object.values,
+          // use Reduce to calculate the win/lost
+          R.map(x => ({
+            timestamp: x[0].timestamp,
+            stats: x.reduce((pre, cur) => {
+              if (!pre) {
+                return {
+                  win: cur.previousScore < cur.score ? 1 : 0,
+                  lost: cur.previousScore > cur.score ? 1 : 0
+                };
+              } else {
+                return {
+                  win: pre.win + (cur.previousScore < cur.score ? 1 : 0),
+                  lost: pre.lost + (cur.previousScore > cur.score ? 1 : 0)
+                };
+              }
+            }, null)
+          }))
+        ),
+        R.map(x => ({
+          name: toChartDate(x.timestamp.seconds).toString(),
+          value: [toChartDate(x.timestamp.seconds), x.stats[winOrlost]]
+        }))
+      )(stats);
+
+    const calcLineChart = v =>
       R.pipe(
         // group by match date
         R.groupBy(m => m.timestamp.seconds),
@@ -44,20 +90,40 @@ export function PlayerStatsChart({ stats }) {
         }))
       )(stats);
 
-    const getScore = v => ({
+    const getLineChart = v => ({
       name: v,
       type: "line",
       showSymbol: true,
       hoverAnimation: true,
-      data: getSummary(v)
+      data: calcLineChart(v)
+    });
+    const getWinLostSerie = v => ({
+      name: v,
+      type: "bar",
+      stack: "a",
+      barMaxWidth: 30,
+      yAxisIndex: 1,
+      label: {
+        show: true,
+        fontSize: 14,
+        fontWeight: "bold",
+        color: "black"
+      },
+      itemStyle: {
+        barBorderColor: v === "win" ? "#2F855A" : "#C53030",
+        color: v === "win" ? "#28a745" : "#FC8181",
+        opacity: 0.4
+      },
+      data: calcWinLost(stats, v)
     });
 
-    const d = [
-      getScore("score"),
-      getScore("prizeMoney"),
-      getScore("winPercentage")
+    return [
+      getLineChart("score"),
+      getLineChart("prizeMoney"),
+      getLineChart("winPercentage"),
+      getWinLostSerie("win"),
+      getWinLostSerie("lost")
     ];
-    return d;
   };
 
   return (

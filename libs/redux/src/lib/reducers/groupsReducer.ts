@@ -1,7 +1,7 @@
 import { IGroup } from "../models";
 import { GroupActionTypes, GroupAction } from "../actions";
 import { removeById } from "../utils";
-const firebase = require("firebase/firestore");
+import * as firebase from "firebase/app";
 
 export interface IGroupsState {
   [groupId: string]: IGroup;
