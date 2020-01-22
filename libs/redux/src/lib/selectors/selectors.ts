@@ -1,7 +1,6 @@
 import { createSelector } from "reselect";
-import { isMember, arrayToObject, roundOff, calculateStats } from "../utils";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
-import players from "../reducers/playersReducer";
+import { arrayToObject, calculateStats, isMember, roundOff } from "../utils";
 const getPlayers = state => state.players;
 const getGroups = state => state.groups;
 const getScoresState = state => state.scores;
@@ -33,6 +32,11 @@ export const getHasMore = createSelector(
 export const getLastDoc = createSelector(
   getScoresState,
   s => s.lastDoc
+);
+
+export const getAppLoadError = createSelector(
+  getAppState,
+  s => s.getAppLoadError
 );
 
 export const getPlayerList = createSelector(

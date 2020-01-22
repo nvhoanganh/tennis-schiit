@@ -6,6 +6,7 @@ export interface IAppState {
   lastAction?: string;
   lastErrorAction?: string;
   lastError?: any;
+  appLoadError?: any;
   signInError?: any;
   user?: any;
   currentGroup?: string;
@@ -33,6 +34,13 @@ const app = (
       return {
         ...state,
         pendingRequests: decrementApi(state),
+        appLoaded: true
+      };
+    case AppActionTypes.APP_LOAD_FAILED:
+      return {
+        ...state,
+        pendingRequests: decrementApi(state),
+        appLoadError: action.error,
         appLoaded: true
       };
     case AppActionTypes.API_ERROR:

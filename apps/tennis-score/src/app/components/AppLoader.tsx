@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import MySpinner from "./MySpinner";
 import bodymovin from "lottie-web";
-export function AppLoader({}) {
+export function AppLoader(props) {
   useEffect(() => {
     bodymovin.loadAnimation({
       container: document.getElementById("spinner"), // Required
@@ -21,11 +21,13 @@ export function AppLoader({}) {
             <p className="lead">
               <em>Score Sheet</em>
             </p>
-            <div
-              className="lead m-auto text-center"
-              id="spinner"
-              style={{ height: 60, width: 60 }}
-            ></div>
+            {!props.hideSpinner ? (
+              <div
+                className="lead m-auto text-center"
+                id="spinner"
+                style={{ height: 60, width: 60 }}
+              ></div>
+            ) : null}
           </div>
         </div>
       </div>

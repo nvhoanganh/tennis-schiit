@@ -1,4 +1,12 @@
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure,
+  useToast
+} from "@chakra-ui/core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { appLoad, loadGroups, signOut } from "@tennis-score/redux";
@@ -21,22 +29,40 @@ const App = ({
   user,
   appLoad,
   loadGroups,
+  appLoadError,
   appLoaded,
   history,
   signOutHandler
 }) => {
+  const toast = useToast();
+
   useEffect(() => {
     appLoad();
     loadGroups();
   }, []);
 
   useEffect(() => {
+    if (appLoadError) {
+      const offline = appLoadError.toString().indexOf("offline") > 0;
+      toast({
+        title: offline
+          ? "Oh no! Your connection seems off.."
+          : "Something went wrong",
+        description: "Please reload to try again",
+        status: "error",
+        duration: null,
+        isClosable: false
+      });
+    }
+  }, [appLoadError]);
+
+  useEffect(() => {
     if (user && !user.displayName) {
-      console.log("user has not profile name");
       history.push("/account-details/edit");
     }
   }, [user]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  if (appLoadError) return <AppLoader hideSpinner={true} />;
   return appLoaded ? (
     <div>
       <Navbar
@@ -55,7 +81,6 @@ const App = ({
               src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
               height="30"
               className="d-inline-block align-top"
-              alt="React Bootstrap logo"
             />{" "}
             Tennis Score
           </Navbar.Brand>
@@ -81,7 +106,6 @@ const App = ({
                 }}
                 src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
                 className="d-inline-block align-top pl-4"
-                alt="React Bootstrap logo"
               />
               Tennis score
             </div>
@@ -109,9 +133,10 @@ const App = ({
 };
 
 const mapStateToProps = ({
-  app: { lastError, pendingRequests, user, appLoaded }
+  app: { lastError, pendingRequests, user, appLoaded, appLoadError }
 }) => ({
   lastError,
+  appLoadError,
   user,
   appLoaded,
   loading: pendingRequests > 0

@@ -117,7 +117,7 @@ const PlayerProfile = ({
                         />
                       }
                       number={(player.won || 0) + (player.lost || 0)}
-                      name="Match played"
+                      name="Matches"
                     />
                   </div>
                   <div className="col-6 p-2">

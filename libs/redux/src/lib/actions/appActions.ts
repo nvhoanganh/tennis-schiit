@@ -12,6 +12,7 @@ export enum AppActionTypes {
 
   APP_LOAD = "APP_LOAD",
   APP_LOADED = "APP_LOADED",
+  APP_LOAD_FAILED = "APP_LOAD_FAILED",
 
   SIGNIN = "SIGNIN",
   SIGNIN_SUCCESS = "SIGNIN_SUCCESS",
@@ -39,6 +40,10 @@ export class AppLoadAction implements IAction {
 }
 export class AppLoadedAction implements IAction {
   readonly type = AppActionTypes.APP_LOADED;
+}
+export class AppLoadFailedAction implements IAction {
+  readonly type = AppActionTypes.APP_LOAD_FAILED;
+  constructor(public action: string, public error: any) {}
 }
 export class ApiEndAction implements IAction {
   readonly type = AppActionTypes.API_END;
@@ -249,7 +254,7 @@ export function appLoad() {
           dispatch({ type: AppActionTypes.APP_LOADED });
         })
         .catch(function(error) {
-          dispatch({ type: AppActionTypes.API_ERROR, error });
+          dispatch({ type: AppActionTypes.APP_LOAD_FAILED, error });
           dispatch(apiEnd());
         });
     });
@@ -259,6 +264,7 @@ export function appLoad() {
 export type AppAction =
   | AppLoadAction
   | AppLoadedAction
+  | AppLoadFailedAction
   | UpdateProfileAction
   | UpdateProfileSuccessAction
   | ApiStartAction
