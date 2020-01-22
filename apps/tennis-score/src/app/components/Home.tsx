@@ -1,40 +1,39 @@
-import geohash from "ngeohash";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
+import useLocation from "../hooks/useLocation";
 import { Button } from "./Button";
-import { body } from "./common";
 import GroupCard from "./GroupCard";
 
 const Home = ({ user, groups, myGroups, loading, ...props }) => {
-  const getUserLoc = () => {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        const { latitude, longitude } = pos.coords;
-        setLoc(geohash.encode(latitude, longitude));
-        console.log("Your current position is:", loc);
-      },
-      err => {
-        console.warn(
-          `Cant get user location, ERROR(${err.code}): ${err.message}`
-        );
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      }
-    );
-  };
-  const [loc, setLoc] = useState(null);
+  const loc = useLocation();
+  const [tabs, setTabs] = useState<any>({});
   useEffect(() => {
-    getUserLoc();
-  }, []);
+    setTabs(s => {
+      return {
+        ...s,
+        ...(myGroups.length > 0 && {
+          groups: {
+            groups: myGroups,
+            name: "My Groups"
+          }
+        }),
+        ...(groups.length > 0 && {
+          discover: {
+            groups,
+            name: "Discover"
+          }
+        })
+      };
+    });
+  }, [myGroups, groups]);
 
+  console.log(tabs);
   if (loading)
     return (
       <>
-        <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
+        <div className="shadow-sm p-2 bg-white border-top border-bottom">
           <Skeleton />
         </div>
         <div className="px-2 py-3">
@@ -54,43 +53,29 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
 
   return (
     <div>
-      {myGroups.length > 0 && (
-        <>
-          <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
-            My groups
-          </div>
-          <div className="px-2">
-            {myGroups.map((p, i) => (
-              <GroupCard
-                key={p.groupId}
-                group={p}
-                user={user}
-                loc={loc}
-                showIsMember={false}
-              ></GroupCard>
-            ))}
-          </div>
-        </>
-      )}
+      <Tabs isFitted>
+        <TabList>
+          {Object.keys(tabs).map(k => (
+            <Tab key={k}>{tabs[k].name}</Tab>
+          ))}
+        </TabList>
+        <TabPanels>
+          {Object.keys(tabs).map(k => (
+            <TabPanel key={k}>
+              {tabs[k].groups.map((p, i) => (
+                <GroupCard
+                  key={p.groupId}
+                  group={p}
+                  user={user}
+                  loc={loc}
+                  showIsMember={false}
+                ></GroupCard>
+              ))}
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
 
-      {groups.length > 0 && (
-        <>
-          <div className="shadow-sm p-2 mt-3 bg-white border-top border-bottom">
-            Discover Groups
-          </div>
-          <div className="px-2">
-            {groups.map((p, i) => (
-              <GroupCard
-                key={p.groupId}
-                group={p}
-                loc={loc}
-                user={user}
-                showIsMember={true}
-              ></GroupCard>
-            ))}
-          </div>
-        </>
-      )}
       <div className="text-center p-2">
         <LinkContainer to={`/newgroup`}>
           <Button

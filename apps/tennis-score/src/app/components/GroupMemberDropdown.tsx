@@ -22,7 +22,7 @@ export function GroupMemberDropdown({
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <button onClick={onOpen} type="button" className="btn btn-link btn-sm">
+      <button onClick={onOpen} type="button" className="btn btn-link btn-sm text-dark">
         <FontAwesomeIcon icon={faEllipsisV} />
       </button>
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>

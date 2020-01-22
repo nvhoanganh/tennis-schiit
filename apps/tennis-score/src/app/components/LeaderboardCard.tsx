@@ -1,16 +1,12 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SORT_PRIZEMONEY, SORT_TRUESKILL, SORT_WINPERCENT } from "@tennis-score/redux";
 import classNames from "classnames";
 import React from "react";
 import Skeleton from "react-loading-skeleton";
-import { LinkContainer } from "react-router-bootstrap";
+import Ripples from "react-ripples";
 import RoundGravatar from "./RoundGravatar";
 import { ScoreCard } from "./ScoreCard";
-import {
-  SORT_PRIZEMONEY,
-  SORT_TRUESKILL,
-  SORT_WINPERCENT
-} from "@tennis-score/redux";
 
 const prizeMoneyCls = player =>
   classNames({
@@ -104,7 +100,7 @@ const getStats = (player, sortBy) => {
   );
 };
 
-const LeaderboardCard = ({ player, ranking, ...props }) => {
+const LeaderboardCard = ({ player, ranking, history, ...props }) => {
   if (props.loading) {
     return (
       <div className="px-2 border-bottom border-top">
@@ -121,10 +117,14 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
   }
   const getUserLink = () =>
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
+
   return (
     <div className="px-2 border-bottom border-top shadow-sm">
-      <div className="card-body py-3 px-0">
-        <LinkContainer to={getUserLink()}>
+      <Ripples
+        className="w-100"
+        onClick={() => setTimeout(() => history.push(getUserLink()), 200)}
+      >
+        <div className="card-body px-0 pt-3 pb-1">
           <div className="float-left pr-3">
             <RoundGravatar
               size={50}
@@ -143,27 +143,25 @@ const LeaderboardCard = ({ player, ranking, ...props }) => {
               </span>
             </div>
           </div>
-        </LinkContainer>
 
-        <div className="mr-auto">
-          <LinkContainer to={getUserLink()}>
-            <a className="h5 text-dark pl-0">
+          <div className="mr-auto">
+            <span className="h5 text-dark pl-0">
               {player.name}
               {!player.linkedplayerId && (
                 <span className="badge x-small badge-light ml-1 x-small">
                   G
                 </span>
               )}
-            </a>
-          </LinkContainer>
-          {player.played ? (
-            <div className="float-right text-right">
-              {getStats(player, props.sortBy)}
-            </div>
-          ) : null}
-          <ScoreCard {...player} />
+            </span>
+            {player.played ? (
+              <div className="float-right text-right">
+                {getStats(player, props.sortBy)}
+              </div>
+            ) : null}
+            <ScoreCard {...player} />
+          </div>
         </div>
-      </div>
+      </Ripples>
     </div>
   );
 };

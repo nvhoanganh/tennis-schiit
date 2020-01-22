@@ -1,4 +1,5 @@
 import React from "react";
+import { Checkbox, CheckboxGroup } from "@chakra-ui/core";
 
 const checkBoxStyle = {
   height: 18,
@@ -13,25 +14,15 @@ const CheckBoxInput: React.SFC<{
   setValue(name: string, value: boolean);
 }> = ({ label, disabled, name, value, setValue }) => {
   return (
-    <div className="form-check">
-      <input
-        disabled={disabled}
-        name={name}
-        style={checkBoxStyle}
-        className="form-check-input"
+    <div style={{ marginTop: 2 }}>
+      <Checkbox
+        isDisabled={disabled}
+        size="lg"
+        isChecked={value}
         onChange={e => setValue(name, e.target.checked)}
-        checked={value}
-        type="checkbox"
-      />
-      <label
-        className="form-check-label"
-        htmlFor={name}
-        style={{
-          marginLeft: 14
-        }}
       >
         {label}
-      </label>
+      </Checkbox>
     </div>
   );
 };

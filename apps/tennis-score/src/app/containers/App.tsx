@@ -1,23 +1,30 @@
-import { appLoad, loadGroups } from "@tennis-score/redux";
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { appLoad, loadGroups, signOut } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect } from "react";
-import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
-import { faSyncAlt, faBars } from "@fortawesome/free-solid-svg-icons";
 
 const linkStyle = {
   lineHeight: "2rem"
 };
 
-const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
+const App = ({
+  route,
+  user,
+  appLoad,
+  loadGroups,
+  appLoaded,
+  history,
+  signOutHandler
+}) => {
   useEffect(() => {
     appLoad();
     loadGroups();
@@ -29,7 +36,7 @@ const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
       history.push("/account-details/edit");
     }
   }, [user]);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return appLoaded ? (
     <div>
       <Navbar
@@ -55,38 +62,46 @@ const App = ({ route, user, appLoad, loadGroups, appLoaded, history }) => {
         </LinkContainer>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
+          onClick={() => onOpen()}
           style={{ marginRight: "0.4rem", border: "none" }}
           children={<FontAwesomeIcon icon={faBars} />}
         />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            {user && user.lastGroup ? (
-              <LinkContainer style={linkStyle} to="/leaderboard">
-                <NavDropdown.Item className="text-white">
-                  Leaderboard
-                </NavDropdown.Item>
-              </LinkContainer>
-            ) : null}
+      </Navbar>
+      <div>{renderRoutes(route.routes)}</div>
+      <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth="1px">
+            <div className="text-center" style={{ marginLeft: -45 }}>
+              <img
+                style={{
+                  width: 54,
+                  alignSelf: "center",
+                  marginRight: 3
+                }}
+                src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
+                className="d-inline-block align-top pl-4"
+                alt="React Bootstrap logo"
+              />
+              Tennis score
+            </div>
+          </DrawerHeader>
+          <DrawerBody>
             <LinkContainer style={linkStyle} to="/home">
-              <NavDropdown.Item className="text-white">Home</NavDropdown.Item>
+              <a className="h5 py-1 d-block">Home</a>
             </LinkContainer>
             {!user ? (
               <LinkContainer style={linkStyle} to="/signin">
-                <NavDropdown.Item className="text-white">
-                  Sign In
-                </NavDropdown.Item>
+                <a className="h5 py-1 d-block">Sign In</a>
               </LinkContainer>
             ) : (
               <LinkContainer style={linkStyle} to="/account-details">
-                <NavDropdown.Item className="text-white">
-                  User Profile
-                </NavDropdown.Item>
+                <a className="h5 py-1 d-block">My Profile</a>
               </LinkContainer>
             )}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <div>{renderRoutes(route.routes)}</div>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </div>
   ) : (
     <AppLoader />
@@ -104,6 +119,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   appLoad: _ => dispatch(appLoad()),
+  signOutHandler: () => dispatch(signOut()),
   loadGroups: _ => dispatch(loadGroups())
 });
 

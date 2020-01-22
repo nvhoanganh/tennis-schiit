@@ -13,7 +13,7 @@ const RouteNav: React.SFC<{
         <Button
           type="button"
           onClick={() => history.goBack()}
-          className="btn btn-link btn-sm"
+          className="btn btn-link btn-sm text-dark"
         >
           <FontAwesomeIcon icon={faLongArrowAltLeft} />
         </Button>

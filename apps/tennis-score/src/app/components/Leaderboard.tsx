@@ -1,23 +1,27 @@
-import { isMember, isOwner } from "@tennis-score/redux";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getStats, isMember, isOwner } from "@tennis-score/redux";
+import { formatDistanceToNow } from "date-fns";
 import format from "date-fns/format";
+import queryString from "query-string";
+import * as R from "ramda";
 import React, { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
+import setQuery from "set-query-string";
+import { Button } from "./Button";
+import Confirm from "./Confirm";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
 import GroupScoreCard from "./GroupScoreCard";
 import HeaderCard from "./Header";
 import LeaderboardCard from "./LeaderboardCard";
 import UpdateButton from "./LoadingButton";
+import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import Skeleton from "react-loading-skeleton";
-import { formatDistanceToNow } from "date-fns";
-import PendingMemberCard from "./PendingMemberCard";
-import Confirm from "./Confirm";
-import * as R from "ramda";
-import { Button } from "./Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-
+import { TournamentStatsChart } from "./TournamentStatsChart";
 const Leaderboard = ({
   pendingJoinRequests,
   players,
@@ -29,8 +33,29 @@ const Leaderboard = ({
   tournament,
   history,
   loading,
+  hasMore,
+  lastDoc,
   ...props
 }) => {
+  // states
+  const q = queryString.parse(location.search);
+  const [tabIndex, setTabIndex] = useState(+q.tab || 0);
+  const [stats, setStats] = useState(null);
+  const [show, setShow] = useState(false);
+  const [approvingPlayer, setapprovingPlayer] = useState(null);
+
+  useEffect(() => {
+    props.loadLeaderboard(match.params.group);
+  }, []);
+
+  useEffect(() => {
+    console.log("tab index changed to:", tabIndex);
+    if (tabIndex === 1 && !stats && group) {
+      getStats(match.params.group, group.currentTournament).then(setStats);
+    }
+    setQuery({ tab: tabIndex });
+  }, [tabIndex, group, stats]);
+
   const joinHandler = _ => {
     if (!user) {
       history.push("/signup");
@@ -40,8 +65,10 @@ const Leaderboard = ({
   };
   const canSubmitNewScore = () =>
     user && isMember(user, group) && tournament && !loading;
+
   const canCreateTour = () =>
     user && isOwner(user, group) && !tournament && !loading;
+
   const showApprove = () =>
     !loading &&
     isMember(user, group) &&
@@ -51,6 +78,7 @@ const Leaderboard = ({
   const rejectJoinRequestHandler = player => {
     props.rejectJoinRequest(player, match.params.group);
   };
+
   const approveJoinRequestHandler = player => {
     if (players.filter(x => !x.linkedplayerId).length === 0) {
       // approve as new
@@ -66,16 +94,12 @@ const Leaderboard = ({
       .approveJoinRequest(approvingPlayer, match.params.group, asPlayer)
       .then(_ => handleClose());
   };
-  const [show, setShow] = useState(false);
-  const [approvingPlayer, setapprovingPlayer] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    props.loadLeaderboard(match.params.group);
-  }, []);
   return (
     <>
+      {/* top nav */}
       {group && (
         <>
           <RouteNav
@@ -139,8 +163,9 @@ const Leaderboard = ({
         </>
       )}
 
+      {/* show pending members */}
       {showApprove() ? (
-        <>
+        <div className="mt-3">
           <HeaderCard>Approve pending members</HeaderCard>
           <div className="pb-4">
             {pendingJoinRequests.map((k, i) => (
@@ -152,78 +177,148 @@ const Leaderboard = ({
               ></PendingMemberCard>
             ))}
           </div>
-        </>
+        </div>
       ) : null}
 
-      <HeaderCard
-        right={
-          <TournamentDropDown
-            user={user}
-            group={group}
-            tournament={tournament}
-          />
-        }
+      {/* tabs */}
+      <Tabs
+        isFitted
+        className="py-2"
+        defaultIndex={tabIndex}
+        onChange={index => setTabIndex(index)}
       >
-        {tournament ? (
-          <span>
-            {tournament.description || "Current tournament"}:{" started "}
-            {format(tournament.startDate.toDate(), "dd/MM/yy")}
-          </span>
-        ) : (
-          "Members"
-        )}
-      </HeaderCard>
-      {/*  show leaderboard */}
-      {loading ? (
-        <div className="pb-3">
-          {R.range(0, 6).map((k, i) => (
-            <LeaderboardCard
-              key={k}
-              player={null}
-              ranking={null}
-              loading={true}
-            ></LeaderboardCard>
-          ))}
-        </div>
-      ) : players.length > 0 ? (
-        <div className="pb-3">
-          {players.map((k, i) => (
-            <LeaderboardCard
-              key={k.id}
-              player={k}
-              group={group}
-              sortBy={tournament ? tournament.sortBy : ""}
-              ranking={i}
-            ></LeaderboardCard>
-          ))}
-          <div className="text-center p-2">
-            {canSubmitNewScore() && (
-              <LinkContainer to={`/newscore/${match.params.group}`}>
-                <UpdateButton
-                  loading={loading}
-                  value="Submit Result"
-                  type="submit"
-                  className="btn btn-primary btn-sm btn-block btn-sm"
-                ></UpdateButton>
-              </LinkContainer>
-            )}
+        <TabList>
+          <Tab>Leaderboard</Tab>
+          <Tab>Stats</Tab>
+        </TabList>
 
-            {canCreateTour() && (
-              <LinkContainer to={`/groups/${match.params.group}/newtournament`}>
-                <UpdateButton
-                  loading={loading}
-                  value="Create Tournament"
-                  type="submit"
-                  className="btn btn-primary btn-sm btn-block btn-sm"
-                ></UpdateButton>
-              </LinkContainer>
+        <TabPanels>
+          <TabPanel>
+            {/* leaerboard */}
+            <HeaderCard
+              right={
+                <TournamentDropDown
+                  user={user}
+                  group={group}
+                  tournament={tournament}
+                />
+              }
+            >
+              {tournament ? (
+                <span>
+                  {tournament.description || "Current tournament"}:{" started "}
+                  {format(tournament.startDate.toDate(), "dd/MM/yy")}
+                </span>
+              ) : (
+                "Members"
+              )}
+            </HeaderCard>
+            {loading ? (
+              <div className="pb-3">
+                {R.range(0, 6).map((k, i) => (
+                  <LeaderboardCard
+                    key={k}
+                    player={null}
+                    history={null}
+                    ranking={null}
+                    loading={true}
+                  ></LeaderboardCard>
+                ))}
+              </div>
+            ) : players.length > 0 ? (
+              <div className="pb-3">
+                {players.map((k, i) => (
+                  <LeaderboardCard
+                    key={k.id}
+                    player={k}
+                    history={history}
+                    group={group}
+                    sortBy={tournament ? tournament.sortBy : ""}
+                    ranking={i}
+                  ></LeaderboardCard>
+                ))}
+                <div className="text-center p-2">
+                  {canSubmitNewScore() && (
+                    <LinkContainer to={`/newscore/${match.params.group}`}>
+                      <UpdateButton
+                        loading={loading}
+                        value="Submit Result"
+                        type="submit"
+                        className="btn btn-primary btn-sm btn-block btn-sm"
+                      ></UpdateButton>
+                    </LinkContainer>
+                  )}
+
+                  {canCreateTour() && (
+                    <LinkContainer
+                      to={`/groups/${match.params.group}/newtournament`}
+                    >
+                      <UpdateButton
+                        loading={loading}
+                        value="Create Tournament"
+                        type="submit"
+                        className="btn btn-primary btn-sm btn-block btn-sm"
+                      ></UpdateButton>
+                    </LinkContainer>
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </TabPanel>
+          <TabPanel>
+            {group && stats ? (
+              <>
+                <div className="py-4 border-bottom shadow-sm">
+                  <TournamentStatsChart
+                    title="Prize Money"
+                    value="prizeMoney"
+                    prefix="$"
+                    suffix=""
+                    players={group.players}
+                    stats={stats}
+                  ></TournamentStatsChart>
+                </div>
+
+                <div className="py-4 border-bottom shadow-sm">
+                  <TournamentStatsChart
+                    title="Win Percentage"
+                    value="winPercentage"
+                    prefix="%"
+                    suffix=""
+                    players={group.players}
+                    stats={stats}
+                  ></TournamentStatsChart>
+                </div>
+
+                <div className="py-4 border-bottom shadow-sm">
+                  <TournamentStatsChart
+                    title="TrueSkill Points"
+                    value="score"
+                    prefix=""
+                    suffix="pt."
+                    players={group.players}
+                    stats={stats}
+                  ></TournamentStatsChart>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="py-4 border-bottom shadow-sm">
+                  <Skeleton height={400} />
+                </div>
+
+                <div className="py-4 border-bottom shadow-sm">
+                  <Skeleton height={400} />
+                </div>
+              </>
             )}
-          </div>
-        </div>
-      ) : null}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
 
       <Confirm
         title="Add Player"
+        size="md"
         close="Cancel"
         onCancelAction={handleClose}
         message={
@@ -234,7 +329,7 @@ const Leaderboard = ({
               </span>{" "}
               is the same player as:
             </div>
-            <div className="py-1 px-2">
+            <div className="py-1">
               {players
                 .filter(x => !x.linkedplayerId)
                 .map(p => (
@@ -266,7 +361,7 @@ const Leaderboard = ({
                 }
               >
                 <span>
-                  <em>None above, create new</em>
+                  <em>Create new</em>
                 </span>
               </HeaderCard>
             </div>

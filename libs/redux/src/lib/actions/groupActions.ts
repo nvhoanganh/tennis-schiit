@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import geohash from "ngeohash";
 import "firebase/storage";
-import { GROUPS, IGroup, TOURNAMENTS, USERS } from "../models";
+import { GROUPS, IGroup, TOURNAMENTS, USERS, STATS } from "../models";
 import { arrayToObject } from "../utils";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { IAction } from "@tennis-score/redux";
@@ -496,6 +496,18 @@ export function addGroup({
       dispatch(loadGroups(true));
     });
   };
+}
+
+export function getStats(groupId, tourId) {
+  return firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId)
+    .collection(TOURNAMENTS)
+    .doc(tourId)
+    .collection(STATS)
+    .get()
+    .then(x => x.docs.map(y => y.data()));
 }
 
 export type GroupAction =

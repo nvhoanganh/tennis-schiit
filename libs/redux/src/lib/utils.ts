@@ -1,4 +1,6 @@
 import * as R from "ramda";
+import addSeconds from "date-fns/addSeconds";
+
 export function delay(duration): Promise<void> {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -7,12 +9,13 @@ export function delay(duration): Promise<void> {
   });
 }
 export const arrayToObject = (array: any[], keymap, valuemap) => {
-  return array.reduce((presV, currV) => {
-    return {
+  return array.reduce(
+    (presV, currV) => ({
       ...presV,
       [keymap(currV)]: valuemap(currV)
-    };
-  }, {});
+    }),
+    {}
+  );
 };
 
 export const isOwner = (user, group) =>
@@ -138,3 +141,9 @@ export const hashCode = s =>
     a = (a << 5) - a + b.charCodeAt(0);
     return a & a;
   }, 0);
+
+export const toChartDate = d => {
+  const now = addSeconds(new Date(1970, 1, 1), d);
+  return [now.getFullYear(), now.getMonth(), now.getDate()].join("/");
+};
+

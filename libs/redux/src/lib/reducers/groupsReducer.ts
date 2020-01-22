@@ -1,7 +1,7 @@
 import { IGroup } from "../models";
 import { GroupActionTypes, GroupAction } from "../actions";
 import { removeById } from "../utils";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
 
 export interface IGroupsState {
   [groupId: string]: IGroup;
@@ -26,7 +26,7 @@ const groups = (
           }
         }
       };
-    
+
     case GroupActionTypes.ADD_GROUP:
       return {
         ...state,

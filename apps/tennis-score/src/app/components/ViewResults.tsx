@@ -1,11 +1,4 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  useDisclosure
-} from "@chakra-ui/core";
+import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { getPossibleVerse, SearchScore } from "@tennis-score/redux";
 import { format } from "date-fns";
@@ -26,8 +19,6 @@ const ViewResults = ({
   players,
   group,
   match,
-  pendingRequests,
-  user,
   tournament,
   history,
   loading,
@@ -46,7 +37,6 @@ const ViewResults = ({
   const [h2h, seth2h] = useState<any>({});
   const [activeLbl, setactiveLbl] = useState<string>("All");
   const viewHead2Head = ({ winners, losers, showAll, label }) => {
-    console.log("checking head 2 head for ", { winners, losers });
     onOpen();
     setactiveLbl(label);
     SearchScore({
@@ -141,10 +131,10 @@ const ViewResults = ({
         <DrawerContent>
           <DrawerHeader>Head 2 Head Result</DrawerHeader>
           <div>
-            <ScrollPills>
+            <ScrollPills height={44}>
               <span
                 className={
-                  "badge ml-1 badge-pill  font-weight-normal border " +
+                  "md badge ml-1 badge-pill font-weight-normal border " +
                   (!activeLbl ? "badge-primary" : "badge-light")
                 }
                 onClick={() =>
@@ -167,7 +157,7 @@ const ViewResults = ({
                   <span
                     key={x.label}
                     className={
-                      "badge ml-1 badge-pill  font-weight-normal border " +
+                      "md badge ml-1 badge-pill  font-weight-normal border " +
                       (activeLbl === x.label ? "badge-primary" : "badge-light")
                     }
                     onClick={() =>

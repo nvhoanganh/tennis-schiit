@@ -1,5 +1,3 @@
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button } from "./Button";
 const HeaderCard: React.SFC<{
@@ -7,9 +5,9 @@ const HeaderCard: React.SFC<{
   children?: any;
 }> = ({ children, right }) => {
   return (
-    <div className="d-flex shadow-sm p-2 mt-3 bg-white border-top border-bottom">
-      <div className="flex-grow-1">{children}</div>
-      <div>
+    <div className="d-flex shadow-sm p-2 bg-white border-top border-bottom">
+      <div className="flex-grow-1 align-self-center">{children}</div>
+      <div className="align-self-center">
         {right ? (
           right
         ) : (

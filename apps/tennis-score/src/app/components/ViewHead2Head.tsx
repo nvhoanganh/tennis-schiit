@@ -1,14 +1,13 @@
 import { getPlayersName, SearchScore } from "@tennis-score/redux";
-import ReactEcharts from "echarts-for-react";
 import queryString from "query-string";
 import React, { useEffect, useRef, useState } from "react";
+import setQuery from "set-query-string";
 import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
-
 const getPlayers = (p, allP) => (
   <span>{getPlayersName(p, allP).join("/")}</span>
 );
@@ -69,12 +68,9 @@ const ViewHead2Head = ({
       tourId: match.params.tour,
       ...state
     }).then(result => {
-      history.push({
-        search:
-          "?team1=" +
-          Object.keys(state.winners).join("|") +
-          "&team2=" +
-          Object.keys(state.losers).join("|")
+      setQuery({
+        team1: Object.keys(state.winners).join("|"),
+        team2: Object.keys(state.losers).join("|")
       });
       setSearched(true);
       setScores(result);

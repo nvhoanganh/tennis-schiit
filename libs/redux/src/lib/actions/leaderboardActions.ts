@@ -177,7 +177,8 @@ export function submitScore({
       headStart,
       gameWonByLostTeam,
       reverseBagel,
-      matchDate: new Date(matchDate)
+      matchDate: new Date(matchDate),
+      timestamp: new Date()
     });
 
     // update other -> this should be in firebase func
@@ -194,6 +195,17 @@ export function submitScore({
     const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
     winnersK.forEach(k => {
       // update each
+      mWinners[k].won = (mWinners[k].won || 0) + 1;
+      if (winByBagel) {
+        mWinners[k].bagelWon = (mWinners[k].bagelWon || 0) + 1;
+        winnersK.forEach(k => {
+          batch.update(tourRef, {
+            [`players.${k}.bagelWon`]: firebase.firestore.FieldValue.increment(
+              1
+            )
+          });
+        });
+      }
       mWinners[k] = {
         ...mWinners[k],
         ...calculateStats(mWinners[k], prize),
@@ -213,6 +225,17 @@ export function submitScore({
     });
 
     loserK.forEach(k => {
+      if (winByBagel) {
+        loserK[k].bagelLost = (loserK[k].bagelLost || 0) + 1;
+        loserK.forEach(k => {
+          batch.update(tourRef, {
+            [`players.${k}.bagelLost`]: firebase.firestore.FieldValue.increment(
+              1
+            )
+          });
+        });
+      }
+      mLosers[k].lost = mLosers[k].lost + 1;
       mLosers[k] = {
         ...mLosers[k],
         ...calculateStats(mLosers[k], prize),
