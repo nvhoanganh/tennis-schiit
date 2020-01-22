@@ -1,7 +1,6 @@
 import gravatar from "gravatar";
 import React from "react";
 import Img from "react-image";
-import Skeleton from "react-loading-skeleton";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 
 function RoundGravatar({ email, uid, size, ...props }) {

@@ -147,3 +147,5 @@ export const toChartDate = d => {
   return [now.getFullYear(), now.getMonth(), now.getDate()].join("/");
 };
 
+export const getUrlAvatar = uid =>
+  `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2Favatar_${uid}_200x200.png?alt=media`;

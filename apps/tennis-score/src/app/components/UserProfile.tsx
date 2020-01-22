@@ -1,4 +1,5 @@
-import { Link } from "@chakra-ui/core";
+import { Avatar, Link } from "@chakra-ui/core";
+import { getUrlAvatar } from '@tennis-score/redux';
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
@@ -7,7 +8,6 @@ import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
-import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
 const UserProfile = ({
@@ -31,11 +31,11 @@ const UserProfile = ({
       <div className="d-flex pb-4">
         <>
           {user ? (
-            <RoundGravatar
-              uid={user.uid}
-              email={user.email}
-              size={156}
-              style={{ margin: "auto" }}
+            <Avatar
+              size="2xl"
+              name={user.displayName}
+              className="m-auto"
+              src={getUrlAvatar(user.uid)}
             />
           ) : (
             <MyLoadingSkeleton

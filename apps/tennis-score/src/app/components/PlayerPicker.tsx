@@ -1,7 +1,9 @@
+import { Avatar } from '@chakra-ui/core';
+import { getUrlAvatar } from '@tennis-score/redux';
 import React from "react";
 import CheckBoxInput from "./CheckBoxInput";
-import RoundGravatar from "./RoundGravatar";
 export function PlayerPicker({ players, state, setValue, ...props }) {
+  console.log(players)
   const setValueHandler = (field, value) => {
     const user = field.split("_")[1];
     const inverse = field.split("_")[0] === "w" ? "l" : "w";
@@ -51,10 +53,10 @@ export function PlayerPicker({ players, state, setValue, ...props }) {
             <td>
               <div className="row ml-2">
                 <div className="">
-                  <RoundGravatar
-                    size={30}
-                    uid={p.linkedplayerId || p.id}
-                    email={p.email}
+                  <Avatar
+                    size="sm"
+                    name={p.name}
+                    src={getUrlAvatar(p.linkedplayerId || p.id)}
                   />
                 </div>
                 <div className="ml-2 font-weight-bold mr-auto mt-1">

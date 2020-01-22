@@ -1,24 +1,18 @@
-import {
-  faAtom,
-  faClipboardCheck,
-  faDollarSign,
-  faPercentage
-} from "@fortawesome/free-solid-svg-icons";
+import { Avatar, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
+import { faAtom, faClipboardCheck, faDollarSign, faPercentage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getStatsByPlayer, getUrlAvatar } from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
+import useLocation from "../hooks/useLocation";
+import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import MySpinner from "./MySpinner";
-import RoundGravatar from "./RoundGravatar";
-import RouteNav from "./RouteNav";
-import { StatsCard } from "./StatsCard";
-import GroupCard from "./GroupCard";
-import useLocation from "../hooks/useLocation";
-import { ScrollPills } from "./ScrollPills";
-import { getStatsByPlayer } from "@tennis-score/redux";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/core";
 import { PlayerStatsChart } from "./PlayerStatsChart";
+import RouteNav from "./RouteNav";
+import { ScrollPills } from "./ScrollPills";
+import { StatsCard } from "./StatsCard";
 
 const PlayerProfile = ({
   player,
@@ -59,11 +53,11 @@ const PlayerProfile = ({
       <div className="d-flex">
         <>
           {player ? (
-            <RoundGravatar
-              uid={player.linkedplayerId}
-              email={player.email}
-              size={156}
-              style={{ margin: "auto" }}
+            <Avatar
+              size="2xl"
+              name={player.name}
+              className="m-auto"
+              src={getUrlAvatar(player.linkedplayerId || player.id)}
             />
           ) : (
             <MyLoadingSkeleton

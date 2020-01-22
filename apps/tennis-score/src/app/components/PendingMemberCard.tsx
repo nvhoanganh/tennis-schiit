@@ -1,16 +1,12 @@
-import {
-  faCheckCircle,
-  faChevronDown,
-  faChevronUp,
-  faTimesCircle
-} from "@fortawesome/free-solid-svg-icons";
+import { Avatar } from "@chakra-ui/core";
+import { faCheckCircle, faChevronDown, faChevronUp, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getUrlAvatar } from "@tennis-score/redux";
 import classNames from "classnames";
 import { formatDistanceToNow } from "date-fns";
 import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
-import RoundGravatar from "./RoundGravatar";
 
 const prizeMoneyCls = player =>
   classNames({
@@ -48,7 +44,12 @@ const PendingMemberCard = ({ player, ...props }) => {
       <div className="card-body px-0 py-3">
         <div className="float-left pr-3 pl-0">
           <LinkContainer to={player ? `/player/${player.uid}` : ""}>
-            <RoundGravatar uid={player.uid} size={35} email={player.email} />
+            <Avatar
+              size="sm"
+              name={player.displayName}
+              className="m-auto"
+              src={getUrlAvatar(player.uid)}
+            />
           </LinkContainer>
         </div>
         <div className="mr-auto">

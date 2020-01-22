@@ -1,21 +1,17 @@
-import { Button } from "@chakra-ui/core";
-import {
-  faSearchMinus,
-  faSearchPlus,
-  faSyncAlt
-} from "@fortawesome/free-solid-svg-icons";
+import { Avatar, Button } from "@chakra-ui/core";
+import { faSearchMinus, faSearchPlus, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getUrlAvatar } from '@tennis-score/redux';
 import React, { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { LinkContainer } from "react-router-bootstrap";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";
+import FloatingFileInput from "./FloatingFileInput";
 import { Link } from "./Link";
 import UpdateButton from "./LoadingButton";
-import RoundGravatar from "./RoundGravatar";
 import RouteNav from "./RouteNav";
 import TextInput from "./TextInput";
-import FloatingFileInput from "./FloatingFileInput";
 
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const avatarRef = useRef<any>(null);
@@ -80,7 +76,12 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
           {!state.photo ? (
             <>
               <div className="d-flex justify-content-center">
-                <RoundGravatar size={150} uid={user.uid} email={user.email} />
+                <Avatar
+                  size="2xl"
+                  name={user.displayName}
+                  className="m-auto"
+                  src={getUrlAvatar(user.uid)}
+                />
               </div>
               <div className="d-flex justify-content-center pt-1">
                 <FloatingFileInput

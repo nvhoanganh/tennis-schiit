@@ -1,11 +1,16 @@
+import { Avatar, AvatarBadge } from "@chakra-ui/core";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SORT_PRIZEMONEY, SORT_TRUESKILL, SORT_WINPERCENT } from "@tennis-score/redux";
+import {
+  getUrlAvatar,
+  SORT_PRIZEMONEY,
+  SORT_TRUESKILL,
+  SORT_WINPERCENT
+} from "@tennis-score/redux";
 import classNames from "classnames";
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import Ripples from "react-ripples";
-import RoundGravatar from "./RoundGravatar";
 import { ScoreCard } from "./ScoreCard";
 
 const prizeMoneyCls = player =>
@@ -15,16 +20,14 @@ const prizeMoneyCls = player =>
     "text-danger": player.prizeMoney < 0
   });
 
-const top3 = ranking => ({
-  backgroundColor:
-    ranking === 0
-      ? "gold"
-      : ranking === 1
-      ? "silver"
-      : ranking === 2
-      ? "chocolate"
-      : ""
-});
+const top3 = ranking =>
+  ranking === 0
+    ? "yellow.300"
+    : ranking === 1
+    ? "gray.300"
+    : ranking === 2
+    ? "yellow.600"
+    : "";
 const arrowClass = "pl-1 h6 align-middle mr-1 h6 ";
 const getArrow = player =>
   player.previousScore > player.score ? (
@@ -126,22 +129,13 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
       >
         <div className="card-body px-0 pt-3 pb-1">
           <div className="float-left pr-3">
-            <RoundGravatar
-              size={50}
-              email={player.email}
-              uid={player.linkedplayerId}
-            />
-            <div className="text-center">
-              <span className="badge badge-pill " style={top3(ranking)}>
-                {ranking === 0
-                  ? "1st"
-                  : ranking === 1
-                  ? "2nd"
-                  : ranking === 2
-                  ? "3rd"
-                  : " "}
-              </span>
-            </div>
+            <Avatar
+              size="md"
+              name={player.name}
+              src={getUrlAvatar(player.linkedplayerId || player.id)}
+            >
+              {top3(ranking) && <AvatarBadge size="1em" bg={top3(ranking)} />}
+            </Avatar>
           </div>
 
           <div className="mr-auto">

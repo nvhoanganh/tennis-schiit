@@ -17,7 +17,7 @@ import ProtectedComponent from "../components/ProtectedComponent";
 
 const mapStateToProps = state => ({
   component: EntryForm,
-  players: getGroupPlayers(state),
+  players: getLeaderboardPlayers(state),
   user: getCurrentUser(state),
   group: getCurrLeaderGroup(state),
   pendingRequests: getPendingRequests(state),
