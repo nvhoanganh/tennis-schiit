@@ -1,4 +1,11 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useToast
+} from "@chakra-ui/core";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,6 +46,7 @@ const Leaderboard = ({
 }) => {
   // states
   const q = queryString.parse(location.search);
+  const toast = useToast();
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
   const [stats, setStats] = useState(null);
   const [show, setShow] = useState(false);
@@ -49,7 +57,6 @@ const Leaderboard = ({
   }, []);
 
   useEffect(() => {
-    console.log("tab index changed to:", tabIndex);
     if (tabIndex === 1 && !stats && group) {
       getStats(match.params.group, group.currentTournament).then(setStats);
     }
@@ -60,7 +67,14 @@ const Leaderboard = ({
     if (!user) {
       history.push("/signup");
     } else {
-      props.joinGroup(group.groupId);
+      props.joinGroup(group.groupId).then(
+        toast({
+          title: "Join Request Sent",
+          status: "success",
+          duration: 3000,
+          isClosable: true
+        })
+      );
     }
   };
   const canSubmitNewScore = () =>
@@ -82,7 +96,14 @@ const Leaderboard = ({
   const approveJoinRequestHandler = player => {
     if (players.filter(x => !x.linkedplayerId).length === 0) {
       // approve as new
-      props.approveJoinRequest(player, match.params.group, null);
+      props.approveJoinRequest(player, match.params.group, null).then(
+        toast({
+          title: "Player added",
+          status: "success",
+          duration: 3000,
+          isClosable: true
+        })
+      );
     } else {
       setapprovingPlayer(player);
       handleShow();
@@ -92,7 +113,15 @@ const Leaderboard = ({
   const approveJoinAndMergePlayer = asPlayer => {
     props
       .approveJoinRequest(approvingPlayer, match.params.group, asPlayer)
-      .then(_ => handleClose());
+      .then(_ => {
+        handleClose();
+        toast({
+          title: "Player added",
+          status: "success",
+          duration: 3000,
+          isClosable: true
+        });
+      });
   };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
