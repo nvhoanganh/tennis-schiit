@@ -2,8 +2,7 @@ import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { toast } from "react-toastify";
-import { ISignInModel, USERS, GROUPS } from "../models";
+import { ISignInModel } from "../models";
 
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
@@ -117,7 +116,6 @@ export function resetPassword(email) {
       .auth()
       .sendPasswordResetEmail(email)
       .then(_ => {
-        toast.success("Password reset sent");
         dispatch(apiEnd());
         dispatch({ type: AppActionTypes.RESET_PASS_SUCCESS });
         window.history.back();

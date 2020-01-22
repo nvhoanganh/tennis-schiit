@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
-import { ToastContainer, toast } from "react-toastify";
 import TextInput from "./TextInput";
+import { useToast } from "@chakra-ui/core";
 
 const ResetPassword = ({
   loading,
@@ -12,6 +12,7 @@ const ResetPassword = ({
   lastError,
   resetError
 }) => {
+  const toast = useToast();
   const [state, setState] = useState({
     email: "",
     emailValid: false
@@ -37,7 +38,14 @@ const ResetPassword = ({
   const validateAndSubmit = e => {
     e.preventDefault();
     if (state.emailValid) {
-      resetPassword(state.email);
+      resetPassword(state.email).then(
+        toast({
+          title: "Password reset email sent",
+          status: "success",
+          duration: 3000,
+          isClosable: true
+        })
+      );
     }
   };
 

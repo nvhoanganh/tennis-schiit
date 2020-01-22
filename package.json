@@ -72,7 +72,6 @@
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
     "react-spinners": "^0.7.1",
-    "react-toastify": "^5.4.1",
     "reactour": "^1.15.5",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
