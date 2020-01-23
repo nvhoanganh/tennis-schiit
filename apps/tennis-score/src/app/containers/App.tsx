@@ -69,9 +69,10 @@ const App = ({
         collapseOnSelect
         expand="lg"
         bg="dark"
+        className="sticky first"
         variant="dark"
         style={{
-          padding: 0
+          padding: 0,
         }}
       >
         <LinkContainer to={"/"}>

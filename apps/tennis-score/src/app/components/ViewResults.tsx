@@ -1,4 +1,11 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { getPossibleVerse, SearchScore } from "@tennis-score/redux";
 import { format } from "date-fns";
@@ -64,6 +71,7 @@ const ViewResults = ({
         <>
           {tournament ? (
             <HeaderCard
+              className="sticky second"
               right={
                 <DropDownMenu
                   icon={faEllipsisH}

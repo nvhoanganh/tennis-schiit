@@ -31,3 +31,15 @@ button.css-17ohz9w:focus {
   box-shadow: unset;
   outline: none;
 }
+.sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 100;
+
+  &.first {
+    top: 0px;
+  }
+  &.second {
+    top: 40px;
+  }
+}

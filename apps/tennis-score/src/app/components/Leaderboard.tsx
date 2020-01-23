@@ -47,7 +47,7 @@ const Leaderboard = ({
   // states
   const q = queryString.parse(location.search);
   const toast = useToast();
-  
+
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
   const [stats, setStats] = useState(null);
   const [show, setShow] = useState(false);
@@ -226,6 +226,7 @@ const Leaderboard = ({
           <TabPanel>
             {/* leaerboard */}
             <HeaderCard
+              className="sticky second"
               right={
                 <TournamentDropDown
                   user={user}
