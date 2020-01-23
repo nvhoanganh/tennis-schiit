@@ -70,7 +70,6 @@ const AddEditTournament = ({
   const validateAndSubmit = e => {
     e.preventDefault();
     if (state.formValid) {
-      console.log(state);
       props
         .addTournament({
           ...state,

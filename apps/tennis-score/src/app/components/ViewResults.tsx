@@ -51,7 +51,6 @@ const ViewResults = ({
       tourId: match.params.tour,
       ...{ winners, losers }
     }).then(result => {
-      console.log(result);
       seth2h(state => ({
         ...state,
         ...{ winners, losers },

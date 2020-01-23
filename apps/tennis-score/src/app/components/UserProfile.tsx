@@ -1,6 +1,6 @@
 import { Avatar, Link } from "@chakra-ui/core";
-import { getUrlAvatar } from '@tennis-score/redux';
-import React, { useEffect } from "react";
+import { getUrlAvatar } from "@tennis-score/redux";
+import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
 import useLocation from "../hooks/useLocation";
@@ -19,10 +19,6 @@ const UserProfile = ({
   ...props
 }) => {
   const loc = useLocation();
-  useEffect(() => {
-    console.log("user groups", user.groups);
-    console.log("all groups", groups);
-  }, []);
   return !user ? (
     <Redirect to="/signin" />
   ) : (

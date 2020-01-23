@@ -3,7 +3,6 @@ import { getUrlAvatar } from '@tennis-score/redux';
 import React from "react";
 import CheckBoxInput from "./CheckBoxInput";
 export function PlayerPicker({ players, state, setValue, ...props }) {
-  console.log(players)
   const setValueHandler = (field, value) => {
     const user = field.split("_")[1];
     const inverse = field.split("_")[0] === "w" ? "l" : "w";

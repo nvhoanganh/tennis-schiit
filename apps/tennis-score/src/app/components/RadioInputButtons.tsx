@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const RadioInputButton: React.SFC<{
   label: string;
@@ -22,8 +22,6 @@ const RadioInputButton: React.SFC<{
 }) => {
   const [className, setClassName] = useState("form-control");
   useEffect(() => {
-    console.log("opions", options);
-    console.log("value", value);
     setClassName(
       classNames({
         "form-control": true,

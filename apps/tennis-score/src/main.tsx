@@ -14,7 +14,6 @@ import chakraTheme from "./theme";
 import { ThemeProvider, theme, CSSReset } from "@chakra-ui/core";
 import { ErrorBoundary } from "./app/containers/ErrorBoundary";
 // init
-console.log("initializing app");
 firebase.initializeApp(FBCONF);
 const store = configureStore({});
 

@@ -79,7 +79,6 @@ export function loadPlayers() {
   return (dispatch, getState) => {
     const curr = getState();
     if (Object.keys(curr.players).length > 0) {
-      console.log("players already loaded");
       return Promise.resolve();
     }
 

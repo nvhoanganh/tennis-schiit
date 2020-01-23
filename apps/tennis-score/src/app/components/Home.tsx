@@ -29,7 +29,6 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
     });
   }, [myGroups, groups]);
 
-  console.log(tabs);
   if (loading)
     return (
       <>
@@ -52,7 +51,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
     );
 
   return (
-    <div>
+    <>
       <Tabs isFitted>
         <TabList>
           {Object.keys(tabs).map(k => (
@@ -86,7 +85,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
           </Button>
         </LinkContainer>
       </div>
-    </div>
+    </>
   );
 };
 

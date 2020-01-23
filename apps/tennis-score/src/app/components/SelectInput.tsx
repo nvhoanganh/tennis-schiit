@@ -45,7 +45,6 @@ const SelectInput: React.SFC<{
         ref={inputRef}
         className={className}
         onChange={e => {
-          console.log("selected value", e.target.value);
           setValue(name, e.target.value);
         }}
         value={value}
