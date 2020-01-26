@@ -1,5 +1,17 @@
-import { Avatar, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
-import { faAtom, faClipboardCheck, faDollarSign, faPercentage } from "@fortawesome/free-solid-svg-icons";
+import {
+  Avatar,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs
+} from "@chakra-ui/core";
+import {
+  faAtom,
+  faClipboardCheck,
+  faDollarSign,
+  faPercentage
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getStatsByPlayer, getUrlAvatar } from "@tennis-score/redux";
 import queryString from "query-string";
@@ -13,6 +25,7 @@ import { PlayerStatsChart } from "./PlayerStatsChart";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
 import { StatsCard } from "./StatsCard";
+import PlayerSettings from "./PlayerSettings";
 
 const PlayerProfile = ({
   player,
@@ -74,12 +87,9 @@ const PlayerProfile = ({
           <div>
             <span className="h4">{player.name}</span>
             {player.linkedplayerId ? (
-              <p>
-                {player.leftHanded ? "Left-Handed" : "Right-Handed"},{" "}
-                {player.singleHandedBackhand
-                  ? "One-Handed Backhand"
-                  : "Two-Handed Backhand"}
-              </p>
+              <>
+                <PlayerSettings user={player}></PlayerSettings>
+              </>
             ) : (
               <div className="col-12">
                 <em>Ghost Player</em>

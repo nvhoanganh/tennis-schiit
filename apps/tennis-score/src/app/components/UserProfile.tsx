@@ -1,8 +1,19 @@
 import { Avatar, Link } from "@chakra-ui/core";
+import {
+  faHandPaper,
+  faMars,
+  faSignLanguage,
+  faUserGraduate,
+  faVenus,
+  faHandRock,
+  faHandHolding
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getUrlAvatar } from "@tennis-score/redux";
-import React from "react";
+import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
+import styled from "styled-components";
 import useLocation from "../hooks/useLocation";
 import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
@@ -10,24 +21,34 @@ import UpdateButton from "./LoadingButton";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
+import { Button } from "./Button";
+import PlayerSettings from "./PlayerSettings";
+
+const StatusIcon = styled.div`
+  font-size: 0.8em;
+  border-radius: 50%;
+  border: solid 1px blue;
+`;
+
 const UserProfile = ({
   signOutHandler,
   history,
   user,
+  player,
   loading,
-  groups,
+  myGroups,
   ...props
 }) => {
   const loc = useLocation();
+  useEffect(() => {
+    props.loadGroups();
+  }, []);
+  console.log(player);
   return !user ? (
     <Redirect to="/signin" />
   ) : (
     <div>
-      <RouteNav
-
-        history={history}
-        center="User Profile"
-      ></RouteNav>
+      <RouteNav history={history} center="User Profile"></RouteNav>
       <div className="d-flex pb-4">
         <>
           {user ? (
@@ -47,17 +68,17 @@ const UserProfile = ({
           )}
         </>
       </div>
-
-      {user.groups ? (
+      <PlayerSettings user={user} />
+      {myGroups ? (
         <>
           <HeaderCard>My Groups</HeaderCard>
           <div>
             <ScrollPills height={300}>
-              {Object.keys(user.groups).map((p, i) => (
+              {Object.keys(myGroups).map((p, i) => (
                 <GroupCard
                   style={{ minWidth: 300 }}
                   key={p}
-                  group={groups[p]}
+                  group={myGroups[p]}
                   loc={loc}
                   user={user}
                   showIsMember={false}

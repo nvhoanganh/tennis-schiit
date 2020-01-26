@@ -40,7 +40,7 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
 
   const validateAndSubmit = e => {
     e.preventDefault();
-    let profile = {
+    updateProfile({
       uid: user.uid,
       displayName: state.displayName,
       history,
@@ -54,9 +54,9 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
         leftHanded: state.leftHanded,
         singleHandedBackhand: state.singleHandedBackhand
       }
-    };
-
-    updateProfile(profile);
+    }).then(_ => {
+      history.push(!user.profileUpdated ? "/home" : "/account-details");
+    });
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       displayName: user.displayName || "",
       leftHanded: user.leftHanded || false,
       singleHandedBackhand: user.singleHandedBackhand || false,
-      gender: user.gender || "Male    ",
+      gender: user.gender || "Male",
       level: user.level || "Advanced Beginner"
     }));
   }, [user]);

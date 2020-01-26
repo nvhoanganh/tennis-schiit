@@ -1,18 +1,10 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  useDisclosure,
-  useToast
-} from "@chakra-ui/core";
+import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure, useToast } from "@chakra-ui/core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { appLoad, loadGroups, signOut } from "@tennis-score/redux";
+import { appLoad, getAppLoaded, getCurrentUser, getLoadingLeaderboard, getPendingRequests, loadGroups, signOut } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
@@ -57,15 +49,21 @@ const App = ({
   }, [appLoadError]);
 
   useEffect(() => {
+    console.log(user);
     if (user && !user.profileUpdated) {
       history.push("/account-details/edit");
     }
+    if (!user || (user && user.profileUpdated)) {
+      setShowNav(true)
+    }
   }, [user]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showNav, setShowNav] = useState(false);
+
   if (appLoadError) return <AppLoader hideSpinner={true} />;
   return appLoaded ? (
     <div>
-      {user.profileUpdated && (
+      {showNav && (
         <Navbar
           collapseOnSelect
           expand="lg"
@@ -135,14 +133,11 @@ const App = ({
   );
 };
 
-const mapStateToProps = ({
-  app: { lastError, pendingRequests, user, appLoaded, appLoadError }
-}) => ({
-  lastError,
-  appLoadError,
-  user,
-  appLoaded,
-  loading: pendingRequests > 0
+const mapStateToProps = state => ({
+  user: getCurrentUser(state),
+  pendingRequests: getPendingRequests(state),
+  appLoaded: getAppLoaded(state),
+  loading: getLoadingLeaderboard(state)
 });
 
 const mapDispatchToProps = dispatch => ({
