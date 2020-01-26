@@ -57,7 +57,7 @@ const App = ({
   }, [appLoadError]);
 
   useEffect(() => {
-    if (user && !user.displayName) {
+    if (user && !user.profileUpdated) {
       history.push("/account-details/edit");
     }
   }, [user]);
@@ -72,7 +72,7 @@ const App = ({
         className="sticky first"
         variant="dark"
         style={{
-          padding: 0,
+          padding: 0
         }}
       >
         <LinkContainer to={"/"}>

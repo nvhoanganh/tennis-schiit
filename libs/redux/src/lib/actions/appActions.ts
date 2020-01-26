@@ -243,12 +243,15 @@ export function appLoad() {
               type: AppActionTypes.SIGNIN_SUCCESS,
               user: {
                 ...user,
-                ...userProfile
+                ...userProfile,
+                profileUpdated: true
               }
             });
           } else {
-            // uer has not updated the profile
-            dispatch({ type: AppActionTypes.SIGNIN_SUCCESS, user });
+            dispatch({
+              type: AppActionTypes.SIGNIN_SUCCESS,
+              user: { ...user, profileUpdated: false }
+            });
           }
           // dispatch apploaded last
           dispatch({ type: AppActionTypes.APP_LOADED });

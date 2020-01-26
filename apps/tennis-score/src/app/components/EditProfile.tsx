@@ -1,7 +1,11 @@
 import { Avatar, Button } from "@chakra-ui/core";
-import { faSearchMinus, faSearchPlus, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearchMinus,
+  faSearchPlus,
+  faSyncAlt
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getUrlAvatar } from '@tennis-score/redux';
+import { getUrlAvatar } from "@tennis-score/redux";
 import React, { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { LinkContainer } from "react-router-bootstrap";
@@ -37,7 +41,7 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       leftHanded: state.leftHanded,
       singleHandedBackhand: state.singleHandedBackhand,
       history,
-      avatar: "" // existing
+      avatar: ""
     };
     if (state.photo) {
       profile.avatar = avatarRef.current.getImageScaledToCanvas().toDataURL();
@@ -70,7 +74,11 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
 
   return (
     <>
-      <RouteNav history={history} center="Update my profile"></RouteNav>
+      <RouteNav
+        history={history}
+        hideBack={!user.profileUpdated}
+        center="Update my profile"
+      ></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
           {!state.photo ? (

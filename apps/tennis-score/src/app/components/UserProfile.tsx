@@ -23,7 +23,11 @@ const UserProfile = ({
     <Redirect to="/signin" />
   ) : (
     <div>
-      <RouteNav history={history} center="User Profile"></RouteNav>
+      <RouteNav
+
+        history={history}
+        center="User Profile"
+      ></RouteNav>
       <div className="d-flex pb-4">
         <>
           {user ? (
