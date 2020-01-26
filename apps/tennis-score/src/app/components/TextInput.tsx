@@ -4,7 +4,7 @@ import classNames from "classnames";
 const TextInput: React.SFC<{
   label: string;
   name: string;
-  value: string;
+  value: any;
   type: string;
   placeholder: string;
   isValid?: boolean;

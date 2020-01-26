@@ -145,11 +145,10 @@ export function signUp({ email, password }: ISignInModel) {
 
 export function updateProfile({
   displayName,
-  leftHanded,
-  singleHandedBackhand,
   avatar,
   uid,
-  history
+  history,
+  userDetails
 }) {
   return async dispatch => {
     dispatch(apiStart(AppActionTypes.UPDATE_PROFILE));
@@ -174,9 +173,7 @@ export function updateProfile({
           .collection("users")
           .doc(uid)
           .set({
-            displayName,
-            leftHanded,
-            singleHandedBackhand,
+            ...userDetails,
             ...(avatarUrl && { avatarUrl })
           })
       )
@@ -185,8 +182,7 @@ export function updateProfile({
           type: AppActionTypes.UPDATE_PROFILE_SUCCESS,
           user: {
             displayName,
-            leftHanded,
-            singleHandedBackhand
+            ...userDetails
           }
         });
         history.push("/home");

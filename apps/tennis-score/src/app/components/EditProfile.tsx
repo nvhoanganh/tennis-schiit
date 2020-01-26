@@ -15,21 +15,26 @@ import FloatingFileInput from "./FloatingFileInput";
 import { Link } from "./Link";
 import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
+import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
-
 const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
   const avatarRef = useRef<any>(null);
   const [state, setState] = useState({
     email: "",
     displayName: "",
+    gender: "Male",
+    level: "Novice",
     displayNameValid: false,
     leftHanded: false,
     singleHandedBackhand: false,
+
+    // avatar editor
     photo: null,
     rotate: 0,
     zoom: 1.2,
     formValid: false
   });
+
   const setValue = (field, value) =>
     setState(curr => ({ ...curr, [field]: value }));
 
@@ -38,15 +43,20 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
     let profile = {
       uid: user.uid,
       displayName: state.displayName,
-      leftHanded: state.leftHanded,
-      singleHandedBackhand: state.singleHandedBackhand,
       history,
-      avatar: ""
+      ...(state.photo && {
+        avatar: avatarRef.current.getImageScaledToCanvas().toDataURL()
+      }),
+      userDetails: {
+        displayName: state.displayName,
+        gender: state.gender,
+        level: state.level,
+        leftHanded: state.leftHanded,
+        singleHandedBackhand: state.singleHandedBackhand
+      }
     };
-    if (state.photo) {
-      profile.avatar = avatarRef.current.getImageScaledToCanvas().toDataURL();
-    }
-    updateProfile(profile).then(_ => history.push("/account-details"));
+
+    updateProfile(profile);
   };
 
   useEffect(() => {
@@ -68,16 +78,21 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
       email: user.email,
       displayName: user.displayName || "",
       leftHanded: user.leftHanded || false,
-      singleHandedBackhand: user.singleHandedBackhand || false
+      singleHandedBackhand: user.singleHandedBackhand || false,
+      gender: user.gender || "Male    ",
+      level: user.level || "Advanced Beginner"
     }));
   }, [user]);
 
+  console.log(state);
   return (
     <>
       <RouteNav
         history={history}
         hideBack={!user.profileUpdated}
-        center="Update my profile"
+        center={
+          user.profileUpdated ? "Update my profile" : "Complete Registration"
+        }
       ></RouteNav>
       <div {...maxContainer}>
         <form noValidate onSubmit={validateAndSubmit}>
@@ -150,9 +165,24 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
                     </button>
                   </div>
                 </div>
+                <div className="d-flex justify-content-center pt-1">
+                  <FloatingFileInput
+                    name="photo"
+                    errorMessage=""
+                    setValue={setValue}
+                    disabled={false}
+                    isValid={true}
+                    button={
+                      <Button size="sm" leftIcon="edit" variant="outline">
+                        Change
+                      </Button>
+                    }
+                  ></FloatingFileInput>
+                </div>
               </>
             )}
           </div>
+
           <TextInput
             type="email"
             name="email"
@@ -171,10 +201,38 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
             label="Display Name"
             value={state.displayName}
             placeholder="Display Name"
-            errorMessage=""
+            errorMessage="Name is required"
             setValue={setValue}
             isValid={state.displayNameValid}
           ></TextInput>
+
+          <SelectInput
+            name="level"
+            label="Level"
+            value={state.level}
+            placeholder=""
+            errorMessage=""
+            setValue={setValue}
+            isValid={true}
+            options={[
+              "Novice",
+              "Advanced Beginner",
+              "Competent",
+              "Proficient",
+              "Expert"
+            ]}
+          ></SelectInput>
+
+          <SelectInput
+            name="gender"
+            label="Gender"
+            value={state.gender}
+            placeholder=""
+            errorMessage=""
+            setValue={setValue}
+            isValid={true}
+            options={["Male", "Female"]}
+          ></SelectInput>
 
           <CheckBoxInput
             name="leftHanded"
@@ -196,20 +254,26 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
                 <UpdateButton
                   loading={pendingRequests > 0}
                   loadingText="Saving..."
-                  value="Update Profile"
+                  value={
+                    user.profileUpdated
+                      ? "Update Profile"
+                      : "Complete Registration"
+                  }
                   type="submit"
                   disabled={!state.formValid || pendingRequests > 0}
                   className="btn btn-primary btn-sm btn-block"
                 ></UpdateButton>
               </div>
             </div>
-            <div className="col-12 text-center">
-              <LinkContainer to={`/account-details`}>
-                <Link title="Cancel" className="small">
-                  Cancel
-                </Link>
-              </LinkContainer>
-            </div>
+            {user.profileUpdated && (
+              <div className="col-12 text-center">
+                <LinkContainer to={`/account-details`}>
+                  <Link title="Cancel" className="small">
+                    Cancel
+                  </Link>
+                </LinkContainer>
+              </div>
+            )}
           </div>
         </form>
       </div>

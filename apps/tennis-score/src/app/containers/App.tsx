@@ -65,34 +65,36 @@ const App = ({
   if (appLoadError) return <AppLoader hideSpinner={true} />;
   return appLoaded ? (
     <div>
-      <Navbar
-        collapseOnSelect
-        expand="lg"
-        bg="dark"
-        className="sticky first"
-        variant="dark"
-        style={{
-          padding: 0
-        }}
-      >
-        <LinkContainer to={"/"}>
-          <Navbar.Brand style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}>
-            <img
-              width="30"
-              src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
-              height="30"
-              className="d-inline-block align-top"
-            />{" "}
-            Tennis Score
-          </Navbar.Brand>
-        </LinkContainer>
-        <Navbar.Toggle
-          aria-controls="responsive-navbar-nav"
-          onClick={() => onOpen()}
-          style={{ marginRight: "0.4rem", border: "none" }}
-          children={<FontAwesomeIcon icon={faBars} />}
-        />
-      </Navbar>
+      {user.profileUpdated && (
+        <Navbar
+          collapseOnSelect
+          expand="lg"
+          bg="dark"
+          className="sticky first"
+          variant="dark"
+          style={{
+            padding: 0
+          }}
+        >
+          <LinkContainer to={"/"}>
+            <Navbar.Brand style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}>
+              <img
+                width="30"
+                src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
+                height="30"
+                className="d-inline-block align-top"
+              />{" "}
+              Tennis Score
+            </Navbar.Brand>
+          </LinkContainer>
+          <Navbar.Toggle
+            aria-controls="responsive-navbar-nav"
+            onClick={() => onOpen()}
+            style={{ marginRight: "0.4rem", border: "none" }}
+            children={<FontAwesomeIcon icon={faBars} />}
+          />
+        </Navbar>
+      )}
       <div>{renderRoutes(route.routes)}</div>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
         <DrawerOverlay />
