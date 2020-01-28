@@ -113,7 +113,7 @@ const PlayerProfile = ({
                     <StatsCard
                       cardClass="bg-success text-white"
                       icon={<FontAwesomeIcon className="h5" icon={faAtom} />}
-                      number={player.score}
+                      number={player.score || "0"}
                       name="Points"
                     />
                   </div>
@@ -136,7 +136,7 @@ const PlayerProfile = ({
                       icon={
                         <FontAwesomeIcon className="h5" icon={faPercentage} />
                       }
-                      number={player.winPercentage}
+                      number={player.winPercentage || "0"}
                       name="Win Pct."
                     />
                   </div>
