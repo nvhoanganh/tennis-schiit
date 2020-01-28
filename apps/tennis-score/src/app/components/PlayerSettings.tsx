@@ -1,14 +1,6 @@
-import {
-  faHandPaper,
-  faHandRock,
-  faUserAstronaut,
-  faUserGraduate
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { Button } from "./Button";
 import { IconButton } from "@chakra-ui/core";
-
+import React from "react";
+import { FaArrowLeft, FaArrowRight, FaFemale, FaHandRock, FaMale, FaUserGraduate } from "react-icons/fa";
 function UserInfo({ icon, text }) {
   return (
     <div className="col-3 text-center p-2">
@@ -16,17 +8,11 @@ function UserInfo({ icon, text }) {
         <IconButton
           aria-label=""
           isRound={true}
-          icon="check-circle"
+          icon={icon}
+          size="lg"
           className="shadow-sm"
         />
-        {/* <Button
-          type="button"
-          className="btn btn-link btn-sm text-dark border rounded-circle shadow-sm h2"
-        >
-          <FontAwesomeIcon icon={icon} className="text-dark h2" />
-        </Button>
-         */}
-        <p className="text-muted x-small mt-2">{text}</p>
+        <p className="text-muted mt-2 small">{text}</p>
       </div>
     </div>
   );
@@ -36,17 +22,20 @@ function PlayerSettings({ user }) {
   return (
     <div className="row">
       <UserInfo
-        icon={faHandRock}
+        icon={FaHandRock}
         text={
           user.singleHandedBackhand ? "Single Backhand" : "Two Handed Backhand"
         }
       />
       <UserInfo
-        icon={faHandPaper}
+        icon={user.leftHanded ? FaArrowLeft : FaArrowRight}
         text={user.leftHanded ? "Left Handed" : "Right Handed"}
       />
-      <UserInfo icon={faUserGraduate} text={user.level || "Competent"} />
-      <UserInfo icon={faUserAstronaut} text={user.gender || "Male"} />
+      <UserInfo icon={FaUserGraduate} text={user.level || "Competent"} />
+      <UserInfo
+        icon={user.gender === "Male" ? FaMale : FaFemale}
+        text={user.gender || "Male"}
+      />
     </div>
   );
 }
