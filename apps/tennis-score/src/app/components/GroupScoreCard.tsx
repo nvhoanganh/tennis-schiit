@@ -11,22 +11,20 @@ const GroupScoreCard = ({
     GeohashDistance.inKm(geoHash, props.loc).toFixed(0);
   return (
     <div>
-      <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+      <em className="d-block small">
         {props.loc && hashedLocation ? (
-          <em className="text-muted" style={{ fontSize: "0.7rem" }}>
-            {distance(hashedLocation)} km away - {" "}
-          </em>
+          <em>{distance(hashedLocation)} km - </em>
         ) : null}
         {location}
       </em>
-      <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+      {/* <em className="d-block small">
         Created{" "}
         {formatDistanceToNow(createdOn.toDate(), {
           addSuffix: true
         })}
-      </em>
+      </em> */}
       {lastMatch && (
-        <em className="d-block text-muted" style={{ fontSize: "0.7rem" }}>
+        <em className="d-block small">
           Last match:{" "}
           {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
         </em>

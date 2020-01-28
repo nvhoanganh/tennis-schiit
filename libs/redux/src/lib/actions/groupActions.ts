@@ -482,7 +482,7 @@ export function addGroup({
       dat = { ...dat, groupImage: imageRef.metadata.fullPath };
     }
 
-    // set user
+    // set user group membership
     await firebase
       .firestore()
       .collection(USERS)

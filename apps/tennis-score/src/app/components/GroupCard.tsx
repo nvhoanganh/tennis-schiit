@@ -8,6 +8,34 @@ import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import { getGroupImageUrl } from "@tennis-score/redux";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
+import styled from "@emotion/styled";
+
+const cardHeight = 260;
+const Module = styled.div`
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6)),
+    url(${(p: any) => p.imageUrl});
+  height: ${cardHeight}px;
+  position: relative;
+  overflow: hidden;
+  margin: 11px;
+  border-radius: 15px;
+  background-repeat: no-repeat;
+  background-size: cover;
+`;
+
+const Header = styled.header`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 10px;
+`;
+
+const Content = styled.div`
+  margin: 0;
+  color: white;
+  text-shadow: 0 1px 0 black;
+`;
 
 const GroupCard = ({ group, user, showIsMember, ...props }) => {
   const loading = props.loading;
@@ -17,30 +45,18 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
       style={{ ...props.style }}
       to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
     >
-      <div className="card shadow my-2 rounded mx-2">
-        {loading ? (
-          <>
-            <MyLoadingSkeleton
-              height={150}
-              class="card-img-top border-bottom"
-            />
-            <MyLoadingSkeleton height={104} class="card-body pt-0 pb-3" />
-          </>
-        ) : (
-          <>
-            <Img
-              src={getGroupImageUrl(group.groupImage)}
-              style={{
-                height: 140,
-                objectFit: "cover"
-              }}
-              loader={<Skeleton height={140} />}
-              className="card-img-top border-bottom"
-            ></Img>
-            <div className="card-body pt-0 pb-3">
+      {loading ? (
+        <MyLoadingSkeleton height={cardHeight} class="card-img-top border-bottom" />
+      ) : (
+        <Module
+          className="shadow-lg border"
+          imageUrl={getGroupImageUrl(group.groupImage)}
+        >
+          <Header>
+            <Content>
               <div className="d-flex mt-3">
                 <div className="flex-grow-1">
-                  <a className="text-dark">{group.name.toUpperCase()}</a>
+                  <a>{group.name.toUpperCase()}</a>
                   <GroupMembership
                     user={user}
                     group={group}
@@ -49,15 +65,9 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
                 </div>
                 <div className="text-nowrap">
                   {Object.values(group.players).length}
-                  <FontAwesomeIcon
-                    className="pl-1 text-muted"
-                    icon={faUsers}
-                  />{" "}
+                  <FontAwesomeIcon className="pl-1" icon={faUsers} />{" "}
                   {group.played}
-                  <FontAwesomeIcon
-                    className="pl-1 text-muted"
-                    icon={faHandshake}
-                  />
+                  <FontAwesomeIcon className="pl-1" icon={faHandshake} />
                 </div>
               </div>
               {!props.hideDetails ? (
@@ -68,10 +78,10 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
                   players={Object.values(group.players)}
                 ></GroupScoreCard>
               ) : null}
-            </div>
-          </>
-        )}
-      </div>
+            </Content>
+          </Header>
+        </Module>
+      )}
     </LinkContainer>
   );
 };

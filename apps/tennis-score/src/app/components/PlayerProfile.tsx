@@ -57,6 +57,7 @@ const PlayerProfile = ({
     }
   }, [group, player]);
 
+  console.log(player);
   if (!player || pendingRequests || (player && !player.name))
     return <MySpinner />;
 
