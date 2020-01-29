@@ -34,11 +34,11 @@ function UserInfo({ icon, text }) {
 
 function PlayerSettings({ user }) {
   return (
-    <div className="row">
+    <div className="row mx-2">
       <UserInfo
         icon={faHandRock}
         text={
-          user.singleHandedBackhand ? "Single Backhand" : "Two Handed Backhand"
+          user.singleHandedBackhand ? "Single Backhand" : "2-Handed Backhand"
         }
       />
       <UserInfo
