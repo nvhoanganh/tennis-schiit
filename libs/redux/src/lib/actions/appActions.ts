@@ -164,19 +164,28 @@ export function updateProfile({
       avatarUrl = imageRef.metadata.fullPath;
     }
     var user = firebase.auth().currentUser;
+    var userRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(uid);
+    if (!(await userRef.get()).exists) {
+      // create first
+      await userRef.set({
+        ...userDetails,
+        ...(avatarUrl && { avatarUrl })
+      });
+    }
+
+    // update
     return user
       .updateProfile({
         displayName
       })
-      .then(u =>
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(uid)
-          .set({
-            ...userDetails,
-            ...(avatarUrl && { avatarUrl })
-          })
+      .then(_ =>
+        userRef.update({
+          ...userDetails,
+          ...(avatarUrl && { avatarUrl })
+        })
       )
       .then(function() {
         dispatch({
@@ -187,7 +196,6 @@ export function updateProfile({
             ...userDetails
           }
         });
-
       })
 
       .catch(function(err) {

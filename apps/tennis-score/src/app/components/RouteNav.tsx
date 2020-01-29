@@ -1,4 +1,4 @@
-import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button } from "./Button";
@@ -17,7 +17,7 @@ const RouteNav: React.SFC<{
             onClick={() => history.goBack()}
             className="btn btn-link btn-sm text-dark"
           >
-            <FontAwesomeIcon icon={faAngleLeft} style={{ fontSize: "1.3rem"}} />
+            <FontAwesomeIcon icon={faArrowLeft} style={{ fontSize: "1.2rem"}} />
           </Button>
         )}
       </div>
