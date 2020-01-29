@@ -36,9 +36,7 @@ const ResultCard = props => {
           {gameWonByLostTeam}
         </em>
         <em className="text-muted d-block x-small">
-          {formatDistanceToNow(matchDate.toDate(), {
-            addSuffix: true
-          })}
+          {formatDistanceToNow(matchDate.toDate())}
         </em>
         <span className="text-nowrap">
           {headStart ? (

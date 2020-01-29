@@ -74,9 +74,7 @@ const PendingMemberCard = ({ player, ...props }) => {
           </div>
           <div>
             <em className="d-block text-muted x-small">
-              {formatDistanceToNow(player.requestDate.toDate(), {
-                addSuffix: true
-              })}
+              {formatDistanceToNow(player.requestDate.toDate())}
             </em>
           </div>
         </div>

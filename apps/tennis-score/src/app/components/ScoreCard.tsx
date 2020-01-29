@@ -10,11 +10,9 @@ export function ScoreCard({
 }) {
   return (
     <div>
-        <small className="d-block">
-          {lastMatch ? formatDistanceToNow(lastMatch.toDate(), {
-            addSuffix: true
-          }) : "-"}
-        </small>
+      <small className="d-block">
+        {lastMatch ? formatDistanceToNow(lastMatch.toDate()) : "-"}
+      </small>
       <small>
         <span className="text-dark font-weight-bold">{played || "0"}</span>(
         <span className="text-success font-weight-bold">{won || "0"}</span>/

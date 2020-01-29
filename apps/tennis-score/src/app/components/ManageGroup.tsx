@@ -1,4 +1,4 @@
-import { getGroupImageUrl } from '@tennis-score/redux';
+import { getGroupImageUrl } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
@@ -52,9 +52,7 @@ const ManageGroup = ({
         <ReadOnlyForm label="Owner" value={group.onwerName} />
         <ReadOnlyForm
           label="Created"
-          value={formatDistanceToNow(group.createdOn.toDate(), {
-            addSuffix: true
-          })}
+          value={formatDistanceToNow(group.createdOn.toDate())}
         />
         <ReadOnlyForm label="Description" value={group.description} />
         <ReadOnlyForm
