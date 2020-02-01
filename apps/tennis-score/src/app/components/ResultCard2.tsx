@@ -1,6 +1,6 @@
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { getHandyCap } from "@tennis-score/redux";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, format } from "date-fns";
 import React from "react";
 import { DropDownMenu } from "./DropDownMenu";
 
@@ -13,6 +13,7 @@ const ResultCard = props => {
     gameWonByLostTeam,
     reverseBagel,
     matchDate,
+    timestamp,
     tournamentId,
     players,
     hideMenu,
@@ -26,7 +27,7 @@ const ResultCard = props => {
     ));
   };
   return (
-    <div className="d-flex border-bottom shadow-sm mx-1 my-2 justify-content-between">
+    <div className="d-flex border-bottom shadow-sm my-1 justify-content-between">
       <div className="pl-1 w-100 flex-grow-1 align-self-center">
         {getPlayers(winners, false)}
       </div>
@@ -36,7 +37,10 @@ const ResultCard = props => {
           {gameWonByLostTeam}
         </em>
         <em className="text-muted d-block x-small">
-          {formatDistanceToNow(matchDate.toDate())}
+          {format(
+            timestamp ? timestamp.toDate() : matchDate.toDate(),
+            "hh:mma"
+          )}
         </em>
         <span className="text-nowrap">
           {headStart ? (

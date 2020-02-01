@@ -49,12 +49,11 @@ const App = ({
   }, [appLoadError]);
 
   useEffect(() => {
-    console.log(user);
-    if (user && !user.profileUpdated) {
+    if (user && user.loaded && !user.profileUpdated) {
       history.push("/account-details/edit");
     }
     if (!user || (user && user.profileUpdated)) {
-      setShowNav(true)
+      setShowNav(true);
     }
   }, [user]);
   const { isOpen, onOpen, onClose } = useDisclosure();

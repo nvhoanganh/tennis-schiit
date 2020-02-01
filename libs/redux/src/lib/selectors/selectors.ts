@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import * as R from "ramda";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 import { arrayToObject, calculateStats, isMember, roundOff } from "../utils";
 const getPlayers = state => state.players;
@@ -19,6 +20,31 @@ export const getAllGroups = createSelector(
 export const getScores = createSelector(
   getScoresState,
   s => s.entities
+);
+
+export const getScoresSortedByDate = createSelector(
+  getScoresState,
+  s => {
+    const f = R.pipe(
+      Object.values,
+      R.groupBy(m => m.matchDate.seconds),
+      R.map(
+        R.pipe(
+          R.sortBy(x =>
+            /// old records doesn't have timestamp field yet
+            x.timestamp ? x.timestamp.seconds : x.matchDate.seconds
+          )
+        )
+      ),
+      Object.values,
+      R.map(x => ({
+        matchDate: x[0].matchDate.toDate(),
+        matches: x
+      })),
+      R.sort((a, b) => b.matchDate - a.matchDate)
+    );
+    return f(s.entities);
+  }
 );
 export const getGroupUser = createSelector(
   getLeaderboardState,

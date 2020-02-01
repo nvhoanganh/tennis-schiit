@@ -84,7 +84,6 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
     }));
   }, [user]);
 
-  console.log(state);
   return (
     <>
       <RouteNav

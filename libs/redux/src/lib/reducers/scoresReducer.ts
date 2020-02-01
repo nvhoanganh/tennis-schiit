@@ -37,9 +37,9 @@ const scores = (
         entities: action.results.after
           ? {
               ...state.entities,
-              ...action.results.data
+              ...action.results.data // load more on scroll
             }
-          : action.results.data,
+          : action.results.data, // initial load
         hasMore: action.results.hasMore
       };
 

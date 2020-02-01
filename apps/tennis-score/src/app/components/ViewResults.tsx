@@ -23,6 +23,7 @@ import { ScrollPills } from "./ScrollPills";
 
 const ViewResults = ({
   scores,
+  scoresSorted,
   players,
   group,
   match,
@@ -43,6 +44,7 @@ const ViewResults = ({
   };
   const [h2h, seth2h] = useState<any>({});
   const [activeLbl, setactiveLbl] = useState<string>("All");
+
   const viewHead2Head = ({ winners, losers, showAll, label }) => {
     onOpen();
     setactiveLbl(label);
@@ -70,7 +72,6 @@ const ViewResults = ({
         <>
           {tournament ? (
             <HeaderCard
-              className="sticky second"
               right={
                 <DropDownMenu
                   icon={faEllipsisH}
@@ -106,15 +107,22 @@ const ViewResults = ({
                   <MySpinner key={0} fontSize="0.7rem" width={25} height={25} />
                 }
               >
-                {Object.keys(scores).map(k => (
-                  <ResultCard
-                    key={k}
-                    players={players}
-                    groupId={match.params.group}
-                    tournamentId={match.params.tour}
-                    showHead2Head={viewHead2Head}
-                    {...scores[k]}
-                  ></ResultCard>
+                {scoresSorted.map(k => (
+                  <div key={k.matchDate}>
+                    <HeaderCard>
+                      <strong>Match Date: {format(k.matchDate, "E, dd/MM/yyyy")}</strong>
+                    </HeaderCard>
+                    {k.matches.map((m, i) => (
+                      <ResultCard
+                        key={i}
+                        players={players}
+                        groupId={match.params.group}
+                        tournamentId={match.params.tour}
+                        showHead2Head={viewHead2Head}
+                        {...m}
+                      ></ResultCard>
+                    ))}
+                  </div>
                 ))}
               </InfiniteScroll>
             </div>

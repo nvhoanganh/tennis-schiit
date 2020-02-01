@@ -249,6 +249,7 @@ export function appLoad() {
               type: AppActionTypes.SIGNIN_SUCCESS,
               user: {
                 ...user,
+                loaded: true,
                 ...userProfile,
                 profileUpdated: true
               }
@@ -256,7 +257,7 @@ export function appLoad() {
           } else {
             dispatch({
               type: AppActionTypes.SIGNIN_SUCCESS,
-              user: { ...user, profileUpdated: false }
+              user: { ...user, loaded: true, profileUpdated: false }
             });
           }
           // dispatch apploaded last
