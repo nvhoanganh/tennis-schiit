@@ -1,14 +1,4 @@
 import { Avatar, Link } from "@chakra-ui/core";
-import {
-  faHandPaper,
-  faMars,
-  faSignLanguage,
-  faUserGraduate,
-  faVenus,
-  faHandRock,
-  faHandHolding
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getUrlAvatar } from "@tennis-score/redux";
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
@@ -19,10 +9,9 @@ import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
+import PlayerSettings from "./PlayerSettings";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
-import { Button } from "./Button";
-import PlayerSettings from "./PlayerSettings";
 
 const StatusIcon = styled.div`
   font-size: 0.8em;

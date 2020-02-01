@@ -1,6 +1,15 @@
 import { IconButton } from "@chakra-ui/core";
 import React from "react";
-import { FaArrowLeft, FaArrowRight, FaFemale, FaHandRock, FaMale, FaUserGraduate } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaHandshake,
+  FaFemale,
+  FaHandRock,
+  FaMale,
+  FaUserGraduate
+} from "react-icons/fa";
+import { faHandshake } from '@fortawesome/free-solid-svg-icons';
 function UserInfo({ icon, text }) {
   return (
     <div className="col-3 text-center p-2">
@@ -20,11 +29,11 @@ function UserInfo({ icon, text }) {
 
 function PlayerSettings({ user }) {
   return (
-    <div className="row">
+    <div className="row mx-2">
       <UserInfo
-        icon={FaHandRock}
+        icon={user.singleHandedBackhand ? FaHandRock : FaHandshake}
         text={
-          user.singleHandedBackhand ? "Single Backhand" : "Two Handed Backhand"
+          user.singleHandedBackhand ? "Single Backhand" : "2-Handed Backhand"
         }
       />
       <UserInfo
@@ -33,7 +42,7 @@ function PlayerSettings({ user }) {
       />
       <UserInfo icon={FaUserGraduate} text={user.level || "Competent"} />
       <UserInfo
-        icon={user.gender === "Male" ? FaMale : FaFemale}
+        icon={user.gender === "Male" || !user.gender ? FaMale : FaFemale}
         text={user.gender || "Male"}
       />
     </div>

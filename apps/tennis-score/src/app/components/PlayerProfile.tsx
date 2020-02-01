@@ -108,7 +108,7 @@ const PlayerProfile = ({
             </TabList>
             <TabPanels>
               <TabPanel>
-                <div className="row m-2">
+                <div className="row mt-2">
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-success text-white"

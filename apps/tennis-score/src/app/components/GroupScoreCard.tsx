@@ -25,8 +25,8 @@ const GroupScoreCard = ({
       </em> */}
       {lastMatch && (
         <em className="d-block small">
-          Last match:{" "}
-          {formatDistanceToNow(lastMatch.toDate(), { addSuffix: true })}
+          Last match: {" "}
+          {formatDistanceToNow(lastMatch.toDate())}
         </em>
       )}
     </div>

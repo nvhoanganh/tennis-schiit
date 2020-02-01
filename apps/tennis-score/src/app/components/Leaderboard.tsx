@@ -181,9 +181,7 @@ const Leaderboard = ({
                   <div className="text-center">
                     <em className="text-muted x-small">
                       Request sent{" "}
-                      {formatDistanceToNow(isPendingJoin.requestDate.toDate(), {
-                        addSuffix: true
-                      })}
+                      {formatDistanceToNow(isPendingJoin.requestDate.toDate())}
                     </em>
                   </div>
                 </>
