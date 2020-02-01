@@ -5,6 +5,11 @@ import * as R from "ramda";
 
 export function PlayerStatsChart({ stats }) {
   const chartOption = () => ({
+    title: {
+      left: "center",
+      bottom: "bottom",
+      text: "My Stats"
+    },
     grid: {
       left: "3%",
       right: "4%",

@@ -2,7 +2,15 @@ import { IAction, arrayToObject } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { GROUPS, IPlayer, PLAYERS, USERS, TOURNAMENTS, STATS } from "../models";
+import {
+  GROUPS,
+  IPlayer,
+  PLAYERS,
+  USERS,
+  TOURNAMENTS,
+  STATS,
+  SCORES
+} from "../models";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { loadGroups } from "./groupActions";
 export enum PlayerActionTypes {
@@ -15,8 +23,7 @@ export enum PlayerActionTypes {
   UPDATE_PLAYER = "UPDATE_PLAYER",
   REMOVE_PLAYER = "REMOVE_PLAYER",
 
-  LOAD_STATS_SUCCESS = "LOAD_STATS_SUCCESS",
-
+  LOAD_STATS_SUCCESS = "LOAD_STATS_SUCCESS"
 }
 // actions
 export class AddPlayerAction implements IAction {
@@ -115,6 +122,26 @@ export function getStatsByPlayer({ groupId, tourId, playerId }) {
     .where("playerId", "==", playerId)
     .get()
     .then(x => x.docs.map(y => y.data()));
+}
+
+export function getMatchesByPlayer({ groupId, tourId, playerId }) {
+  const scoreRef = firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId)
+    .collection(TOURNAMENTS)
+    .doc(tourId)
+    .collection(SCORES);
+  const win = scoreRef.where(`winners.${playerId}`, "==", true).get();
+
+  const lost = scoreRef.where(`losers.${playerId}`, "==", true).get();
+
+  return Promise.all([win, lost]).then(results => {
+    return [
+      ...results[0].docs.map(y => y.data()),
+      ...results[1].docs.map(y => y.data())
+    ];
+  });
 }
 
 export type PlayerAction =

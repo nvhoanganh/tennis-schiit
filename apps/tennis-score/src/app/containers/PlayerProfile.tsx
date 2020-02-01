@@ -9,7 +9,9 @@ import {
   getPlayer,
   loadGroups,
   loadLeaderboard,
-  getAllGroups
+  getAllGroups,
+  getLeaderboardPlayers,
+  getLeaderboardPlayersObj
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import PlayerProfile from "../components/PlayerProfile";
@@ -17,6 +19,7 @@ import PlayerProfile from "../components/PlayerProfile";
 const mapStateToProps = state => {
   return {
     user: getCurrentUser(state),
+    players: getLeaderboardPlayersObj(state),
     player: getLeaderBoardGroupUser(state),
     group: getCurrLeaderGroup(state),
     groups: getAllGroups(state),

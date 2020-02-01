@@ -13,7 +13,11 @@ import {
   faPercentage
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getStatsByPlayer, getUrlAvatar } from "@tennis-score/redux";
+import {
+  getStatsByPlayer,
+  getUrlAvatar,
+  getMatchesByPlayer
+} from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
 import useLocation from "../hooks/useLocation";
@@ -26,9 +30,11 @@ import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
 import { StatsCard } from "./StatsCard";
 import PlayerSettings from "./PlayerSettings";
+import { PlayerWinLostWithChart } from "./PlayerWinLostWithChart";
 
 const PlayerProfile = ({
   player,
+  players,
   match,
   group,
   groups,
@@ -39,6 +45,7 @@ const PlayerProfile = ({
   ...props
 }) => {
   const [myStats, setMyStats] = useState<any>(null);
+  const [myMatches, setmyMatches] = useState<any>(null);
   const loc = useLocation();
   const q = queryString.parse(location.search);
   useEffect(() => {
@@ -46,17 +53,20 @@ const PlayerProfile = ({
     props.getPlayer(match.params.id, q.userId);
   }, []);
   useEffect(() => {
-    if (group && player) {
+    if (group) {
       getStatsByPlayer({
         groupId: group.groupId,
         tourId: group.currentTournament,
-        playerId: player.playerId
-      }).then(x => {
-        setMyStats(x);
-      });
-    }
-  }, [group, player]);
+        playerId: match.params.id
+      }).then(x => setMyStats(x));
 
+      getMatchesByPlayer({
+        groupId: group.groupId,
+        tourId: group.currentTournament,
+        playerId: match.params.id
+      }).then(x => setmyMatches(x));
+    }
+  }, [group]);
   if (!player || pendingRequests || (player && !player.name))
     return <MySpinner />;
 
@@ -100,15 +110,15 @@ const PlayerProfile = ({
       </div>
       <>
         <HeaderCard>Statistics</HeaderCard>
-        <div className="m-2 mx-3">
-          <Tabs variant="soft-rounded" variantColor="facebook" size="sm">
-            <TabList>
+        <div>
+          <Tabs  variant="soft-rounded" variantColor="facebook" size="sm">
+            <TabList className="m-2">
               <Tab>Overall</Tab>
-              <Tab>Chart</Tab>
+              <Tab>Stats</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
-                <div className="row mt-2">
+                <div className="row mt-2 mx-1">
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-success text-white"
@@ -154,8 +164,18 @@ const PlayerProfile = ({
               </TabPanel>
               <TabPanel>
                 {myStats && (
-                  <div className="m-2">
+                  <div className="py-4 border-bottom shadow-sm">
                     <PlayerStatsChart stats={myStats}></PlayerStatsChart>
+                  </div>
+                )}
+
+                {myMatches && (
+                  <div className="py-4 border-bottom shadow-sm">
+                    <PlayerWinLostWithChart
+                      stats={myMatches}
+                      playerId={match.params.id}
+                      players={players}
+                    ></PlayerWinLostWithChart>
                   </div>
                 )}
               </TabPanel>
