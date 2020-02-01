@@ -137,7 +137,7 @@ const Leaderboard = ({
             center={group.name.toUpperCase()}
             right={
               <GroupMemberDropdown
-                history
+                history={history}
                 leaveGroup={props.leaveGroup}
                 joinGroup={props.joinGroup}
                 user={user}
