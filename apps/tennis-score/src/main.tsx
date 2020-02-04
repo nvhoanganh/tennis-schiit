@@ -16,13 +16,14 @@ import chakraTheme from "./theme";
 import ReactGA from "react-ga";
 import { createBrowserHistory } from "history";
 
-// init
-firebase.initializeApp(FBCONF);
-const trackingId = "UA-153446671-1";
-ReactGA.initialize(trackingId);
-const store = configureStore({});
 
+const trackingId = "UA-153446671-1";
+const store = configureStore({});
 const history = createBrowserHistory();
+
+// init 
+firebase.initializeApp(FBCONF);
+ReactGA.initialize(trackingId);
 
 // Initialize google analytics page view tracking
 history.listen(location => {
