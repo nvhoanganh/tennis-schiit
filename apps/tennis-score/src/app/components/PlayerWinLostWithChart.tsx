@@ -67,7 +67,7 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
     const getStats = o =>
       Object.keys(o).map(x => ({
         value: o[x],
-        name: players[x].name
+        name: players[x] ? players[x].name : 'NA'
       }));
 
     console.log(players);
