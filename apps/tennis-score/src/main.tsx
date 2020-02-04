@@ -1,3 +1,5 @@
+import { CSSReset, ThemeProvider } from "@chakra-ui/core";
+import { FBCONF } from "@tennis-score/api-interfaces";
 import { configureStore } from "@tennis-score/redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as firebase from "firebase/app";
@@ -8,21 +10,32 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { renderRoutes } from "react-router-config";
 import { BrowserRouter as Router } from "react-router-dom";
-import routes from "./app/routes";
-import { FBCONF } from "@tennis-score/api-interfaces";
-import chakraTheme from "./theme";
-import { ThemeProvider, theme, CSSReset } from "@chakra-ui/core";
 import { ErrorBoundary } from "./app/containers/ErrorBoundary";
+import routes from "./app/routes";
+import chakraTheme from "./theme";
+import ReactGA from "react-ga";
+import { createBrowserHistory } from "history";
+
 // init
 firebase.initializeApp(FBCONF);
+const trackingId = "UA-153446671-1";
+ReactGA.initialize(trackingId);
 const store = configureStore({});
+
+const history = createBrowserHistory();
+
+// Initialize google analytics page view tracking
+history.listen(location => {
+  ReactGA.set({ page: location.pathname }); // Update the user's current page
+  ReactGA.pageview(location.pathname); // Record a pageview for the given page
+});
 
 ReactDOM.render(
   <ErrorBoundary>
     <Provider store={store}>
       <ThemeProvider theme={chakraTheme}>
         <CSSReset />
-        <Router>{renderRoutes(routes)}</Router>
+        <Router history={history}>{renderRoutes(routes)}</Router>
       </ThemeProvider>
     </Provider>
   </ErrorBoundary>,

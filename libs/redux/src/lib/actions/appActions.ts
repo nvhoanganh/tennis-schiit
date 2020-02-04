@@ -3,6 +3,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { ISignInModel } from "../models";
+import ReactGA from "react-ga";
 
 export enum AppActionTypes {
   API_ERROR = "LAST_API_ERROR",
@@ -237,6 +238,10 @@ export function appLoad() {
       // }
 
       // get additional details from firestore
+      ReactGA.set({
+        userId: user.uid
+      });
+
       firebase
         .firestore()
         .collection("users")
