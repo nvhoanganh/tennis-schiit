@@ -1,7 +1,23 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure, useToast } from "@chakra-ui/core";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure,
+  useToast
+} from "@chakra-ui/core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { appLoad, getAppLoaded, getCurrentUser, getLoadingLeaderboard, getPendingRequests, loadGroups, signOut } from "@tennis-score/redux";
+import {
+  appLoad,
+  getAppLoaded,
+  getCurrentUser,
+  getLoadingLeaderboard,
+  getPendingRequests,
+  loadGroups,
+  signOut
+} from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -11,6 +27,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import { AppLoader } from "../components/AppLoader";
+import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 
 const linkStyle = {
   lineHeight: "2rem"
@@ -27,6 +44,7 @@ const App = ({
   signOutHandler
 }) => {
   const toast = useToast();
+  usePwaInstallPrompt();
 
   useEffect(() => {
     appLoad();

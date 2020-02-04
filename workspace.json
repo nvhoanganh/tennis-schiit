@@ -17,8 +17,10 @@
             "tsConfig": "apps/tennis-score/tsconfig.app.json",
             "assets": [
               "apps/tennis-score/src/favicon.ico",
+              "apps/tennis-score/src/manifest.json",
               "apps/tennis-score/src/assets",
               "apps/tennis-score/src/assets/icons"
+
             ],
             "styles": ["apps/tennis-score/src/styles.scss"],
             "scripts": [],
