@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "predeploy": "nx build --prod && workbox injectManifest",
+    "predeploy": "nx build --prod && workbox generateSW workbox-config.js",
     "deploy": "firebase deploy --only hosting",
     "start": "nx serve",
     "startpwa": "npm run predeploy && http-server dist/apps/tennis-score -p 4200",
