@@ -1,104 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>TennisScore</title>
-    <base href="/" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico" />
-    <link rel="manifest" href="manifest.json" />
-    <style>
-      #snackbar {
-        visibility: hidden;
-        min-width: 250px;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        border-radius: 2px;
-        padding: 16px;
-        position: fixed;
-        z-index: 1;
+<head>
+  <meta charset="utf-8" />
+  <title>TennisScore</title>
+  <base href="/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    #snackbar {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      bottom: 30px;
+      width: 100%;
+    }
+
+    #reload {
+      text-decoration: underline;
+    }
+
+    #snackbar.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s;
+      animation: fadein 0.5s;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
         bottom: 30px;
-        width: 100%;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
       }
 
-      #reload {
-        text-decoration: underline;
+      to {
+        bottom: 30px;
+        opacity: 1;
       }
+    }
+  </style>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbhMnOl-eKAlPWNFBX9CJODlHSnDne5u0&libraries=places"></script>
+</head>
 
-      #snackbar.show {
-        visibility: visible;
-        -webkit-animation: fadein 0.5s;
-        animation: fadein 0.5s;
-      }
+<body>
+  <div id="root"></div>
+  <div id="snackbar">
+    A new version of this app is available.<br />
+    Click <a id="reload">here</a> to update.
+  </div>
+  <script>
+    let newWorker;
 
-      @-webkit-keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 30px;
-          opacity: 1;
-        }
-      }
+    document.getElementById("reload").addEventListener("click", function () {
+      newWorker.postMessage({ type: "SKIP_WAITING" });
+    });
 
-      @keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 30px;
-          opacity: 1;
-        }
-      }
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbhMnOl-eKAlPWNFBX9CJODlHSnDne5u0&libraries=places"></script>
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <div id="snackbar">
-      A new version of this app is available.<br />
-      Click <a id="reload">here</a> to update.
-    </div>
-    <script>
-      let newWorker;
-
-      document.getElementById("reload").addEventListener("click", function() {
-        newWorker.postMessage({ type: "SKIP_WAITING" });
-      });
-
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js").then(reg => {
-          reg.addEventListener("updatefound", () => {
-            console.log("New Version of Service Worker detected");
-            newWorker = reg.installing;
-            newWorker.addEventListener("statechange", () => {
-              switch (newWorker.state) {
-                case "installed":
-                  if (navigator.serviceWorker.controller) {
-                    document.getElementById("snackbar").className = "show";
-                  }
-                  break;
-              }
-            });
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then(reg => {
+        reg.addEventListener("updatefound", () => {
+          console.log("New Version of Service Worker detected");
+          newWorker = reg.installing;
+          newWorker.addEventListener("statechange", () => {
+            switch (newWorker.state) {
+              case "installed":
+                console.log("new Service worker is now installed");
+                if (navigator.serviceWorker.controller) {
+                  console.log("showing the snackbar");
+                  document.getElementById("snackbar").className = "show";
+                }
+                break;
+            }
           });
         });
+      });
 
-        let refreshing;
-        navigator.serviceWorker.addEventListener("controllerchange", () => {
-          if (refreshing) return;
-          window.location.reload();
-          refreshing = true;
-        });
-      }
-    </script>
-  </body>
+      let refreshing;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (refreshing) return;
+        window.location.reload();
+        refreshing = true;
+      });
+    }
+  </script>
+</body>
+
 </html>

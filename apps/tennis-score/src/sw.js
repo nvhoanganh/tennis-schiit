@@ -7,21 +7,38 @@ if ("function" === typeof importScripts) {
     // workbox.setConfig({
     //   debug: true
     // });
-    console.log("Workbox is loaded");
+    console.log("Workbox is loaded..");
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
-    /* cache images*/
     const { registerRoute } = workbox.routing;
     const { CacheFirst, StaleWhileRevalidate } = workbox.strategies;
     const { CacheableResponse } = workbox.cacheableResponse;
-    // const { CacheExpiration, Plugin: CacheExpirationPlugin} = workbox.expiration;
+    const { CacheExpiration, Plugin: ExpirationPlugin } = workbox.expiration;
 
-    // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
+    /* cache images*/
     registerRoute(
       /^https:\/\/fonts\.googleapis\.com/,
       new StaleWhileRevalidate({
-        cacheName: "google-fonts-stylesheets"
+        cacheName: "google-fonts-stylesheets",
+        plugins: [
+          new CacheableResponse({
+            statuses: [0, 200]
+          })
+        ]
+      })
+    );
+
+    // cache google map
+    registerRoute(
+      /^https:\/\/maps\.googleapis\.com\/maps-api-v3/,
+      new StaleWhileRevalidate({
+        cacheName: "google-map-api",
+        plugins: [
+          new CacheableResponse({
+            statuses: [0, 200]
+          })
+        ]
       })
     );
 
@@ -33,6 +50,10 @@ if ("function" === typeof importScripts) {
         plugins: [
           new CacheableResponse({
             statuses: [0, 200]
+          }),
+          new ExpirationPlugin({
+            maxAgeSeconds: 60 * 60 * 24 * 30,
+            maxEntries: 30
           })
         ]
       })
