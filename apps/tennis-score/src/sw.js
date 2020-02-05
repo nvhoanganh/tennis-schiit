@@ -9,14 +9,17 @@ if ("function" === typeof importScripts) {
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
     /* cache images*/
-    workbox.routing.registerRoute(
-      /\.(?:png|gif|jpg|jpeg)\?alt=media$/,
-      workbox.strategies.staleWhileRevalidate({
-        cacheName: "images",
+    const { registerRoute } = workbox.routing;
+    const { CacheFirst } = workbox.strategies;
+    const { CacheableResponsePlugin } = workbox.CacheableResponse;
+
+    registerRoute(
+      new RegExp(".(?:png|gif|jpg|jpeg)?alt=media$"),
+      new CacheFirst({
+        cacheName: "image-cache",
         plugins: [
-          new workbox.expiration.Plugin({
-            maxEntries: 60,
-            maxAgeSeconds: 24 * 60 * 60 // 1 Days
+          new CacheableResponsePlugin({
+            statuses: [0, 200]
           })
         ]
       })
