@@ -31,7 +31,7 @@ const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
 
   useEffect(() => {
     if (group) {
-      setState(curr => ({
+      setState(_ => ({
         ...group,
         photoValid: true
       }));
@@ -43,7 +43,8 @@ const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
       const newS = {
         ...current,
         nameValid: !!state.name,
-        locationValid: !!state.locationLongLat && !!state.location
+        locationValid: !!state.locationLongLat && !!state.location,
+        photoValid: state.photo
       };
       return {
         ...newS,
@@ -114,7 +115,7 @@ const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
                 src={getGroupImageUrl(group.groupImage)}
                 style={{
                   height: 140,
-                  objectFit: "cover",
+                  objectFit: "cover"
                 }}
                 className="card-img-top border"
               ></img>

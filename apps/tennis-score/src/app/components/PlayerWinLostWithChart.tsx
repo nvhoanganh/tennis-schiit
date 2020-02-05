@@ -17,67 +17,67 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
 
   const getOtherPlayer = (o, me) => Object.keys(o).filter(x => x !== me)[0];
 
-  const getDataSeries = () => {
-    const winLostRecords = stats.reduce((pre, cur) => {
-      if (!pre) {
-        if (cur.winners[playerId]) {
-          // I won
-          return {
-            winWith: {
-              [getOtherPlayer(cur.winners, playerId)]: 1
-            }
-          };
-        }
-        if (cur.losers[playerId]) {
-          // I won
-          return {
-            lostWith: {
-              [getOtherPlayer(cur.losers, playerId)]: 1
-            }
-          };
-        }
-      } else {
-        if (cur.winners[playerId]) {
-          // I won
-          const otherplayer = getOtherPlayer(cur.winners, playerId);
-          return {
-            ...pre,
-            winWith: {
-              ...pre.winWith,
-              [otherplayer]:
-                (pre.winWith ? pre.winWith[otherplayer] || 0 : 0) + 1
-            }
-          };
-        }
-        if (cur.losers[playerId]) {
-          const otherplayer = getOtherPlayer(cur.losers, playerId);
-          // I won
-          return {
-            ...pre,
-            lostWith: {
-              ...pre.lostWith,
-              [otherplayer]:
-                (pre.lostWith ? pre.lostWith[otherplayer] || 0 : 0) + 1
-            }
-          };
-        }
+  const winLostRecords = stats.reduce((pre, cur) => {
+    if (!pre) {
+      if (cur.winners[playerId]) {
+        // I won
+        return {
+          winWith: {
+            [getOtherPlayer(cur.winners, playerId)]: 1
+          }
+        };
       }
-    }, null);
+      if (cur.losers[playerId]) {
+        // I won
+        return {
+          lostWith: {
+            [getOtherPlayer(cur.losers, playerId)]: 1
+          }
+        };
+      }
+    } else {
+      if (cur.winners[playerId]) {
+        // I won
+        const otherplayer = getOtherPlayer(cur.winners, playerId);
+        return {
+          ...pre,
+          winWith: {
+            ...pre.winWith,
+            [otherplayer]: (pre.winWith ? pre.winWith[otherplayer] || 0 : 0) + 1
+          }
+        };
+      }
+      if (cur.losers[playerId]) {
+        const otherplayer = getOtherPlayer(cur.losers, playerId);
+        // I won
+        return {
+          ...pre,
+          lostWith: {
+            ...pre.lostWith,
+            [otherplayer]:
+              (pre.lostWith ? pre.lostWith[otherplayer] || 0 : 0) + 1
+          }
+        };
+      }
+    }
+  }, null);
 
+  const getDataSeries = () => {
     const getStats = o =>
       Object.keys(o).map(x => ({
         value: o[x],
-        name: players[x] ? players[x].name : 'NA'
+        name: players[x] ? players[x].name : "NA"
       }));
 
     console.log(players);
+
     return [
       {
         name: "Win with",
         type: "pie",
         radius: ["0%", "60%"],
         label: {
-          position: "inner"
+          position: "inkner"
         },
         data: getStats(winLostRecords.winWith)
       },
@@ -93,12 +93,12 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
     ];
   };
 
-  return (
+  return winLostRecords ? (
     <ReactEcharts
       option={chartOption()}
       style={{
         height: 400
       }}
     />
-  );
+  ) : null;
 }

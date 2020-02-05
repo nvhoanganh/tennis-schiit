@@ -51,7 +51,15 @@ export const getGroupImageUrl = url => {
   const [file, ext] = getFileNameAndExt(url);
 
   return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
-    file + "_1000x140." + ext
+    file + "_414x260." + ext
+  )}?alt=media`;
+};
+
+export const getGroupImageUrlFull = url => {
+  const [file, ext] = getFileNameAndExt(url);
+
+  return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
+    file + "." + ext
   )}?alt=media`;
 };
 

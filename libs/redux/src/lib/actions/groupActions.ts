@@ -414,6 +414,7 @@ export function editGroup({
       .doc(group.groupId);
 
     if (photo) {
+      debugger;
       var storageRef = firebase.storage().ref();
       var imageRef = await storageRef
         .child(`images/${editGroup.id}-${photo.name}`)
@@ -421,9 +422,7 @@ export function editGroup({
       dat = { ...(<any>dat), groupImage: imageRef.metadata.fullPath };
     }
 
-    const g = await (await editGroup.get()).data();
-
-    return editGroup.update({ dat }).then(_ => {
+    return editGroup.update(dat).then(_ => {
       dispatch(apiEnd());
       dispatch(loadGroups(true));
     });
@@ -463,11 +462,12 @@ export function addGroup({
           email: user.email,
           name: user.displayName,
           userId: user.uid,
-          avatarUrl: user.avatarUrl,
+          avatarUrl: user.avatarUrl || "",
           linkedplayerId: user.uid
         }
       ]
     };
+
     dispatch(apiStart(GroupActionTypes.ADD_GROUP));
     var newGroup = firebase
       .firestore()

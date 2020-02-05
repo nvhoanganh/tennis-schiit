@@ -1,14 +1,12 @@
+import styled from "@emotion/styled";
 import { faHandshake, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getGroupImageUrl } from "@tennis-score/redux";
 import React from "react";
-import Skeleton from "react-loading-skeleton";
-import Img from "react-image";
 import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
-import { getGroupImageUrl } from "@tennis-score/redux";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
-import styled from "@emotion/styled";
 
 const cardHeight = 260;
 const Module = styled.div`
@@ -17,8 +15,6 @@ const Module = styled.div`
   height: ${cardHeight}px;
   position: relative;
   overflow: hidden;
-  margin: 11px;
-  border-radius: 15px;
   background-repeat: no-repeat;
   background-size: cover;
 `;
@@ -49,7 +45,7 @@ const GroupCard = ({ group, user, showIsMember, ...props }) => {
         <MyLoadingSkeleton height={cardHeight} class="card-img-top border-bottom" />
       ) : (
         <Module
-          className="shadow-lg border"
+          className="shadow-lg"
           imageUrl={getGroupImageUrl(group.groupImage)}
         >
           <Header>

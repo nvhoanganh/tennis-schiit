@@ -1,11 +1,5 @@
+import { deleteGroup, loadGroups, loadLeaderboard, loadPlayers } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import {
-  loadPlayers,
-  loadGroups,
-  loadLeaderboard,
-  getLeaderboardPlayers,
-  deleteGroup
-} from "@tennis-score/redux";
 import ManageGroup from "../components/ManageGroup";
 
 const mapStateToProps = ({

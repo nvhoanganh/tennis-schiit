@@ -16,7 +16,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
         ...(myGroups.length > 0 && {
           groups: {
             groups: myGroups,
-            name: "My Groups"
+            name: "Groups"
           }
         }),
         ...(groups.length > 0 && {
@@ -75,7 +75,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
         </TabPanels>
       </Tabs>
 
-      <div className="text-center p-2">
+      <div className="text-center p-4">
         <LinkContainer to={`/newgroup`}>
           <Button
             type="submit"

@@ -60,7 +60,7 @@ const UserProfile = ({
       <PlayerSettings user={user} />
       {myGroups ? (
         <>
-          <HeaderCard>My Groups</HeaderCard>
+          <HeaderCard>Groups</HeaderCard>
           <div>
             <ScrollPills height={300}>
               {Object.keys(myGroups).map((p, i) => (

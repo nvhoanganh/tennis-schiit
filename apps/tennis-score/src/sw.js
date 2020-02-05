@@ -15,10 +15,28 @@ if ("function" === typeof importScripts) {
     const { registerRoute } = workbox.routing;
     const { CacheFirst, StaleWhileRevalidate } = workbox.strategies;
     const { CacheableResponse } = workbox.cacheableResponse;
+    const { Expiration } = workbox.expiration;
 
+    // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
     registerRoute(
-      new RegExp("^.*firebasestorage.*\.(?:png|gif|jpg|jpeg)\?alt=media"),
+      /^https:\/\/fonts\.gstatic\.com/,
       new CacheFirst({
+        cacheName: "google-fonts-webfonts",
+        plugins: [
+          new CacheableResponse({
+            statuses: [0, 200]
+          }),
+          new Expiration({
+            maxAgeSeconds: 60 * 60 * 24 * 3, // 3 days
+            maxEntries: 30
+          })
+        ]
+      })
+    );
+    // Cache images in the firebase storage
+    registerRoute(
+      /.*firebasestorage\.googleapis\.com.*.(?:png|gif|jpg|jpeg)/,
+      new StaleWhileRevalidate({
         cacheName: "firebase-image-cache",
         plugins: [
           new CacheableResponse({

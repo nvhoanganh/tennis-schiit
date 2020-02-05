@@ -1,4 +1,4 @@
-import { getGroupImageUrl } from "@tennis-score/redux";
+import { getGroupImageUrlFull } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
@@ -40,7 +40,7 @@ const ManageGroup = ({
         {group && (
           <div className="pb-2">
             <img
-              src={getGroupImageUrl(group.groupImage)}
+              src={getGroupImageUrlFull(group.groupImage)}
               style={{
                 height: 140,
                 objectFit: "cover"

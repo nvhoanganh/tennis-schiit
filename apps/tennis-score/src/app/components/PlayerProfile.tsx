@@ -67,6 +67,7 @@ const PlayerProfile = ({
       }).then(x => setmyMatches(x));
     }
   }, [group]);
+
   if (!player || pendingRequests || (player && !player.name))
     return <MySpinner />;
 
@@ -111,7 +112,7 @@ const PlayerProfile = ({
       <>
         <HeaderCard>Statistics</HeaderCard>
         <div>
-          <Tabs  variant="soft-rounded" variantColor="facebook" size="sm">
+          <Tabs variant="soft-rounded" variantColor="facebook" size="sm">
             <TabList className="m-2">
               <Tab>Overall</Tab>
               <Tab>Stats</Tab>
@@ -163,13 +164,15 @@ const PlayerProfile = ({
                 </div>
               </TabPanel>
               <TabPanel>
-                {myStats && (
+                {myStats && myStats.length > 0 ? (
                   <div className="py-4 border-bottom shadow-sm">
                     <PlayerStatsChart stats={myStats}></PlayerStatsChart>
                   </div>
+                ) : (
+                  <div className="text-center h5 my-5">0 match played</div>
                 )}
 
-                {myMatches && (
+                {myMatches && myMatches.length > 0 && (
                   <div className="py-4 border-bottom shadow-sm">
                     <PlayerWinLostWithChart
                       stats={myMatches}
