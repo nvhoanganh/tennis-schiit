@@ -65,18 +65,12 @@
   <body>
     <div id="root"></div>
     <div id="snackbar">
-      A new version of this app is available. Click <a id="reload">here</a> to
-      update.
+      A new version of this app is available.<br />
+      Click <a id="reload">here</a> to update.
     </div>
     <script>
       let newWorker;
 
-      function showUpdateBar() {
-        let snackbar = document.getElementById("snackbar");
-        snackbar.className = "show";
-      }
-
-      // The click event on the pop up notification
       document.getElementById("reload").addEventListener("click", function() {
         newWorker.postMessage({ type: "SKIP_WAITING" });
       });
@@ -90,7 +84,7 @@
               switch (newWorker.state) {
                 case "installed":
                   if (navigator.serviceWorker.controller) {
-                    showUpdateBar();
+                    document.getElementById("snackbar").className = "show";
                   }
                   break;
               }
@@ -99,14 +93,11 @@
         });
 
         let refreshing;
-        navigator.serviceWorker.addEventListener(
-          "controllerchange",
-          function() {
-            if (refreshing) return;
-            window.location.reload();
-            refreshing = true;
-          }
-        );
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (refreshing) return;
+          window.location.reload();
+          refreshing = true;
+        });
       }
     </script>
   </body>
