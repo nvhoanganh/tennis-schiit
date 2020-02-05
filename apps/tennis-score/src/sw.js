@@ -4,9 +4,9 @@ if ("function" === typeof importScripts) {
   );
   /* global workbox */
   if (workbox) {
-    workbox.setConfig({
-      debug: true
-    });
+    // workbox.setConfig({
+    //   debug: true
+    // });
     console.log("Workbox is loaded");
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
@@ -15,24 +15,16 @@ if ("function" === typeof importScripts) {
     const { registerRoute } = workbox.routing;
     const { CacheFirst, StaleWhileRevalidate } = workbox.strategies;
     const { CacheableResponse } = workbox.cacheableResponse;
-    const { Expiration } = workbox.expiration;
+    // const { CacheExpiration, Plugin: CacheExpirationPlugin} = workbox.expiration;
 
     // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
     registerRoute(
-      /^https:\/\/fonts\.gstatic\.com/,
-      new CacheFirst({
-        cacheName: "google-fonts-webfonts",
-        plugins: [
-          new CacheableResponse({
-            statuses: [0, 200]
-          }),
-          new Expiration({
-            maxAgeSeconds: 60 * 60 * 24 * 3, // 3 days
-            maxEntries: 30
-          })
-        ]
+      /^https:\/\/fonts\.googleapis\.com/,
+      new StaleWhileRevalidate({
+        cacheName: "google-fonts-stylesheets"
       })
     );
+
     // Cache images in the firebase storage
     registerRoute(
       /.*firebasestorage\.googleapis\.com.*.(?:png|gif|jpg|jpeg)/,
