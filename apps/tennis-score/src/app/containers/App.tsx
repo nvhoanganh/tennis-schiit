@@ -26,6 +26,7 @@ import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
+import AppIcon from "../../assets/icons/icon-96x96.png";
 import { AppLoader } from "../components/AppLoader";
 import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 
@@ -95,7 +96,7 @@ const App = ({
             <Navbar.Brand style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}>
               <img
                 width="30"
-                src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
+                src={AppIcon}
                 height="30"
                 className="d-inline-block align-top"
               />{" "}
@@ -122,7 +123,7 @@ const App = ({
                   alignSelf: "center",
                   marginRight: 3
                 }}
-                src="https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/assets%2Fapplogo.png?alt=media"
+                src={AppIcon}
                 className="d-inline-block align-top pl-4"
               />
               Tennis score
