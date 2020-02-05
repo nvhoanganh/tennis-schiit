@@ -6,6 +6,7 @@
     "nx": "nx",
     "predeploy": "rm -rf dist/apps/tennis-score/ && nx build --prod && workbox injectManifest workbox-config.js",
     "deploy": "firebase deploy --only hosting",
+    "deploy2": "firebase deploy --token $FIREBASETOKEN --only hosting",
     "start": "nx serve",
     "startpwa": "npm run predeploy && http-server dist/apps/tennis-score -p 4200",
     "build": "nx build",

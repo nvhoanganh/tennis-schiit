@@ -4,21 +4,24 @@ if ("function" === typeof importScripts) {
   );
   /* global workbox */
   if (workbox) {
+    workbox.setConfig({
+      debug: true
+    });
     console.log("Workbox is loaded");
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
     /* cache images*/
     const { registerRoute } = workbox.routing;
-    const { CacheFirst } = workbox.strategies;
-    const { CacheableResponsePlugin } = workbox.CacheableResponse;
+    const { CacheFirst, StaleWhileRevalidate } = workbox.strategies;
+    const { CacheableResponse } = workbox.cacheableResponse;
 
     registerRoute(
-      new RegExp(".(?:png|gif|jpg|jpeg)?alt=media$"),
+      new RegExp("^.*firebasestorage.*\.(?:png|gif|jpg|jpeg)\?alt=media"),
       new CacheFirst({
-        cacheName: "image-cache",
+        cacheName: "firebase-image-cache",
         plugins: [
-          new CacheableResponsePlugin({
+          new CacheableResponse({
             statuses: [0, 200]
           })
         ]
@@ -28,3 +31,9 @@ if ("function" === typeof importScripts) {
     console.log("Workbox could not be loaded. No Offline support");
   }
 }
+
+self.addEventListener("message", function(event) {
+  if (event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
