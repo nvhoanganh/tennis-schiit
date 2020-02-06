@@ -122,7 +122,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
 
   return (
-    <div className="px-2 border-bottom border-top shadow-sm">
+    <div className="px-2 border-top">
       <Ripples
         className="w-100"
         onClick={() => setTimeout(() => history.push(getUserLink()), 200)}

@@ -9,7 +9,7 @@ const RouteNav: React.SFC<{
   hideBack?: boolean;
 }> = ({ history, center, right, hideBack }) => {
   return (
-    <div className="d-flex justify-content-between pb-1">
+    <div className="d-flex justify-content-between sticky first bg-white border-bottom mb-2">
       <div className="p-2 align-self-center">
         {!hideBack && (
           <Button
@@ -21,7 +21,7 @@ const RouteNav: React.SFC<{
           </Button>
         )}
       </div>
-      <div className="p-2 d-flex align-self-center h5">{center}</div>
+      <div className="p-2 d-flex align-self-center h5 mb-0">{center}</div>
       <div className="p-2 align-self-center">
         {right ? (
           right

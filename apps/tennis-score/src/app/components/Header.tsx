@@ -9,7 +9,7 @@ const HeaderCard: React.SFC<{
   return (
     <div
       className={
-        "d-flex shadow-sm p-2 bg-white border-top border-bottom " + className
+        "d-flex p-2 bg-white border-top border-bottom " + className
       }
       style={style}
     >

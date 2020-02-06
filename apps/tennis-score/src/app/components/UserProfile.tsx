@@ -64,15 +64,17 @@ const UserProfile = ({
           <div>
             <ScrollPills height={300}>
               {Object.keys(myGroups).map((p, i) => (
-                <GroupCard
-                  style={{ minWidth: 300 }}
-                  key={p}
-                  group={myGroups[p]}
-                  loc={loc}
-                  user={user}
-                  showIsMember={false}
-                  hideDetails={true}
-                ></GroupCard>
+                <div key={p} className="m-2 shadow-sm">
+                  <GroupCard
+                    style={{ minWidth: 300 }}
+                    group={myGroups[p]}
+                    history={history}
+                    loc={loc}
+                    user={user}
+                    showIsMember={false}
+                    hideDetails={true}
+                  ></GroupCard>
+                </div>
               ))}
             </ScrollPills>
           </div>

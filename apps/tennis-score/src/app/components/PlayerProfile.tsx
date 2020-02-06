@@ -193,15 +193,17 @@ const PlayerProfile = ({
           <div className="pb-5">
             <ScrollPills height={300}>
               {Object.keys(player.groups).map((p, i) => (
-                <GroupCard
-                  style={{ minWidth: 300 }}
-                  key={p}
-                  group={groups[p]}
-                  loc={loc}
-                  user={player}
-                  showIsMember={false}
-                  hideDetails={true}
-                ></GroupCard>
+                <div key={p} className="m-2 shadow-sm">
+                  <GroupCard
+                    style={{ minWidth: 300 }}
+                    group={groups[p]}
+                    loc={loc}
+                    history={history}
+                    user={player}
+                    showIsMember={false}
+                    hideDetails={true}
+                  ></GroupCard>
+                </div>
               ))}
             </ScrollPills>
           </div>

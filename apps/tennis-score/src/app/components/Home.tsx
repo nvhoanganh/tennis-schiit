@@ -1,12 +1,10 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { LinkContainer } from "react-router-bootstrap";
 import useLocation from "../hooks/useLocation";
-import { Button } from "./Button";
 import GroupCard from "./GroupCard";
 
-const Home = ({ user, groups, myGroups, loading, ...props }) => {
+const Home = ({ user, groups, myGroups, loading, history, ...props }) => {
   const loc = useLocation();
   const [tabs, setTabs] = useState<any>({});
   useEffect(() => {
@@ -16,13 +14,18 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
         ...(myGroups.length > 0 && {
           groups: {
             groups: myGroups,
-            name: "Groups"
+            name: "My Groups"
           }
         }),
         ...(groups.length > 0 && {
           discover: {
             groups,
             name: "Discover"
+          },
+          new: {
+            groups: [],
+            isNew: true,
+            name: "Add Group"
           }
         })
       };
@@ -39,6 +42,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
           {[1, 2, 3, 4].map((p, i) => (
             <GroupCard
               key={p}
+              history={history}
               group={null}
               user={null}
               showIsMember={true}
@@ -50,10 +54,21 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
       </>
     );
 
+  const handleTabsChange = index => {
+    if (Object.values(tabs)[index]["isNew"]) {
+      history.push("/newgroup");
+    }
+  };
+
   return (
     <>
-      <Tabs isFitted>
-        <TabList>
+      <Tabs
+        variant="soft-rounded"
+        variantColor="facebook"
+        size="sm"
+        onChange={handleTabsChange}
+      >
+        <TabList className="m-2">
           {Object.keys(tabs).map(k => (
             <Tab key={k}>{tabs[k].name}</Tab>
           ))}
@@ -67,6 +82,7 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
                   group={p}
                   user={user}
                   loc={loc}
+                  history={history}
                   showIsMember={false}
                 ></GroupCard>
               ))}
@@ -74,17 +90,6 @@ const Home = ({ user, groups, myGroups, loading, ...props }) => {
           ))}
         </TabPanels>
       </Tabs>
-
-      <div className="text-center p-4">
-        <LinkContainer to={`/newgroup`}>
-          <Button
-            type="submit"
-            className="btn btn-primary btn-sm btn-block btn-sm"
-          >
-            Create Group
-          </Button>
-        </LinkContainer>
-      </div>
     </>
   );
 };

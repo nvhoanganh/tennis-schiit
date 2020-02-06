@@ -7,11 +7,11 @@ import { LinkContainer } from "react-router-bootstrap";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
+import Ripples from "react-ripples";
 
 const cardHeight = 260;
 const Module = styled.div`
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6)),
-    url(${(p: any) => p.imageUrl});
+  background: url(${(p: any) => p.imageUrl});
   height: ${cardHeight}px;
   position: relative;
   overflow: hidden;
@@ -20,65 +20,87 @@ const Module = styled.div`
 `;
 
 const Header = styled.header`
+  width: 100%;
+  padding: 0px 15px 15px 15px;
+`;
+
+const IconRows = styled.div`
   position: absolute;
   bottom: 0;
-  left: 0;
+  right: 0;
   width: 100%;
-  padding: 20px 10px;
+  padding: 20px 10px 6px;
+  color: white;
+  margin: 0px;
+  text-alight: right;
 `;
 
 const Content = styled.div`
   margin: 0;
-  color: white;
-  text-shadow: 0 1px 0 black;
 `;
 
-const GroupCard = ({ group, user, showIsMember, ...props }) => {
+const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
   const loading = props.loading;
 
   return (
-    <LinkContainer
-      style={{ ...props.style }}
-      to={loading ? "" : `/leaderboard/${group ? group.groupId : ""}`}
-    >
-      {loading ? (
-        <MyLoadingSkeleton height={cardHeight} class="card-img-top border-bottom" />
-      ) : (
-        <Module
-          className="shadow-lg"
-          imageUrl={getGroupImageUrl(group.groupImage)}
-        >
-          <Header>
-            <Content>
-              <div className="d-flex mt-3">
-                <div className="flex-grow-1">
-                  <a>{group.name.toUpperCase()}</a>
-                  <GroupMembership
-                    user={user}
+    <div style={{ ...props.style }} className="border-top">
+      <Ripples
+        className="w-100"
+        onClick={() =>
+          setTimeout(
+            () => history.push(`/leaderboard/${group ? group.groupId : ""}`),
+            200
+          )
+        }
+      >
+        {loading ? (
+          <MyLoadingSkeleton
+            height={cardHeight}
+            class="card-img-top border-bottom"
+          />
+        ) : (
+          <div className="w-100">
+            <Module
+              className="shadow-lg"
+              imageUrl={getGroupImageUrl(group.groupImage)}
+            >
+              <IconRows>
+                <div className="text-nowrap text-right">
+                  <span className="rounded-lg bg-dark p-1">
+                    {Object.values(group.players).length}
+                    <FontAwesomeIcon className="pl-1" icon={faUsers} />{" "}
+                    {group.played}
+                    <FontAwesomeIcon className="pl-1" icon={faHandshake} />
+                  </span>
+                </div>
+              </IconRows>
+            </Module>
+            <Header>
+              <Content>
+                <div className="d-flex mt-3">
+                  <div className="flex-grow-1">
+                    <a>{group.name.toUpperCase()}</a>
+                    <GroupMembership
+                      user={user}
+                      group={group}
+                      showIsMember={showIsMember}
+                    />
+                  </div>
+                </div>
+                {!props.hideDetails ? (
+                  <GroupScoreCard
                     group={group}
-                    showIsMember={showIsMember}
-                  />
-                </div>
-                <div className="text-nowrap">
-                  {Object.values(group.players).length}
-                  <FontAwesomeIcon className="pl-1" icon={faUsers} />{" "}
-                  {group.played}
-                  <FontAwesomeIcon className="pl-1" icon={faHandshake} />
-                </div>
-              </div>
-              {!props.hideDetails ? (
-                <GroupScoreCard
-                  group={group}
-                  loc={props.loc}
-                  user={user}
-                  players={Object.values(group.players)}
-                ></GroupScoreCard>
-              ) : null}
-            </Content>
-          </Header>
-        </Module>
-      )}
-    </LinkContainer>
+                    loc={props.loc}
+                    user={user}
+                    players={Object.values(group.players)}
+                  ></GroupScoreCard>
+                ) : null}
+              </Content>
+            </Header>
+          </div>
+        )}
+      </Ripples>
+    </div>
   );
 };
 

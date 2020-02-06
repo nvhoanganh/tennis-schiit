@@ -7,7 +7,7 @@ import {
   useDisclosure,
   useToast
 } from "@chakra-ui/core";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   appLoad,
@@ -119,17 +119,26 @@ const App = ({
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">
-            <div className="text-center" style={{ marginLeft: -45 }}>
+            <div className="text-center">
               <img
                 style={{
-                  width: 54,
-                  alignSelf: "center",
-                  marginRight: 3
+                  width: 54
                 }}
                 src={AppIcon}
                 className="d-inline-block align-top pl-4"
               />
               Tennis score
+              {user && (
+                <button
+                  onClick={() =>
+                    signOutHandler().then(_ => window.location.reload())
+                  }
+                  type="button"
+                  className="btn btn-danger btn-sm float-right"
+                >
+                  <FontAwesomeIcon icon={faSignInAlt} />
+                </button>
+              )}
             </div>
           </DrawerHeader>
           <DrawerBody>

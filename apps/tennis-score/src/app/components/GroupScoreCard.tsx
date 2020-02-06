@@ -11,7 +11,7 @@ const GroupScoreCard = ({
     GeohashDistance.inKm(geoHash, props.loc).toFixed(0);
   return (
     <div>
-      <em className="d-block small">
+      <em className="d-block small text-truncate">
         {props.loc && hashedLocation ? (
           <em>{distance(hashedLocation)} km - </em>
         ) : null}

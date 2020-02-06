@@ -145,18 +145,6 @@ const Leaderboard = ({
               />
             }
           ></RouteNav>
-          <div className="px-3">
-            {!loading ? (
-              <GroupScoreCard
-                group={group}
-                user={user}
-                players={players}
-              ></GroupScoreCard>
-            ) : (
-              <Skeleton height={48} />
-            )}
-          </div>
-
           {!isMember(user, group) && !loading && (
             <div className="text-center p-2">
               {!isPendingJoin ? (
@@ -224,7 +212,6 @@ const Leaderboard = ({
           <TabPanel>
             {/* leaerboard */}
             <HeaderCard
-              className="sticky first"
               right={
                 <TournamentDropDown
                   user={user}
