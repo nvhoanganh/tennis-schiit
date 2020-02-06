@@ -131,7 +131,7 @@ const ViewHead2Head = ({
           <div ref={divRef} style={{ float: "left", clear: "both" }}></div>
           {state.formValid && Object.keys(scores).length ? (
             <>
-              <HeaderCard className="sticky second">
+              <HeaderCard className="sticky first">
                 {getPlayers(state.winners, playersAsObject)} vs.{" "}
                 {getPlayers(state.losers, playersAsObject)}
               </HeaderCard>

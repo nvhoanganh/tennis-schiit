@@ -224,7 +224,7 @@ const Leaderboard = ({
           <TabPanel>
             {/* leaerboard */}
             <HeaderCard
-              className="sticky second"
+              className="sticky first"
               right={
                 <TournamentDropDown
                   user={user}

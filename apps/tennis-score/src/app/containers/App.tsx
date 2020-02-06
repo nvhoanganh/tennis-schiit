@@ -29,7 +29,7 @@ import "../app.scss";
 import AppIcon from "../../assets/icons/icon-96x96.png";
 import { AppLoader } from "../components/AppLoader";
 import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
-
+import Headroom from "react-headroom";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -82,34 +82,37 @@ const App = ({
   return appLoaded ? (
     <div>
       {showNav && (
-        <Navbar
-          collapseOnSelect
-          expand="lg"
-          bg="dark"
-          className="sticky first"
-          variant="dark"
-          style={{
-            padding: 0
-          }}
-        >
-          <LinkContainer to={"/"}>
-            <Navbar.Brand style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}>
-              <img
-                width="30"
-                src={AppIcon}
-                height="30"
-                className="d-inline-block align-top"
-              />{" "}
-              Tennis Score
-            </Navbar.Brand>
-          </LinkContainer>
-          <Navbar.Toggle
-            aria-controls="responsive-navbar-nav"
-            onClick={() => onOpen()}
-            style={{ marginRight: "0.4rem", border: "none" }}
-            children={<FontAwesomeIcon icon={faBars} />}
-          />
-        </Navbar>
+        <Headroom>
+          <Navbar
+            collapseOnSelect
+            expand="lg"
+            bg="dark"
+            variant="dark"
+            style={{
+              padding: 0
+            }}
+          >
+            <LinkContainer to={"/"}>
+              <Navbar.Brand
+                style={{ paddingLeft: "0.9rem", padding: "0.6rem" }}
+              >
+                <img
+                  width="30"
+                  src={AppIcon}
+                  height="30"
+                  className="d-inline-block align-top"
+                />{" "}
+                Tennis Score
+              </Navbar.Brand>
+            </LinkContainer>
+            <Navbar.Toggle
+              aria-controls="responsive-navbar-nav"
+              onClick={() => onOpen()}
+              style={{ marginRight: "0.4rem", border: "none" }}
+              children={<FontAwesomeIcon icon={faBars} />}
+            />
+          </Navbar>
+        </Headroom>
       )}
       <div>{renderRoutes(route.routes)}</div>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
