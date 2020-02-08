@@ -8,13 +8,12 @@
 # dependencies
 /node_modules
 
-.cache
 # IDEs and editors
 /.idea
 .project
 .classpath
 .c9/
-*.launch
+*.launch/
 .settings/
 *.sublime-workspace
 
@@ -32,9 +31,11 @@
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
+firebase-debug.log
 testem.log
 /typings
 .cache
 # System Files
 .DS_Store
 Thumbs.db
+/.firebase/*.cache
