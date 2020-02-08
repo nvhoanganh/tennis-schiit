@@ -25,13 +25,14 @@ const SelectInput: React.SFC<{
   values
 }) => {
   const inputRef = useRef<HTMLSelectElement>(null);
+  const [dirty, setDirty] = useState(false);
   const [className, setClassName] = useState("form-control");
   useEffect(() => {
     inputRef.current.setCustomValidity(!isValid ? "weak" : "");
     setClassName(
       classNames({
         "form-control": true,
-        "is-invalid": !isValid
+        "is-invalid": !isValid && dirty
       })
     );
   }, [isValid]);
@@ -46,6 +47,7 @@ const SelectInput: React.SFC<{
         className={className}
         onChange={e => {
           setValue(name, e.target.value);
+          setDirty(true);
         }}
         value={value}
         placeholder={placeholder}

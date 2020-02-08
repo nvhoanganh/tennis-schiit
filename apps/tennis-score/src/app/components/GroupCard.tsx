@@ -35,7 +35,6 @@ const Content = styled.div`
 
 const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
   const loading = props.loading;
-  console.log("height is", props.height);
   const Module = styled.div`
     background: url(${(p: any) => p.imageUrl});
     height: ${props.height || 260}px;
@@ -57,7 +56,7 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
       >
         {loading ? (
           <MyLoadingSkeleton
-            height={cardHeight}
+            height={props.height || 260}
             class="card-img-top border-bottom"
           />
         ) : (

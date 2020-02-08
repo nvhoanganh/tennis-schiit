@@ -23,13 +23,14 @@ const TextInput: React.SFC<{
   errorMessage
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [dirty, setDirty] = useState(false);
   const [className, setClassName] = useState("form-control");
   useEffect(() => {
     inputRef.current.setCustomValidity(!isValid ? "weak" : "");
     setClassName(
       classNames({
         "form-control": true,
-        "is-invalid": !isValid
+        "is-invalid": !isValid && dirty
       })
     );
   }, [isValid]);
@@ -43,7 +44,10 @@ const TextInput: React.SFC<{
         ref={inputRef}
         autoComplete="off"
         className={className}
-        onChange={e => setValue(name, e.target.value)}
+        onChange={e => {
+          setValue(name, e.target.value);
+          setDirty(true);
+        }}
         value={value}
         placeholder={placeholder}
         type={type}

@@ -60,12 +60,12 @@ const SignIn = ({
         </Link>
       </LinkContainer>
       <h4 className="card-title mb-4 mt-1">Sign in</h4>
-      <p>
+      <p className="text-center py-3">
         <Link
           onClick={() => {
             signInHandler({ isGmail: true });
           }}
-          className="btn btn-block btn-outline"
+          className="btn btn-outline-danger"
         >
           <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
           Login via Google
