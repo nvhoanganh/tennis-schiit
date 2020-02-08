@@ -93,7 +93,7 @@ const PlayerProfile = ({
           )}
         </>
       </div>
-      <div className="row pt-3">
+      <div className="pt-3">
         <div className="col-sm-12 text-center">
           <div>
             <span className="h4">{player.name}</span>
@@ -119,7 +119,7 @@ const PlayerProfile = ({
             </TabList>
             <TabPanels>
               <TabPanel>
-                <div className="row mt-2 mx-1">
+                <div className="mt-2 mx-1">
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-success text-white"

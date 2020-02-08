@@ -81,8 +81,8 @@ const UserProfile = ({
         </>
       ) : null}
 
-      <div className="row pt-5 px-2 text-center">
-        <div className="col-12 emphasis">
+      <div className="pt-5 px-2 text-center">
+        <div className="emphasis">
           <div className="btn-group dropup btn-block">
             <UpdateButton
               loading={loading}
@@ -94,8 +94,8 @@ const UserProfile = ({
           </div>
         </div>
       </div>
-      <div className="row pt-2 pb-5 px-2">
-        <div className="col-12 text-center">
+      <div className="pt-2 pb-5 px-2">
+        <div className="text-center">
           <LinkContainer to="/account-details/edit">
             <Link title="Update Details" href="">
               Update Details
