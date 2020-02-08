@@ -42,7 +42,7 @@ export function GroupMemberDropdown({
         <DrawerContent>
           <DrawerBody className="py-4 pb-5">
             {!isMember(user, group) && (
-              <a className="h5 py-2" onClick={joinHandler}>
+              <a className="d-block h5 py-2" onClick={joinHandler}>
                 Join Group
               </a>
             )}
@@ -58,7 +58,7 @@ export function GroupMemberDropdown({
             )}
             {isOwner(user, group) && (
               <LinkContainer to={`/managegroup/${group.groupId}`}>
-                <a className="h5 py-2">Manage Group</a>
+                <a className="d-block h5 py-2">Manage Group</a>
               </LinkContainer>
             )}
             <ShareLink
