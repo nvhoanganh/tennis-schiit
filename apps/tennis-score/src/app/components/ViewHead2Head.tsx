@@ -8,9 +8,11 @@ import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
-const getPlayers = (p, allP) => (
-  <span>{getPlayersName(p, allP).join("/")}</span>
-);
+import { DropDownMenu } from "./DropDownMenu";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { ShareLink } from "./ShareLink";
+const getPlayers = (p, allP) => <span>{getPlayersAsText(p, allP)}</span>;
+const getPlayersAsText = (p, allP) => getPlayersName(p, allP).join("/");
 const ViewHead2Head = ({
   pendingRequests,
   group,
@@ -96,6 +98,12 @@ const ViewHead2Head = ({
       };
     });
   }, [state.winners, state.losers]);
+  const getVs = () =>
+    `${getPlayersAsText(state.winners, playersAsObject)} vs. ${getPlayersAsText(
+      state.losers,
+      playersAsObject
+    )}`;
+
   return (
     <>
       {group ? (
@@ -103,6 +111,18 @@ const ViewHead2Head = ({
           <RouteNav
             history={history}
             center="View Head 2 Head Result"
+            right={
+              <DropDownMenu
+                icon={faEllipsisV}
+                options={[
+                  <ShareLink
+                    title={getVs()}
+                    text={`Check out ${getVs()} H2H`}
+                    url={window.location.href}
+                  />
+                ]}
+              />
+            }
           ></RouteNav>
           <div className="pb-3 px-2">
             <form noValidate onSubmit={validateAndSubmit}>
@@ -120,6 +140,7 @@ const ViewHead2Head = ({
                 <UpdateButton
                   loading={pendingRequests}
                   loadingText="Saving..."
+                  u
                   value="View H2H Results"
                   type="submit"
                   disabled={!state.formValid || pendingRequests > 0}

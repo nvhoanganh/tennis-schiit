@@ -1,9 +1,16 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isInstalled, isMember, isOwner, shareLink } from "@tennis-score/redux";
 import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
+import { ShareLink } from "./ShareLink";
 
 export function GroupMemberDropdown({
   history,
@@ -12,7 +19,7 @@ export function GroupMemberDropdown({
   joinGroup,
   leaveGroup
 }) {
-  console.log('group', group)
+  console.log("group", group);
   const joinHandler = _ => {
     if (!user) {
       history.push("/signup");
@@ -54,20 +61,11 @@ export function GroupMemberDropdown({
                 <a className="h5 py-2">Manage Group</a>
               </LinkContainer>
             )}
-            {isInstalled() && (
-                <a
-                  className="d-block h5 py-2"
-                  onClick={() =>
-                    shareLink({
-                      title: group.name,
-                      text: `Check out ${group.name} leaderboard!`,
-                      url: `https://tennisscoresheet.com/leaderboard/${group.groupId}?tab=0`
-                    })
-                  }
-                >
-                  Share
-                </a>
-            )}
+            <ShareLink
+              title={`${group.name} Results`}
+              text={`Check out ${group.name} match results!`}
+              url={window.location.href}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

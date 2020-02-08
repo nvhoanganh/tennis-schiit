@@ -172,7 +172,7 @@ export const shareLink = (data: ShareData) => {
       .then(() => console.log("Successful share"))
       .catch(error => console.log("Error sharing", error));
   } else {
-    console.log("app is not installed mode");
+    console.log("app is not installed mode", data);
   }
 };
 

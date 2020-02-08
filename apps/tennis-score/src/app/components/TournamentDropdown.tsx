@@ -11,6 +11,7 @@ import { isMember, isOwner, isInstalled, shareLink } from "@tennis-score/redux";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { LinkContainer } from "react-router-bootstrap";
+import { ShareLink } from "./ShareLink";
 
 export function TournamentDropDown({ user, group, tournament }) {
   const canSubmitNewScore = () => user && isMember(user, group) && tournament;
@@ -39,20 +40,7 @@ export function TournamentDropDown({ user, group, tournament }) {
             >
               <a className="h5 py-2 d-block">Check Head 2 Head</a>
             </LinkContainer>
-            {isInstalled() && (
-              <a
-                className="d-block h5 py-2"
-                onClick={() =>
-                  shareLink({
-                    title: group.name,
-                    text: `Check out ${group.name} match results!`,
-                    url: `https://tennisscoresheet.com/groups/${group.groupId}/tournament/${group.currentTournament}/results`
-                  })
-                }
-              >
-                Share
-              </a>
-            )}
+
             <LinkContainer
               to={`/groups/${group.groupId}/tournament/${group.currentTournament}/results`}
             >

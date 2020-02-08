@@ -1,3 +1,4 @@
+import { ShareLink } from "./ShareLink";
 import {
   Drawer,
   DrawerBody,
@@ -7,7 +8,12 @@ import {
   useDisclosure
 } from "@chakra-ui/core";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import { getPossibleVerse, SearchScore } from "@tennis-score/redux";
+import {
+  getPossibleVerse,
+  SearchScore,
+  isInstalled,
+  shareLink
+} from "@tennis-score/redux";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -40,10 +46,28 @@ const ViewResults = ({
   }, []);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const loadFunc = e => {
+    console.log("load more");
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
   const [h2h, seth2h] = useState<any>({});
   const [activeLbl, setactiveLbl] = useState<string>("All");
+  const links = [
+    <DrawerLink
+      key="menu"
+      onClick={() =>
+        history.push(
+          `/headtohead/${group.groupId}/tournament/${match.params.tour}`
+        )
+      }
+    >
+      Check Head 2 Head
+    </DrawerLink>,
+    <ShareLink
+      title={`${group.name} Results`}
+      text={`Check out ${group.name} match results!`}
+      url={window.location.href}
+    />
+  ];
 
   const viewHead2Head = ({ winners, losers, showAll, label }) => {
     onOpen();
@@ -72,23 +96,7 @@ const ViewResults = ({
         <>
           {tournament ? (
             <HeaderCard
-              right={
-                <DropDownMenu
-                  icon={faEllipsisH}
-                  options={[
-                    <DrawerLink
-                      key="menu"
-                      onClick={() =>
-                        history.push(
-                          `/headtohead/${group.groupId}/tournament/${match.params.tour}`
-                        )
-                      }
-                    >
-                      Check Head 2 Head
-                    </DrawerLink>
-                  ]}
-                />
-              }
+              right={<DropDownMenu icon={faEllipsisH} options={links} />}
             >
               <span>
                 {tournament.description || "Current tournament"}:{" started "}
