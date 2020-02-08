@@ -4,11 +4,11 @@ import bodymovin from "lottie-web";
 export function AppLoader(props) {
   useEffect(() => {
     bodymovin.loadAnimation({
-      container: document.getElementById("spinner"), // Required
+      container: document.getElementById("spinner"),
       autoplay: true,
       loop: true,
       path:
-        "https://maxst.icons8.com/vue-static/landings/animated-icons/icons/fidget-spinner/fidget-spinner.json" // Required
+        "/assets/fidget-spinner.json"
     });
   }, []);
 
