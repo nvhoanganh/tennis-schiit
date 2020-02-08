@@ -110,7 +110,7 @@ const ViewResults = ({
                 {scoresSorted.map(k => (
                   <div key={k.matchDate}>
                     <HeaderCard>
-                      <strong>Match Date: {format(k.matchDate, "E, dd/MM/yyyy")}</strong>
+                      <strong>{format(k.matchDate, "E, dd/MM/yyyy")}</strong>
                     </HeaderCard>
                     {k.matches.map((m, i) => (
                       <ResultCard
@@ -136,7 +136,7 @@ const ViewResults = ({
             <Skeleton />
           </HeaderCard>
           <div className="pb-3 pl-3 pr-3">
-            <Skeleton height={90} count={10} />
+            <Skeleton height={60} count={10} />
           </div>
         </>
       )}

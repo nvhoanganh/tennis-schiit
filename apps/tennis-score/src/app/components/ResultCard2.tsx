@@ -27,7 +27,7 @@ const ResultCard = props => {
     ));
   };
   return (
-    <div className="d-flex border-bottom shadow-sm my-1 justify-content-between">
+    <div className="d-flex border-bottom justify-content-between">
       <div className="pl-1 w-100 flex-grow-1 align-self-center">
         {getPlayers(winners, false)}
       </div>

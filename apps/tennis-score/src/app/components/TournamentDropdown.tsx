@@ -1,7 +1,13 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isMember, isOwner } from "@tennis-score/redux";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isMember, isOwner, isInstalled, shareLink } from "@tennis-score/redux";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { LinkContainer } from "react-router-bootstrap";
@@ -12,7 +18,11 @@ export function TournamentDropDown({ user, group, tournament }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <button onClick={onOpen} type="button" className="btn btn-link btn-sm text-dark">
+      <button
+        onClick={onOpen}
+        type="button"
+        className="btn btn-link btn-sm text-dark"
+      >
         <FontAwesomeIcon icon={faEllipsisH} />
       </button>
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
@@ -29,6 +39,20 @@ export function TournamentDropDown({ user, group, tournament }) {
             >
               <a className="h5 py-2 d-block">Check Head 2 Head</a>
             </LinkContainer>
+            {isInstalled() && (
+              <a
+                className="d-block h5 py-2"
+                onClick={() =>
+                  shareLink({
+                    title: group.name,
+                    text: `Check out ${group.name} match results!`,
+                    url: `https://tennisscoresheet.com/groups/${group.groupId}/tournament/${group.currentTournament}/results`
+                  })
+                }
+              >
+                Share
+              </a>
+            )}
             <LinkContainer
               to={`/groups/${group.groupId}/tournament/${group.currentTournament}/results`}
             >

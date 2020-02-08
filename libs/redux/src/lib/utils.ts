@@ -157,3 +157,27 @@ export const toChartDate = d => {
 
 export const getUrlAvatar = uid =>
   `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2Favatar_${uid}_200x200.png?alt=media`;
+
+export const isInstalled = () =>
+  "standalone" in window.navigator && window.navigator["standalone"];
+
+export const shareLink = (data: ShareData) => {
+  if ("share" in window.navigator) {
+    (window.navigator as any)
+      .share({
+        title: "web.dev",
+        text: "Check out web.dev.",
+        url: "https://web.dev/"
+      })
+      .then(() => console.log("Successful share"))
+      .catch(error => console.log("Error sharing", error));
+  } else {
+    console.log("app is not installed mode");
+  }
+};
+
+export interface ShareData {
+  title?: string;
+  text?: string;
+  url?: string;
+}
