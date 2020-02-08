@@ -1,6 +1,13 @@
 /*
  * Remove template code below
  */
+// stop bouncing on ios
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
 #root {
   height: 100vh;
   font-family: "Montserrat";

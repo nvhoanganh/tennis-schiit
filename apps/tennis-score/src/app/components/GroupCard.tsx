@@ -1,5 +1,9 @@
 import styled from "@emotion/styled";
-import { faHandshake, faUsers, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHandshake,
+  faUsers,
+  faUser
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getGroupImageUrl } from "@tennis-score/redux";
 import React from "react";
@@ -8,16 +12,6 @@ import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import Ripples from "react-ripples";
-
-const cardHeight = 260;
-const Module = styled.div`
-  background: url(${(p: any) => p.imageUrl});
-  height: ${cardHeight}px;
-  position: relative;
-  overflow: hidden;
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
 
 const Header = styled.header`
   width: 100%;
@@ -41,7 +35,15 @@ const Content = styled.div`
 
 const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
   const loading = props.loading;
-
+  console.log("height is", props.height);
+  const Module = styled.div`
+    background: url(${(p: any) => p.imageUrl});
+    height: ${props.height || 260}px;
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: cover;
+  `;
   return (
     <div style={{ ...props.style }} className="border-top">
       <Ripples
@@ -68,7 +70,10 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
                 <div className="text-nowrap text-right">
                   <span
                     className="rounded-lg p-1"
-                    style={{ backgroundColor: "rgb(52,58,64, 0.6)", fontSize: '0.8rem'}}
+                    style={{
+                      backgroundColor: "rgb(52,58,64, 0.6)",
+                      fontSize: "0.8rem"
+                    }}
                   >
                     {Object.values(group.players).length}
                     <FontAwesomeIcon className="pl-1" icon={faUser} />{" "}

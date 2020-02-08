@@ -53,7 +53,7 @@ const PlayerProfile = ({
     props.getPlayer(match.params.id, q.userId);
   }, []);
   useEffect(() => {
-    if (group) {
+    if (group && group.currentTournament) {
       getStatsByPlayer({
         groupId: group.groupId,
         tourId: group.currentTournament,
@@ -119,7 +119,7 @@ const PlayerProfile = ({
             </TabList>
             <TabPanels>
               <TabPanel>
-                <div className="mt-2 mx-1">
+                <div className="row mt-2 mx-1">
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-success text-white"
@@ -169,7 +169,7 @@ const PlayerProfile = ({
                     <PlayerStatsChart stats={myStats}></PlayerStatsChart>
                   </div>
                 ) : (
-                  <div className="text-center h5 my-5">0 match played</div>
+                  <div className="text-center h6 my-5">0 match played</div>
                 )}
 
                 {myMatches && myMatches.length > 0 && (
@@ -191,11 +191,12 @@ const PlayerProfile = ({
         <>
           <HeaderCard>Groups</HeaderCard>
           <div className="pb-5">
-            <ScrollPills height={300}>
+            <ScrollPills height={200}>
               {Object.keys(player.groups).map((p, i) => (
                 <div key={p} className="m-2 shadow-sm">
                   <GroupCard
-                    style={{ minWidth: 300 }}
+                    style={{ minWidth: 200 }}
+                    height={148}
                     group={groups[p]}
                     loc={loc}
                     history={history}

@@ -58,7 +58,7 @@ const Leaderboard = ({
   }, []);
 
   useEffect(() => {
-    if (tabIndex === 1 && !stats && group) {
+    if (tabIndex === 1 && !stats && group && group.currentTournament) {
       getStats(match.params.group, group.currentTournament).then(setStats);
     }
     setQuery({ tab: tabIndex });
@@ -282,51 +282,57 @@ const Leaderboard = ({
             ) : null}
           </TabPanel>
           <TabPanel>
-            {group && stats ? (
+            {group && group.currentTournament ? (
               <>
-                <div className="py-4 border-bottom shadow-sm">
-                  <TournamentStatsChart
-                    title="Prize Money"
-                    value="prizeMoney"
-                    prefix="$"
-                    suffix=""
-                    players={group.players}
-                    stats={stats}
-                  ></TournamentStatsChart>
-                </div>
+                {stats ? (
+                  <>
+                    <div className="py-4 border-bottom shadow-sm">
+                      <TournamentStatsChart
+                        title="Prize Money"
+                        value="prizeMoney"
+                        prefix="$"
+                        suffix=""
+                        players={group.players}
+                        stats={stats}
+                      ></TournamentStatsChart>
+                    </div>
 
-                <div className="py-4 border-bottom shadow-sm">
-                  <TournamentStatsChart
-                    title="Win Percentage"
-                    value="winPercentage"
-                    prefix="%"
-                    suffix=""
-                    players={group.players}
-                    stats={stats}
-                  ></TournamentStatsChart>
-                </div>
+                    <div className="py-4 border-bottom shadow-sm">
+                      <TournamentStatsChart
+                        title="Win Percentage"
+                        value="winPercentage"
+                        prefix="%"
+                        suffix=""
+                        players={group.players}
+                        stats={stats}
+                      ></TournamentStatsChart>
+                    </div>
 
-                <div className="py-4 border-bottom shadow-sm">
-                  <TournamentStatsChart
-                    title="TrueSkill Points"
-                    value="score"
-                    prefix=""
-                    suffix="pt."
-                    players={group.players}
-                    stats={stats}
-                  ></TournamentStatsChart>
-                </div>
+                    <div className="py-4 border-bottom shadow-sm">
+                      <TournamentStatsChart
+                        title="TrueSkill Points"
+                        value="score"
+                        prefix=""
+                        suffix="pt."
+                        players={group.players}
+                        stats={stats}
+                      ></TournamentStatsChart>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="py-4 border-bottom shadow-sm">
+                      <Skeleton height={400} />
+                    </div>
+
+                    <div className="py-4 border-bottom shadow-sm">
+                      <Skeleton height={400} />
+                    </div>
+                  </>
+                )}
               </>
             ) : (
-              <>
-                <div className="py-4 border-bottom shadow-sm">
-                  <Skeleton height={400} />
-                </div>
-
-                <div className="py-4 border-bottom shadow-sm">
-                  <Skeleton height={400} />
-                </div>
-              </>
+              <div className="text-center h6 my-5">No tournament created for this group</div>
             )}
           </TabPanel>
         </TabPanels>
