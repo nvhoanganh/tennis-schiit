@@ -4,7 +4,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useToast } from "@chakra-ui/core";
 export function ShareLink({ title, text, url }) {
   const toast = useToast();
-  return isInstalled() ? (
+  return "share" in window.navigator ? (
     <a
       className="d-block h5 py-2"
       onClick={() =>

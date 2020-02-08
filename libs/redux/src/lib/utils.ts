@@ -164,11 +164,7 @@ export const isInstalled = () =>
 export const shareLink = (data: ShareData) => {
   if ("share" in window.navigator) {
     (window.navigator as any)
-      .share({
-        title: "web.dev",
-        text: "Check out web.dev.",
-        url: "https://web.dev/"
-      })
+      .share(data)
       .then(() => console.log("Successful share"))
       .catch(error => console.log("Error sharing", error));
   } else {
