@@ -58,8 +58,9 @@ const UserProfile = ({
               {Object.keys(myGroups).map((p, i) => (
                 <div key={p} className="m-2 shadow-sm">
                   <GroupCard
-                    style={{ minWidth: 300 }}
+                    style={{ minWidth: 250 }}
                     group={myGroups[p]}
+                    height={200}
                     history={history}
                     user={user}
                     showIsMember={false}
