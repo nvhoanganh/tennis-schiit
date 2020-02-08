@@ -7,7 +7,6 @@ if ("function" === typeof importScripts) {
     // workbox.setConfig({
     //   debug: true
     // });
-    console.log("Workbox is loaded..");
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 

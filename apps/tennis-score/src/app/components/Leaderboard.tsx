@@ -1,13 +1,5 @@
-import {
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  useToast
-} from "@chakra-ui/core";
+import { Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from "@chakra-ui/core";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getStats, isMember, isOwner } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
@@ -21,7 +13,6 @@ import setQuery from "set-query-string";
 import { Button } from "./Button";
 import Confirm from "./Confirm";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
-import GroupScoreCard from "./GroupScoreCard";
 import HeaderCard from "./Header";
 import LeaderboardCard from "./LeaderboardCard";
 import UpdateButton from "./LoadingButton";
@@ -29,6 +20,7 @@ import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
 import { TournamentStatsChart } from "./TournamentStatsChart";
+
 const Leaderboard = ({
   pendingJoinRequests,
   players,
@@ -52,7 +44,6 @@ const Leaderboard = ({
   const [stats, setStats] = useState(null);
   const [show, setShow] = useState(false);
   const [approvingPlayer, setapprovingPlayer] = useState(null);
-
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
   }, []);

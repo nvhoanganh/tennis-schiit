@@ -39,13 +39,11 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then(reg => {
         reg.addEventListener("updatefound", () => {
-          console.log("New Version of Service Worker detected");
           newWorker = reg.installing;
           newWorker.addEventListener("statechange", () => {
             switch (newWorker.state) {
               case "installed":
                 if (navigator.serviceWorker.controller) {
-                  console.log("new Service worker is now installed, reloading...");
                   newWorker.postMessage({ type: "SKIP_WAITING" });
                 }
                 break;

@@ -24,7 +24,6 @@ const UserProfile = ({
   useEffect(() => {
     props.loadGroups();
   }, []);
-  console.log(player);
   return !user ? (
     <Redirect to="/signin" />
   ) : (

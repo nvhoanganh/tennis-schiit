@@ -157,7 +157,6 @@ export function updateProfile({
     const blob = avatar ? await (await fetch(avatar)).blob() : null;
     let avatarUrl = "";
     if (blob) {
-      console.log("new avatar uploaded");
       var storageRef = firebase.storage().ref();
       var imageRef = await storageRef
         .child(`images/avatar_${uid}.png`)

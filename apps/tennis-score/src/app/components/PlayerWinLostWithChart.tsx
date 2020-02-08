@@ -69,8 +69,6 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
         name: players[x] ? players[x].name : "NA"
       }));
 
-    console.log(players);
-
     return [
       {
         name: "Win with",
