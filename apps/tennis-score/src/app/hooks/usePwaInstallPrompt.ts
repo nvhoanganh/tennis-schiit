@@ -12,10 +12,12 @@ export const usePwaInstallPrompt = () => {
   // Detects if device is in standalone mode
   const isInStandaloneMode = () =>
     "standalone" in window.navigator && window.navigator["standalone"];
-
+  const key = "tennis-scoresheet-ios-ask-pwa";
   useEffect(() => {
-    if (isIos() && !isInStandaloneMode()) {
+    // dont' ask more than 3 times
+    if (isIos() && !isInStandaloneMode() && +localStorage.getItem(key) < 3) {
       setTimeout(() => {
+        localStorage.setItem(key, (+localStorage.getItem(key) + 1).toString());
         toast({
           title: "Install as App",
           description:
@@ -28,4 +30,3 @@ export const usePwaInstallPrompt = () => {
     }
   }, []);
 };
-

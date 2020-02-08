@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { faHandshake, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHandshake, faUsers, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getGroupImageUrl } from "@tennis-score/redux";
 import React from "react";
@@ -66,9 +66,12 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
             >
               <IconRows>
                 <div className="text-nowrap text-right">
-                  <span className="rounded-lg bg-dark p-1">
+                  <span
+                    className="rounded-lg p-1"
+                    style={{ backgroundColor: "rgb(52,58,64, 0.6)", fontSize: '0.8rem'}}
+                  >
                     {Object.values(group.players).length}
-                    <FontAwesomeIcon className="pl-1" icon={faUsers} />{" "}
+                    <FontAwesomeIcon className="pl-1" icon={faUser} />{" "}
                     {group.played}
                     <FontAwesomeIcon className="pl-1" icon={faHandshake} />
                   </span>

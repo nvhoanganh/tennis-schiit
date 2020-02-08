@@ -6,12 +6,24 @@
   <title>TennisScore</title>
   <base href="/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico" />
+  <link rel="preconnect" href="https://firestore.googleapis.com">
+  <link rel="dns-prefetch" href="https://www.googleapis.com">
+  <link rel="dns-prefetch" href="https://maps.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <!-- remote resources -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="preload" as="font" />
+
   <link rel="manifest" href="manifest.json" />
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbhMnOl-eKAlPWNFBX9CJODlHSnDne5u0&libraries=places"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#343a40" />
+
+  <!-- icons -->
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="assets/icons/icon-152x152.png">
 </head>
 
 <body>
@@ -45,6 +57,8 @@
       });
     }
   </script>
+  <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbhMnOl-eKAlPWNFBX9CJODlHSnDne5u0&libraries=places"></script>
 </body>
 
 </html>
