@@ -1,11 +1,11 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import useLocation from "../hooks/useLocation";
+import { getUserLoc } from "../hooks/useLocation";
 import GroupCard from "./GroupCard";
 
 const Home = ({ user, groups, myGroups, loading, history, ...props }) => {
-  const loc = useLocation();
+  const [loc, setLoc] = useState(null);
   const [tabs, setTabs] = useState<any>({});
   useEffect(() => {
     setTabs(s => {
@@ -20,6 +20,7 @@ const Home = ({ user, groups, myGroups, loading, history, ...props }) => {
         ...(groups.length > 0 && {
           discover: {
             groups,
+            isDiscover: true,
             name: "Discover"
           },
           new: {
@@ -56,7 +57,10 @@ const Home = ({ user, groups, myGroups, loading, history, ...props }) => {
 
   const handleTabsChange = index => {
     if (Object.values(tabs)[index]["isNew"]) {
-      history.push("/newgroup");
+      history.push(user ? "/newgroup" : "/signin");
+    }
+    if (Object.values(tabs)[index]["isDiscover"]) {
+      getUserLoc(setLoc);
     }
   };
 

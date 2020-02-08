@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
+import React, { useEffect, useRef, useState } from "react";
 
 const TextInput: React.SFC<{
   label: string;
@@ -33,7 +33,7 @@ const TextInput: React.SFC<{
         "is-invalid": !isValid && dirty
       })
     );
-  }, [isValid]);
+  }, [isValid, dirty]);
 
   return (
     <div className="form-group">

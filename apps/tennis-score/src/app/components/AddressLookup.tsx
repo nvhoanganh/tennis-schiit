@@ -24,6 +24,7 @@ const AddressLookup: React.SFC<{
   errorMessage,
   disabled
 }) => {
+  const [dirty, setDirty] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [className, setClassName] = useState("");
   useEffect(() => {
@@ -31,28 +32,29 @@ const AddressLookup: React.SFC<{
     setClassName(
       classNames({
         "form-control": true,
-        "is-invalid": !isValid
+        "is-invalid": !isValid && dirty
       })
     );
-  }, [isValid]);
+  }, [isValid, dirty]);
 
   const handleSelect = address => {
     geocodeByAddress(address)
-      .then(results => {
-        setValue(name, address);
-        return getLatLng(results[0]);
-      })
+      .then(results => getLatLng(results[0]))
       .then(latLng => {
         setValue(`${name}LongLat`, latLng);
       })
       .catch(error => console.error("Error", error));
   };
+
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <PlacesAutocomplete
         value={value}
-        onChange={e => setValue(name, e)}
+        onChange={e => {
+          setValue(name, e);
+          setDirty(true);
+        }}
         className={className}
         onSelect={handleSelect}
       >
@@ -64,11 +66,16 @@ const AddressLookup: React.SFC<{
               placeholder={placeholder}
               className={className}
               {...getInputProps({
-                placeholder: "Search Places ...",
+                placeholder: "Search Places",
                 className: className
               })}
             />
-            <div className="autocomplete-dropdown-container border">
+            <div
+              className={
+                "autocomplete-dropdown-container " +
+                ((loading || suggestions.length > 0) && " border rounded")
+              }
+            >
               {loading && <div>Loading...</div>}
               {suggestions.map(suggestion => {
                 const className = suggestion.active

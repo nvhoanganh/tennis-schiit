@@ -9,24 +9,18 @@ const FileInput: React.SFC<{
   multiple: boolean;
   disabled?: boolean;
   setValue(name: string, value: any);
-}> = ({
-  label,
-  disabled,
-  name,
-  isValid,
-  setValue,
-  errorMessage
-}) => {
+}> = ({ label, disabled, name, isValid, setValue, errorMessage }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [dirty, setDirty] = useState(false);
   const [className, setClassName] = useState("");
   useEffect(() => {
     inputRef.current.setCustomValidity(!isValid ? "weak" : "");
     setClassName(
       classNames({
-        "is-invalid": !isValid
+        "is-invalid": !isValid && dirty
       })
     );
-  }, [isValid]);
+  }, [isValid, dirty]);
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
@@ -36,7 +30,11 @@ const FileInput: React.SFC<{
         multiple
         ref={inputRef}
         className={className}
-        onChange={e => setValue(name, e.target.files[0])}
+        onFocus={_ => setDirty(true)}
+        onChange={e => {
+          setValue(name, e.target.files[0]);
+          setDirty(true);
+        }}
         type="file"
       />
       <div className="invalid-feedback">{errorMessage}</div>

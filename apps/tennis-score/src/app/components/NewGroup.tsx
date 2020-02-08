@@ -91,8 +91,8 @@ const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
 
           <AddressLookup
             name="location"
-            label="Location"
-            errorMessage="Address is required"
+            label="Court Location"
+            errorMessage="Valid address is required"
             value={state.location}
             setValue={setValue}
             isValid={state.locationValid}

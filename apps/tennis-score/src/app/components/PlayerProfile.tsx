@@ -46,7 +46,6 @@ const PlayerProfile = ({
 }) => {
   const [myStats, setMyStats] = useState<any>(null);
   const [myMatches, setmyMatches] = useState<any>(null);
-  const loc = useLocation();
   const q = queryString.parse(location.search);
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
@@ -198,7 +197,6 @@ const PlayerProfile = ({
                     style={{ minWidth: 200 }}
                     height={148}
                     group={groups[p]}
-                    loc={loc}
                     history={history}
                     user={player}
                     showIsMember={false}

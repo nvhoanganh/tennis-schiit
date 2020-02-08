@@ -3,7 +3,6 @@ import { getUrlAvatar } from "@tennis-score/redux";
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
-import styled from "styled-components";
 import useLocation from "../hooks/useLocation";
 import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
@@ -12,12 +11,6 @@ import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import PlayerSettings from "./PlayerSettings";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
-
-const StatusIcon = styled.div`
-  font-size: 0.8em;
-  border-radius: 50%;
-  border: solid 1px blue;
-`;
 
 const UserProfile = ({
   signOutHandler,
@@ -28,7 +21,6 @@ const UserProfile = ({
   myGroups,
   ...props
 }) => {
-  const loc = useLocation();
   useEffect(() => {
     props.loadGroups();
   }, []);
@@ -69,7 +61,6 @@ const UserProfile = ({
                     style={{ minWidth: 300 }}
                     group={myGroups[p]}
                     history={history}
-                    loc={loc}
                     user={user}
                     showIsMember={false}
                     hideDetails={true}

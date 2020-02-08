@@ -1,17 +1,12 @@
 import styled from "@emotion/styled";
-import {
-  faHandshake,
-  faUsers,
-  faUser
-} from "@fortawesome/free-solid-svg-icons";
+import { faHandshake, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getGroupImageUrl } from "@tennis-score/redux";
 import React from "react";
-import { LinkContainer } from "react-router-bootstrap";
+import Ripples from "react-ripples";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
-import Ripples from "react-ripples";
 
 const Header = styled.header`
   width: 100%;
@@ -62,7 +57,7 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
         ) : (
           <div className="w-100">
             <Module
-              className="shadow-lg"
+              className="shadow-sm"
               imageUrl={getGroupImageUrl(group.groupImage)}
             >
               <IconRows>

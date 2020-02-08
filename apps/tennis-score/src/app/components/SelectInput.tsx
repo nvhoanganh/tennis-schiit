@@ -35,7 +35,7 @@ const SelectInput: React.SFC<{
         "is-invalid": !isValid && dirty
       })
     );
-  }, [isValid]);
+  }, [isValid, dirty]);
 
   return (
     <div className="form-group">
