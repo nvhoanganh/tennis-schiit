@@ -1,7 +1,7 @@
-import React from "react";
-import { shareLink, isInstalled } from "@tennis-score/redux";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useToast } from "@chakra-ui/core";
+import { shareLink } from "@tennis-score/redux";
+import React from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 export function ShareLink({ title, text, url }) {
   const toast = useToast();
   return "share" in window.navigator ? (
@@ -11,7 +11,7 @@ export function ShareLink({ title, text, url }) {
         shareLink({
           title,
           text,
-          url: `https://tennisscoresheet.com${url}`
+          url
         })
       }
     >
@@ -19,7 +19,7 @@ export function ShareLink({ title, text, url }) {
     </a>
   ) : (
     <CopyToClipboard
-      text={`${text} - https://tennisscoresheet.com${url}`}
+      text={`${text} - ${url}`}
       onCopy={() =>
         toast({
           title: "Link copied to clipboard",
