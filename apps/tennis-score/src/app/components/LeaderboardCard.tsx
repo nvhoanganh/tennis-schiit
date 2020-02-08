@@ -106,7 +106,7 @@ const getStats = (player, sortBy) => {
 const LeaderboardCard = ({ player, ranking, history, ...props }) => {
   if (props.loading) {
     return (
-      <div className="px-2 border-bottom border-top">
+      <div className="px-2 border-bottom">
         <div className="pl-0 py-3">
           <div>
             <a className="h5 text-dark pl-0">
@@ -122,7 +122,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
 
   return (
-    <div className="px-2 border-top">
+    <div className="px-2 border-bottom">
       <Ripples
         className="w-100"
         onClick={() => setTimeout(() => history.push(getUserLink()), 200)}
