@@ -36,6 +36,7 @@ import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 import Headroom from "react-headroom";
 import useServiceWorker from "../hooks/useServiceWorker";
 import { version } from "../../assets/version";
+import Confirm from "../components/Confirm";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -51,13 +52,20 @@ const App = ({
   signOutHandler
 }) => {
   const toast = useToast();
-  const showInstalling = useServiceWorker();
+  const [showInstalling, isInstalled] = useServiceWorker();
+  const [show, setShow] = useState(false);
   usePwaInstallPrompt();
 
   useEffect(() => {
     appLoad();
     loadGroups();
   }, []);
+
+  useEffect(() => {
+    if (isInstalled) {
+      setShow(true);
+    }
+  }, [isInstalled]);
 
   useEffect(() => {
     if (appLoadError) {
@@ -88,7 +96,7 @@ const App = ({
   return appLoaded ? (
     <div>
       {showInstalling && (
-        <Alert status="info">
+        <Alert status="info" className="sticky first">
           <Spinner color="blue.500" className="mr-3" />
           Installing new version..
         </Alert>
@@ -174,6 +182,17 @@ const App = ({
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+
+      <Confirm
+        title="Reload now?"
+        message="New version has been successfully installed. Do you want to reload now?"
+        close="Maybe later"
+        mainAction="OK"
+        mainActionClass="blue"
+        onCancelAction={() => setShow(false)}
+        onConfirmAction={() => window.location.reload()}
+        show={show}
+      ></Confirm>
     </div>
   ) : (
     <AppLoader />

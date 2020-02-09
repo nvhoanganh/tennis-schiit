@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 const useServiceWorker = () => {
   const toast = useToast();
   const [showInstalling, setShowInstalling] = useState(false);
+  const [isInstalled, setIsInstaled] = useState(false);
   useEffect(() => {
     console.log("SW:registering SW.js", new Date());
     if ("serviceWorker" in navigator) {
@@ -35,17 +36,18 @@ const useServiceWorker = () => {
         console.log("SW:set showinstalling to false", new Date());
         setShowInstalling(false);
         if (refreshing) return;
-        toast({
-          title: "New version installed. Reload to see updates",
-          status: "success",
-          duration: 7000,
-          isClosable: true
-        });
+        setIsInstaled(true);
+        // toast({
+        //   title: "New version installed. Reload to see updates",
+        //   status: "success",
+        //   duration: 7000,
+        //   isClosable: true
+        // });
         refreshing = true;
       });
     }
   }, []);
-  return showInstalling;
+  return [showInstalling, isInstalled];
 };
 
 export default useServiceWorker;

@@ -22,11 +22,11 @@ const Confirm = ({ title, message, show, ...props }) => {
       >
         <AlertDialogOverlay />
         <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogHeader fontSize="base" fontWeight="bold">
             {title}
           </AlertDialogHeader>
 
-          <AlertDialogBody>{message}</AlertDialogBody>
+          <AlertDialogBody fontSize="base">{message}</AlertDialogBody>
 
           {!props.hideFooter ? (
             <AlertDialogFooter>
