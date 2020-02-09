@@ -10,29 +10,34 @@ const useServiceWorker = () => {
           let newWorker;
           newWorker = reg.installing;
           newWorker.addEventListener("statechange", () => {
+            toast({
+              title: "Installing new version..",
+              status: "success",
+              duration: null,
+              isClosable: false
+            });
             switch (newWorker.state) {
               case "installed":
                 console.log("new service worker installled");
                 if (navigator.serviceWorker.controller) {
                   newWorker.postMessage({ type: "SKIP_WAITING" });
-                  toast({
-                    title:
-                      "Installing new version. This app will automatically reload",
-                    status: "success",
-                    duration: null,
-                    isClosable: false
-                  });
                 }
                 break;
             }
           });
         });
-      });
+      });i
 
       let refreshing;
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (refreshing) return;
-        window.location.reload();
+        toast({
+          title: "New version installed. Reload to see updates",
+          status: "success",
+          duration: 5000,
+          isClosable: true
+        });
+        // window.location.reload();
         refreshing = true;
       });
     }
