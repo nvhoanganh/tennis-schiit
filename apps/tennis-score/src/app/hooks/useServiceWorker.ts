@@ -13,14 +13,15 @@ const useServiceWorker = () => {
             switch (newWorker.state) {
               case "installed":
                 console.log("new service worker installled");
-                toast({
-                  title: "Installing new version. This app will auto reload..",
-                  status: "success",
-                  duration: null,
-                  isClosable: false
-                });
                 if (navigator.serviceWorker.controller) {
                   newWorker.postMessage({ type: "SKIP_WAITING" });
+                  toast({
+                    title:
+                      "Installing new version. This app will automatically reload",
+                    status: "success",
+                    duration: null,
+                    isClosable: false
+                  });
                 }
                 break;
             }
