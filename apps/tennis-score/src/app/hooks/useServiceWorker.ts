@@ -26,7 +26,7 @@ const useServiceWorker = () => {
             }
           });
         });
-      });i
+      });
 
       let refreshing;
       navigator.serviceWorker.addEventListener("controllerchange", () => {
