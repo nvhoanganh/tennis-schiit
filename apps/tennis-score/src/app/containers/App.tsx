@@ -96,7 +96,7 @@ const App = ({
   return appLoaded ? (
     <div>
       {showInstalling && (
-        <Alert status="info" className="sticky first">
+        <Alert status="info" style={{ zIndex: 1000 }} className="sticky first">
           <Spinner color="blue.500" className="mr-3" />
           Installing new version..
         </Alert>
