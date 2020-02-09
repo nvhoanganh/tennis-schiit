@@ -39,8 +39,8 @@ button.css-17ohz9w:focus {
   outline: none;
 }
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
+  position: sticky !important;
+  position: -webkit-sticky !important;
   z-index: 100;
 
   &.first {
