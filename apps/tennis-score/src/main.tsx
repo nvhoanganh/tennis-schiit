@@ -16,12 +16,11 @@ import chakraTheme from "./theme";
 import ReactGA from "react-ga";
 import { createBrowserHistory } from "history";
 
-
 const trackingId = "UA-153446671-1";
 const store = configureStore({});
 const history = createBrowserHistory();
 
-// init 
+// init
 firebase.initializeApp(FBCONF);
 ReactGA.initialize(trackingId);
 
@@ -38,7 +37,7 @@ ReactDOM.render(
         <CSSReset />
         <Router history={history}>{renderRoutes(routes)}</Router>
       </ThemeProvider>
-    </Provider>
+    </Provider> 
   </ErrorBoundary>,
   document.getElementById("root")
 );

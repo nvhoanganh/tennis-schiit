@@ -5,7 +5,8 @@ import {
   DrawerHeader,
   DrawerOverlay,
   useDisclosure,
-  useToast
+  useToast,
+  DrawerFooter
 } from "@chakra-ui/core";
 import { faBars, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,6 +31,8 @@ import AppIcon from "../../assets/icons/icon-96x96.png";
 import { AppLoader } from "../components/AppLoader";
 import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 import Headroom from "react-headroom";
+import useServiceWorker from "../hooks/useServiceWorker";
+import { version } from '../../assets/version';
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -45,6 +48,7 @@ const App = ({
   signOutHandler
 }) => {
   const toast = useToast();
+  useServiceWorker();
   usePwaInstallPrompt();
 
   useEffect(() => {
@@ -155,6 +159,9 @@ const App = ({
               </LinkContainer>
             )}
           </DrawerBody>
+          <DrawerFooter>
+            <p className="text-muted small py-1 d-block text-center">v0.1.{version}</p>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>

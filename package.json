@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "predeploy": "rm -rf dist/apps/tennis-score/ && nx build --prod && workbox injectManifest workbox-config.js",
+    "setbuildnumber": "node ./node_modules/envsub/bin/envsub.js --env BuildId=34343 apps/tennis-score/src/assets/version.ts apps/tennis-score/src/assets/version.ts",
+    "predeploy": "rm -rf dist/apps/tennis-score/ && npm run setbuildnumber && nx build --prod && workbox injectManifest workbox-config.js",
     "deploy": "firebase deploy --only hosting",
     "deploy2": "firebase deploy --token $FIREBASETOKEN --only hosting",
     "start": "nx serve",
@@ -110,6 +111,7 @@
     "@typescript-eslint/eslint-plugin": "2.3.2",
     "@typescript-eslint/parser": "2.3.2",
     "dotenv": "6.2.0",
+    "envsub": "^4.0.7",
     "eslint": "6.1.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-import": "2.18.2",
