@@ -4,7 +4,7 @@ const useServiceWorker = () => {
   const toast = useToast();
   const [showInstalling, setShowInstalling] = useState(false);
   useEffect(() => {
-    console.log("SW:register SW.js file", new Date());
+    console.log("SW:registering SW.js", new Date());
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then(reg => {
         console.log("SW:service worker registered in app.", new Date());
