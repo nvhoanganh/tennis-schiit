@@ -4,12 +4,12 @@ if ("function" === typeof importScripts) {
   );
   /* global workbox */
   if (workbox) {
-    // workbox.setConfig({
-    //   debug: true
-    // });
+    workbox.setConfig({
+      debug: false
+    });
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
-
+    // console.log("new12");
     const { registerRoute } = workbox.routing;
     const { CacheFirst, StaleWhileRevalidate } = workbox.strategies;
     const { CacheableResponse } = workbox.cacheableResponse;

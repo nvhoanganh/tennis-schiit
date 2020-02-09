@@ -6,7 +6,10 @@ import {
   DrawerOverlay,
   useDisclosure,
   useToast,
-  DrawerFooter
+  DrawerFooter,
+  Alert,
+  AlertIcon,
+  Spinner
 } from "@chakra-ui/core";
 import { faBars, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,7 +35,7 @@ import { AppLoader } from "../components/AppLoader";
 import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 import Headroom from "react-headroom";
 import useServiceWorker from "../hooks/useServiceWorker";
-import { version } from '../../assets/version';
+import { version } from "../../assets/version";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -48,7 +51,7 @@ const App = ({
   signOutHandler
 }) => {
   const toast = useToast();
-  useServiceWorker();
+  const showInstalling = useServiceWorker();
   usePwaInstallPrompt();
 
   useEffect(() => {
@@ -81,10 +84,15 @@ const App = ({
   }, [user]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showNav, setShowNav] = useState(false);
-
   if (appLoadError) return <AppLoader hideSpinner={true} />;
   return appLoaded ? (
     <div>
+      {showInstalling && (
+        <Alert status="info">
+          <Spinner color="blue.500" className="mr-3" />
+          Installing new version..
+        </Alert>
+      )}
       {showNav && (
         <Headroom>
           <Navbar
@@ -160,7 +168,9 @@ const App = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <p className="text-muted small py-1 d-block text-center">v0.1.{version}</p>
+            <p className="text-muted small py-1 d-block text-center">
+              v0.1.{version}
+            </p>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

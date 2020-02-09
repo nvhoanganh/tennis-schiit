@@ -1,33 +1,27 @@
+import { useToast } from "@chakra-ui/core";
 import { useEffect, useState } from "react";
-import { useToast, useDisclosure } from "@chakra-ui/core";
 const useServiceWorker = () => {
   const toast = useToast();
-  const { onClose } = useDisclosure();
   const [showInstalling, setShowInstalling] = useState(false);
   useEffect(() => {
+    console.log("SW:register SW.js file", new Date());
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then(reg => {
-        console.log("service worker registered in app.");
+        console.log("SW:service worker registered in app.", new Date());
         reg.addEventListener("updatefound", () => {
           let newWorker;
           newWorker = reg.installing;
-          newWorker.addEventListener("statechange", () => {
-            if (!showInstalling) {
-              // show only once
-              toast({
-                title: "Installing new version...",
-                status: "success",
-                onClose: onClose,
-                duration: 3000,
-                isClosable: true
-              });
-              setShowInstalling(true);
-            }
+          console.log("SW:update found, status is:", newWorker.state);
+          if (newWorker.state === "installing") {
+            setShowInstalling(true);
+          }
 
+          newWorker.addEventListener("statechange", () => {
+            console.log("SW:new state", newWorker.state, new Date());
             switch (newWorker.state) {
               case "installed":
-                console.log("new service worker installled");
                 if (navigator.serviceWorker.controller) {
+                  console.log("SW:send skip waiting", new Date());
                   newWorker.postMessage({ type: "SKIP_WAITING" });
                 }
                 break;
@@ -38,19 +32,20 @@ const useServiceWorker = () => {
 
       let refreshing;
       navigator.serviceWorker.addEventListener("controllerchange", () => {
+        console.log("SW:set showinstalling to false", new Date());
+        setShowInstalling(false);
         if (refreshing) return;
-        onClose();
         toast({
           title: "New version installed. Reload to see updates",
           status: "success",
-          duration: 5000,
+          duration: 7000,
           isClosable: true
         });
-        // window.location.reload();
         refreshing = true;
       });
     }
   }, []);
+  return showInstalling;
 };
 
 export default useServiceWorker;
