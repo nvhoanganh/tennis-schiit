@@ -95,7 +95,7 @@ const App = ({
   if (appLoadError) return <AppLoader hideSpinner={true} />;
   return appLoaded ? (
     <div>
-      {!showInstalling && (
+      {showInstalling && (
         <Alert status="info" style={{ zIndex: 1000 }} className="sticky first">
           <Spinner color="blue.500" className="mr-3" />
           Installing new version..

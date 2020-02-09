@@ -245,17 +245,6 @@ const Leaderboard = ({
                   ></LeaderboardCard>
                 ))}
                 <div className="text-center p-2">
-                  {canSubmitNewScore() && (
-                    <LinkContainer to={`/newscore/${match.params.group}`}>
-                      <UpdateButton
-                        loading={loading}
-                        value="Submit Result"
-                        type="submit"
-                        className="btn btn-primary btn-sm btn-block btn-sm"
-                      ></UpdateButton>
-                    </LinkContainer>
-                  )}
-
                   {canCreateTour() && (
                     <LinkContainer
                       to={`/groups/${match.params.group}/newtournament`}
