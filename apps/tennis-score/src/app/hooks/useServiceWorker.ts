@@ -11,7 +11,7 @@ const useServiceWorker = () => {
           newWorker = reg.installing;
           newWorker.addEventListener("statechange", () => {
             toast({
-              title: "Installing new version..",
+              title: "Installing new version...",
               status: "success",
               duration: null,
               isClosable: false
