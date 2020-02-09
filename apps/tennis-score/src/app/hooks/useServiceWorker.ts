@@ -7,18 +7,18 @@ const useServiceWorker = () => {
       navigator.serviceWorker.register("/sw.js").then(reg => {
         console.log("service worker registered in app.");
         reg.addEventListener("updatefound", () => {
-          toast({
-            title: "Installing new version. This app will auto reload..",
-            status: "success",
-            duration: null,
-            isClosable: false
-          });
           let newWorker;
           newWorker = reg.installing;
           newWorker.addEventListener("statechange", () => {
             switch (newWorker.state) {
               case "installed":
                 console.log("new service worker installled");
+                toast({
+                  title: "Installing new version. This app will auto reload..",
+                  status: "success",
+                  duration: null,
+                  isClosable: false
+                });
                 if (navigator.serviceWorker.controller) {
                   newWorker.postMessage({ type: "SKIP_WAITING" });
                 }
