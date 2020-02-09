@@ -4,7 +4,7 @@ import "firebase/firestore";
 import geohash from "ngeohash";
 import "firebase/storage";
 import { GROUPS, IGroup, TOURNAMENTS, USERS, STATS } from "../models";
-import { arrayToObject } from "../utils";
+import { arrayToObject, urlB64ToUint8Array, isPushEnabled } from "../utils";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 import { loadLeaderboard } from "./leaderboardActions";
@@ -509,6 +509,28 @@ export function getStats(groupId, tourId) {
     .then(x => x.docs.map(y => y.data()));
 }
 
+export function getWebPushSub(uid, reg) {
+  const publicKey =
+    "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
+
+  if (isPushEnabled()) {
+    console.log("SW:registering Webpush", new Date());
+    const subscribeOptions = {
+      userVisibleOnly: true,
+      applicationServerKey: urlB64ToUint8Array(publicKey)
+    };
+    return reg.pushManager.subscribe(subscribeOptions).then(sub => {
+      console.log("SW:Received PushSubscription: ", sub);
+      return firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .update({
+          webPush: sub
+        });
+    });
+  }
+}
 export type GroupAction =
   | AddPlayerToGroupAction
   | AddTournamentSuccess

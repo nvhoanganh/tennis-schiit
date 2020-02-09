@@ -20,7 +20,8 @@ import {
   getLoadingLeaderboard,
   getPendingRequests,
   loadGroups,
-  signOut
+  signOut,
+  registerPwaHandle
 } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
@@ -49,10 +50,11 @@ const App = ({
   appLoadError,
   appLoaded,
   history,
+  registerPwaHandle,
   signOutHandler
 }) => {
-  const toast = useToast();
-  const [showInstalling, isInstalled] = useServiceWorker();
+  const toast = useToast();p
+  const [showInstalling, isInstalled] = useServiceWorker(registerPwaHandle);
   const [show, setShow] = useState(false);
   usePwaInstallPrompt();
 
@@ -208,6 +210,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   appLoad: _ => dispatch(appLoad()),
+  registerPwaHandle: reg => dispatch(registerPwaHandle(reg)),
   signOutHandler: () => dispatch(signOut()),
   loadGroups: _ => dispatch(loadGroups())
 });

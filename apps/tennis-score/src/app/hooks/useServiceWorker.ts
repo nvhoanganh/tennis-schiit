@@ -1,14 +1,14 @@
-import { useToast } from "@chakra-ui/core";
 import { useEffect, useState } from "react";
-const useServiceWorker = () => {
-  const toast = useToast();
+const useServiceWorker = registerPwaHandle => {
   const [showInstalling, setShowInstalling] = useState(false);
   const [isInstalled, setIsInstaled] = useState(false);
+  const [registration, setRegistration] = useState(null);
   useEffect(() => {
     console.log("SW:registering SW.js", new Date());
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then(reg => {
         console.log("SW:service worker registered in app.", new Date());
+        setRegistration(reg);
         reg.addEventListener("updatefound", () => {
           let newWorker;
           newWorker = reg.installing;
@@ -29,6 +29,8 @@ const useServiceWorker = () => {
             }
           });
         });
+
+        registerPwaHandle(reg);
       });
 
       let refreshing;
@@ -37,17 +39,11 @@ const useServiceWorker = () => {
         setShowInstalling(false);
         if (refreshing) return;
         setIsInstaled(true);
-        // toast({
-        //   title: "New version installed. Reload to see updates",
-        //   status: "success",
-        //   duration: 7000,
-        //   isClosable: true
-        // });
         refreshing = true;
       });
     }
   }, []);
-  return [showInstalling, isInstalled];
+  return [showInstalling, isInstalled, registration];
 };
 
 export default useServiceWorker;

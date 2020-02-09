@@ -1,20 +1,18 @@
 import { useToast } from "@chakra-ui/core";
 import { useEffect } from "react";
-import { isInstalled } from '@tennis-score/redux';
+import { isInstalled, isIos } from "@tennis-score/redux";
+import { appConfig } from "../../assets/config";
 
 export const usePwaInstallPrompt = () => {
   const toast = useToast();
-
-  // Detects if device is on iOS
-  const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-  };
+  const {
+    pwaInstallPromptTimesKey: key,
+    pwaInstallPromptTimes: max
+  } = appConfig;
   // Detects if device is in standalone mode
-  const key = "tennis-scoresheet-ios-ask-pwa";
   useEffect(() => {
     // dont' ask more than 3 times
-    if (isIos() && !isInstalled() && +localStorage.getItem(key) < 3) {
+    if (isIos() && !isInstalled() && +localStorage.getItem(key) < max) {
       setTimeout(() => {
         localStorage.setItem(key, (+localStorage.getItem(key) + 1).toString());
         toast({

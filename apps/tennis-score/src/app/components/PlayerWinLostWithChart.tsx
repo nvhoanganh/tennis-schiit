@@ -61,7 +61,6 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
       }
     }
   }, null);
-
   const getDataSeries = () => {
     const getStats = o =>
       Object.keys(o).map(x => ({
@@ -77,7 +76,7 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
         label: {
           position: "inkner"
         },
-        data: getStats(winLostRecords.winWith)
+        data: winLostRecords.winWith ? getStats(winLostRecords.winWith) : []
       },
       {
         name: "Lost with",
@@ -86,7 +85,7 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
           position: "inner"
         },
         radius: ["70%", "87%"],
-        data: getStats(winLostRecords.lostWith)
+        data: winLostRecords.lostWith ? getStats(winLostRecords.lostWith) : []
       }
     ];
   };

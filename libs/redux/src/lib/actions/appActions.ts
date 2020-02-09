@@ -29,9 +29,14 @@ export enum AppActionTypes {
   SIGNUP_SUCCESS = "SIGNUP_SUCCESS",
 
   UPDATE_PROFILE = "UPDATE_PROFILE",
-  UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS"
-}
+  UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS",
 
+  PWA_REG = "SET_PWA_REG"
+}
+export class AppRegisterPwaHandle implements IAction {
+  readonly type = AppActionTypes.PWA_REG;
+  constructor(public registration: any) {}
+}
 export class ApiStartAction implements IAction {
   readonly type = AppActionTypes.API_START;
   constructor(public action: string, public payload?: any) {}
@@ -89,6 +94,10 @@ export function resetError() {
 }
 export function apiError(action: string, err: any): ApiErrorAction {
   return { type: AppActionTypes.API_ERROR, action, err };
+}
+
+export function registerPwaHandle(registration): AppRegisterPwaHandle {
+  return { type: AppActionTypes.PWA_REG, registration };
 }
 
 // thunks
@@ -197,7 +206,6 @@ export function updateProfile({
           }
         });
       })
-
       .catch(function(err) {
         dispatch({ type: AppActionTypes.API_ERROR, err });
       });
@@ -237,6 +245,7 @@ export function appLoad() {
       // }
 
       // get additional details from firestore
+      // Google Analytics
       ReactGA.set({
         userId: user.uid
       });
@@ -276,6 +285,7 @@ export function appLoad() {
 }
 
 export type AppAction =
+  | AppRegisterPwaHandle
   | AppLoadAction
   | AppLoadedAction
   | AppLoadFailedAction

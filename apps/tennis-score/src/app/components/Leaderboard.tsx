@@ -1,7 +1,21 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from "@chakra-ui/core";
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useToast,
+  Box,
+  CloseButton
+} from "@chakra-ui/core";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getStats, isMember, isOwner } from "@tennis-score/redux";
+import {
+  getStats,
+  isMember,
+  isOwner,
+  isPushEnabled
+} from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
 import format from "date-fns/format";
 import queryString from "query-string";
@@ -20,6 +34,7 @@ import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
 import { TournamentStatsChart } from "./TournamentStatsChart";
+import { usePushNotification } from "../hooks/usePushNotification";
 
 const Leaderboard = ({
   pendingJoinRequests,
@@ -39,7 +54,7 @@ const Leaderboard = ({
   // states
   const q = queryString.parse(location.search);
   const toast = useToast();
-
+  usePushNotification();
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
   const [stats, setStats] = useState(null);
   const [show, setShow] = useState(false);
@@ -312,7 +327,9 @@ const Leaderboard = ({
                 )}
               </>
             ) : (
-              <div className="text-center h6 my-5">No tournament created for this group</div>
+              <div className="text-center h6 my-5">
+                No tournament created for this group
+              </div>
             )}
           </TabPanel>
         </TabPanels>
