@@ -12,6 +12,10 @@ export const getCurrentUser = createSelector(
   getAppState,
   s => s.user
 );
+export const getPwaHandle = createSelector(
+  getAppState,
+  s => s.pwaHandle
+);
 
 export const getAllGroups = createSelector(
   getGroups,

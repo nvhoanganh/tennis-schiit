@@ -32,6 +32,9 @@ export enum AppActionTypes {
   UPDATE_PROFILE = "UPDATE_PROFILE",
   UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS",
 
+  GET_NOTIFICATION_SUB = "GET_NOTIFICATION_SUB",
+  GET_NOTIFICATION_SUB_SUCCESS = "GET_NOTIFICATION_SUB_SUCCESS",
+
   PWA_REG = "SET_PWA_REG"
 }
 export class AppRegisterPwaHandle implements IAction {
@@ -61,6 +64,11 @@ export class ResetErrorAction implements IAction {
 export class ApiErrorAction implements IAction {
   readonly type = AppActionTypes.API_ERROR;
   constructor(public action: string, public err: any) {}
+}
+
+export class GetNotificationSubSuccess implements IAction {
+  readonly type = AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS;
+  constructor(public action: string, public subscripttion: any) {}
 }
 
 export class SignInSuccessAction implements IAction {
@@ -284,7 +292,7 @@ export function appLoad() {
     });
   };
 }
-export function getWebPushSub(uid, reg) {
+function getWebPushSub(uid, reg) {
   const publicKey =
     "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
 
@@ -302,10 +310,32 @@ export function getWebPushSub(uid, reg) {
         .doc(uid)
         .update({
           webPush: sub
-        });
+        })
+        .then(_ => sub);
     });
   }
 }
+
+export function getWebPushSubAction() {
+  return (dispatch, getState) => {
+    const {
+      app: {
+        user: { uid },
+        pwaHandle
+      }
+    } = getState();
+    dispatch(apiStart(AppActionTypes.GET_NOTIFICATION_SUB));
+    // delete from pending first
+    return getWebPushSub(uid, pwaHandle).then(subscripttion => {
+      dispatch(apiEnd());
+      dispatch(<GetNotificationSubSuccess>{
+        type: AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS,
+        subscripttion
+      });
+    });
+  };
+}
+
 export type AppAction =
   | AppRegisterPwaHandle
   | AppLoadAction

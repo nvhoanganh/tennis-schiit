@@ -8,7 +8,7 @@ if ("function" === typeof importScripts) {
       debug: false
     });
     /* injection point for manifest files.  */
-    //    workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+    workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
     console.log("now6");
     const { registerRoute } = workbox.routing;
     const { CacheFirst, StaleWhileRevalidate } = workbox.strategies;

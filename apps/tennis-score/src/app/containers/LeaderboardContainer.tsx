@@ -19,7 +19,9 @@ import {
   getScores,
   getLastDoc,
   getHasMore,
-  getStats
+  getStats,
+  getPwaHandle,
+  getWebPushSubAction
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Leaderboard from "../components/Leaderboard";
@@ -27,6 +29,7 @@ import Leaderboard from "../components/Leaderboard";
 const mapStateToProps = state => ({
   players: getLeaderboardPlayers(state),
   user: getCurrentUser(state),
+  pwaHandle: getPwaHandle(state),
   group: getCurrLeaderGroup(state),
   pendingRequests: getPendingRequests(state),
   appLoaded: getAppLoaded(state),
@@ -46,6 +49,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(approveJoinRequest(user, groupId, createAs)),
   cancelJoinGroup: groupId => dispatch(cancelJoinGroup(groupId)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId)),
+  getNotificationSub: _ => dispatch(getWebPushSubAction()),
   loadResult: (groupId, tourid, more) =>
     dispatch(loadResults(groupId, tourid, more))
 });

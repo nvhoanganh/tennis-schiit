@@ -10,7 +10,11 @@ import { Button } from "../components/Button";
 import { appConfig } from "../../assets/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-export const usePushNotification = () => {
+export const usePushNotification = ({
+  getNotificationSub,
+  user,
+  pwaHandle
+}) => {
   const toast = useToast();
   const {
     pwaNotificationSubKey: key,
@@ -19,6 +23,8 @@ export const usePushNotification = () => {
   } = appConfig;
   useEffect(() => {
     if (
+      pwaHandle && 
+      user &&
       isPushEnabled() &&
       !isInstalled() &&
       !localStorage.getItem(subscribedKey)
@@ -59,6 +65,18 @@ export const usePushNotification = () => {
                         });
                       } else {
                         localStorage.setItem(subscribedKey, "true");
+                        // dispatch action to get and save sub
+                        getNotificationSub().then(_ => {
+                          toast({
+                            position: "bottom",
+                            status: "success",
+                            title: "You're all set!",
+                            description:
+                              "You will be notified when new result is submitted",
+                            duration: 3000,
+                            isClosable: true
+                          });
+                        });
                       }
                     });
                   }}

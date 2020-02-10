@@ -49,12 +49,14 @@ const Leaderboard = ({
   loading,
   hasMore,
   lastDoc,
+  pwaHandle,
+  getNotificationSub,
   ...props
 }) => {
   // states
   const q = queryString.parse(location.search);
   const toast = useToast();
-  usePushNotification();
+  usePushNotification({getNotificationSub, user, pwaHandle});
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
   const [stats, setStats] = useState(null);
   const [show, setShow] = useState(false);
@@ -84,8 +86,6 @@ const Leaderboard = ({
       );
     }
   };
-  const canSubmitNewScore = () =>
-    user && isMember(user, group) && tournament && !loading;
 
   const canCreateTour = () =>
     user && isOwner(user, group) && !tournament && !loading;
