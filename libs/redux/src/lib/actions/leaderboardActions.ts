@@ -198,13 +198,6 @@ export function submitScore({
       mWinners[k].won = (mWinners[k].won || 0) + 1;
       if (winByBagel) {
         mWinners[k].bagelWon = (mWinners[k].bagelWon || 0) + 1;
-        winnersK.forEach(k => {
-          batch.update(tourRef, {
-            [`players.${k}.bagelWon`]: firebase.firestore.FieldValue.increment(
-              1
-            )
-          });
-        });
       }
       mWinners[k] = {
         ...mWinners[k],
@@ -226,14 +219,7 @@ export function submitScore({
 
     loserK.forEach(k => {
       if (winByBagel) {
-        loserK[k].bagelLost = (loserK[k].bagelLost || 0) + 1;
-        loserK.forEach(k => {
-          batch.update(tourRef, {
-            [`players.${k}.bagelLost`]: firebase.firestore.FieldValue.increment(
-              1
-            )
-          });
-        });
+        mLosers[k].bagelLost = (mLosers[k].bagelLost || 0) + 1;
       }
       mLosers[k].lost = mLosers[k].lost + 1;
       mLosers[k] = {

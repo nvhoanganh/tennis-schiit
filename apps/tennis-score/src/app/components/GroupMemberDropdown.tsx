@@ -19,7 +19,6 @@ export function GroupMemberDropdown({
   joinGroup,
   leaveGroup
 }) {
-  console.log("group", group);
   const joinHandler = _ => {
     if (!user) {
       history.push("/signup");

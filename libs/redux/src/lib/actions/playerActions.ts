@@ -121,7 +121,7 @@ export function getStatsByPlayer({ groupId, tourId, playerId }) {
     .collection(STATS)
     .where("playerId", "==", playerId)
     .get()
-    .then(x => x.docs.map(y => y.data()));
+    .then(x => x.docs.map(y => ({ ...y.data(), id: y.id })));
 }
 
 export function getMatchesByPlayer({ groupId, tourId, playerId }) {
