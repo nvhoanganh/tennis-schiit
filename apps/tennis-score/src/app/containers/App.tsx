@@ -53,7 +53,7 @@ const App = ({
   registerPwaHandle,
   signOutHandler
 }) => {
-  const toast = useToast();p
+  const toast = useToast();
   const [showInstalling, isInstalled] = useServiceWorker(registerPwaHandle);
   const [show, setShow] = useState(false);
   usePwaInstallPrompt();

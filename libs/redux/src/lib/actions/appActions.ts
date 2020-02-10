@@ -3,6 +3,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { ISignInModel } from "../models";
+import { isPushEnabled, urlB64ToUint8Array } from "../utils";
 import ReactGA from "react-ga";
 
 export enum AppActionTypes {
@@ -283,7 +284,28 @@ export function appLoad() {
     });
   };
 }
+export function getWebPushSub(uid, reg) {
+  const publicKey =
+    "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
 
+  if (isPushEnabled()) {
+    console.log("SW:registering Webpush", new Date());
+    const subscribeOptions = {
+      userVisibleOnly: true,
+      applicationServerKey: urlB64ToUint8Array(publicKey)
+    };
+    return reg.pushManager.subscribe(subscribeOptions).then(sub => {
+      console.log("SW:Received PushSubscription: ", sub);
+      return firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .update({
+          webPush: sub
+        });
+    });
+  }
+}
 export type AppAction =
   | AppRegisterPwaHandle
   | AppLoadAction

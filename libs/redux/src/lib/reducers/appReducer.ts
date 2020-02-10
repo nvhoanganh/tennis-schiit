@@ -1,11 +1,11 @@
-]]]]]]]]]]]]]]]]]]]]]]]]]]import { AppAction, AppActionTypes } from "../actions";
+import { AppAction, AppActionTypes } from "../actions";
 
 export interface IAppState {
   pendingRequests: number;
   appLoaded?: boolean;
-  pwaHandle?: any;
   lastAction?: string;
   lastErrorAction?: string;
+  pwaHandle?: any;
   lastError?: any;
   appLoadError?: any;
   signInError?: any;
@@ -13,7 +13,7 @@ export interface IAppState {
   currentGroup?: string;
 }
 
-1`            =========================================================================================================pecrementApi = state =>
+const decrementApi = state =>
   state.pendingRequests - 1 < 0 ? 0 : state.pendingRequests - 1;
 const app = (
   state: IAppState = { pendingRequests: 0 },
@@ -31,11 +31,6 @@ const app = (
         ...state,
         appLoaded: false
       };
-    case AppActionTypes.PWA_REG:
-      return {
-        ...state,
-        pwaHandle: action.registration
-      };
     case AppActionTypes.APP_LOADED:
       return {
         ...state,
@@ -48,6 +43,11 @@ const app = (
         pendingRequests: decrementApi(state),
         appLoadError: action.error,
         appLoaded: true
+      };
+    case AppActionTypes.PWA_REG:
+      return {
+        ...state,
+        pwaHandle: action.registration
       };
     case AppActionTypes.API_ERROR:
       return {
