@@ -1,3 +1,4 @@
 VERSION=$(git rev-parse --short HEAD)
-echo Version numer: $VERSION
-node ./node_modules/envsub/bin/envsub.js --env BuildId=$VERSION apps/tennis-score/src/assets/version.template.ts apps/tennis-score/src/assets/version.ts
+DATEV=$(date +%Y.%m.%d)
+echo Version numer: $DATEV.$VERSION
+node ./node_modules/envsub/bin/envsub.js --env BuildId=$DATEV.$VERSION apps/tennis-score/src/assets/version.template.ts apps/tennis-score/src/assets/version.ts

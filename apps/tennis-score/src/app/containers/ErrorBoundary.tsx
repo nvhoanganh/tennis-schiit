@@ -1,12 +1,10 @@
-import { useToast } from "@chakra-ui/core";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "firebase/auth";
 import "firebase/firestore";
-import React, { useEffect } from "react";
+import React from "react";
 import "../app.scss";
-import { AppLoader } from "../components/AppLoader";
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-
+import ReactGA from "react-ga";
 export class ErrorBoundary extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -18,19 +16,16 @@ export class ErrorBoundary extends React.Component<any, any> {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.log("Error captured by Error Boundary", error, errorInfo);
+    ReactGA.exception({
+      description: `${error.toString()} - ${errorInfo.componentStack}`,
+      fatal: true
+    });
   }
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return (
-        <>
-          <ShowError></ShowError>
-        </>
-      );
+      return <ShowError></ShowError>;
     }
-
     return this.props.children;
   }
 }
@@ -47,9 +42,12 @@ function ShowError() {
                 <em>Score Sheet</em>
               </p>
               <div>
-                <FontAwesomeIcon icon={faExclamationTriangle} className="text-danger h1" />
-                <p>Oopps! Something went wrong</p>
-                <p className="text-muted x-small">Please reload to try again</p>
+                <FontAwesomeIcon
+                  icon={faExclamationTriangle}
+                  className="text-danger h1"
+                />
+                <p>Oops! Something went wrong</p>
+                <p className="text-muted small">Please reload to try again</p>
               </div>
             </div>
           </div>
