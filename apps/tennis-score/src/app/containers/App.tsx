@@ -179,7 +179,7 @@ const App = ({
           </DrawerBody>
           <DrawerFooter>
             <p className="text-muted small py-1 d-block text-center">
-              v0.1.{version}
+              v{version}
             </p>
           </DrawerFooter>
         </DrawerContent>
