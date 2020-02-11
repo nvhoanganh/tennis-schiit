@@ -23,6 +23,7 @@ import {
   signOut,
   registerPwaHandle
 } from "@tennis-score/redux";
+import ReactGA from "react-ga";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -62,6 +63,16 @@ const App = ({
     appLoad();
     loadGroups();
   }, []);
+
+  useEffect(() => {
+    if (window.performance && appLoaded) {
+      ReactGA.timing({
+        category: "AppLoad",
+        variable: appLoaded ? "loaded" : "loading",
+        value: Math.round(performance.now())
+      });
+    }
+  }, [appLoaded]);
 
   useEffect(() => {
     if (isInstalled) {

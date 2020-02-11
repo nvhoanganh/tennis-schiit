@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ReactGA from "react-ga";
 const useServiceWorker = registerPwaHandle => {
   const [showInstalling, setShowInstalling] = useState(false);
   const [isInstalled, setIsInstaled] = useState(false);
@@ -8,6 +9,7 @@ const useServiceWorker = registerPwaHandle => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then(reg => {
         console.log("SW:service worker registered in app.", new Date());
+        ReactGA.set({ dimension2: "true" });
         setRegistration(reg);
         reg.addEventListener("updatefound", () => {
           let newWorker;

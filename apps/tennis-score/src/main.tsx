@@ -32,6 +32,15 @@ history.listen(location => {
   ReactGA.pageview(location.pathname); // Record a pageview for the given page
 });
 
+// timing
+if (window.performance) {
+  ReactGA.timing({
+    category: "AppLoad",
+    variable: "init",
+    value: Math.round(performance.now())
+  });
+}
+
 ReactDOM.render(
   <ErrorBoundary>
     <Provider store={store}>
