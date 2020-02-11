@@ -15,6 +15,7 @@ import routes from "./app/routes";
 import chakraTheme from "./theme";
 import ReactGA from "react-ga";
 import { createBrowserHistory } from "history";
+import { version } from "./assets/version";
 
 const trackingId = "UA-153446671-1";
 const store = configureStore({});
@@ -27,6 +28,7 @@ ReactGA.initialize(trackingId);
 // Initialize google analytics page view tracking
 history.listen(location => {
   ReactGA.set({ page: location.pathname }); // Update the user's current page
+  ReactGA.set({ dimension1: version });
   ReactGA.pageview(location.pathname); // Record a pageview for the given page
 });
 
@@ -37,7 +39,7 @@ ReactDOM.render(
         <CSSReset />
         <Router history={history}>{renderRoutes(routes)}</Router>
       </ThemeProvider>
-    </Provider> 
+    </Provider>
   </ErrorBoundary>,
   document.getElementById("root")
 );
