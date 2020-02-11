@@ -1,15 +1,9 @@
 {
-  "database": {
-    "rules": "database.rules.json"
-  },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": [
-      "npm run build"
-    ]
   },
   "hosting": {
     "public": "dist/apps/tennis-score",
@@ -21,7 +15,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "function": "app"
       }
     ]
   },

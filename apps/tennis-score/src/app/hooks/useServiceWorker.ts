@@ -17,6 +17,10 @@ const useServiceWorker = registerPwaHandle => {
           console.log("SW:update found, status is:", newWorker.state);
           if (newWorker.state === "installing") {
             setShowInstalling(true);
+            setTimeout(() => {
+              // fall back for the very first version installation
+              setShowInstalling(false);
+            }, 5000);
           }
 
           newWorker.addEventListener("statechange", () => {

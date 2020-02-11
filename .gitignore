@@ -40,3 +40,4 @@ testem.log
 Thumbs.db
 /.firebase/*.cache
 /apps/tennis-score/src/assets/version.ts
+/functions/sw-shell-real.js
