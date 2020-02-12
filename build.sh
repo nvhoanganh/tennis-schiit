@@ -10,7 +10,6 @@ node ./node_modules/envsub/bin/envsub.js --env BuildId=$DATEV.$VERSION apps/tenn
 echo Start building the app
 npm run build-prod
 
-
 # replace the file
 echo Replace the index.html file
 value=$(<dist/apps/tennis-score/index.html)
