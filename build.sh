@@ -16,7 +16,7 @@ echo Replace the index.html file
 value=$(<dist/apps/tennis-score/index.html)
 echo "$value"
 node ./node_modules/envsub/bin/envsub.js --env Template="$value" sw-shell-real.template.js functions/sw-shell-real.js
-rm -rf dist/apps/tennis-score/index.html
+# rm -rf dist/apps/tennis-score/index.html
 
 # inject service worker (after index.html is removed)
 echo Injecting the service worker
