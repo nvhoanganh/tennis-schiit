@@ -69,7 +69,7 @@ const getMeta = url => {
   console.log("not matching anything");
   return {
     title: "Tennis Score Sheet",
-    image: "https://tennisscoresheet.com/assets/icons/icon-192x192.png",
+    image: "https://tennisscoresheet.com/assets/icons/icon-384x384.png",
     description:
       "Create social tennis groups, invite friends, keep track of score, stay competitive, stay connected",
     content:
@@ -102,7 +102,6 @@ app.get("*", (req, res) => {
     );
     // this is the static index.html, we can cache this for long time
     res.set("Cache-Control", "public, max-age=86400, s-maxage=86400");
-    res.set("Vary", "Accept-Encoding");
     res.send(realUser());
   }
 });
