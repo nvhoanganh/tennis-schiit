@@ -20,10 +20,10 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.tennisscoresheet"
+        applicationId "xyz.appmaker.cwioir"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 341
+        versionCode 342
         versionName "1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
