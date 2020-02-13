@@ -6,8 +6,6 @@ import { DropDownMenu } from "./DropDownMenu";
 
 const ResultCard = props => {
   const {
-    scoreId,
-    groupId,
     winners,
     losers,
     headStart,
@@ -15,11 +13,11 @@ const ResultCard = props => {
     reverseBagel,
     matchDate,
     timestamp,
-    tournamekntId,
     players,
     hideMenu,
     showHead2Head,
-    deleteScore
+    deleteScore,
+    canDelete
   } = props;
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
@@ -79,9 +77,22 @@ const ResultCard = props => {
               >
                 View Head 2 Head
               </a>,
-              <a key="delete" onClick={deleteScore} className="h5 py-2 d-block">
-                Delete Result
-              </a>
+              ...(canDelete
+                ? [
+                    <>
+                      <a
+                        key="delete"
+                        onClick={deleteScore}
+                        className="h5 d-block"
+                      >
+                        Delete Result
+                      </a>
+                      <p className="text-muted small pb-2">
+                        <em>Only last result can be deleted</em>
+                      </p>
+                    </>
+                  ]
+                : [])
             ]}
           />
         </div>

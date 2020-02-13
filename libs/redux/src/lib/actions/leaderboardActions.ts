@@ -314,7 +314,6 @@ export async function DeleteScore({
   winners,
   losers
 }) {
-  console.log("deleting score id", scoreId);
   const groupRef = firebase
     .firestore()
     .collection(GROUPS)
@@ -331,12 +330,10 @@ export async function DeleteScore({
         .limit(2)
         .get()
         .then(x => {
-          console.log(x.docs);
           return x.docs.map(y => ({ ...y.data(), id: y.id }));
         })
     )
   );
-  console.log(lastStats);
   const batch = firebase.firestore().batch();
   lastStats.forEach(x => {
     if (x.length === 0) {
@@ -373,7 +370,6 @@ export async function DeleteScore({
     played: firebase.firestore.FieldValue.increment(-1)
   });
   await batch.commit();
-
   return Promise.resolve();
 }
 export type LeaderboardAction =

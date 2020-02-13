@@ -14,7 +14,9 @@ import {
   SearchScore,
   isInstalled,
   shareLink,
-  DeleteScore
+  DeleteScore,
+  isOwner,
+  isMember
 } from "@tennis-score/redux";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -35,6 +37,7 @@ const ViewResults = ({
   scoresSorted,
   players,
   group,
+  user,
   match,
   tournament,
   history,
@@ -46,7 +49,6 @@ const ViewResults = ({
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const toast = useToast();
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
     props.loadResult(match.params.group, match.params.tour, null);
@@ -150,6 +152,9 @@ const ViewResults = ({
                         groupId={match.params.group}
                         tournamentId={match.params.tour}
                         showHead2Head={viewHead2Head}
+                        canDelete={
+                          i === k.matches.length - 1 && isMember(user, group)
+                        }
                         deleteScore={() => {
                           setDeletingScore(m);
                           handleShow();
