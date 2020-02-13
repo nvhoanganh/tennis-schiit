@@ -20,7 +20,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "xyz.appmaker.cwioir"
+        applicationId "com.tennisscoresheet"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 341
@@ -29,7 +29,7 @@ android {
         manifestPlaceholders = [
                 // The hostname is used when building the intent-filter, so the TWA is able to
                 // handle Intents to open https://svgomg.firebaseapp.com.
-                hostName: "xyz.appmaker.cwioir",
+                hostName: "com.tennisscoresheet",
                 defaultUrl: "https://tennisscoresheet.com/",
                 launcherName: "Tennis Score Sheet",
                 // This variable below expresses the relationship between the app and the site,
