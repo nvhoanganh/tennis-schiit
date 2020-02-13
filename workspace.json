@@ -20,7 +20,8 @@
               "apps/tennis-score/src/manifest.json",
               "apps/tennis-score/src/assets",
               "apps/tennis-score/src/assets/icons",
-              "apps/tennis-score/src/sw.js"
+              "apps/tennis-score/src/sw.js",
+              "apps/tennis-score/src/.well-known"
             ],
             "styles": ["apps/tennis-score/src/styles.scss"],
             "scripts": [],
