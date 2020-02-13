@@ -131,3 +131,4 @@ lint/tmp/
 # lint/reports/
 /deploy/android/Tennis Score Sheet/app/release/**
 /deploy/android/Tennis Score Sheet/app/debug/**
+/deploy/android/Tennis Score Sheet/.idea/caches/*.ser
