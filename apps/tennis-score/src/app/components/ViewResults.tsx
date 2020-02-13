@@ -5,14 +5,16 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from "@chakra-ui/core";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import {
   getPossibleVerse,
   SearchScore,
   isInstalled,
-  shareLink
+  shareLink,
+  DeleteScore
 } from "@tennis-score/redux";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -26,6 +28,7 @@ import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
+import Confirm from "./Confirm";
 
 const ViewResults = ({
   scores,
@@ -40,6 +43,10 @@ const ViewResults = ({
   lastDoc,
   ...props
 }) => {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const toast = useToast();
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
     props.loadResult(match.params.group, match.params.tour, null);
@@ -49,7 +56,20 @@ const ViewResults = ({
     props.loadResult(match.params.group, match.params.tour, lastDoc);
   };
   const [h2h, seth2h] = useState<any>({});
+  const [deletingScore, setDeletingScore] = useState<any>(null);
   const [activeLbl, setactiveLbl] = useState<string>("All");
+
+  const deleteScore = () => {
+    DeleteScore({
+      ...deletingScore,
+      groupId: match.params.group,
+      tourId: match.params.tour
+    }).then(() => {
+      handleClose();
+      props.loadLeaderboard(match.params.group);
+      props.loadResult(match.params.group, match.params.tour, null);
+    });
+  };
 
   const viewHead2Head = ({ winners, losers, showAll, label }) => {
     onOpen();
@@ -130,6 +150,10 @@ const ViewResults = ({
                         groupId={match.params.group}
                         tournamentId={match.params.tour}
                         showHead2Head={viewHead2Head}
+                        deleteScore={() => {
+                          setDeletingScore(m);
+                          handleShow();
+                        }}
                         {...m}
                       ></ResultCard>
                     ))}
@@ -232,6 +256,17 @@ const ViewResults = ({
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      <Confirm
+        title="Delete Result?"
+        message="Are you sure you want to delete this match result?"
+        close="Cancel"
+        mainAction="Delete"
+        mainActionClass="red"
+        onCancelAction={handleClose}
+        onConfirmAction={deleteScore}
+        show={show}
+      ></Confirm>
     </>
   );
 };

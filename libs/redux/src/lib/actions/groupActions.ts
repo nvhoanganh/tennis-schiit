@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import geohash from "ngeohash";
 import "firebase/storage";
-import { GROUPS, IGroup, TOURNAMENTS, USERS, STATS } from "../models";
-import { arrayToObject, urlB64ToUint8Array, isPushEnabled } from "../utils";
-import { apiEnd, apiStart, AppActionTypes } from "./appActions";
-import { IAction } from "@tennis-score/redux";
+import geohash from "ngeohash";
+import { GROUPS, IGroup, STATS, TOURNAMENTS, USERS } from "../models";
+import { arrayToObject } from "../utils";
+import { apiEnd, apiStart } from "./appActions";
 import { loadLeaderboard } from "./leaderboardActions";
 export enum GroupActionTypes {
   LOAD_GROUPS = "LOAD_GROUPS",
@@ -134,23 +135,23 @@ export function loadGroups(reload = false) {
         );
 
         dispatch(apiEnd());
-        dispatch(<LoadGroupsSuccessAction>{
+        dispatch({
           type: GroupActionTypes.LOAD_GROUPS_SUCCESS,
           groups: data
-        });
+        } as LoadGroupsSuccessAction);
       });
   };
 }
 
 export function deleteGroup(groupId) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(apiStart(GroupActionTypes.DELETE_GROUP));
     return firebase
       .firestore()
       .collection(GROUPS)
       .doc(groupId)
       .delete()
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
         dispatch(loadGroups(true));
         dispatch({ type: GroupActionTypes.DELETE_GROUP, id: groupId });
@@ -174,13 +175,13 @@ export function joinGroup(groupId) {
       .update({
         [`pendingJoinRequests.${uid}`]: user
       })
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
-        dispatch(<JoinGroupSuccessAction>{
+        dispatch({
           type: GroupActionTypes.JOIN_GROUP_SUCCESS,
           groupId: groupId,
           user
-        });
+        } as JoinGroupSuccessAction);
       });
   };
 }
@@ -202,7 +203,7 @@ export function rejectJoinRequest(target, groupId) {
       .update({
         [`pendingJoinRequests.${target.uid}`]: firebase.firestore.FieldValue.delete()
       })
-      .then(_ =>
+      .then(() =>
         firebase
           .firestore()
           .collection(GROUPS)
@@ -214,15 +215,15 @@ export function rejectJoinRequest(target, groupId) {
             }
           })
       )
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
-        dispatch(<RejectJoinRequestSuccessAction>{
+        dispatch({
           type: GroupActionTypes.REJECT_JOIN_GROUP_SUCCESS,
           payload: {
             groupId,
             target
           }
-        });
+        } as RejectJoinRequestSuccessAction);
       });
   };
 }
@@ -252,12 +253,12 @@ export function approveJoinRequest(target, groupId, createAs) {
       .update({
         [`pendingJoinRequests.${target.uid}`]: firebase.firestore.FieldValue.delete()
       })
-      .then(_ =>
+      .then(() =>
         userRef.update({
           [`groups.${groupId}`]: true
         })
       )
-      .then(_ => {
+      .then(() => {
         // add player
         if (createAs === null) {
           return groupRef.update({
@@ -290,7 +291,7 @@ export function approveJoinRequest(target, groupId, createAs) {
           });
         }
       })
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
         dispatch(loadGroups(true));
         dispatch(loadLeaderboard(groupId));
@@ -314,19 +315,18 @@ export function cancelJoinGroup(groupId) {
       .update({
         [`pendingJoinRequests.${uid}`]: firebase.firestore.FieldValue.delete()
       })
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
-        dispatch(<CancelJoinGroupSuccessAction>{
+        dispatch({
           type: GroupActionTypes.CANCEL_JOIN_GROUP_SUCCESS,
           groupId: groupId,
           user
-        });
+        } as CancelJoinGroupSuccessAction);
       });
   };
 }
 
 export function addTournament({
-  
   group,
   tournamentId,
   startDate,
@@ -334,7 +334,7 @@ export function addTournament({
   description,
   sortBy
 }) {
-  return async (dispatch, getState) => {
+  return async dispatch => {
     dispatch(apiStart(GroupActionTypes.ADD_TOURNAMENT));
 
     const groupRef = firebase
@@ -395,11 +395,7 @@ export function editGroup({
   locationLongLat,
   photo
 }) {
-  return async (dispatch, getState) => {
-    const {
-      app: { user }
-    } = getState();
-
+  return async dispatch => {
     let dat = {
       name,
       description,
@@ -409,21 +405,20 @@ export function editGroup({
     };
 
     dispatch(apiStart(GroupActionTypes.UPDATE_GROUP));
-    var editGroup = firebase
+    const editGroup = firebase
       .firestore()
       .collection(GROUPS)
       .doc(group.groupId);
 
     if (photo) {
-      debugger;
-      var storageRef = firebase.storage().ref();
-      var imageRef = await storageRef
+      const storageRef = firebase.storage().ref();
+      const imageRef = await storageRef
         .child(`images/${editGroup.id}-${photo.name}`)
         .put(photo);
-      dat = { ...(<any>dat), groupImage: imageRef.metadata.fullPath };
+      dat = { ...(dat as any), groupImage: imageRef.metadata.fullPath };
     }
 
-    return editGroup.update(dat).then(_ => {
+    return editGroup.update(dat).then(() => {
       dispatch(apiEnd());
       dispatch(loadGroups(true));
     });
@@ -431,7 +426,7 @@ export function editGroup({
 }
 
 export function checkFileExist(url) {
-  var storageRef = firebase.storage().refFromURL(url);
+  const storageRef = firebase.storage().refFromURL(url);
   return storageRef.getDownloadURL();
 }
 export function addGroup({
@@ -470,14 +465,14 @@ export function addGroup({
     };
 
     dispatch(apiStart(GroupActionTypes.ADD_GROUP));
-    var newGroup = firebase
+    const newGroup = firebase
       .firestore()
       .collection(GROUPS)
       .doc();
 
     if (photo) {
-      var storageRef = firebase.storage().ref();
-      var imageRef = await storageRef
+      const storageRef = firebase.storage().ref();
+      const imageRef = await storageRef
         .child(`images/${newGroup.id}-${photo.name}`)
         .put(photo);
       dat = { ...dat, groupImage: imageRef.metadata.fullPath };
@@ -491,7 +486,7 @@ export function addGroup({
       .update({
         [`groups.${newGroup.id}`]: true
       });
-    return newGroup.set(dat).then(_ => {
+    return newGroup.set(dat).then(() => {
       dispatch(apiEnd());
       dispatch(loadGroups(true));
     });
@@ -509,7 +504,6 @@ export function getStats(groupId, tourId) {
     .get()
     .then(x => x.docs.map(y => y.data()));
 }
-
 
 export type GroupAction =
   | AddPlayerToGroupAction

@@ -1,11 +1,12 @@
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { getHandyCap } from "@tennis-score/redux";
-import { formatDistanceToNow, format } from "date-fns";
+import { format } from "date-fns";
 import React from "react";
 import { DropDownMenu } from "./DropDownMenu";
 
 const ResultCard = props => {
   const {
+    scoreId,
     groupId,
     winners,
     losers,
@@ -14,10 +15,11 @@ const ResultCard = props => {
     reverseBagel,
     matchDate,
     timestamp,
-    tournamentId,
+    tournamekntId,
     players,
     hideMenu,
-    showHead2Head
+    showHead2Head,
+    deleteScore
   } = props;
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
@@ -76,6 +78,9 @@ const ResultCard = props => {
                 className="h5 py-2 d-block"
               >
                 View Head 2 Head
+              </a>,
+              <a key="delete" onClick={deleteScore} className="h5 py-2 d-block">
+                Delete Result
               </a>
             ]}
           />

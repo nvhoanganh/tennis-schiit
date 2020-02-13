@@ -1,4 +1,4 @@
-import { IAction, arrayToObject } from "@tennis-score/redux";
+import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -6,12 +6,12 @@ import {
   GROUPS,
   IPlayer,
   PLAYERS,
-  USERS,
-  TOURNAMENTS,
+  SCORES,
   STATS,
-  SCORES
+  TOURNAMENTS,
+  USERS
 } from "../models";
-import { apiEnd, apiStart, AppActionTypes } from "./appActions";
+import { apiEnd, apiStart } from "./appActions";
 import { loadGroups } from "./groupActions";
 export enum PlayerActionTypes {
   LOAD_PLAYERS = "LOAD_PLAYERS",
@@ -48,7 +48,7 @@ export function removePlayer(playerId: string): RemovePlayerAction {
   return { type: PlayerActionTypes.REMOVE_PLAYER, playerId };
 }
 export function addPlayer({ name, email, groupId, group }) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(apiStart(PlayerActionTypes.ADD_PLAYER));
     return firebase
       .firestore()
@@ -74,7 +74,7 @@ export function addPlayer({ name, email, groupId, group }) {
             })
           });
       })
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
         dispatch(loadGroups(true));
       });
@@ -103,10 +103,10 @@ export function loadPlayers() {
           };
         });
         dispatch(apiEnd());
-        dispatch(<LoadPlayersSuccessAction>{
+        dispatch({
           type: PlayerActionTypes.LOAD_PLAYERS_SUCCESS,
           players: allUsers
-        });
+        } as LoadPlayersSuccessAction);
       });
   };
 }

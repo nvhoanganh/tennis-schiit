@@ -195,15 +195,17 @@ export function submitScore({
     const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
     winnersK.forEach(k => {
       // update each
-      mWinners[k].won = (mWinners[k].won || 0) + 1;
       if (winByBagel) {
         mWinners[k].bagelWon = (mWinners[k].bagelWon || 0) + 1;
       }
+      mWinners[k].won = (mWinners[k].won || 0) + 1;
+
       mWinners[k] = {
         ...mWinners[k],
         ...calculateStats(mWinners[k], prize),
         playerId: k,
-        timestamp: new Date(matchDate)
+        timestamp: new Date(matchDate),
+        lastMatch: new Date()
       };
       batch.update(tourRef, {
         [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1),
@@ -221,12 +223,14 @@ export function submitScore({
       if (winByBagel) {
         mLosers[k].bagelLost = (mLosers[k].bagelLost || 0) + 1;
       }
-      mLosers[k].lost = mLosers[k].lost + 1;
+      mLosers[k].lost = (mLosers[k].lost || 0) + 1;
+
       mLosers[k] = {
         ...mLosers[k],
         ...calculateStats(mLosers[k], prize),
         playerId: k,
-        timestamp: new Date(matchDate)
+        timestamp: new Date(matchDate),
+        lastMatch: new Date()
       };
       batch.update(tourRef, {
         [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1),
@@ -301,6 +305,76 @@ export async function SearchScore({ groupId, tourId, winners, losers }) {
     const merged = R.merge(d[0], d[1]);
     return merged;
   });
+}
+
+export async function DeleteScore({
+  scoreId,
+  groupId,
+  tourId,
+  winners,
+  losers
+}) {
+  console.log("deleting score id", scoreId);
+  const groupRef = firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId);
+
+  const tourRef = groupRef.collection(TOURNAMENTS).doc(tourId);
+  const statsRef = tourRef.collection(STATS);
+  const players = { ...winners, ...losers };
+  const lastStats = await Promise.all(
+    Object.keys(players).map(playerId =>
+      statsRef
+        .where("playerId", "==", playerId)
+        .orderBy("played", "desc")
+        .limit(2)
+        .get()
+        .then(x => {
+          console.log(x.docs);
+          return x.docs.map(y => ({ ...y.data(), id: y.id }));
+        })
+    )
+  );
+  console.log(lastStats);
+  const batch = firebase.firestore().batch();
+  lastStats.forEach(x => {
+    if (x.length === 0) {
+      return;
+    }
+    // delete last match
+    batch.delete(statsRef.doc(x[0].id));
+    const k = x[0]["playerId"];
+    if (x.length > 1) {
+      const preMatch = x[1] as any;
+      // update player stats back to previous stats
+      batch.update(tourRef, {
+        [`players.${k}.won`]: preMatch.won || 0,
+        [`players.${k}.lost`]: preMatch.lost || 0,
+        [`players.${k}.previousScore`]: preMatch.previousScore,
+        [`players.${k}.score`]: preMatch.score,
+        [`players.${k}.skill`]: preMatch.skill,
+        [`players.${k}.lastMatch`]: preMatch.lastMatch.toDate(),
+        [`players.${k}.bagelWon`]: preMatch.bagelWon || 0,
+        [`players.${k}.bagelLost`]: preMatch.bagelLost || 0
+      });
+    } else {
+      // delete player from tournament
+      batch.update(tourRef, {
+        [`players.${k}`]: firebase.firestore.FieldValue.delete()
+      });
+    }
+  });
+
+  // delete score
+  batch.delete(tourRef.collection(SCORES).doc(scoreId));
+  // set played count for the group
+  batch.update(groupRef, {
+    played: firebase.firestore.FieldValue.increment(-1)
+  });
+  await batch.commit();
+
+  return Promise.resolve();
 }
 export type LeaderboardAction =
   | GetUserSuccessAction

@@ -82,19 +82,22 @@ export function loadResults(groupId, tourId, after) {
           .limit(10);
 
     return queryRef.get().then(querySnapshot => {
-      const data = arrayToObject(querySnapshot.docs, x => x.id, x => x.data());
+      const data = arrayToObject(
+        querySnapshot.docs,
+        x => x.id,
+        x => ({ ...x.data(), scoreId: x.id })
+      );
 
       dispatch(apiEnd());
-      dispatch(<LoadResultsSuccessAction>{
+      dispatch({
         type: ScoreActionTypes.LOAD_RESULTS_SUCCESS,
-
         results: {
           data,
           after,
           lastDoc: R.last(querySnapshot.docs),
           hasMore: !querySnapshot.empty
         }
-      });
+      } as LoadResultsSuccessAction);
     });
   };
 }
