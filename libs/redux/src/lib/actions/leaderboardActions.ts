@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setNewScore } from "@tennis-score/api-interfaces";
 import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
@@ -20,7 +21,6 @@ export enum LeaderboardActionTypes {
 }
 
 // actions
-
 export class GetUserAction implements IAction {
   readonly type = LeaderboardActionTypes.GET_USER;
   constructor(public user: any) {}
@@ -81,10 +81,10 @@ export function getPlayer(playerId, userId) {
 
 export function loadLeaderboard(groupId: string) {
   return async dispatch => {
-    dispatch(<LoadLeaderboardAction>{
+    dispatch({
       type: LeaderboardActionTypes.LOAD_LEADERBOARD,
       groupId: groupId
-    });
+    } as LoadLeaderboardAction);
     dispatch(apiStart(LeaderboardActionTypes.LOAD_LEADERBOARD));
     const group = await firebase
       .firestore()
@@ -112,19 +112,19 @@ export function loadLeaderboard(groupId: string) {
         .doc(fgroupData.currentTournament)
         .get();
 
-      dispatch(<LoadLeaderboardSuccessAction>{
+      dispatch({
         type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
         group: fgroupData,
         groupId,
         tournament: currentTournament.exists ? currentTournament.data() : null
-      });
+      } as LoadLeaderboardSuccessAction);
     } else {
-      dispatch(<LoadLeaderboardSuccessAction>{
+      dispatch({
         type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
         group: fgroupData,
         groupId,
         tournament: null
-      });
+      } as LoadLeaderboardSuccessAction);
     }
 
     return Promise.resolve();
@@ -151,8 +151,8 @@ export function submitScore({
     dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
 
     /// calculate score based on previous
-    let mWinners = {};
-    let mLosers = {};
+    const mWinners = {};
+    const mLosers = {};
     Object.keys(winners).forEach(key => {
       mWinners[key] = players[key] || {};
     });
@@ -256,10 +256,10 @@ export function submitScore({
     // end
 
     dispatch(apiEnd());
-    dispatch(<SubmitScoreSuccessAction>{
+    dispatch({
       type: LeaderboardActionTypes.SUBMIT_SCORE_SUCCESS,
       newScoreId: g.id
-    });
+    } as SubmitScoreSuccessAction);
     return Promise.resolve(g.id);
   };
 }
