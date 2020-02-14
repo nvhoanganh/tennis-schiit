@@ -74,7 +74,7 @@ const Leaderboard = ({
 
   const joinHandler = _ => {
     if (!user) {
-      history.push("/signup");
+      history.push("/signin");
     } else {
       props.joinGroup(group.groupId).then(
         toast({
