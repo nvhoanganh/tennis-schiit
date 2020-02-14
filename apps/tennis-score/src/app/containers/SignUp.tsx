@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { signUp, resetError } from "@tennis-score/redux";
+import { signUp, resetError, signIn } from "@tennis-score/redux";
 import SignUp from "../components/SignUp";
 
 const mapStateToProps = ({ app: { lastError, pendingRequests } }) => ({
@@ -8,6 +8,7 @@ const mapStateToProps = ({ app: { lastError, pendingRequests } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  signInHandler: data => dispatch(signIn(data)),
   resetError: _ => dispatch(resetError()),
   signupHandler: data => dispatch(signUp(data))
 });

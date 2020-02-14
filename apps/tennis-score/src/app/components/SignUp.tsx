@@ -5,8 +5,10 @@ import TextInput from "./TextInput";
 import UpdateButton from "./LoadingButton";
 import { maxContainer } from "./common";
 import { Link } from "./Link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-const SignUp = ({ loading, resetError, signupHandler }) => {
+const SignUp = ({ loading, resetError, signupHandler, signInHandler }) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -51,6 +53,18 @@ const SignUp = ({ loading, resetError, signupHandler }) => {
   return (
     <div {...maxContainer}>
       <h4 className="card-title mb-4 mt-1">Sign Up</h4>
+      <p className="text-center py-3">
+        <Link
+          onClick={() => {
+            signInHandler({ isGmail: true });
+          }}
+          className="btn btn-outline-danger"
+        >
+          <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
+          Signup using Google
+        </Link>
+      </p>
+      <hr />
       <form noValidate onSubmit={validateAndSubmit}>
         <TextInput
           type="email"
