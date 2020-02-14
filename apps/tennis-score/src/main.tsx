@@ -23,6 +23,11 @@ const history = createBrowserHistory();
 
 // init
 firebase.initializeApp(FBCONF);
+firebase
+  .firestore()
+  .enablePersistence()
+  .catch(err => console.log("failed to enable offline support", err));
+
 ReactGA.initialize(trackingId);
 
 // Initialize google analytics page view tracking
