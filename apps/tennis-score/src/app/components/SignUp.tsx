@@ -6,9 +6,10 @@ import UpdateButton from "./LoadingButton";
 import { maxContainer } from "./common";
 import { Link } from "./Link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Redirect } from "react-router-dom";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-const SignUp = ({ loading, resetError, signupHandler, signInHandler }) => {
+const SignUp = ({ loading, resetError, signupHandler, signInHandler, user}) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -50,7 +51,10 @@ const SignUp = ({ loading, resetError, signupHandler, signInHandler }) => {
   useEffect(() => {
     resetError();
   }, []);
-  return (
+
+  return user ? (
+    <Redirect to="/home" />
+  ) : (
     <div {...maxContainer}>
       <h4 className="card-title mb-4 mt-1">Sign Up</h4>
       <p className="text-center py-3">

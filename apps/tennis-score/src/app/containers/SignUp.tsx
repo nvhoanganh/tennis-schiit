@@ -2,8 +2,9 @@ import { connect } from "react-redux";
 import { signUp, resetError, signIn } from "@tennis-score/redux";
 import SignUp from "../components/SignUp";
 
-const mapStateToProps = ({ app: { lastError, pendingRequests } }) => ({
+const mapStateToProps = ({ app: { lastError, pendingRequests, user } }) => ({
   lastError,
+  user,
   loading: pendingRequests > 0
 });
 
