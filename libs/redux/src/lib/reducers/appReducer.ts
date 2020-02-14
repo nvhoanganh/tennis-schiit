@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppAction, AppActionTypes } from "../actions";
 
-export interface IAppState {
+export interface AppState {
   pendingRequests: number;
   appLoaded?: boolean;
   lastAction?: string;
@@ -11,14 +12,15 @@ export interface IAppState {
   signInError?: any;
   user?: any;
   currentGroup?: string;
+  signUpError?: any;
 }
 
 const decrementApi = state =>
   state.pendingRequests - 1 < 0 ? 0 : state.pendingRequests - 1;
 const app = (
-  state: IAppState = { pendingRequests: 0 },
+  state: AppState = { pendingRequests: 0 },
   action: AppAction
-): IAppState => {
+): AppState => {
   switch (action.type) {
     case AppActionTypes.API_START:
       return {
@@ -43,6 +45,16 @@ const app = (
         pendingRequests: decrementApi(state),
         appLoadError: action.error,
         appLoaded: true
+      };
+    case AppActionTypes.SIGNUP_FAILED:
+      return {
+        ...state,
+        signUpError: action.err
+      };
+    case AppActionTypes.SIGNUP_SUCCESS:
+      return {
+        ...state,
+        signUpError: null
       };
     case AppActionTypes.PWA_REG:
       return {

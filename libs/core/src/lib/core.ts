@@ -1,5 +1,6 @@
 export function strongPassword(value) {
-  const pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  // const pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  const pattern = /^.{8,}$/;
   return value && pattern.test(value);
 }
 

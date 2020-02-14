@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
@@ -28,6 +29,7 @@ export enum AppActionTypes {
 
   SIGNUP = "SIGNUP",
   SIGNUP_SUCCESS = "SIGNUP_SUCCESS",
+  SIGNUP_FAILED = "SIGNUP_FAILED",
 
   UPDATE_PROFILE = "UPDATE_PROFILE",
   UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS",
@@ -78,6 +80,10 @@ export class SignInSuccessAction implements IAction {
 export class SignUpSuccessAction implements IAction {
   readonly type = AppActionTypes.SIGNUP_SUCCESS;
   constructor(public user: any) {}
+}
+export class SignUpFailedAction implements IAction {
+  readonly type = AppActionTypes.SIGNUP_FAILED;
+  constructor(public err: any) {}
 }
 export class SignOutSuccessAction implements IAction {
   readonly type = AppActionTypes.SIGNOUT_SUCCESS;
@@ -139,7 +145,7 @@ export function resetPassword(email) {
     return firebase
       .auth()
       .sendPasswordResetEmail(email)
-      .then(_ => {
+      .then(() => {
         dispatch(apiEnd());
         dispatch({ type: AppActionTypes.RESET_PASS_SUCCESS });
         window.history.back();
@@ -158,31 +164,28 @@ export function signUp({ email, password }: ISignInModel) {
         dispatch(apiEnd());
         dispatch({ type: AppActionTypes.SIGNUP_SUCCESS, user: user.user });
       })
-      .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
+      .catch(err => {
+        dispatch({ type: AppActionTypes.API_ERROR, err });
+        dispatch({ type: AppActionTypes.SIGNUP_FAILED, err });
+      });
   };
 }
 
-export function updateProfile({
-  displayName,
-  avatar,
-  uid,
-  history,
-  userDetails
-}) {
+export function updateProfile({ displayName, avatar, uid, userDetails }) {
   return async dispatch => {
     dispatch(apiStart(AppActionTypes.UPDATE_PROFILE));
     // get blob from File API
     const blob = avatar ? await (await fetch(avatar)).blob() : null;
     let avatarUrl = "";
     if (blob) {
-      var storageRef = firebase.storage().ref();
-      var imageRef = await storageRef
+      const storageRef = firebase.storage().ref();
+      const imageRef = await storageRef
         .child(`images/avatar_${uid}.png`)
         .put(blob);
       avatarUrl = imageRef.metadata.fullPath;
     }
-    var user = firebase.auth().currentUser;
-    var userRef = firebase
+    const user = firebase.auth().currentUser;
+    const userRef = firebase
       .firestore()
       .collection("users")
       .doc(uid);
@@ -199,7 +202,7 @@ export function updateProfile({
       .updateProfile({
         displayName
       })
-      .then(_ =>
+      .then(() =>
         userRef.update({
           ...userDetails,
           ...(avatarUrl && { avatarUrl })
@@ -227,7 +230,7 @@ export function signOut() {
     return firebase
       .auth()
       .signOut()
-      .then(_ => dispatch({ type: AppActionTypes.SIGNOUT_SUCCESS }))
+      .then(() => dispatch({ type: AppActionTypes.SIGNOUT_SUCCESS }))
       .catch(err => dispatch({ type: AppActionTypes.API_ERROR, err }));
   };
 }
@@ -311,7 +314,7 @@ function getWebPushSub(uid, reg) {
         .update({
           webPush: sub
         })
-        .then(_ => sub);
+        .then(() => sub);
     });
   }
 }
@@ -328,10 +331,10 @@ export function getWebPushSubAction() {
     // delete from pending first
     return getWebPushSub(uid, pwaHandle).then(subscripttion => {
       dispatch(apiEnd());
-      dispatch(<GetNotificationSubSuccess>{
+      dispatch({
         type: AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS,
         subscripttion
-      });
+      } as GetNotificationSubSuccess);
     });
   };
 }
@@ -349,4 +352,5 @@ export type AppAction =
   | ResetErrorAction
   | SignInSuccessAction
   | SignOutSuccessAction
-  | SignUpSuccessAction;
+  | SignUpSuccessAction
+  | SignUpFailedAction;

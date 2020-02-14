@@ -9,7 +9,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Redirect } from "react-router-dom";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-const SignUp = ({ loading, resetError, signupHandler, signInHandler, user}) => {
+const SignUp = ({
+  loading,
+  resetError,
+  signUpError,
+  signupHandler,
+  signInHandler,
+  user
+}) => {
   const [state, setState] = useState({
     email: "",
     emailValid: false,
@@ -70,13 +77,16 @@ const SignUp = ({ loading, resetError, signupHandler, signInHandler, user}) => {
       </p>
       <hr />
       <form noValidate onSubmit={validateAndSubmit}>
+        {signUpError && (
+          <p className="text-danger h6 py-3 text-center">{signUpError.message}</p>
+        )}
         <TextInput
           type="email"
           name="email"
           label="Username"
           value={state.email}
           placeholder="Email address"
-          errorMessage="Valid email is required"
+          errorMessage={"Valid email is required"}
           setValue={setValue}
           isValid={state.emailValid}
         ></TextInput>
@@ -87,7 +97,7 @@ const SignUp = ({ loading, resetError, signupHandler, signInHandler, user}) => {
           label="Password"
           value={state.password}
           placeholder="Password"
-          errorMessage="Min 8 chars,1 number,1 special"
+          errorMessage="Min 8 chars"
           setValue={setValue}
           isValid={state.passwordValid}
         ></TextInput>
