@@ -10,7 +10,8 @@ import {
   faAtom,
   faClipboardCheck,
   faDollarSign,
-  faPercentage
+  faPercentage,
+  faEllipsisV
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -31,6 +32,8 @@ import { ScrollPills } from "./ScrollPills";
 import { StatsCard } from "./StatsCard";
 import PlayerSettings from "./PlayerSettings";
 import { PlayerWinLostWithChart } from "./PlayerWinLostWithChart";
+import { DropDownMenu } from "./DropDownMenu";
+import { ShareLink } from "./ShareLink";
 
 const PlayerProfile = ({
   player,
@@ -72,7 +75,22 @@ const PlayerProfile = ({
 
   return (
     <>
-      <RouteNav history={history} center="Player Profile"></RouteNav>
+      <RouteNav
+        history={history}
+        center="Player Profile"
+        right={
+          <DropDownMenu
+            icon={faEllipsisV}
+            options={[
+              <ShareLink
+                title={`${player.name} player profile`}
+                text={`${player.name} - ${group.name} Results`}
+                url={window.location.href}
+              />
+            ]}
+          />
+        }
+      ></RouteNav>
       <div className="d-flex">
         <>
           {player ? (
