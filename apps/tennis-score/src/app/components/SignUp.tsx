@@ -78,7 +78,10 @@ const SignUp = ({
       <hr />
       <form noValidate onSubmit={validateAndSubmit}>
         {signUpError && (
-          <p className="text-danger h6 py-3 text-center">{signUpError.message}</p>
+          <p className="text-danger h6 py-3 text-center">
+            {signUpError.message ||
+              "Oops! something went wrong. Please try again later."}
+          </p>
         )}
         <TextInput
           type="email"
