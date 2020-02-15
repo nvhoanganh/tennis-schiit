@@ -33,7 +33,7 @@ function PlayerSettings({ user }) {
       <UserInfo
         icon={user.singleHandedBackhand ? FaHandRock : FaHandshake}
         text={
-          user.singleHandedBackhand ? "Single Backhand" : "2-Handed Backhand"
+          user.singleHandedBackhand ? "Single Backhand" : "2Handed Backhand"
         }
       />
       <UserInfo

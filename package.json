@@ -10,6 +10,7 @@
     "start": "nx serve",
     "startpwa": "npm run predeploy && http-server dist/apps/tennis-score -p 4200",
     "build": "nx build",
+    "webpack-bundle": "webpack --profile --json > stats.json",
     "build-prod": "nx build --prod",
     "ngrok": "ngrok http 4200",
     "test": "nx test",
@@ -129,6 +130,7 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.5.3",
-    "url-loader": "^3.0.0"
+    "url-loader": "^3.0.0",
+    "webpack-bundle-analyzer": "^3.6.0"
   }
 }
