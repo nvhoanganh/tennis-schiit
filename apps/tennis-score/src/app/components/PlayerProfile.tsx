@@ -1,39 +1,21 @@
-import {
-  Avatar,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs
-} from "@chakra-ui/core";
-import {
-  faAtom,
-  faClipboardCheck,
-  faDollarSign,
-  faPercentage,
-  faEllipsisV
-} from "@fortawesome/free-solid-svg-icons";
+import { Avatar, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
+import { faAtom, faClipboardCheck, faDollarSign, faEllipsisV, faPercentage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getStatsByPlayer,
-  getUrlAvatar,
-  getMatchesByPlayer
-} from "@tennis-score/redux";
+import { getMatchesByPlayer, getStatsByPlayer, getUrlAvatar } from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
-import useLocation from "../hooks/useLocation";
+import { DropDownMenu } from "./DropDownMenu";
 import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
 import MyLoadingSkeleton from "./MyLoadingSekeleton";
 import MySpinner from "./MySpinner";
+import PlayerSettings from "./PlayerSettings";
 import { PlayerStatsChart } from "./PlayerStatsChart";
+import { PlayerWinLostWithChart } from "./PlayerWinLostWithChart";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
-import { StatsCard } from "./StatsCard";
-import PlayerSettings from "./PlayerSettings";
-import { PlayerWinLostWithChart } from "./PlayerWinLostWithChart";
-import { DropDownMenu } from "./DropDownMenu";
 import { ShareLink } from "./ShareLink";
+import { StatsCard } from "./StatsCard";
 
 const PlayerProfile = ({
   player,

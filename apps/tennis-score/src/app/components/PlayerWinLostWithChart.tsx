@@ -1,4 +1,10 @@
-import ReactEcharts from "echarts-for-react";
+// chart
+import ReactEchartsCore from "echarts-for-react/lib/core";
+import "echarts/lib/chart/pie";
+import "echarts/lib/component/title";
+import "echarts/lib/component/tooltip";
+import echarts from "echarts/lib/echarts";
+
 import React from "react";
 
 export function PlayerWinLostWithChart({ stats, players, playerId }) {
@@ -91,7 +97,8 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
   };
 
   return winLostRecords ? (
-    <ReactEcharts
+    <ReactEchartsCore
+      echarts={echarts}
       option={chartOption()}
       style={{
         height: 400

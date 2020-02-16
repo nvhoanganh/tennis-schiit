@@ -1,9 +1,17 @@
 import { roundOff, toChartDate } from "@tennis-score/redux";
-import ReactEcharts from "echarts-for-react";
+// chart
+import ReactEchartsCore from "echarts-for-react/lib/core";
+import "echarts/lib/chart/line";
+import "echarts/lib/component/title";
+import "echarts/lib/component/tooltip";
+import echarts from "echarts/lib/echarts";
+
 import * as R from "ramda";
 import React from "react";
 
-export function TournamentStatsChart({
+
+
+function TournamentStatsChart({
   players,
   stats,
   title,
@@ -92,7 +100,8 @@ export function TournamentStatsChart({
   };
 
   return (
-    <ReactEcharts
+    <ReactEchartsCore
+      echarts={echarts}
       option={chartOption()}
       style={{
         height: 400
@@ -100,3 +109,4 @@ export function TournamentStatsChart({
     />
   );
 }
+export default TournamentStatsChart;

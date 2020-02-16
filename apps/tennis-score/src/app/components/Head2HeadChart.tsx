@@ -1,6 +1,12 @@
 import React from "react";
 import * as R from "ramda";
-import ReactEcharts from "echarts-for-react";
+// chart
+import ReactEchartsCore from "echarts-for-react/lib/core";
+import "echarts/lib/chart/bar";
+import "echarts/lib/component/title";
+import "echarts/lib/component/tooltip";
+import echarts from "echarts/lib/echarts";
+
 import {
   getPlayersNameAsString,
   roundOff,
@@ -132,7 +138,8 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
     };
   };
   return (
-    <ReactEcharts
+    <ReactEchartsCore
+      echarts={echarts}
       option={getOption()}
       style={{
         height: 350

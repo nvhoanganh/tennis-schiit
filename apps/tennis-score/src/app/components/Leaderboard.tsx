@@ -4,23 +4,16 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  useToast,
-  Box,
-  CloseButton
+  useToast
 } from "@chakra-ui/core";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getStats,
-  isMember,
-  isOwner,
-  isPushEnabled
-} from "@tennis-score/redux";
+import { getStats, isMember, isOwner } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
 import format from "date-fns/format";
 import queryString from "query-string";
 import * as R from "ramda";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import setQuery from "set-query-string";
@@ -33,8 +26,8 @@ import UpdateButton from "./LoadingButton";
 import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import { TournamentStatsChart } from "./TournamentStatsChart";
-import { usePushNotification } from "../hooks/usePushNotification";
+// lazy loaded component
+const TournamentStatsChart = React.lazy(() => import("./TournamentStatsChart"));
 
 const Leaderboard = ({
   pendingJoinRequests,
@@ -281,38 +274,52 @@ const Leaderboard = ({
               <>
                 {stats ? (
                   <>
-                    <div className="py-4 border-bottom shadow-sm">
-                      <TournamentStatsChart
-                        title="Prize Money"
-                        value="prizeMoney"
-                        prefix="$"
-                        suffix=""
-                        players={group.players}
-                        stats={stats}
-                      ></TournamentStatsChart>
-                    </div>
+                    <Suspense
+                      fallback={
+                        <>
+                          <div className="py-4 border-bottom shadow-sm">
+                            <Skeleton height={400} />
+                          </div>
 
-                    <div className="py-4 border-bottom shadow-sm">
-                      <TournamentStatsChart
-                        title="Win Percentage"
-                        value="winPercentage"
-                        prefix="%"
-                        suffix=""
-                        players={group.players}
-                        stats={stats}
-                      ></TournamentStatsChart>
-                    </div>
+                          <div className="py-4 border-bottom shadow-sm">
+                            <Skeleton height={400} />
+                          </div>
+                        </>
+                      }
+                    >
+                      <div className="py-4 border-bottom shadow-sm">
+                        <TournamentStatsChart
+                          title="Prize Money"
+                          value="prizeMoney"
+                          prefix="$"
+                          suffix=""
+                          players={group.players}
+                          stats={stats}
+                        ></TournamentStatsChart>
+                      </div>
 
-                    <div className="py-4 border-bottom shadow-sm">
-                      <TournamentStatsChart
-                        title="TrueSkill Points"
-                        value="score"
-                        prefix=""
-                        suffix="pt."
-                        players={group.players}
-                        stats={stats}
-                      ></TournamentStatsChart>
-                    </div>
+                      <div className="py-4 border-bottom shadow-sm">
+                        <TournamentStatsChart
+                          title="Win Percentage"
+                          value="winPercentage"
+                          prefix="%"
+                          suffix=""
+                          players={group.players}
+                          stats={stats}
+                        ></TournamentStatsChart>
+                      </div>
+
+                      <div className="py-4 border-bottom shadow-sm">
+                        <TournamentStatsChart
+                          title="TrueSkill Points"
+                          value="score"
+                          prefix=""
+                          suffix="pt."
+                          players={group.players}
+                          stats={stats}
+                        ></TournamentStatsChart>
+                      </div>
+                    </Suspense>
                   </>
                 ) : (
                   <>
