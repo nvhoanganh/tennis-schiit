@@ -1,5 +1,5 @@
 import { getGroupImageUrlFull } from "@tennis-score/redux";
-import { formatDistanceToNow } from "date-fns";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { maxContainer } from "./common";

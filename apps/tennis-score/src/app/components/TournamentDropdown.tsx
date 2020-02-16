@@ -1,17 +1,9 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerOverlay,
-  useDisclosure
-} from "@chakra-ui/core";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isMember, isOwner, isInstalled, shareLink } from "@tennis-score/redux";
+import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { isMember, isOwner } from "@tennis-score/redux";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
+import { FaEllipsisH } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
-import { ShareLink } from "./ShareLink";
 
 export function TournamentDropDown({ user, group, tournament }) {
   const canSubmitNewScore = () => user && isMember(user, group) && tournament;
@@ -24,7 +16,7 @@ export function TournamentDropDown({ user, group, tournament }) {
         type="button"
         className="btn btn-link btn-sm text-dark"
       >
-        <FontAwesomeIcon icon={faEllipsisH} />
+        <FaEllipsisH />
       </button>
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />

@@ -1,14 +1,7 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerOverlay,
-  useDisclosure
-} from "@chakra-ui/core";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isInstalled, isMember, isOwner, shareLink } from "@tennis-score/redux";
+import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { isMember, isOwner } from "@tennis-score/redux";
 import React from "react";
+import { FaEllipsisV } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import { ShareLink } from "./ShareLink";
 
@@ -34,7 +27,7 @@ export function GroupMemberDropdown({
         type="button"
         className="btn btn-link btn-sm text-dark"
       >
-        <FontAwesomeIcon icon={faEllipsisV} />
+        <FaEllipsisV />
       </button>
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />

@@ -1,13 +1,12 @@
+import { isValidEmail, strongPassword } from "@tennis-score/core";
 import React, { useEffect, useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
-import { strongPassword, isValidEmail } from "@tennis-score/core";
-import TextInput from "./TextInput";
-import UpdateButton from "./LoadingButton";
+import { Redirect } from "react-router-dom";
 import { maxContainer } from "./common";
 import { Link } from "./Link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Redirect } from "react-router-dom";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import UpdateButton from "./LoadingButton";
+import TextInput from "./TextInput";
 
 const SignUp = ({
   loading,
@@ -71,7 +70,7 @@ const SignUp = ({
           }}
           className="btn btn-outline-danger"
         >
-          <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
+          <FaUserCircle className="text-danger mr-2" />
           Signup using Google
         </Link>
       </p>

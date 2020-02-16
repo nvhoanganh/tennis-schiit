@@ -1,7 +1,7 @@
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { getHandyCap } from "@tennis-score/redux";
-import { format } from "date-fns";
+import format from "date-fns/format";
 import React from "react";
+import { FaEllipsisV } from "react-icons/fa";
 import { DropDownMenu } from "./DropDownMenu";
 
 const ResultCard = props => {
@@ -62,7 +62,7 @@ const ResultCard = props => {
       {!hideMenu && (
         <div className="p-1 align-self-center">
           <DropDownMenu
-            icon={faEllipsisV}
+            icon={<FaEllipsisV />}
             options={[
               <a
                 key="filter"

@@ -1,19 +1,11 @@
-import {
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  useToast
-} from "@chakra-ui/core";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from "@chakra-ui/core";
 import { getStats, isMember, isOwner } from "@tennis-score/redux";
-import { formatDistanceToNow } from "date-fns";
 import format from "date-fns/format";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import queryString from "query-string";
 import { range } from "ramda";
-import React, { useEffect, useState, Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+import { FaCheckCircle } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import setQuery from "set-query-string";
@@ -367,7 +359,7 @@ const Leaderboard = ({
                         onClick={() => approveJoinAndMergePlayer(p)}
                         className="btn btn-primary btn-sm"
                       >
-                        <FontAwesomeIcon icon={faCheckCircle} /> Select
+                        <FaCheckCircle /> Select
                       </Button>
                     }
                   >
@@ -382,7 +374,7 @@ const Leaderboard = ({
                     onClick={() => approveJoinAndMergePlayer(null)}
                     className="btn btn-primary btn-sm"
                   >
-                    <FontAwesomeIcon icon={faCheckCircle} /> Select
+                    <FaCheckCircle /> Select
                   </Button>
                 }
               >

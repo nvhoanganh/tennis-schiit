@@ -1,44 +1,22 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  useDisclosure,
-  useToast,
-  DrawerFooter,
-  Alert,
-  AlertIcon,
-  Spinner
-} from "@chakra-ui/core";
-import { faBars, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  appLoad,
-  getAppLoaded,
-  getCurrentUser,
-  getLoadingLeaderboard,
-  getPendingRequests,
-  loadGroups,
-  signOut,
-  registerPwaHandle
-} from "@tennis-score/redux";
-import ReactGA from "react-ga";
+import { Alert, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/core";
+import { appLoad, getAppLoaded, getCurrentUser, getLoadingLeaderboard, getPendingRequests, loadGroups, registerPwaHandle, signOut } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
+import ReactGA from "react-ga";
+import Headroom from "react-headroom";
+import { FaBars, FaSignInAlt } from 'react-icons/fa';
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
-import "../app.scss";
 import AppIcon from "../../assets/icons/icon-96x96.png";
-import { AppLoader } from "../components/AppLoader2";
-import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
-import Headroom from "react-headroom";
-import useServiceWorker from "../hooks/useServiceWorker";
 import { version } from "../../assets/version";
+import "../app.scss";
+import { AppLoader } from "../components/AppLoader2";
 import Confirm from "../components/Confirm";
+import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
+import useServiceWorker from "../hooks/useServiceWorker";
 const linkStyle = {
   lineHeight: "2rem"
 };
@@ -142,7 +120,7 @@ const App = ({
               aria-controls="responsive-navbar-nav"
               onClick={() => onOpen()}
               style={{ marginRight: "0.4rem", border: "none" }}
-              children={<FontAwesomeIcon icon={faBars} />}
+              children={<FaBars />}
             />
           </Navbar>
         </Headroom>
@@ -169,7 +147,7 @@ const App = ({
                   type="button"
                   className="btn btn-danger btn-sm float-right"
                 >
-                  <FontAwesomeIcon icon={faSignInAlt} />
+                  <FaSignInAlt />
                 </button>
               )}
             </div>

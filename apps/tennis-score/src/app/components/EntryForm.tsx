@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";

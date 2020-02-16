@@ -3,13 +3,12 @@ import React from "react";
 import {
   FaArrowLeft,
   FaArrowRight,
-  FaHandshake,
   FaFemale,
   FaHandRock,
+  FaHandshake,
   FaMale,
   FaUserGraduate
 } from "react-icons/fa";
-import { faHandshake } from '@fortawesome/free-solid-svg-icons';
 function UserInfo({ icon, text }) {
   return (
     <div className="col-3 text-center p-2">

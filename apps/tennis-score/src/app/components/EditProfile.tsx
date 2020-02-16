@@ -1,13 +1,8 @@
 import { Avatar, Button } from "@chakra-ui/core";
-import {
-  faSearchMinus,
-  faSearchPlus,
-  faSyncAlt
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getUrlAvatar } from "@tennis-score/redux";
 import React, { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
+import { FaSearchMinus, FaSearchPlus, FaSyncAlt } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import CheckBoxInput from "./CheckBoxInput";
 import { maxContainer } from "./common";
@@ -146,21 +141,21 @@ const EditProfile = ({ user, updateProfile, history, pendingRequests }) => {
                       }
                       className="btn btn-secondary"
                     >
-                      <FontAwesomeIcon icon={faSyncAlt} />
+                      <FaSyncAlt />
                     </button>
                     <button
                       type="button"
                       onClick={() => setValue("zoom", state.zoom + 0.2)}
                       className="btn btn-secondary"
                     >
-                      <FontAwesomeIcon icon={faSearchPlus} />
+                      <FaSearchPlus />
                     </button>
                     <button
                       onClick={() => setValue("zoom", state.zoom - 0.2)}
                       type="button"
                       className="btn btn-secondary"
                     >
-                      <FontAwesomeIcon icon={faSearchMinus} />
+                      <FaSearchMinus />
                     </button>
                   </div>
                 </div>

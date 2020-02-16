@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
-import { faHandshake, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getGroupImageUrl } from "@tennis-score/redux";
 import React from "react";
+import { FaHandshake, FaUser } from "react-icons/fa";
 import Ripples from "react-ripples";
 import { GroupMembership } from "./GroupMembership";
 import GroupScoreCard from "./GroupScoreCard";
@@ -70,9 +69,8 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
                     }}
                   >
                     {Object.values(group.players).length}
-                    <FontAwesomeIcon className="pl-1" icon={faUser} />{" "}
-                    {group.played}
-                    <FontAwesomeIcon className="pl-1" icon={faHandshake} />
+                    <FaUser className="pl-1" /> {group.played}
+                    <FaHandshake className="pl-1" />
                   </span>
                 </div>
               </IconRows>

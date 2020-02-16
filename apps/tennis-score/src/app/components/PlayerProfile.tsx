@@ -1,9 +1,25 @@
-import { Avatar, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core";
-import { faAtom, faClipboardCheck, faDollarSign, faEllipsisV, faPercentage } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getMatchesByPlayer, getStatsByPlayer, getUrlAvatar } from "@tennis-score/redux";
+import {
+  Avatar,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs
+} from "@chakra-ui/core";
+import {
+  getMatchesByPlayer,
+  getStatsByPlayer,
+  getUrlAvatar
+} from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
+import {
+  FaAtom,
+  FaClipboardCheck,
+  FaDollarSign,
+  FaEllipsisV,
+  FaPercentage
+} from "react-icons/fa";
 import { DropDownMenu } from "./DropDownMenu";
 import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
@@ -62,7 +78,7 @@ const PlayerProfile = ({
         center="Player Profile"
         right={
           <DropDownMenu
-            icon={faEllipsisV}
+            icon={<FaEllipsisV />}
             options={[
               <ShareLink
                 title={`${player.name} player profile`}
@@ -122,7 +138,7 @@ const PlayerProfile = ({
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-success text-white"
-                      icon={<FontAwesomeIcon className="h5" icon={faAtom} />}
+                      icon={<FaAtom className="h5" />}
                       number={player.score || "0"}
                       name="Points"
                     />
@@ -130,12 +146,7 @@ const PlayerProfile = ({
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-dark text-white"
-                      icon={
-                        <FontAwesomeIcon
-                          className="h5"
-                          icon={faClipboardCheck}
-                        />
-                      }
+                      icon={<FaClipboardCheck className="h5" />}
                       number={(player.won || 0) + (player.lost || 0)}
                       name="Matches"
                     />
@@ -143,9 +154,7 @@ const PlayerProfile = ({
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-info text-white"
-                      icon={
-                        <FontAwesomeIcon className="h5" icon={faPercentage} />
-                      }
+                      icon={<FaPercentage className="h5" />}
                       number={player.winPercentage || "0"}
                       name="Win Pct."
                     />
@@ -153,9 +162,7 @@ const PlayerProfile = ({
                   <div className="col-6 p-2">
                     <StatsCard
                       cardClass="bg-warning text-dark"
-                      icon={
-                        <FontAwesomeIcon className="h5" icon={faDollarSign} />
-                      }
+                      icon={<FaDollarSign className="h5" />}
                       number={player.prizeMoney || "0"}
                       name="Prize money"
                     />

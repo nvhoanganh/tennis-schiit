@@ -1,6 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Container, Button, Link } from "react-floating-action-button";
+import { Button, Container } from "react-floating-action-button";
 import { LinkContainer } from "react-router-bootstrap";
 function FloatButton({ icon, url, tooltip }) {
   return (
@@ -14,7 +13,7 @@ function FloatButton({ icon, url, tooltip }) {
     >
       <LinkContainer to={url}>
         <Button tooltip={tooltip} icon="fas fa-plus" rotate={false}>
-          <FontAwesomeIcon icon={icon} />
+          {icon}
         </Button>
       </LinkContainer>
     </Container>

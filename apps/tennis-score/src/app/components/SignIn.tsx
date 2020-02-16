@@ -1,13 +1,12 @@
-import { faUserCircle, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import { FaUserCircle } from 'react-icons/fa';
 import { LinkContainer } from "react-router-bootstrap";
-
 import { Redirect } from "react-router-dom";
-import UpdateButton from "./LoadingButton";
-import { Link } from "./Link";
-import TextInput from "./TextInput";
 import { maxContainer } from "./common";
+import { Link } from "./Link";
+import UpdateButton from "./LoadingButton";
+import TextInput from "./TextInput";
+
 
 const SignIn = ({
   resetError,
@@ -67,7 +66,7 @@ const SignIn = ({
           }}
           className="btn btn-outline-danger"
         >
-          <FontAwesomeIcon icon={faUserCircle} className="text-danger mr-2" />
+          <FaUserCircle className="text-danger mr-2" />
           Login via Google
         </Link>
       </p>

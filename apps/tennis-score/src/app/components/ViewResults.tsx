@@ -1,28 +1,12 @@
-import { ShareLink } from "./ShareLink";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  useDisclosure,
-  useToast
-} from "@chakra-ui/core";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import {
-  getPossibleVerse,
-  SearchScore,
-  isInstalled,
-  shareLink,
-  DeleteScore,
-  isOwner,
-  isMember
-} from "@tennis-score/redux";
-import { format } from "date-fns";
+import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { DeleteScore, getPossibleVerse, isMember, SearchScore } from "@tennis-score/redux";
+import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
+import { FaEllipsisH } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "react-loading-skeleton";
 import { Button } from "./Button";
+import Confirm from "./Confirm";
 import { DrawerLink, DropDownMenu } from "./DropDownMenu";
 import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
@@ -30,7 +14,7 @@ import MySpinner from "./MySpinner";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
-import Confirm from "./Confirm";
+import { ShareLink } from "./ShareLink";
 
 const ViewResults = ({
   scores,
@@ -102,7 +86,7 @@ const ViewResults = ({
             <HeaderCard
               right={
                 <DropDownMenu
-                  icon={faEllipsisH}
+                  icon={<FaEllipsisH />}
                   options={[
                     <DrawerLink
                       key="menu"

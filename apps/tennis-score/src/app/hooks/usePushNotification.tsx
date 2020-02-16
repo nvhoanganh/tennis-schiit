@@ -1,15 +1,9 @@
 import { useToast } from "@chakra-ui/core";
-import {
-  isInstalled,
-  isPushEnabled,
-  isIos,
-  askPersmission
-} from "@tennis-score/redux";
-import React, { useEffect, useState } from "react";
-import { Button } from "../components/Button";
+import { askPersmission, isInstalled, isPushEnabled } from "@tennis-score/redux";
+import React, { useEffect } from "react";
+import { FaBell } from "react-icons/fa";
 import { appConfig } from "../../assets/config";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "../components/Button";
 export const usePushNotification = ({
   getNotificationSub,
   user,
@@ -23,7 +17,7 @@ export const usePushNotification = ({
   } = appConfig;
   useEffect(() => {
     if (
-      pwaHandle && 
+      pwaHandle &&
       user &&
       isPushEnabled() &&
       !isInstalled() &&
@@ -39,10 +33,7 @@ export const usePushNotification = ({
           render: ({ onClose }) => (
             <div className="m-1 py-3 px-4 bg-dark rounded-lg shadow">
               <p className="text-white d-flex">
-                <FontAwesomeIcon
-                  icon={faBell}
-                  className="mr-2 h4 align-self-end"
-                />
+                <FaBell className="mr-2 h4 align-self-end" />
                 <span className="ml-2 align-self-center">
                   Get Notifications for new match result?
                 </span>

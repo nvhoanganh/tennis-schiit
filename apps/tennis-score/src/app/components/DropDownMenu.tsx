@@ -1,13 +1,22 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
 import React from "react";
 
 export function DropDownMenu({ options, icon }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <button onClick={onOpen} type="button" className="btn btn-link btn-sm text-dark">
-        <FontAwesomeIcon icon={icon} />
+      <button
+        onClick={onOpen}
+        type="button"
+        className="btn btn-link btn-sm text-dark"
+      >
+        {icon}
       </button>
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />

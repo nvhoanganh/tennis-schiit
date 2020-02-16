@@ -1,14 +1,8 @@
 import { Avatar, AvatarBadge } from "@chakra-ui/core";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getUrlAvatar,
-  SORT_PRIZEMONEY,
-  SORT_TRUESKILL,
-  SORT_WINPERCENT
-} from "@tennis-score/redux";
+import { getUrlAvatar, SORT_PRIZEMONEY, SORT_TRUESKILL, SORT_WINPERCENT } from "@tennis-score/redux";
 import classNames from "classnames";
 import React from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import Ripples from "react-ripples";
 import { ScoreCard } from "./ScoreCard";
@@ -31,15 +25,9 @@ const top3 = ranking =>
 const arrowClass = "pl-1 h6 align-middle mr-1 h6 ";
 const getArrow = player =>
   player.previousScore > player.score ? (
-    <FontAwesomeIcon
-      icon={faChevronDown}
-      className={arrowClass + "text-danger"}
-    />
+    <FaChevronDown className={arrowClass + "text-danger d-inline"} />
   ) : player.previousScore < player.score ? (
-    <FontAwesomeIcon
-      icon={faChevronUp}
-      className={arrowClass + "text-success"}
-    />
+    <FaChevronUp className={arrowClass + "text-success d-inline"} />
   ) : null;
 
 const getStats = (player, sortBy) => {

@@ -1,43 +1,11 @@
 import { Avatar } from "@chakra-ui/core";
-import { faCheckCircle, faChevronDown, faChevronUp, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getUrlAvatar } from "@tennis-score/redux";
-import classNames from "classnames";
-import { formatDistanceToNow } from "date-fns";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import React from "react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "./Button";
 
-const prizeMoneyCls = player =>
-  classNames({
-    h6: true,
-    "text-success": player.prizeMoney > 0,
-    "text-danger": player.prizeMoney < 0
-  });
-
-const top3 = ranking => ({
-  backgroundColor:
-    ranking === 0
-      ? "gold"
-      : ranking === 1
-      ? "silver"
-      : ranking === 2
-      ? "chocolate"
-      : ""
-});
-const arrowClass = "pl-1 h6 align-middle mr-1 h6 ";
-const getArrow = player =>
-  player.lastWeekscore > player.score ? (
-    <FontAwesomeIcon
-      icon={faChevronDown}
-      className={arrowClass + "text-danger"}
-    />
-  ) : player.lastWeekscore < player.score ? (
-    <FontAwesomeIcon
-      icon={faChevronUp}
-      className={arrowClass + "text-success"}
-    />
-  ) : null;
 const PendingMemberCard = ({ player, ...props }) => {
   return (
     <div className="col-sm-6 col-md-4 col-lg-3 border-bottom border-top shadow-sm">
@@ -62,14 +30,14 @@ const PendingMemberCard = ({ player, ...props }) => {
               onClick={() => props.approveJoinRequest(player)}
               className="btn btn-primary btn-sm"
             >
-              <FontAwesomeIcon icon={faCheckCircle} />
+              <FaCheckCircle />
             </Button>
             <Button
               type="button"
               onClick={() => props.rejectJoinRequest(player)}
               className="btn ml-1 btn-danger btn-sm"
             >
-              <FontAwesomeIcon icon={faTimesCircle} />
+              <FaTimesCircle />
             </Button>
           </div>
           <div>

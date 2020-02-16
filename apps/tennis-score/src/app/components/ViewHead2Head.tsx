@@ -1,15 +1,15 @@
 import { getPlayersName, SearchScore } from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useRef, useState } from "react";
+import { FaEllipsisV } from 'react-icons/fa';
 import setQuery from "set-query-string";
+import { DropDownMenu } from "./DropDownMenu";
 import { Head2HeadChart } from "./Head2HeadChart";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";
 import { PlayerPicker } from "./PlayerPicker";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
-import { DropDownMenu } from "./DropDownMenu";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { ShareLink } from "./ShareLink";
 const getPlayers = (p, allP) => <span>{getPlayersAsText(p, allP)}</span>;
 const getPlayersAsText = (p, allP) => getPlayersName(p, allP).join("/");
@@ -113,7 +113,7 @@ const ViewHead2Head = ({
             center="View Head 2 Head Result"
             right={
               <DropDownMenu
-                icon={faEllipsisV}
+                icon={<FaEllipsisV />}
                 options={[
                   <ShareLink
                     title={getVs()}

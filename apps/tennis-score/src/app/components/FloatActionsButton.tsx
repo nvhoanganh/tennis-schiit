@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Container, Button, Link } from "react-floating-action-button";
 import { LinkContainer } from "react-router-bootstrap";
@@ -14,14 +13,12 @@ function FloatActionsButton({ icon, urls }) {
     >
       {urls.map(url => (
         <Link key={url.url} href={url.url} tooltip={url.tooltip} icon={icon}>
-          <LinkContainer to={url.url}>
-            <FontAwesomeIcon icon={url.icon} />
-          </LinkContainer>
+          <LinkContainer to={url.url}>{url.icon}</LinkContainer>
         </Link>
       ))}
 
       <Button icon="fas fa-plus" rotate={false}>
-        <FontAwesomeIcon icon={icon} />
+        {icon}
       </Button>
     </Container>
   );

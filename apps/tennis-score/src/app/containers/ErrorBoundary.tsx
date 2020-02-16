@@ -1,10 +1,10 @@
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "firebase/auth";
 import "firebase/firestore";
 import React from "react";
 import "../app.scss";
 import ReactGA from "react-ga";
+import { FaExclamationTriangle } from "react-icons/fa";
 export class ErrorBoundary extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -42,10 +42,7 @@ function ShowError() {
                 <em>Score Sheet</em>
               </p>
               <div>
-                <FontAwesomeIcon
-                  icon={faExclamationTriangle}
-                  className="text-danger h1"
-                />
+                <FaExclamationTriangle className="text-danger h1" />
                 <p>Oops! Something went wrong</p>
                 <p className="text-muted small">Please reload to try again</p>
               </div>

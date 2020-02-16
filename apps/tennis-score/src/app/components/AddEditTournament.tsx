@@ -1,6 +1,10 @@
 import { isValidNumber } from "@tennis-score/core";
-import { SORT_PRIZEMONEY, SORT_TRUESKILL, SORT_WINPERCENT } from "@tennis-score/redux";
-import { format } from "date-fns";
+import {
+  SORT_PRIZEMONEY,
+  SORT_TRUESKILL,
+  SORT_WINPERCENT
+} from "@tennis-score/redux";
+import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
 import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";

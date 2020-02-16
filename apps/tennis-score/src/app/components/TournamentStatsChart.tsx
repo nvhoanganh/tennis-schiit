@@ -3,6 +3,7 @@ import { roundOff, toChartDate } from "@tennis-score/redux";
 import ReactEchartsCore from "echarts-for-react/lib/core";
 import "echarts/lib/chart/line";
 import "echarts/lib/component/title";
+import "echarts/lib/component/legend";
 import "echarts/lib/component/tooltip";
 import echarts from "echarts/lib/echarts";
 
