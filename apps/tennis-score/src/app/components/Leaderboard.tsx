@@ -12,7 +12,7 @@ import { getStats, isMember, isOwner } from "@tennis-score/redux";
 import { formatDistanceToNow } from "date-fns";
 import format from "date-fns/format";
 import queryString from "query-string";
-import * as R from "ramda";
+import { range } from "ramda";
 import React, { useEffect, useState, Suspense } from "react";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
@@ -230,7 +230,7 @@ const Leaderboard = ({
             </HeaderCard>
             {loading ? (
               <div className="pb-3">
-                {R.range(0, 6).map((k, i) => (
+                {range(0, 6).map((k, i) => (
                   <LeaderboardCard
                     key={k}
                     player={null}

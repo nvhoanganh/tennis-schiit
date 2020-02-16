@@ -1,18 +1,12 @@
+import { isValidNumber } from "@tennis-score/core";
+import { SORT_PRIZEMONEY, SORT_TRUESKILL, SORT_WINPERCENT } from "@tennis-score/redux";
+import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { maxContainer } from "./common";
 import UpdateButton from "./LoadingButton";
 import RouteNav from "./RouteNav";
 import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
-import * as R from "ramda";
-import { isNumber } from "util";
-import { isValidNumber } from "@tennis-score/core";
-import {
-  SORT_TRUESKILL,
-  SORT_PRIZEMONEY,
-  SORT_WINPERCENT
-} from "@tennis-score/redux";
-import { format } from "date-fns";
 
 const AddEditTournament = ({
   loading,

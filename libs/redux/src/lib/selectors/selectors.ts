@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
-import * as R from "ramda";
+import { pipe, groupBy, map, sortBy, sort } from "ramda";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 import { arrayToObject, calculateStats, isMember, roundOff } from "../utils";
 const getPlayers = state => state.players;
@@ -29,23 +30,23 @@ export const getScores = createSelector(
 export const getScoresSortedByDate = createSelector(
   getScoresState,
   s => {
-    const f = R.pipe(
+    const f = pipe(
       Object.values,
-      R.groupBy(m => m.matchDate.seconds),
-      R.map(
-        R.pipe(
-          R.sortBy(x =>
+      groupBy(m => m.matchDate.seconds),
+      map(
+        pipe(
+          sortBy(x =>
             /// old records doesn't have timestamp field yet
             x.timestamp ? x.timestamp.seconds : x.matchDate.seconds
           )
         )
       ),
       Object.values,
-      R.map(x => ({
+      map(x => ({
         matchDate: x[0].matchDate.toDate(),
         matches: x
       })),
-      R.sort((a, b) => b.matchDate - a.matchDate)
+      sort((a, b) => b.matchDate - a.matchDate)
     );
     return f(s.entities);
   }
@@ -113,9 +114,9 @@ export const getGroupPlayers = createSelector(
     if (!s) return [];
     return Object.values(s.players).map(x => {
       return {
-        id: (<any>x).userId,
-        email: (<any>x).email,
-        name: (<any>x).name
+        id: (x as any).userId,
+        email: (x as any).email,
+        name: (x as any).name
       };
     });
   }
@@ -133,7 +134,7 @@ export const getLeaderboardPlayers = createSelector(
     };
 
     // enhance the group player
-    let players = Object.values(group.players).map(({ ...gp }) => {
+    const players = Object.values(group.players).map(({ ...gp }) => {
       const player = leaderboard.players[gp.userId];
 
       if (!player) {

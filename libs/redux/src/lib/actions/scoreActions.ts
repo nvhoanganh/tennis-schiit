@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IScore, GROUPS, TOURNAMENTS, SCORES } from "../models";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import * as R from "ramda";
-import { delay, arrayToObject } from "../utils";
+import { last } from "ramda";
+import { arrayToObject } from "../utils";
 import { apiStart, apiEnd } from "./appActions";
 import { IAction } from "@tennis-score/redux";
 export enum ScoreActionTypes {
@@ -60,7 +61,7 @@ export function updateScore(score: IScore): UpdateScoreAction {
 
 // thunks
 export function loadResults(groupId, tourId, after) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(
       apiStart(ScoreActionTypes.LOAD_RESULTS, { groupId, tourId, after })
     );
@@ -94,7 +95,7 @@ export function loadResults(groupId, tourId, after) {
         results: {
           data,
           after,
-          lastDoc: R.last(querySnapshot.docs),
+          lastDoc: last(querySnapshot.docs),
           hasMore: !querySnapshot.empty
         }
       } as LoadResultsSuccessAction);

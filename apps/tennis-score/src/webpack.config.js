@@ -7,6 +7,7 @@ module.exports = config => {
     ...config.plugins,
     new BundleAnalyzerPlugin({
       analyzerMode: "static",
+      openAnalyzer: false
     })
   ];
   config.module.rules.unshift(

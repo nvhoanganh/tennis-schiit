@@ -6,10 +6,8 @@ import "echarts/lib/component/title";
 import "echarts/lib/component/tooltip";
 import echarts from "echarts/lib/echarts";
 
-import * as R from "ramda";
+import { pipe, sort, map, groupBy, last, sortBy } from "ramda";
 import React from "react";
-
-
 
 function TournamentStatsChart({
   players,
@@ -41,9 +39,9 @@ function TournamentStatsChart({
     tooltip: {
       trigger: "axis",
       formatter: function(params) {
-        const getLabel = R.pipe(
-          R.sort((x, y) => y.data.value[1] - x.data.value[1]),
-          R.map(x => `${x.seriesName} : ${prefix}${x.data.value[1]}${suffix}`)
+        const getLabel = pipe(
+          sort((x, y) => y.data.value[1] - x.data.value[1]),
+          map(x => `${x.seriesName} : ${prefix}${x.data.value[1]}${suffix}`)
         );
         return `<strong>${params[0].data.name}</strong>:<br><br>${getLabel(
           params
@@ -60,7 +58,7 @@ function TournamentStatsChart({
   });
 
   const getDataSeries = () => {
-    const userScores = R.groupBy(p => p.playerId, stats);
+    const userScores = groupBy(p => p.playerId, stats);
 
     const getPlayerArray = o =>
       // get Array from object
@@ -72,24 +70,24 @@ function TournamentStatsChart({
         }))
       }));
 
-    const result = R.pipe(
+    const result = pipe(
       getPlayerArray,
-      R.map(k => ({
+      map(k => ({
         name: players[k.playerId] ? players[k.playerId].name : "NA",
         playerId: k.playerId,
         type: "line",
         showSymbol: true,
         hoverAnimation: true,
-        data: R.pipe(
+        data: pipe(
           // group by match date
-          R.groupBy(m => m.timestamp.seconds),
+          groupBy(m => m.timestamp.seconds),
           Object.values,
           // for each date, sort by match count ascendant
-          R.map(R.pipe(R.sortBy(x => x.played))),
+          map(pipe(sortBy(x => x.played))),
           // for each date, get the last match only
-          R.map(x => R.last(x)),
+          map(x => last(x)),
           // get the values from this last match
-          R.map(x => ({
+          map(x => ({
             name: toChartDate(x.timestamp.seconds).toString(),
             value: [toChartDate(x.timestamp.seconds), roundOff(x[value])]
           }))

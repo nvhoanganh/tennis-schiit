@@ -1,5 +1,5 @@
 import React from "react";
-import * as R from "ramda";
+import { intersection, assocPath, path } from "ramda";
 // chart
 import ReactEchartsCore from "echarts-for-react/lib/core";
 import "echarts/lib/chart/bar";
@@ -55,30 +55,30 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
     Object.values(scores).forEach(x => {
       const r = x as any;
       if (
-        R.intersection(Object.keys(r.winners), Object.keys(winners)).length > 0
+        intersection(Object.keys(r.winners), Object.keys(winners)).length > 0
       ) {
-        stats = R.assocPath(
+        stats = assocPath(
           ["overall", team1],
-          (R.path(["overall", team1], stats) || 0) + 1,
+          (path(["overall", team1], stats) || 0) + 1,
           stats
         );
-        stats = R.assocPath(
+        stats = assocPath(
           [r.headStart || "0", team1],
-          (R.path([r.headStart || "0", team1], stats) || 0) + 1,
+          (path([r.headStart || "0", team1], stats) || 0) + 1,
           stats
         );
       } else if (
-        R.intersection(Object.keys(r.winners), Object.keys(losers)).length > 0
+        intersection(Object.keys(r.winners), Object.keys(losers)).length > 0
       ) {
-        stats = R.assocPath(
+        stats = assocPath(
           ["overall", team2],
-          (R.path(["overall", team2], stats) || 0) + 1,
+          (path(["overall", team2], stats) || 0) + 1,
           stats
         );
         // need to invert the headstart value in this case
-        stats = R.assocPath(
+        stats = assocPath(
           [+r.headStart * -1 || "0", team2],
-          (R.path([+r.headStart * -1 || "", team2], stats) || 0) + 1,
+          (path([+r.headStart * -1 || "", team2], stats) || 0) + 1,
           stats
         );
       }

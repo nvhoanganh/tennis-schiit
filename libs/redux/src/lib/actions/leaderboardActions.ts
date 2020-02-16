@@ -6,7 +6,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
 import { calculateStats, arrayToObject, getPlayers } from "../utils";
-import * as R from "ramda";
+import { merge } from "ramda";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 export enum LeaderboardActionTypes {
   GET_USER = "GET_USER",
@@ -138,8 +138,7 @@ export function submitScore({
   gameWonByLostTeam,
   reverseBagel,
   matchDate,
-  headStart,
-  ...score
+  headStart
 }) {
   return async (dispatch, getState) => {
     const {
@@ -302,7 +301,7 @@ export async function SearchScore({ groupId, tourId, winners, losers }) {
     const d = results.map(r =>
       arrayToObject(r.docs, x => x.id, x => ({ ...x.data(), id: x.id }))
     );
-    const merged = R.merge(d[0], d[1]);
+    const merged = merge(d[0], d[1]);
     return merged;
   });
 }

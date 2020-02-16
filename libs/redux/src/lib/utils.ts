@@ -1,5 +1,15 @@
-import * as R from "ramda";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-useless-escape */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { flatten } from "ramda";
 import addSeconds from "date-fns/addSeconds";
+
+export const getFileNameAndExt = url => {
+  const {
+    groups: { ext, file }
+  } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
+  return [file, ext];
+};
 
 export function delay(duration): Promise<void> {
   return new Promise(resolve => {
@@ -71,13 +81,6 @@ export const getUserAvatarUrl = url => {
   )}?alt=media`;
 };
 
-export const getFileNameAndExt = url => {
-  const {
-    groups: { ext, file }
-  } = <any>/^(?<file>.*)\.(?<ext>.*)$/.exec(url);
-  return [file, ext];
-};
-
 export const getHandyCap = val => {
   switch (+val) {
     case 0.15:
@@ -124,7 +127,7 @@ export const getPlayersNameAsString = (p, allP) =>
   getPlayersName(p, allP).join("/");
 
 export const getPossibleVerse = (players, group1, group2) =>
-  R.flatten(
+  flatten(
     Object.keys(group1).map(x =>
       Object.keys(group2).map(y => ({
         label: `${players[x].name} vs ${players[y].name}`,
