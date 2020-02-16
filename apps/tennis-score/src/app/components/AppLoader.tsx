@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import MySpinner from "./MySpinner";
 import bodymovin from "lottie-web";
+import React, { useEffect } from "react";
 export function AppLoader(props) {
   useEffect(() => {
     bodymovin.loadAnimation({

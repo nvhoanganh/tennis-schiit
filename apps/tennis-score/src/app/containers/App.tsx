@@ -33,7 +33,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
 import "../app.scss";
 import AppIcon from "../../assets/icons/icon-96x96.png";
-import { AppLoader } from "../components/AppLoader";
+import { AppLoader } from "../components/AppLoader2";
 import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 import Headroom from "react-headroom";
 import useServiceWorker from "../hooks/useServiceWorker";
