@@ -66,7 +66,7 @@ const SignIn = ({
           }}
           className="btn btn-outline-danger"
         >
-          <FaUserCircle className="text-danger mr-2" />
+          <FaUserCircle className="text-danger mr-2 d-inline" />
           Login via Google
         </Link>
       </p>

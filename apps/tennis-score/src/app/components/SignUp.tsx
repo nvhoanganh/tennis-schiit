@@ -70,7 +70,7 @@ const SignUp = ({
           }}
           className="btn btn-outline-danger"
         >
-          <FaUserCircle className="text-danger mr-2" />
+          <FaUserCircle className="text-danger mr-2 d-inline" />
           Signup using Google
         </Link>
       </p>

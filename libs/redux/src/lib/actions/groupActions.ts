@@ -133,7 +133,7 @@ export function loadGroups(reload = false) {
             ...mapGroups(x.data())
           })
         );
-
+        
         dispatch(apiEnd());
         dispatch({
           type: GroupActionTypes.LOAD_GROUPS_SUCCESS,

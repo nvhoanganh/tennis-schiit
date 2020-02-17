@@ -1,12 +1,32 @@
-import { Alert, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/core";
-import { appLoad, getAppLoaded, getCurrentUser, getLoadingLeaderboard, getPendingRequests, loadGroups, registerPwaHandle, signOut } from "@tennis-score/redux";
+import {
+  Alert,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Spinner,
+  useDisclosure,
+  useToast
+} from "@chakra-ui/core";
+import {
+  appLoad,
+  getAppLoaded,
+  getCurrentUser,
+  getLoadingLeaderboard,
+  getPendingRequests,
+  loadGroups,
+  registerPwaHandle,
+  signOut
+} from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import ReactGA from "react-ga";
 import Headroom from "react-headroom";
-import { FaBars, FaSignInAlt } from 'react-icons/fa';
+import { FaBars, FaSignInAlt } from "react-icons/fa";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { renderRoutes } from "react-router-config";
@@ -17,6 +37,7 @@ import { AppLoader } from "../components/AppLoader2";
 import Confirm from "../components/Confirm";
 import { usePwaInstallPrompt } from "../hooks/usePwaInstallPrompt";
 import useServiceWorker from "../hooks/useServiceWorker";
+
 const linkStyle = {
   lineHeight: "2rem"
 };

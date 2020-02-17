@@ -37,6 +37,14 @@ history.listen(location => {
   ReactGA.pageview(location.pathname); // Record a pageview for the given page
 });
 
+// unhandled error from promise
+window.addEventListener("unhandledrejection", function(event) {
+  ReactGA.exception({
+    description: `Unhandled rejection - reason: ${event.reason})`,
+    fatal: true
+  });
+});
+
 // timing
 if (window.performance) {
   ReactGA.timing({
