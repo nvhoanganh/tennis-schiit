@@ -175,7 +175,7 @@ const App = ({
       </Drawer>
 
       <Confirm
-        title="Reload now?"
+        title="Restar now?"
         message="New version has been successfully installed. Do you want to reload now?"
         close="Maybe later"
         mainAction="OK"

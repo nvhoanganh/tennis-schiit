@@ -13,7 +13,7 @@ npm run build-prod
 
 # update the ServiceWorker shell
 echo Replace the index.html file
-value=$(<dist/apps/tennis-score/index.html)
+value=`cat dist/apps/tennis-score/index.html`
 echo "$value"
 node ./node_modules/envsub/bin/envsub.js --env Template="$value" sw-shell-real.template.js functions/sw-shell-real.js
 

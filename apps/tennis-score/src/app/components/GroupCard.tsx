@@ -62,15 +62,14 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
               <IconRows>
                 <div className="text-nowrap text-right">
                   <span
-                    className="rounded-lg p-1"
+                    className="rounded-lg p-1 small"
                     style={{
-                      backgroundColor: "rgb(52,58,64, 0.6)",
-                      fontSize: "0.8rem"
+                      backgroundColor: "rgb(52,58,64, 0.6)"
                     }}
                   >
                     {Object.values(group.players).length}
-                    <FaUser className="pl-1" /> {group.played}
-                    <FaHandshake className="pl-1" />
+                    <FaUser className="pl-1 d-inline small" /> {group.played}
+                    <FaHandshake className="pl-1 d-inline small" />
                   </span>
                 </div>
               </IconRows>
