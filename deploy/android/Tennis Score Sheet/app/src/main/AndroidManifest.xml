@@ -38,6 +38,9 @@
             <meta-data android:name="android.support.customtabs.trusted.DEFAULT_URL"
                 android:value="${defaultUrl}" />
 
+            <meta-data android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
+                android:resource="@drawable/ic_splash" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,5 +54,13 @@
                     android:host="${hostName}"/>
             </intent-filter>
         </activity>
+        <provider android:name="android.support.v4.content.FileProvider"
+          android:authorities="com.placeholder"
+          android:exported="false"
+          android:grantUriPermissions="true"
+        >
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
     </application>
 </manifest>
