@@ -1,4 +1,11 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from "@chakra-ui/core";
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useToast
+} from "@chakra-ui/core";
 import { getStats, isMember, isOwner } from "@tennis-score/redux";
 import format from "date-fns/format";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
@@ -47,7 +54,6 @@ const Leaderboard = ({
   const [show, setShow] = useState(false);
   const [approvingPlayer, setapprovingPlayer] = useState(null);
   useEffect(() => {
-    console.log("loading leader board for ", match.params.group);
     props.loadLeaderboard(match.params.group);
   }, []);
 

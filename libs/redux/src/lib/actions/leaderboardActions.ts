@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useToast } from "@chakra-ui/core";
 import { setNewScore } from "@tennis-score/api-interfaces";
 import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
-import { calculateStats, arrayToObject, getPlayers } from "../utils";
 import { merge } from "ramda";
+import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
+import { arrayToObject, calculateStats, getPlayers } from "../utils";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 export enum LeaderboardActionTypes {
   GET_USER = "GET_USER",
@@ -35,7 +36,8 @@ export class LoadLeaderboardSuccessAction implements IAction {
   constructor(
     public group: any,
     public groupId: string,
-    public tournament: any
+    public tournament: any,
+    public groupListener: any
   ) {}
 }
 
@@ -80,19 +82,32 @@ export function getPlayer(playerId, userId) {
 }
 
 export function loadLeaderboard(groupId: string) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const {
+      leaderboard: { groupId: currentGroupId, groupListener, tournament }
+    } = getState();
+
+    if (groupId === currentGroupId && tournament) {
+      return;
+    }
+
+    if (typeof groupListener === "function") {
+      groupListener();
+    }
+
     dispatch({
       type: LeaderboardActionTypes.LOAD_LEADERBOARD,
       groupId: groupId
     } as LoadLeaderboardAction);
+
     dispatch(apiStart(LeaderboardActionTypes.LOAD_LEADERBOARD));
     const group = await firebase
       .firestore()
       .collection(GROUPS)
       .doc(groupId)
       .get();
-
     dispatch(apiEnd());
+
     if (!group.exists) {
       dispatch({
         type: LeaderboardActionTypes.LOAD_LEADERBOARD_FAILED,
@@ -102,22 +117,24 @@ export function loadLeaderboard(groupId: string) {
     }
 
     const fgroupData = group.data();
-    // get current leader board
     if (fgroupData.currentTournament) {
-      const currentTournament = await firebase
+      const unsubscribe = firebase
         .firestore()
         .collection(GROUPS)
         .doc(groupId)
         .collection(TOURNAMENTS)
         .doc(fgroupData.currentTournament)
-        .get();
-
-      dispatch({
-        type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
-        group: fgroupData,
-        groupId,
-        tournament: currentTournament.exists ? currentTournament.data() : null
-      } as LoadLeaderboardSuccessAction);
+        .onSnapshot(currentTournament => {
+          dispatch({
+            type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,
+            group: fgroupData,
+            groupId,
+            tournament: currentTournament.exists
+              ? currentTournament.data()
+              : null,
+            groupListener: unsubscribe
+          } as LoadLeaderboardSuccessAction);
+        });
     } else {
       dispatch({
         type: LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS,

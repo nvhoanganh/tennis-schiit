@@ -96,7 +96,9 @@ const PlayerProfile = ({
               size="2xl"
               name={player.name}
               className="m-auto"
-              src={getUrlAvatar(player.linkedplayerId || player.id)}
+              src={
+                player.linkedplayerId ? getUrlAvatar(player.linkedplayerId) : ""
+              }
             />
           ) : (
             <MyLoadingSkeleton

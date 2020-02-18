@@ -1,5 +1,10 @@
 import { Avatar, AvatarBadge } from "@chakra-ui/core";
-import { getUrlAvatar, SORT_PRIZEMONEY, SORT_TRUESKILL, SORT_WINPERCENT } from "@tennis-score/redux";
+import {
+  getUrlAvatar,
+  SORT_PRIZEMONEY,
+  SORT_TRUESKILL,
+  SORT_WINPERCENT
+} from "@tennis-score/redux";
 import classNames from "classnames";
 import React from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -108,7 +113,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
   }
   const getUserLink = () =>
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
-
+  console.log(player);
   return (
     <div className="px-2 border-bottom">
       <Ripples
@@ -120,7 +125,9 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
             <Avatar
               size="md"
               name={player.name}
-              src={getUrlAvatar(player.linkedplayerId || player.id)}
+              src={
+                player.linkedplayerId ? getUrlAvatar(player.linkedplayerId) : ""
+              }
             >
               {top3(ranking) && <AvatarBadge size="1em" bg={top3(ranking)} />}
             </Avatar>

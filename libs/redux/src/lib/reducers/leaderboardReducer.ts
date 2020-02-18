@@ -8,6 +8,7 @@ interface LeaderboardState {
   results?: any;
   loading?: boolean;
   players?: any;
+  groupListener?: any;
 }
 
 const getAllPlayers = action => {
@@ -47,6 +48,7 @@ const leaderboard = (
         groupId: action.groupId,
         loading: false,
         tournament: action.tournament,
+        groupListener: action.groupListener,
         players: getAllPlayers(action)
       };
     default:
