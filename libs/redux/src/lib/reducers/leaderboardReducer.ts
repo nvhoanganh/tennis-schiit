@@ -10,6 +10,12 @@ interface LeaderboardState {
   players?: any;
 }
 
+const getAllPlayers = action => {
+  return action.tournament && action.tournament.players
+    ? action.tournament.players
+    : Object.values(action.group.players);
+};
+
 const leaderboard = (
   state: LeaderboardState = {},
   action: LeaderboardAction
@@ -36,17 +42,12 @@ const leaderboard = (
       };
 
     case LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS:
-      const getAllPlayers = () => {
-        return action.tournament && action.tournament.players
-          ? action.tournament.players
-          : Object.values(action.group.players);
-      };
       return {
         ...state,
         groupId: action.groupId,
         loading: false,
         tournament: action.tournament,
-        players: getAllPlayers()
+        players: getAllPlayers(action)
       };
     default:
       return state;
