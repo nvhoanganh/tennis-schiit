@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import geohash from "ngeohash";
 export const getUserLoc = setLoc => {
-  console.log('asking for user permission');
   navigator.geolocation.getCurrentPosition(
     pos => {
       const { latitude, longitude } = pos.coords;
