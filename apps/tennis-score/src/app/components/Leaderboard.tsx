@@ -47,6 +47,7 @@ const Leaderboard = ({
   const [show, setShow] = useState(false);
   const [approvingPlayer, setapprovingPlayer] = useState(null);
   useEffect(() => {
+    console.log("loading leader board for ", match.params.group);
     props.loadLeaderboard(match.params.group);
   }, []);
 

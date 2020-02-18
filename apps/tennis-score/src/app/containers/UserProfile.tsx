@@ -31,7 +31,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   signOutHandler: () => dispatch(signOut()),
-  loadGroups: _ => dispatch(loadGroups()),
 });
 
 export default connect(

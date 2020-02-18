@@ -23,7 +23,6 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   addTournament: d => dispatch(addTournament(d)),
-  loadGroups: _ => dispatch(loadGroups()),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 

@@ -17,7 +17,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadPlayers: _ => dispatch(loadPlayers()),
-  loadGroups: _ => dispatch(loadGroups()),
   joinGroup: groupId => dispatch(joinGroup(groupId)),
   rejectJoinRequest: (user, groupId) =>
     dispatch(rejectJoinRequest(user, groupId)),

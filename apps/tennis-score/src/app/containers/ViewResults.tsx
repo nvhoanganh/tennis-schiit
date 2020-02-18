@@ -17,7 +17,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   loadResult: (groupId, tourid, more) =>
     dispatch(loadResults(groupId, tourid, more)),
-  loadGroups: _ => dispatch(loadGroups()),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))
 });
 

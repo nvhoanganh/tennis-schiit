@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LeaderboardAction, LeaderboardActionTypes } from "../actions";
 
-interface ILeaderboardState {
+interface LeaderboardState {
   groupId?: any;
   user?: any;
   tournament?: any;
@@ -10,15 +11,15 @@ interface ILeaderboardState {
 }
 
 const leaderboard = (
-  state: ILeaderboardState = {},
+  state: LeaderboardState = {},
   action: LeaderboardAction
-): ILeaderboardState => {
+): LeaderboardState => {
   switch (action.type) {
     case LeaderboardActionTypes.GET_USER_SUCCESS:
       return {
         ...state,
         user: action.user
-      };    
+      };
 
     case LeaderboardActionTypes.LOAD_LEADERBOARD:
       return {

@@ -21,9 +21,6 @@ const UserProfile = ({
   myGroups,
   ...props
 }) => {
-  useEffect(() => {
-    props.loadGroups();
-  }, []);
   return !user ? (
     <Redirect to="/signin" />
   ) : (

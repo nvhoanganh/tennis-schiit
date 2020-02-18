@@ -25,7 +25,6 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   loadPlayers: _ => dispatch(loadPlayers()),
-  loadGroups: _ => dispatch(loadGroups()),
   addPlayer: d => dispatch(addPlayer(d)),
   getUser: u => dispatch(getCurrentUser(u)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId))

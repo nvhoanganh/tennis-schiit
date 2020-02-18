@@ -112,19 +112,13 @@ const mapGroups = (data): IGroup => {
 };
 
 // thunks
-export function loadGroups(reload = false) {
-  return (dispatch, getState) => {
-    const { groups } = getState();
-    if (Object.keys(groups).length > 0 && !reload) {
-      return Promise.resolve();
-    }
-
-    dispatch(apiStart(GroupActionTypes.LOAD_GROUPS));
+export function loadGroups() {
+  return dispatch => {
     return firebase
       .firestore()
       .collection(GROUPS)
-      .get()
-      .then(querySnapshot => {
+      .onSnapshot(querySnapshot => {
+        console.log("groups updated from firestore");
         const data = arrayToObject(
           querySnapshot.docs,
           x => x.id,
@@ -133,8 +127,6 @@ export function loadGroups(reload = false) {
             ...mapGroups(x.data())
           })
         );
-        
-        dispatch(apiEnd());
         dispatch({
           type: GroupActionTypes.LOAD_GROUPS_SUCCESS,
           groups: data
@@ -153,7 +145,6 @@ export function deleteGroup(groupId) {
       .delete()
       .then(() => {
         dispatch(apiEnd());
-        dispatch(loadGroups(true));
         dispatch({ type: GroupActionTypes.DELETE_GROUP, id: groupId });
       });
   };
@@ -293,7 +284,6 @@ export function approveJoinRequest(target, groupId, createAs) {
       })
       .then(() => {
         dispatch(apiEnd());
-        dispatch(loadGroups(true));
         dispatch(loadLeaderboard(groupId));
       });
   };
@@ -420,7 +410,6 @@ export function editGroup({
 
     return editGroup.update(dat).then(() => {
       dispatch(apiEnd());
-      dispatch(loadGroups(true));
     });
   };
 }
@@ -488,7 +477,6 @@ export function addGroup({
       });
     return newGroup.set(dat).then(() => {
       dispatch(apiEnd());
-      dispatch(loadGroups(true));
     });
   };
 }

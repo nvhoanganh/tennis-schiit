@@ -76,7 +76,6 @@ export function addPlayer({ name, email, groupId, group }) {
       })
       .then(() => {
         dispatch(apiEnd());
-        dispatch(loadGroups(true));
       });
   };
 }

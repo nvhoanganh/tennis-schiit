@@ -15,7 +15,6 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   loadPlayers: _ => dispatch(loadPlayers()),
-  loadGroups: _ => dispatch(loadGroups()),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId)),
   deleteGroup: groupId => dispatch(deleteGroup(groupId))
 });
