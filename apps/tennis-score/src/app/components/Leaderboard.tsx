@@ -366,7 +366,7 @@ const Leaderboard = ({
                         onClick={() => approveJoinAndMergePlayer(p)}
                         className="btn btn-primary btn-sm"
                       >
-                        <FaCheckCircle /> Select
+                        <FaCheckCircle className="d-inline" /> Select
                       </Button>
                     }
                   >
@@ -381,7 +381,7 @@ const Leaderboard = ({
                     onClick={() => approveJoinAndMergePlayer(null)}
                     className="btn btn-primary btn-sm"
                   >
-                    <FaCheckCircle /> Select
+                    <FaCheckCircle className="d-inline" /> Select
                   </Button>
                 }
               >

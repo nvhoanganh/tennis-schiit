@@ -113,7 +113,6 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
   }
   const getUserLink = () =>
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
-  console.log(player);
   return (
     <div className="px-2 border-bottom">
       <Ripples
@@ -134,14 +133,17 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
           </div>
 
           <div className="mr-auto">
-            <span className="h5 text-dark pl-0">
+            <a
+              className="h5 text-dark pl-0"
+              onClick={() => setTimeout(() => history.push(getUserLink()), 200)}
+            >
               {player.name}
               {!player.linkedplayerId && (
                 <span className="badge x-small badge-light ml-1 x-small">
                   G
                 </span>
               )}
-            </span>
+            </a>
             {player.played ? (
               <div className="float-right text-right">
                 {getStats(player, props.sortBy)}

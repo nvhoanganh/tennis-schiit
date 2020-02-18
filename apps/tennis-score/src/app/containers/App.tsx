@@ -59,7 +59,6 @@ const App = ({
   usePwaInstallPrompt();
 
   useEffect(() => {
-    console.log("loading groups and app");
     appLoad();
     loadGroups();
   }, []);

@@ -118,7 +118,6 @@ export function loadGroups() {
       .firestore()
       .collection(GROUPS)
       .onSnapshot(querySnapshot => {
-        console.log("groups updated from firestore");
         const data = arrayToObject(
           querySnapshot.docs,
           x => x.id,
@@ -271,6 +270,7 @@ export function approveJoinRequest(target, groupId, createAs) {
                     ...x,
                     email: target.email,
                     name: target.displayName,
+                    avatarUrl: target.avatarUrl || "",
                     linkedplayerId: target.uid,
                     addedBy: uid
                   }

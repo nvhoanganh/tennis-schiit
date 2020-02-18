@@ -3,7 +3,7 @@ import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { ISignInModel } from "../models";
+import { ISignInModel, USERS } from "../models";
 import { isPushEnabled, urlB64ToUint8Array } from "../utils";
 import ReactGA from "react-ga";
 
@@ -187,7 +187,7 @@ export function updateProfile({ displayName, avatar, uid, userDetails }) {
     const user = firebase.auth().currentUser;
     const userRef = firebase
       .firestore()
-      .collection("users")
+      .collection(USERS)
       .doc(uid);
     if (!(await userRef.get()).exists) {
       // create first
