@@ -1,25 +1,4 @@
-import {
-  approveJoinRequest,
-  cancelJoinGroup,
-  getAppLoaded,
-  getCurrentUser,
-  getCurrLeaderGroup,
-  getCurrLeaderTournament,
-  getIsPendingJoin,
-  getLeaderboardPlayers,
-  getLoadingLeaderboard,
-  getPendingJoinRequest,
-  getPendingRequests,
-  getPwaHandle,
-  getWebPushSubAction,
-  joinGroup,
-  loadGroups,
-  loadLeaderboard,
-  loadPlayers,
-  loadResults,
-  rejectJoinRequest,
-  getNewScoreAddedByOther
-} from "@tennis-score/redux";
+import { approveJoinRequest, cancelJoinGroup, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getIsPendingJoin, getLeaderboardPlayers, getLoadingLeaderboard, getPendingJoinRequest, getPendingRequests, getPwaHandle, getWebPushSubAction, joinGroup, loadLeaderboard, loadPlayers, loadResults, rejectJoinRequest } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Leaderboard from "../components/Leaderboard";
 
