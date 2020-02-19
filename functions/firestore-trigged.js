@@ -7,6 +7,7 @@
 function handleUserChange(change, context) {
   console.log(context.params);
   console.log(change.after.data());
+  console.log(change.before.data());
 }
 
 module.exports = handleUserChange;
