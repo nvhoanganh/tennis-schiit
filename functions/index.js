@@ -8,11 +8,8 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 // functions
-// exports.app = functions.https.onRequest(app);
+exports.app = functions.https.onRequest(app);
 
 exports.usersTrigger = functions.firestore
   .document("users/{userId}")
-  .onWrite((change, context) => {
-    console.log(context.params);
-    console.log(change.after.data());
-  });
+  .onWrite(handleUserChange);
