@@ -16,7 +16,7 @@ const UserProfile = ({
   history,
   user,
   player,
-  loading,
+  pendingRequests,
   myGroups,
   ...props
 }) => {
@@ -72,7 +72,7 @@ const UserProfile = ({
         <div className="emphasis">
           <div className="btn-group dropup btn-block">
             <UpdateButton
-              loading={loading}
+              loading={pendingRequests}
               onClick={signOutHandler}
               value="Sign Out"
               type="button"

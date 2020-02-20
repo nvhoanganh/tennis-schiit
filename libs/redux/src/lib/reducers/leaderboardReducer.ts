@@ -6,7 +6,6 @@ interface LeaderboardState {
   user?: any;
   tournament?: any;
   results?: any;
-  loading?: boolean;
   players?: any;
   groupListener?: any;
 }
@@ -31,22 +30,19 @@ const leaderboard = (
     case LeaderboardActionTypes.LOAD_LEADERBOARD:
       return {
         ...state,
-        loading: true,
         groupId: action.groupId,
         tournament: null,
         players: null
       };
     case LeaderboardActionTypes.LOAD_LEADERBOARD_FAILED:
       return {
-        ...state,
-        loading: false
+        ...state
       };
 
     case LeaderboardActionTypes.LOAD_LEADERBOARD_SUCCESS:
       return {
         ...state,
         groupId: action.groupId,
-        loading: false,
         tournament: action.tournament,
         groupListener: action.groupListener,
         players: getAllPlayers(action)

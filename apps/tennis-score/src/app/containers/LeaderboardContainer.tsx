@@ -1,4 +1,4 @@
-import { approveJoinRequest, cancelJoinGroup, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getIsPendingJoin, getLeaderboardPlayers, getLoadingLeaderboard, getPendingJoinRequest, getPendingRequests, getPwaHandle, getWebPushSubAction, joinGroup, loadLeaderboard, loadPlayers, loadResults, rejectJoinRequest } from "@tennis-score/redux";
+import { approveJoinRequest, cancelJoinGroup, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getIsPendingJoin, getLeaderboardPlayers, getPendingJoinRequest, getPendingRequests, getPwaHandle, getWebPushSubAction, joinGroup, loadLeaderboard, loadPlayers, loadResults, rejectJoinRequest } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Leaderboard from "../components/Leaderboard";
 
@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
   pendingRequests: getPendingRequests(state),
   appLoaded: getAppLoaded(state),
   tournament: getCurrLeaderTournament(state),
-  loading: getLoadingLeaderboard(state),
+  loading: getPendingRequests(state),
   pendingJoinRequests: getPendingJoinRequest(state),
   isPendingJoin: getIsPendingJoin(state)
 });

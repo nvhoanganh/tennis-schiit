@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useToast } from "@chakra-ui/core";
 import { setNewScore } from "@tennis-score/api-interfaces";
 import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
@@ -9,6 +7,7 @@ import { merge } from "ramda";
 import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
 import { arrayToObject, calculateStats, getPlayers } from "../utils";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
+
 export enum LeaderboardActionTypes {
   GET_USER = "GET_USER",
   GET_USER_SUCCESS = "GET_USER_SUCCESS",

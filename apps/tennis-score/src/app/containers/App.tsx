@@ -1,25 +1,5 @@
-import {
-  Alert,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  Spinner,
-  useDisclosure,
-  useToast
-} from "@chakra-ui/core";
-import {
-  appLoad,
-  getAppLoaded,
-  getCurrentUser,
-  getLoadingLeaderboard,
-  getPendingRequests,
-  loadGroups,
-  registerPwaHandle,
-  signOut
-} from "@tennis-score/redux";
+import { Alert, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/core";
+import { appLoad, getAppLoaded, getCurrentUser, getPendingRequests, loadGroups, registerPwaHandle, signOut } from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -216,8 +196,7 @@ const App = ({
 const mapStateToProps = state => ({
   user: getCurrentUser(state),
   pendingRequests: getPendingRequests(state),
-  appLoaded: getAppLoaded(state),
-  loading: getLoadingLeaderboard(state)
+  appLoaded: getAppLoaded(state)
 });
 
 const mapDispatchToProps = dispatch => ({
