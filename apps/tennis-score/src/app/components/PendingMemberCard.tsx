@@ -16,7 +16,7 @@ const PendingMemberCard = ({ player, ...props }) => {
               size="sm"
               name={player.displayName}
               className="m-auto"
-              src={getUrlAvatar(player.uid)}
+              src={player.avatarUrl ? getUrlAvatar(player.uid) : ""}
             />
           </LinkContainer>
         </div>

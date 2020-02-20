@@ -153,11 +153,18 @@ export function joinGroup(groupId) {
   return (dispatch, getState) => {
     const {
       app: {
-        user: { uid, email, displayName }
+        user: { uid, email, displayName, avatarUrl }
       }
     } = getState();
     dispatch(apiStart(GroupActionTypes.JOIN_GROUP));
-    const user = { uid, email, displayName, requestDate: new Date() };
+    const user = {
+      uid,
+      email,
+      displayName,
+      requestDate: new Date(),
+      avatarUrl: avatarUrl || ""
+    };
+    console.log("joining user", user);
     return firebase
       .firestore()
       .collection(GROUPS)

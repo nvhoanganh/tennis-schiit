@@ -124,9 +124,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
             <Avatar
               size="md"
               name={player.name}
-              src={
-                player.linkedplayerId ? getUrlAvatar(player.linkedplayerId) : ""
-              }
+              src={player.avatarUrl ? getUrlAvatar(player.linkedplayerId) : ""}
             >
               {top3(ranking) && <AvatarBadge size="1em" bg={top3(ranking)} />}
             </Avatar>

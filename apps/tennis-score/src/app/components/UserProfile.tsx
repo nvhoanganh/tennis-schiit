@@ -33,7 +33,7 @@ const UserProfile = ({
               size="2xl"
               name={user.displayName}
               className="m-auto"
-              src={getUrlAvatar(user.uid)}
+              src={user.avatarUrl ? getUrlAvatar(user.uid) : ""}
             />
           ) : (
             <MyLoadingSkeleton
