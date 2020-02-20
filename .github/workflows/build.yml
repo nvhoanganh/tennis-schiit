@@ -24,7 +24,8 @@ jobs:
       run: |
         npm install cypress
         npm run e2e:ci
-    - uses: actions/upload-artifact@v1
+    - name: Collect Cypress videos
+      uses: actions/upload-artifact@v1
       with:
         name: cypress
         path: dist/cypress/apps/tennis-score-e2e/videos
@@ -34,13 +35,15 @@ jobs:
       run: npm run build -- $GITHUB_RUN_NUMBER
       if: github.ref == 'refs/heads/release'
 
-    - uses: actions/upload-artifact@v1
+    - name: Collect Web artifacts
+      uses: actions/upload-artifact@v1
       with:
         name: webapp
         path: dist/apps/tennis-score
       if: github.ref == 'refs/heads/release'
 
-    - uses: actions/upload-artifact@v1
+    - name: Collect Functions artifacts
+      uses: actions/upload-artifact@v1
       with:
         name: functions
         path: dist/apps/functions
