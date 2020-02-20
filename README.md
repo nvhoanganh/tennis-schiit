@@ -1,2 +1,2 @@
 # TennisScore
-![CI](https://github.com/nvhoanganh/tennis-schiit/workflows/CI/badge.svg)
+![CI](https://github.com/nvhoanganh/tennis-schiit/workflows/CI/badge.svg?branch=master)
