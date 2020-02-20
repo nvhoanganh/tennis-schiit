@@ -4,7 +4,7 @@ describe("tennis-score", () => {
   });
 
   it("should display welcome message", () => {
-    cy.get(".navbar-brand").contains("Tenniss Score");
+    cy.get(".navbar-brand").contains("Tennis Score");
   });
 
   it("should display HSV group", () => {
