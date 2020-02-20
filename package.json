@@ -116,7 +116,6 @@
     "@typescript-eslint/eslint-plugin": "2.3.2",
     "@typescript-eslint/parser": "2.3.2",
     "cross-env": "^7.0.0",
-    "cypress": "^4.0.2",
     "dotenv": "6.2.0",
     "envsub": "^4.0.7",
     "eslint": "6.1.0",

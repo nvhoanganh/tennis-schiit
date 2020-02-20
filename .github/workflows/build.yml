@@ -20,18 +20,18 @@ jobs:
       run: npm run test
     - name: Linting the code
       run: npm run lint
-    - name: Build the solution
-      run: npm run build -- $GITHUB_RUN_NUMBER
     - name: Run e2e test
       run: |
         npm install cypress
         npm run e2e:ci
-      if: github.ref == 'refs/heads/release'
     - uses: actions/upload-artifact@v1
       with:
         name: cypress
         path: dist/cypress/apps/tennis-score-e2e/videos
-      if: failure() && github.ref == 'refs/heads/release'
+      if: failure()
+    - name: Build the solution for deployment
+      run: npm run build -- $GITHUB_RUN_NUMBER
+      if: github.ref == 'refs/heads/release'
     - uses: actions/upload-artifact@v1
       with:
         name: webapp
