@@ -24,6 +24,14 @@ jobs:
       run: npm run lint
     - name: Build the solution
       run: npm run predeploy -- $GITHUB_RUN_NUMBER
+    - uses: actions/upload-artifact@v1
+      with:
+        name: webapp
+        path: dist/apps/tennis-score
+    - uses: actions/upload-artifact@v1
+      with:
+        name: functions
+        path: dist/apps/functions
     - name: Deploy
       env:
         FIREBASETOKEN: ${{ secrets.FIREBASETOKEN }}

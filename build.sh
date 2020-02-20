@@ -23,4 +23,7 @@ node ./node_modules/envsub/bin/envsub.js --env Template="$value" sw-shell-real.t
 echo Injecting the service worker
 workbox injectManifest workbox-config.js
 
+echo Copy functions codes to dist folder
+mkdir dist/apps/functions
+cp functions/*.* dist/apps/functions
 echo Finished building Version numer: $DATEV.$VERSION.$BUILDID
