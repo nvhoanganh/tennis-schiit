@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - master
+      - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: npm install  
+    - name: Run Unit Tests
+      run: npm run test  
+    - name: Linting the code
+      run: npm run lint 
+    - name: Build the solution
+      run: npm run predeploy
+    - name: Deploy
+      run: firebase deploy --token $FIREBASETOKEN --only hosting,function
+      if: github.ref == 'release'
