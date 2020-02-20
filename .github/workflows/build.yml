@@ -16,8 +16,6 @@ jobs:
       run: echo Running Build# $GITHUB_RUN_NUMBER on Branch $GITHUB_REF
     - name: Install Dependencies
       run: npm install
-    - name: Install Dependencies
-      run: npm install
     - name: Run Unit Tests
       run: npm run test
     - name: Linting the code
@@ -35,5 +33,9 @@ jobs:
     - name: Deploy
       env:
         FIREBASETOKEN: ${{ secrets.FIREBASETOKEN }}
-      run: npm run deploy -- --token $FIREBASETOKEN
+      run: |
+        cd functions
+        npm install
+        cd ..
+        npm run deploy -- --token $FIREBASETOKEN
       if: github.ref == 'refs/heads/release'
