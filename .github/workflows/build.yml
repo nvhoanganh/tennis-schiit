@@ -23,7 +23,7 @@ jobs:
     - name: Linting the code
       run: npm run lint
     - name: Build the solution
-      run: npm run predeploy -- $GITHUB_RUN_NUMBER
+      run: npm run build -- $GITHUB_RUN_NUMBER
     - uses: actions/upload-artifact@v1
       with:
         name: webapp
