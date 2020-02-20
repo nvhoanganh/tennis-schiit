@@ -36,4 +36,4 @@ jobs:
       env:
         FIREBASETOKEN: ${{ secrets.FIREBASETOKEN }}
       run: firebase deploy --token $FIREBASETOKEN --only hosting,functions
-      if: github.ref == 'release'
+      if: github.ref == 'refs/heads/release'
