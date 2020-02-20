@@ -27,7 +27,7 @@ const ViewHead2Head = ({
   const getInitState = () => {
     const q = queryString.parse(location.search);
     if (q.team1 && q.team2) {
-      let toretun = {
+      const toretun = {
         winners: {},
         losers: {},
         formValid: true

@@ -40,6 +40,7 @@ const ManageGroup = ({
         {group && (
           <div className="pb-2">
             <img
+              alt={group.name}
               src={getGroupImageUrlFull(group.groupImage)}
               style={{
                 height: 140,

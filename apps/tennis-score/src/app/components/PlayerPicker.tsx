@@ -18,8 +18,8 @@ export function PlayerPicker({ players, state, setValue, ...props }) {
     } else {
       ns = { ...state, [field]: value };
     }
-    let winners = {};
-    let losers = {};
+    const winners = {};
+    const losers = {};
     Object.keys(ns).forEach(k => {
       if ((k.startsWith("w_") || k.startsWith("l_")) && ns[k]) {
         if (k.startsWith("w_") && ns[k]) {

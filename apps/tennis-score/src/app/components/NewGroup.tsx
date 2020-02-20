@@ -112,6 +112,7 @@ const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
           {group && (
             <div>
               <img
+                alt="Group"
                 src={getGroupImageUrl(group.groupImage)}
                 style={{
                   height: 140,

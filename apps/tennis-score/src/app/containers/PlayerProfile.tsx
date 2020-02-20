@@ -1,18 +1,4 @@
-import {
-  getAppLoaded,
-  getCurrentUser,
-  getCurrLeaderGroup,
-  getCurrLeaderTournament,
-  getLeaderBoardGroupUser,
-  getLoadingLeaderboard,
-  getPendingRequests,
-  getPlayer,
-  loadGroups,
-  loadLeaderboard,
-  getAllGroups,
-  getLeaderboardPlayers,
-  getLeaderboardPlayersObj
-} from "@tennis-score/redux";
+import { getAllGroups, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getLeaderBoardGroupUser, getLeaderboardPlayersObj, getLoadingLeaderboard, getPendingRequests, getPlayer, loadLeaderboard } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import PlayerProfile from "../components/PlayerProfile";
 

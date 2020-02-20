@@ -1,5 +1,8 @@
-import React from "react";
-import { intersection, assocPath, path } from "ramda";
+import {
+  getHandyCap,
+  getPlayersNameAsString,
+  roundOff
+} from "@tennis-score/redux";
 // chart
 import ReactEchartsCore from "echarts-for-react/lib/core";
 import "echarts/lib/chart/bar";
@@ -7,12 +10,8 @@ import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
 import "echarts/lib/component/tooltip";
 import echarts from "echarts/lib/echarts";
-
-import {
-  getPlayersNameAsString,
-  roundOff,
-  getHandyCap
-} from "@tennis-score/redux";
+import { assocPath, intersection, path } from "ramda";
+import React from "react";
 
 export function Head2HeadChart({ scores, winners, losers, players }) {
   const chartOption = categories => ({
@@ -84,8 +83,8 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
         );
       }
     });
-    let cats = {};
-    Object.keys(stats).map(k => {
+    const cats = {};
+    Object.keys(stats).forEach(k => {
       let total = 0;
       Object.keys(stats[k]).forEach(t => {
         total = total + stats[k][t];
@@ -126,7 +125,8 @@ export function Head2HeadChart({ scores, winners, losers, players }) {
         }
       ],
       categories: sortedCat.map(
-        k => `${k != "overall" ? getHandyCap(k) : "overall"} [${cats[k].total}]`
+        k =>
+          `${k !== "overall" ? getHandyCap(k) : "overall"} [${cats[k].total}]`
       )
     };
   };

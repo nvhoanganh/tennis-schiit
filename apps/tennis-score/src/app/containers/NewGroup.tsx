@@ -1,5 +1,5 @@
+import { addGroup, editGroup } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import { signUp, addGroup, editGroup } from "@tennis-score/redux";
 import NewGroup from "../components/NewGroup";
 import ProtectedComponent from "../components/ProtectedComponent";
 

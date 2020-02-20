@@ -1,10 +1,9 @@
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import "firebase/auth";
 import "firebase/firestore";
 import React from "react";
-import "../app.scss";
 import ReactGA from "react-ga";
 import { FaExclamationTriangle } from "react-icons/fa";
+import "../app.scss";
 export class ErrorBoundary extends React.Component<any, any> {
   constructor(props) {
     super(props);

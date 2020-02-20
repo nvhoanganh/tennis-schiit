@@ -5,11 +5,9 @@ import {
   getLeaderboardPlayers,
   getPendingRequests,
   getCurrentUser,
-  loadGroups,
   loadLeaderboard,
   loadPlayers,
-  submitScore,
-  getGroupPlayers
+  submitScore
 } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import EntryForm from "../components/EntryForm";

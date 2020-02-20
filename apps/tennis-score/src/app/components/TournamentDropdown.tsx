@@ -1,4 +1,10 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
 import { isMember, isOwner } from "@tennis-score/redux";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -6,9 +12,11 @@ import { FaEllipsisH } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 
 export function TournamentDropDown({ user, group, tournament }) {
-  const canSubmitNewScore = () => user && isMember(user, group) && tournament;
-  if (!group) return null;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const canSubmitNewScore = () => user && isMember(user, group) && tournament;
+  if (!group) {
+    return null;
+  }
   return (
     <>
       <button

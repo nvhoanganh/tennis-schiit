@@ -1,13 +1,5 @@
+import { addPlayer, getCurrentUser, getLeaderboardPlayers, loadLeaderboard, loadPlayers } from "@tennis-score/redux";
 import { connect } from "react-redux";
-import {
-  loadPlayers,
-  loadGroups,
-  loadLeaderboard,
-  getLeaderboardPlayers,
-  addPlayer,
-  getCurrentUser
-} from "@tennis-score/redux";
-import Leaderboard from "../components/Leaderboard";
 import AddPlayer from "../components/AddPlayer";
 
 const mapStateToProps = ({

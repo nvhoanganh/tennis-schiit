@@ -1,9 +1,8 @@
 import { Avatar, Link } from "@chakra-ui/core";
 import { getUrlAvatar } from "@tennis-score/redux";
-import React, { useEffect } from "react";
+import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Redirect } from "react-router-dom";
-import useLocation from "../hooks/useLocation";
 import GroupCard from "./GroupCard";
 import HeaderCard from "./Header";
 import UpdateButton from "./LoadingButton";

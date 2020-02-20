@@ -1,4 +1,4 @@
-import { deleteGroup, loadGroups, loadLeaderboard, loadPlayers } from "@tennis-score/redux";
+import { deleteGroup, loadLeaderboard, loadPlayers } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import ManageGroup from "../components/ManageGroup";
 

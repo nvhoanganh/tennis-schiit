@@ -1,4 +1,4 @@
-import { getAppIsLoaded, getCurrentUser, getGroupNotMemberOff, getMyGroups, getPendingRequests, getPlayerList, loadGroups } from "@tennis-score/redux";
+import { getAppIsLoaded, getCurrentUser, getGroupNotMemberOff, getMyGroups, getPendingRequests, getPlayerList } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Home from "../components/Home";
 

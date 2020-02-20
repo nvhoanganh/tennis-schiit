@@ -1,10 +1,4 @@
-import {
-  getLeaderboardPlayers,
-  loadGroups,
-  loadLeaderboard,
-  loadPlayers,
-  addTournament
-} from "@tennis-score/redux";
+import { addTournament, getLeaderboardPlayers, loadLeaderboard } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import AddEditTournament from "../components/AddEditTournament";
 

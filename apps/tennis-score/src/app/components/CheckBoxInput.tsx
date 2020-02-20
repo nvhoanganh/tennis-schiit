@@ -1,10 +1,5 @@
+import { Checkbox } from "@chakra-ui/core";
 import React from "react";
-import { Checkbox, CheckboxGroup } from "@chakra-ui/core";
-
-const checkBoxStyle = {
-  height: 18,
-  width: 18
-};
 
 const CheckBoxInput: React.SFC<{
   label: string;

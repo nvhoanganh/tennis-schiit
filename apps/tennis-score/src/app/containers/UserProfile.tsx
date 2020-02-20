@@ -1,16 +1,4 @@
-import {
-  signOut,
-  getCurrentUser,
-  getLeaderBoardGroupUser,
-  getCurrLeaderGroup,
-  getCurrLeaderTournament,
-  getPendingRequests,
-  getAppLoaded,
-  getLoadingLeaderboard,
-  getAllGroups,
-  loadGroups,
-  getMyGroups
-} from "@tennis-score/redux";
+import { getAllGroups, getAppLoaded, getCurrentUser, getCurrLeaderTournament, getLeaderBoardGroupUser, getLoadingLeaderboard, getMyGroups, getPendingRequests, signOut } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import ProtectedComponent from "../components/ProtectedComponent";
 import UserProfile from "../components/UserProfile";

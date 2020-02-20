@@ -47,7 +47,7 @@ const Leaderboard = ({
 }) => {
   // states
   // usePushNotification({getNotificationSub, user, pwaHandle});
-  const q = queryString.parse(location.search);
+  const q = queryString.parse(window.location.search);
   const toast = useToast();
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
   const [stats, setStats] = useState(null);

@@ -12,8 +12,7 @@ const useServiceWorker = registerPwaHandle => {
         ReactGA.set({ dimension2: "true" });
         setRegistration(reg);
         reg.addEventListener("updatefound", () => {
-          let newWorker;
-          newWorker = reg.installing;
+          const newWorker = reg.installing;
           console.log("SW:update found, status is:", newWorker.state);
           if (newWorker.state === "installing") {
             setShowInstalling(true);

@@ -1,4 +1,4 @@
-import { getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getLeaderboardPlayers, getLeaderboardPlayersObj, getPendingRequests, loadGroups, loadLeaderboard, loadPlayers, submitScore } from "@tennis-score/redux";
+import { getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getLeaderboardPlayers, getLeaderboardPlayersObj, getPendingRequests, loadLeaderboard, loadPlayers, submitScore } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import ViewHead2Head from "../components/ViewHead2Head";
 

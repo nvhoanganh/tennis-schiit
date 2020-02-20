@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./AppLoader.scss";
 export function AppLoader(props) {
   return (
@@ -29,12 +29,6 @@ export function AppLoader(props) {
                     <rect x="8" y="8" width="64" height="64"></rect>
                   </svg>
                 </div>
-
-                <a
-                  className="dribbble"
-                  href="https://dribbble.com/shots/5878367-Loaders"
-                  target="_blank"
-                ></a>
               </div>
             ) : null}
           </div>

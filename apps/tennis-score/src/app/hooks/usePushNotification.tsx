@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 import { appConfig } from "../../assets/config";
 import { Button } from "../components/Button";
+
 export const usePushNotification = ({
   getNotificationSub,
   user,
@@ -12,8 +13,7 @@ export const usePushNotification = ({
   const toast = useToast();
   const {
     pwaNotificationSubKey: key,
-    pwaNotificationSubGivenKey: subscribedKey,
-    pwaNotificationSubTimes: max
+    pwaNotificationSubGivenKey: subscribedKey
   } = appConfig;
   useEffect(() => {
     if (

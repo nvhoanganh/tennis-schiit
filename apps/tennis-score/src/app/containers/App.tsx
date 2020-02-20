@@ -130,6 +130,7 @@ const App = ({
               >
                 <img
                   width="30"
+                  alt="Tennis Score"
                   src={AppIcon}
                   height="30"
                   className="d-inline-block align-top"
@@ -153,6 +154,7 @@ const App = ({
           <DrawerHeader borderBottomWidth="1px">
             <div className="text-center">
               <img
+                alt="Tennis Score"
                 style={{
                   width: 54
                 }}

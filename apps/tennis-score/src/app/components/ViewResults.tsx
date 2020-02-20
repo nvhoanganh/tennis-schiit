@@ -1,5 +1,17 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
-import { DeleteScore, getPossibleVerse, isMember, SearchScore } from "@tennis-score/redux";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
+import {
+  DeleteScore,
+  getPossibleVerse,
+  isMember,
+  SearchScore
+} from "@tennis-score/redux";
 import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
@@ -37,6 +49,7 @@ const ViewResults = ({
     props.loadLeaderboard(match.params.group);
     props.loadResult(match.params.group, match.params.tour, null);
   }, []);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const loadFunc = e => {
     props.loadResult(match.params.group, match.params.tour, lastDoc);

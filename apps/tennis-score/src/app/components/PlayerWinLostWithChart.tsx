@@ -67,6 +67,7 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
         };
       }
     }
+    return null;
   }, null);
   const getDataSeries = () => {
     const getStats = o =>

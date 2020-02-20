@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-useless-escape */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { flatten } from "ramda";
 import addSeconds from "date-fns/addSeconds";
 
@@ -39,6 +37,7 @@ export const isMember = (user, group) =>
     .length > 0;
 
 export const removeById = (id, obj) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { [id]: removed, ...newState } = obj;
   return newState;
 };
