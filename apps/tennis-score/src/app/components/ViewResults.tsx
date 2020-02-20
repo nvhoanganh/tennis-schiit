@@ -1,17 +1,5 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  useDisclosure
-} from "@chakra-ui/core";
-import {
-  DeleteScore,
-  getPossibleVerse,
-  isMember,
-  SearchScore
-} from "@tennis-score/redux";
+import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import { DeleteScore, getPossibleVerse, isMember, SearchScore } from "@tennis-score/redux";
 import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
@@ -93,7 +81,7 @@ const ViewResults = ({
   return (
     <>
       <RouteNav history={history} center="Match Results"></RouteNav>
-      {!loading ? (
+      {scores && Object.keys(scores).length > 0 ? (
         <>
           {tournament ? (
             <HeaderCard
@@ -126,55 +114,57 @@ const ViewResults = ({
               </span>
             </HeaderCard>
           ) : null}
-          {scores && Object.keys(scores).length > 0 ? (
-            <div className="pb-3 pl-1 pr-1">
-              <InfiniteScroll
-                pageStart={0}
-                loadMore={loadFunc}
-                threshold={70}
-                hasMore={hasMore}
-                loader={
-                  <MySpinner key={0} fontSize="0.7rem" width={25} height={25} />
-                }
-              >
-                {scoresSorted.map(k => (
-                  <div key={k.matchDate}>
-                    <HeaderCard>
-                      <strong>{format(k.matchDate, "E, dd/MM/yyyy")}</strong>
-                    </HeaderCard>
-                    {k.matches.map((m, i) => (
-                      <ResultCard
-                        key={i}
-                        players={players}
-                        groupId={match.params.group}
-                        tournamentId={match.params.tour}
-                        showHead2Head={viewHead2Head}
-                        canDelete={
-                          i === k.matches.length - 1 && isMember(user, group)
-                        }
-                        deleteScore={() => {
-                          setDeletingScore(m);
-                          handleShow();
-                        }}
-                        {...m}
-                      ></ResultCard>
-                    ))}
-                  </div>
-                ))}
-              </InfiniteScroll>
-            </div>
-          ) : (
-            <p className="text-center">No match found</p>
-          )}
+          <div className="pb-3 pl-1 pr-1">
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={loadFunc}
+              threshold={70}
+              hasMore={hasMore}
+              loader={
+                <MySpinner key={0} fontSize="0.7rem" width={25} height={25} />
+              }
+            >
+              {scoresSorted.map(k => (
+                <div key={k.matchDate}>
+                  <HeaderCard>
+                    <strong>{format(k.matchDate, "E, dd/MM/yyyy")}</strong>
+                  </HeaderCard>
+                  {k.matches.map((m, i) => (
+                    <ResultCard
+                      key={i}
+                      players={players}
+                      groupId={match.params.group}
+                      tournamentId={match.params.tour}
+                      showHead2Head={viewHead2Head}
+                      canDelete={
+                        i === k.matches.length - 1 && isMember(user, group)
+                      }
+                      deleteScore={() => {
+                        setDeletingScore(m);
+                        handleShow();
+                      }}
+                      {...m}
+                    ></ResultCard>
+                  ))}
+                </div>
+              ))}
+            </InfiniteScroll>
+          </div>
         </>
       ) : (
         <>
-          <HeaderCard>
-            <Skeleton />
-          </HeaderCard>
-          <div className="pb-3 pl-3 pr-3">
-            <Skeleton height={60} count={10} />
-          </div>
+          {loading ? (
+            <>
+              <HeaderCard>
+                <Skeleton />
+              </HeaderCard>
+              <div className="pb-3 pl-3 pr-3">
+                <Skeleton height={60} count={10} />
+              </div>
+            </>
+          ) : (
+            <p className="text-center">No match found</p>
+          )}
         </>
       )}
 

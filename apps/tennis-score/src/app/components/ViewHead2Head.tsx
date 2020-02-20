@@ -1,7 +1,7 @@
-import { getPlayersName, SearchScore } from "@tennis-score/redux";
+import { getPlayersName, getSortedResult, SearchScore } from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useRef, useState } from "react";
-import { FaEllipsisV } from 'react-icons/fa';
+import { FaEllipsisV } from "react-icons/fa";
 import setQuery from "set-query-string";
 import { DropDownMenu } from "./DropDownMenu";
 import { Head2HeadChart } from "./Head2HeadChart";
@@ -11,8 +11,10 @@ import { PlayerPicker } from "./PlayerPicker";
 import ResultCard from "./ResultCard2";
 import RouteNav from "./RouteNav";
 import { ShareLink } from "./ShareLink";
+
 const getPlayers = (p, allP) => <span>{getPlayersAsText(p, allP)}</span>;
 const getPlayersAsText = (p, allP) => getPlayersName(p, allP).join("/");
+
 const ViewHead2Head = ({
   pendingRequests,
   group,
@@ -76,7 +78,10 @@ const ViewHead2Head = ({
       });
       setSearched(true);
       setScores(result);
-      divRef.current.scrollIntoView({ behavior: "smooth" });
+      console.log(result);
+      if (divRef.current) {
+        divRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     });
   };
 
@@ -140,7 +145,6 @@ const ViewHead2Head = ({
                 <UpdateButton
                   loading={pendingRequests}
                   loadingText="Saving..."
-                  u
                   value="View H2H Results"
                   type="submit"
                   disabled={!state.formValid || pendingRequests > 0}
@@ -166,12 +170,13 @@ const ViewHead2Head = ({
               </div>
               <HeaderCard>Results</HeaderCard>
               <div className="pb-5">
-                {Object.keys(scores).map(k => (
+                {getSortedResult(scores).map(k => (
                   <ResultCard
-                    key={k}
+                    key={k["id"]}
+                    showFullDate={true}
                     hideMenu={true}
                     players={playersAsObject}
-                    {...scores[k]}
+                    {...(k as any)}
                   ></ResultCard>
                 ))}
               </div>

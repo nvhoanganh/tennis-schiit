@@ -1,24 +1,25 @@
 import { getHandyCap } from "@tennis-score/redux";
 import format from "date-fns/format";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { DropDownMenu } from "./DropDownMenu";
 
-const ResultCard = props => {
-  const {
-    winners,
-    losers,
-    headStart,
-    gameWonByLostTeam,
-    reverseBagel,
-    matchDate,
-    timestamp,
-    players,
-    hideMenu,
-    showHead2Head,
-    deleteScore,
-    canDelete
-  } = props;
+const ResultCard = ({
+  winners,
+  losers,
+  headStart,
+  gameWonByLostTeam,
+  reverseBagel,
+  matchDate,
+  timestamp,
+  players,
+  hideMenu,
+  showHead2Head,
+  deleteScore,
+  canDelete,
+  ...props
+}) => {
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
       <span key={x} className={"d-block" + (isLoser ? " text-right" : "")}>
@@ -26,6 +27,11 @@ const ResultCard = props => {
       </span>
     ));
   };
+  const getTimeFormat = () =>
+    props.showFullDate
+      ? formatDistanceToNow(timestamp ? timestamp.toDate() : matchDate.toDate())
+      : format(timestamp ? timestamp.toDate() : matchDate.toDate(), "hh:mma");
+
   return (
     <div className="d-flex border-bottom justify-content-between">
       <div className="pl-1 w-100 flex-grow-1 align-self-center">
@@ -36,12 +42,7 @@ const ResultCard = props => {
           {gameWonByLostTeam === "6" || gameWonByLostTeam === "5" ? "7" : "6"} -{" "}
           {gameWonByLostTeam}
         </em>
-        <em className="text-muted d-block x-small">
-          {format(
-            timestamp ? timestamp.toDate() : matchDate.toDate(),
-            "hh:mma"
-          )}
-        </em>
+        <em className="text-muted d-block x-small">{getTimeFormat()}</em>
         <span className="text-nowrap">
           {headStart ? (
             <span className="badge x-small badge-success">

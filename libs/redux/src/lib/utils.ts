@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
-import { flatten } from "ramda";
 import addSeconds from "date-fns/addSeconds";
+import { flatten, path } from "ramda";
 
 export const getFileNameAndExt = url => {
   const {
@@ -212,3 +212,9 @@ export const isIos = () => {
   const userAgent = window.navigator.userAgent.toLowerCase();
   return /iphone|ipad|ipod/.test(userAgent);
 };
+
+export const getSortedResult = scores =>
+  Object.values(scores).sort(
+    (x, y) =>
+      path(["matchDate", "seconds"], y) - path(["matchDate", "seconds"], x)
+  );

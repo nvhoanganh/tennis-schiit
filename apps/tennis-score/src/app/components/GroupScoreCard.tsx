@@ -2,7 +2,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import GeohashDistance from "geohash-distance";
 import React from "react";
 const GroupScoreCard = ({
-  group: { createdOn, location, played, lastMatch, owner, hashedLocation },
+  group: { location, lastMatch, hashedLocation },
   players,
   user,
   ...props
