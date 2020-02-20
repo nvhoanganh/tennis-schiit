@@ -1,13 +1,17 @@
-import { getGreeting } from '../support/app.po';
+describe("tennis-score", () => {
+  before(() => {
+    cy.visit("/");
+  });
 
-describe('tennis-score', () => {
-  beforeEach(() => cy.visit('/'));
+  it("should display welcome message", () => {
+    cy.get(".navbar-brand").contains("Tennis Score");
+  });
 
-  it('should display welcome message', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword');
+  it("should display HSV group", () => {
+    cy.contains("HSV").click();
+  });
 
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome to tennis-score!');
+  it("click on back should go back", () => {
+    cy.get(":nth-child(1) > .btn").click();
   });
 });
