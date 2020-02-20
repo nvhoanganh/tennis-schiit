@@ -19,7 +19,7 @@ exports.usersTrigger = functions.firestore
     const after = change.after.data();
     const before = change.before.data();
 
-    if (before.avatarUrl !== after.avatarUrl) {
+    if (before.avatarUrl !== after.avatarUrl && after.groups) {
       console.log("avatar changed, updating groups");
       return Promise.all(
         Object.keys(after.groups).map(groupId => {
