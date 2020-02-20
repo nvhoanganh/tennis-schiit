@@ -6,7 +6,7 @@
     "nx": "nx",
     "predeploy": "sh ./build.sh",
     "deploy": "firebase deploy --only hosting,functions",
-    "deploy2": "firebase deploy --token $FIREBASETOKEN --only hosting,function",
+    "deploy2": "firebase deploy --token $FIREBASETOKEN --only hosting,functions",
     "start": "nx serve",
     "firebase": "firebase",
     "startpwa": "npm run predeploy && http-server dist/apps/tennis-score -p 4200",

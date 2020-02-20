@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - release
 
@@ -12,14 +12,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Start
+      run: echo Running Build# $GITHUB_RUN_NUMBER on Branch $GITHUB_REF
     - name: Install Dependencies
-      run: npm install  
+      run: npm install
+    - name: Install Dependencies
+      run: npm install
     - name: Run Unit Tests
-      run: npm run test  
+      run: npm run test
     - name: Linting the code
-      run: npm run lint 
+      run: npm run lint
     - name: Build the solution
-      run: npm run predeploy
+      run: npm run predeploy -- $GITHUB_RUN_NUMBER
     - name: Deploy
-      run: firebase deploy --token $FIREBASETOKEN --only hosting,function
+      env:
+        FIREBASETOKEN: ${{ secrets.FIREBASETOKEN }}
+      run: firebase deploy --token $FIREBASETOKEN --only hosting,functions
       if: github.ref == 'release'

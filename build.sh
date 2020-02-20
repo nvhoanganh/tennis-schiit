@@ -2,10 +2,12 @@
 rm -rf dist/apps/tennis-score/
 
 # get version
+BUILDID=$1
+echo Build ID is $BUILDID
 VERSION=$(git rev-parse --short HEAD)
 DATEV=$(date +%Y.%m.%d)
-echo Building Version numer: $DATEV.$VERSION
-node ./node_modules/envsub/bin/envsub.js --env BuildId=$DATEV.$VERSION apps/tennis-score/src/assets/version.template.ts apps/tennis-score/src/assets/version.ts
+echo Building Version numer: $DATEV.$VERSION.$BUILDID
+node ./node_modules/envsub/bin/envsub.js --env BuildId=$DATEV.$VERSION.$BUILDID apps/tennis-score/src/assets/version.template.ts apps/tennis-score/src/assets/version.ts
 
 # build
 echo Start building the app
@@ -21,4 +23,4 @@ node ./node_modules/envsub/bin/envsub.js --env Template="$value" sw-shell-real.t
 echo Injecting the service worker
 workbox injectManifest workbox-config.js
 
-echo Finished building Version numer: $DATEV.$VERSION
+echo Finished building Version numer: $DATEV.$VERSION.$BUILDID
