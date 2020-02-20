@@ -29,19 +29,23 @@ jobs:
         name: cypress
         path: dist/cypress/apps/tennis-score-e2e/videos
       if: failure()
+
     - name: Build the solution for deploy
       run: npm run build -- $GITHUB_RUN_NUMBER
       if: github.ref == 'refs/heads/release'
+
     - uses: actions/upload-artifact@v1
       with:
         name: webapp
         path: dist/apps/tennis-score
       if: github.ref == 'refs/heads/release'
+
     - uses: actions/upload-artifact@v1
       with:
         name: functions
         path: dist/apps/functions
       if: github.ref == 'refs/heads/release'
+
     - name: Deploy
       env:
         FIREBASETOKEN: ${{ secrets.FIREBASETOKEN }}
