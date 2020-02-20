@@ -8,6 +8,7 @@
     "deploy": "firebase deploy --only hosting,functions",
     "deploy2": "firebase deploy --token $FIREBASETOKEN --only hosting,functions",
     "start": "nx serve",
+    "workbox": "workbox injectManifest workbox-config.js",
     "firebase": "firebase",
     "startpwa": "npm run predeploy && http-server dist/apps/tennis-score -p 4200",
     "webpack-bundle": "webpack --profile --json > stats.json",
@@ -132,6 +133,7 @@
     "tslint": "~5.11.0",
     "typescript": "~3.5.3",
     "url-loader": "^3.0.0",
-    "webpack-bundle-analyzer": "^3.6.0"
+    "webpack-bundle-analyzer": "^3.6.0",
+    "workbox-cli": "^5.0.0"
   }
 }

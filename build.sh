@@ -21,7 +21,7 @@ node ./node_modules/envsub/bin/envsub.js --env Template="$value" sw-shell-real.t
 
 # inject service worker
 echo Injecting the service worker
-workbox injectManifest workbox-config.js
+npm run workbox
 
 echo Copy functions codes to dist folder
 mkdir dist/apps/functions
