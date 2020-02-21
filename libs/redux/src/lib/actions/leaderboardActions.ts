@@ -199,9 +199,7 @@ export function submitScore({
     // update other -> this should be in firebase func
     const batch = firebase.firestore().batch();
     batch.update(groupRef, {
-      played: firebase.firestore.FieldValue.increment(1)
-    });
-    batch.update(groupRef, {
+      played: firebase.firestore.FieldValue.increment(1),
       lastMatch: new Date()
     });
 

@@ -1,9 +1,106 @@
 rules_version = '2';
+// https://medium.com/day4/firebases-firestore-rules-how-the-f-af5821513025
 service cloud.firestore {
   match /databases/{database}/documents {
+  	function isLoggedIn() {
+    	return request.auth.uid != null;
+    }
+  	function isMember(groupId) {
+    	return groupId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.groups;
+    }
+
+    function isOwnerOfGroup(groupId) {
+    	return request.auth.uid == get(/databases/$(database)/documents/groups/$(groupId)).data.owner;
+    }
+
+    // Have any of these fields changed?
+    function hasNotChanged(fields) {
+      return (fields.size() < 1 || equals(fields[0]))
+        && (fields.size() < 2 || equals(fields[1]))
+        && (fields.size() < 3 || equals(fields[2]))
+        && (fields.size() < 4 || equals(fields[3]))
+        && (fields.size() < 5 || equals(fields[4]))
+        && (fields.size() < 6 || equals(fields[5]))
+        && (fields.size() < 7 || equals(fields[6]))
+        && (fields.size() < 8 || equals(fields[7]))
+        && (fields.size() < 9 || equals(fields[8]))
+        && (fields.size() < 10 || equals(fields[9]))
+        && (fields.size() < 11 || equals(fields[10]))
+        && (fields.size() < 12 || equals(fields[11]))
+        && (fields.size() < 13 || equals(fields[12]))
+    }
+    // Is this field unchanged?
+    function equals(field) {
+      return field in request.resource.data
+        && field in resource.data
+        && val(field) == resource.data[field]
+    }
+
+    function val(field) {
+      return request.resource.data[field];
+    }
+
+    // /players/0NmjOMXj4C7glw3COYqH
+    match /players/{playerId} {
+    	// owner and member can add new player
+      allow create: if isMember(request.resource.data.groupId) || isOwnerOfGroup(request.resource.data.groupId);
+    }
+  	match /users/{userId} {
+    	// user can only update/create own profile
+      allow update,create: if request.auth.uid == userId;
+      // only me can delete account
+      allow delete: if request.auth.uid == 'FLDJnQNRuNhV6jPh6WOZQWPKHEB3';
+    }
+
+    match /groups/{groupId}/{path=**} {
+    	// owner of group has full access
+      allow write: if isOwnerOfGroup(groupId);
+    }
+
+    match /groups/{groupId} {
+    	// authenticated user can create new groups
+      allow create: if isLoggedIn();
+      // any authenticated user can join any groups
+      allow update: if isLoggedIn()
+      	&& request.resource.data.pendingJoinRequests != null
+      	&& hasNotChanged([
+          'description','currentTournament','groupImage',
+          'hashedLocation','location','locationLongLat',
+          'name','onwerName','owner',
+          'played','players']);
+      // member can submit new score
+      allow update: if isMember(groupId)
+        && request.resource.data.played != resource.data.played
+        && request.resource.data.lastMatch != resource.data.get('lastMatch', null)
+        && hasNotChanged([
+          'description','currentTournament','groupImage',
+          'hashedLocation','location','locationLongLat',
+          'name','onwerName','owner']);
+    }
+
+    match /groups/{groupId}/tournaments/{tourId} {
+    	// only owner create/delete tournament
+      allow create, delete, update: if isOwnerOfGroup(groupId);
+      // member can update players stats (submit new score) or approve new member join request
+      allow update: if isMember(groupId)
+        && request.resource.data.players != resource.data.get('players', null);
+    }
+
+    // /groups/0oiWTODB7i2iXjCIMw1H/tournaments/5UEwlZqwV0aF1OJxfqmb/stats/0Dzcj6I1ShZ62KMkOsXE
+    match /groups/{groupId}/tournaments/{tourId}/stats/{statId} {
+    	// member can add new stats (submit new score)
+      allow create: if isMember(groupId);
+    }
+
+    // /groups/0oiWTODB7i2iXjCIMw1H/tournaments/5UEwlZqwV0aF1OJxfqmb/scores/0UMrglcSCu570jrVrPrh
+    match /groups/{groupId}/tournaments/{tourId}/scores/{scoreId} {
+    	// member can add new score (submit new score)
+      allow create: if isMember(groupId);
+    }
+
+    // everyone can read everything
     match /{document=**} {
       allow read: if true;
-      allow create, update, delete: if request.auth.uid != null;
     }
   }
 }
