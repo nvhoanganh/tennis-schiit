@@ -1,14 +1,17 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const functions = require("firebase-functions");
-const app = require("./dynamic-render");
 const admin = require("firebase-admin");
-
 admin.initializeApp();
 const db = admin.firestore();
 
+const functions = require("firebase-functions");
+const app = require("./dynamic-render");
+const api = require("./api");
+
 // functions
 exports.app = functions.https.onRequest(app);
+
+exports.api = functions.https.onRequest(api);
 
 // update
 exports.usersTrigger = functions.firestore

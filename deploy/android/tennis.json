@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "tennis-schiit",
+  "private_key_id": "e70f1641fec02d868d50f7544ec68064b3e0448b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZRlBL6u8k39xV\nI7xaqjF8OBZmTPE8Avy/oLLpIbaAZx0CC6GLIe4pDlMi+s6AqLuhmptYFk5hHG8X\nlif/KOQ76V1ppVKNFr3vlHfZJixkhqI8ZtpE0LQpS9VvPjBG1Yg7Y1NG1dcRmIWV\nuu0bB9p86uYGH/IOXF2altR8NSIYpyn3SbzXDCiWW6BBdwq7/UKoCg+qsj61+o8S\ne5cxOoOHxsr1RtULmybufpwhIKvJDOGCsuNG0jvNCYAZocp6pGjvuOoFk5H+Vm1C\n1fvA4Bea2uEP5+rK+/1Dv8gor7eoFT4HYgHhwk+PJdoRT7AptqWpcWrSj8gSagQ9\nc5NxIiP9AgMBAAECggEABSsN466ge9dkq9uOay/mFBqQjA7Y63YSSQSdUi3ech/l\nVIYDos0nl4u/dg+LbQuWcE8wfPyTu9FkqVCFtwi5Tfm+aYdaTHIutKMVckbdEMuF\nti016bIFL/HWgS+Q1trxbfZuNAJA0WNw71hjl3GtC6z2RfhbOdg5DVMxldOngDGw\nSsBbyTc+5vLMbnwZkG0k+4wxnuIHLyjiqSeZADZMnaYS53PN3gzum/eVvFG1jqKr\n27ffjXlC5UEHmIWfTUoIt8qBvQp42AClhJvlT6p3xxZAwDzpjlWpsCSoa6MsYx//\nK8McH2c0dXA1FNv9+n050a87p4chEuQtJicm6eWRSQKBgQDvoPL7HKHnBHA+cVs5\nzlgpkVXyS+divLJcvnEejoOTmdPT+NRy9EqxfiJFQHUy+jKdtDQ1fgD86ij2kCpR\nOpPrHWygb0d4Lc5cV8oqWS13LwXMwP59Nhc/pQI4a9pVbjkEg22PFKY5ElZdjPgM\nHcpRispxsr9mFgpacGK91t8fZwKBgQDoHmW9fewdvP5/MrxOKN3VIlWNJ5lvuOWD\nC3MuZzMY4ihyMSw1e9TSIUjT60659v5+mzFlfTc4V6GXxR2VT1FywZoYZUCWgcoy\nk+Mayr17yDppQcGvLJQDkq1pcbljrFl1E1PATTOvZeSRLe67LV9EpKDqEtb2U9M7\nECCbVUiW+wKBgBUthEvtG+Hu4nyiSA2zztbdoVrommp/gsPvkM/CiJ5i2fXB6ATA\n0lkdbKnyKGl480A8zOBtYmj3yOcBlrvXEXuV/iOvsgFNCw/eMl/LwdjmrvyJkfQ+\n848MZkXWQlWKiD993hDnIkmo9TkPXFy1xUuvmHSz93ZuPDwB8rgUZWPBAoGBALEt\nqslm2hmlDro3FweuKA4thBIX/QYLo51Q2x27hoRi9S6dHDrDCCNRZs7kWZaX05D+\nk0j9uG3Ybi90Ne2nuusWnrIqb4+zCI1s1zi3MsXOg8+ecuJs65qClr3bIgDUKQC1\nvQMXqvEinMK4xfa4XnT+GRozQUSLnbwCxnDrO1qLAoGBAOHbHdAP3n7AQeKNrM1F\nFaCRfhA03NC7V9GKarywvamEDZ6wKZlrYvmbkjS96nZ1VAFE73JQaot4YXHlcoQ7\n9kpTE0K2U9ZVg+FT8b+QQxzmwR4k3hwolpJK5Y2ZCJSHg31G48bFK7Sy9VDOhwMZ\n8IAAP+J0ekXAAm6MDNuPbuuD\n-----END PRIVATE KEY-----\n",
+  "client_email": "tennis-schiit@appspot.gserviceaccount.com",
+  "client_id": "105469168551967054691",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tennis-schiit%40appspot.gserviceaccount.com"
+}

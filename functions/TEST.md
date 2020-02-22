@@ -1,6 +1,5 @@
 ## run stesp ##
-export GOOGLE_APPLICATION_CREDENTIALS="/c/tennis.json"
-firebase functions:shell
+export GOOGLE_APPLICATION_CREDENTIALS="/c/tennis.json" && firebase functions:shell
 
 ## trigger update ##
 usersTrigger(
