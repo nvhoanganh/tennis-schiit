@@ -25,6 +25,7 @@ import UpdateButton from "./LoadingButton";
 import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
+import { usePushNotification } from '../hooks/usePushNotification';
 // lazy loaded component
 const TournamentStatsChart = React.lazy(() => import("./TournamentStatsChart"));
 
@@ -46,7 +47,7 @@ const Leaderboard = ({
   ...props
 }) => {
   // states
-  // usePushNotification({getNotificationSub, user, pwaHandle});
+  usePushNotification({getNotificationSub, user, pwaHandle});
   const q = queryString.parse(window.location.search);
   const toast = useToast();
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);

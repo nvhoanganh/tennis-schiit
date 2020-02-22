@@ -29,7 +29,7 @@ const useServiceWorker = registerPwaHandle => {
               case "installed":
                 if (navigator.serviceWorker.controller) {
                   console.log("SW:send skip waiting", new Date());
-                  localStorage.setItem(appConfig.pwaInstalled, "true");
+
                   newWorker.postMessage({ type: "SKIP_WAITING" });
                 }
                 break;
@@ -37,6 +37,7 @@ const useServiceWorker = registerPwaHandle => {
           });
         });
 
+        localStorage.setItem(appConfig.pwaInstalled, "true");
         registerPwaHandle(reg);
       });
 

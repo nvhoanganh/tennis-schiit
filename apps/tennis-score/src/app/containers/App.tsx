@@ -36,6 +36,7 @@ const App = ({
   const toast = useToast();
   const [showInstalling, isInstalled] = useServiceWorker(registerPwaHandle);
   const [show, setShow] = useState(false);
+
   usePwaInstallPrompt();
 
   useEffect(() => {

@@ -112,6 +112,7 @@ export function apiError(action: string, err: any): ApiErrorAction {
 }
 
 export function registerPwaHandle(registration): AppRegisterPwaHandle {
+  console.log("registered handle", registration);
   return { type: AppActionTypes.PWA_REG, registration };
 }
 
@@ -264,7 +265,7 @@ export function appLoad() {
 
       firebase
         .firestore()
-        .collection("users")
+        .collection(USERS)
         .doc(user.uid)
         .get()
         .then(function(doc) {
@@ -309,10 +310,11 @@ function getWebPushSub(uid, reg) {
       console.log("SW:Received PushSubscription: ", sub);
       return firebase
         .firestore()
-        .collection("users")
+        .collection(USERS)
         .doc(uid)
         .update({
-          webPush: sub
+          webPush: JSON.stringify(sub),
+          webPushRefreshedTime: new Date()
         })
         .then(() => sub);
     });
