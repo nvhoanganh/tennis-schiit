@@ -3,7 +3,7 @@ import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { ISignInModel, USERS } from "../models";
+import { ISignInModel, USERS, GROUPS } from "../models";
 import { isPushEnabled, urlB64ToUint8Array } from "../utils";
 import ReactGA from "react-ga";
 
@@ -70,7 +70,7 @@ export class ApiErrorAction implements IAction {
 
 export class GetNotificationSubSuccess implements IAction {
   readonly type = AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS;
-  constructor(public action: string, public subscripttion: any) {}
+  constructor(public action: string) {}
 }
 
 export class SignInSuccessAction implements IAction {
@@ -112,7 +112,6 @@ export function apiError(action: string, err: any): ApiErrorAction {
 }
 
 export function registerPwaHandle(registration): AppRegisterPwaHandle {
-  console.log("registered handle", registration);
   return { type: AppActionTypes.PWA_REG, registration };
 }
 
@@ -296,7 +295,17 @@ export function appLoad() {
     });
   };
 }
-function getWebPushSub(uid, reg) {
+
+export function turnOffWebPushSubForGroup(uid, groupId) {
+  return firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId)
+    .update({
+      [`webPush.${uid}`]: false
+    });
+}
+export function getWebPushSub(uid, reg, groupId) {
   const publicKey =
     "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
 
@@ -308,20 +317,36 @@ function getWebPushSub(uid, reg) {
     };
     return reg.pushManager.subscribe(subscribeOptions).then(sub => {
       console.log("SW:Received PushSubscription: ", sub);
-      return firebase
-        .firestore()
-        .collection(USERS)
-        .doc(uid)
-        .update({
-          webPush: JSON.stringify(sub),
-          webPushRefreshedTime: new Date()
-        })
-        .then(() => sub);
+      console.log("Marked Web Pushed Enabled for this user", uid);
+      console.log("Update group Id web push", groupId);
+      const batch = firebase.firestore().batch();
+      batch.update(
+        firebase
+          .firestore()
+          .collection(USERS)
+          .doc(uid),
+        {
+          webPushEnabled: true
+        }
+      );
+      batch.update(
+        firebase
+          .firestore()
+          .collection(GROUPS)
+          .doc(groupId),
+        {
+          [`webPush.${uid}`]: {
+            data: JSON.stringify(sub),
+            timestamp: new Date()
+          }
+        }
+      );
+      return batch.commit();
     });
   }
 }
 
-export function getWebPushSubAction() {
+export function getWebPushSubAction(groupId) {
   return (dispatch, getState) => {
     const {
       app: {
@@ -331,11 +356,10 @@ export function getWebPushSubAction() {
     } = getState();
     dispatch(apiStart(AppActionTypes.GET_NOTIFICATION_SUB));
     // delete from pending first
-    return getWebPushSub(uid, pwaHandle).then(subscripttion => {
+    return getWebPushSub(uid, pwaHandle, groupId).then(() => {
       dispatch(apiEnd());
       dispatch({
-        type: AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS,
-        subscripttion
+        type: AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS
       } as GetNotificationSubSuccess);
     });
   };

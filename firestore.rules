@@ -76,6 +76,13 @@ service cloud.firestore {
           'description','currentTournament','groupImage',
           'hashedLocation','location','locationLongLat',
           'name','onwerName','owner']);
+      // member can turn on notifications
+      allow update: if isMember(groupId)
+        && request.resource.data.webPush != resource.data.webPush
+        && hasNotChanged([
+          'description','currentTournament','groupImage',
+          'hashedLocation','location','locationLongLat',
+          'name','onwerName','owner']);
     }
 
     match /groups/{groupId}/tournaments/{tourId} {

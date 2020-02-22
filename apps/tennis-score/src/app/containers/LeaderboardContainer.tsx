@@ -1,10 +1,11 @@
-import { approveJoinRequest, cancelJoinGroup, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getIsPendingJoin, getLeaderboardPlayers, getPendingJoinRequest, getPendingRequests, getPwaHandle, getWebPushSubAction, joinGroup, loadLeaderboard, loadPlayers, loadResults, rejectJoinRequest } from "@tennis-score/redux";
+import { approveJoinRequest, cancelJoinGroup, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getIsPendingJoin, getLeaderboardPlayers, getPendingJoinRequest, getPendingRequests, getPwaHandle, getWebPushSubAction, joinGroup, loadLeaderboard, loadPlayers, loadResults, rejectJoinRequest, getUserTurnedOnPushNotification } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import Leaderboard from "../components/Leaderboard";
 
 const mapStateToProps = state => ({
   players: getLeaderboardPlayers(state),
   user: getCurrentUser(state),
+  pushNotificationIsOn: getUserTurnedOnPushNotification(state),
   pwaHandle: getPwaHandle(state),
   group: getCurrLeaderGroup(state),
   pendingRequests: getPendingRequests(state),
@@ -24,7 +25,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(approveJoinRequest(user, groupId, createAs)),
   cancelJoinGroup: groupId => dispatch(cancelJoinGroup(groupId)),
   loadLeaderboard: groupId => dispatch(loadLeaderboard(groupId)),
-  getNotificationSub: _ => dispatch(getWebPushSubAction()),
+  getNotificationSub: groupId => dispatch(getWebPushSubAction(groupId)),
   loadResult: (groupId, tourid, more) =>
     dispatch(loadResults(groupId, tourid, more))
 });

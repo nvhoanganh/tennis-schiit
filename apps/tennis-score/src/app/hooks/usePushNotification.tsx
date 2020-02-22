@@ -1,6 +1,5 @@
 import { useToast } from "@chakra-ui/core";
 import { askPersmission, isPushEnabled } from "@tennis-score/redux";
-import differenceInDays from "date-fns/differenceInDays";
 import React, { useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 import { appConfig } from "../../assets/config";
@@ -8,15 +7,12 @@ import { Button } from "../components/Button";
 export const usePushNotification = ({
   getNotificationSub,
   user,
-  pwaHandle
+  pwaHandle,
+  groupId
 }) => {
   const toast = useToast();
   const askUser = () => {
     setTimeout(() => {
-      localStorage.setItem(
-        numberOfTimesAsked,
-        (+localStorage.getItem(numberOfTimesAsked) + 1).toString()
-      );
       toast({
         position: "bottom",
         status: "success",
@@ -48,7 +44,7 @@ export const usePushNotification = ({
                       });
                     } else {
                       // dispatch action to get and save sub
-                      getNotificationSub().then(_ => {
+                      getNotificationSub(groupId).then(_ => {
                         toast({
                           position: "bottom",
                           status: "success",
@@ -81,35 +77,17 @@ export const usePushNotification = ({
     }, 1000);
   };
 
-  const {
-    pwaNotificationSubKey: numberOfTimesAsked,
-    pwaNotificationSubDeniedKey: permissionDenied
-  } = appConfig;
+  const { pwaNotificationSubDeniedKey: permissionDenied } = appConfig;
 
   useEffect(() => {
-    if (localStorage.getItem(permissionDenied) === "true") {
-      // user denied it
-      return;
-    }
-
-    if (pwaHandle && user && isPushEnabled()) {
-      console.log(
-        "last refresh",
-        differenceInDays(new Date(), user.webPushRefreshedTime.toDate())
-      );
-      if (
-        user.webPush &&
-        differenceInDays(new Date(), user.webPushRefreshedTime.toDate()) > 30
-      ) {
-        console.log(user.webPushRefreshedTime.toDate());
-      } else {
-        if (+localStorage.getItem(numberOfTimesAsked) > 3) {
-          // don't ask too many times
-          return;
-        }
-
-        askUser();
-      }
+    if (
+      pwaHandle &&
+      user &&
+      isPushEnabled() &&
+      !user.webPushEnabled &&
+      !localStorage.getItem(permissionDenied)
+    ) {
+      askUser();
     }
   }, []);
 };

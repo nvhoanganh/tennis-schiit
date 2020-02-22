@@ -6,7 +6,13 @@ import {
   Tabs,
   useToast
 } from "@chakra-ui/core";
-import { getStats, isMember, isOwner } from "@tennis-score/redux";
+import {
+  getStats,
+  isMember,
+  isOwner,
+  getWebPushSub,
+  turnOffWebPushSubForGroup
+} from "@tennis-score/redux";
 import format from "date-fns/format";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import queryString from "query-string";
@@ -25,7 +31,7 @@ import UpdateButton from "./LoadingButton";
 import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import { usePushNotification } from '../hooks/usePushNotification';
+import { usePushNotification } from "../hooks/usePushNotification";
 // lazy loaded component
 const TournamentStatsChart = React.lazy(() => import("./TournamentStatsChart"));
 
@@ -43,11 +49,41 @@ const Leaderboard = ({
   hasMore,
   lastDoc,
   pwaHandle,
+  pushNotificationIsOn,
   getNotificationSub,
   ...props
 }) => {
   // states
-  usePushNotification({getNotificationSub, user, pwaHandle});
+  console.log(group);
+  usePushNotification({
+    getNotificationSub,
+    user,
+    pwaHandle,
+    groupId: match.params.group
+  });
+
+  const handleAddPush = () => {
+    if (pushNotificationIsOn) {
+      // turn off
+      turnOffWebPushSubForGroup(user.uid, match.params.group).then(() =>
+        toast({
+          title: "Turned off Push Notification",
+          status: "success",
+          duration: 2000,
+          isClosable: true
+        })
+      );
+    } else {
+      getWebPushSub(user.uid, pwaHandle, match.params.group).then(() =>
+        toast({
+          title: "Turned on Push Notification",
+          status: "success",
+          duration: 2000,
+          isClosable: true
+        })
+      );
+    }
+  };
   const q = queryString.parse(window.location.search);
   const toast = useToast();
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
@@ -136,9 +172,11 @@ const Leaderboard = ({
             center={group.name.toUpperCase()}
             right={
               <GroupMemberDropdown
+                pushNotificationIsOn={pushNotificationIsOn}
                 history={history}
                 leaveGroup={props.leaveGroup}
                 joinGroup={props.joinGroup}
+                enablePushNotification={handleAddPush}
                 user={user}
                 group={group}
               />

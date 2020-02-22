@@ -98,6 +98,19 @@ export const getCurrLeaderGroup = createSelector(
   }
 );
 
+export const getUserTurnedOnPushNotification = createSelector(
+  getCurrLeaderGroup,
+  getCurrentUser,
+  (group, user) => {
+    return (
+      group &&
+      group.webPush &&
+      user.uid in group.webPush &&
+      group.webPush[user.uid]
+    );
+  }
+);
+
 export const getCurrLeaderTournament = createSelector(
   getLeaderboardState,
   s => s.tournament
