@@ -21,6 +21,10 @@ const useServiceWorker = registerPwaHandle => {
           ) {
             // only show Installing banner if service worker is already installed.
             setShowInstalling(true);
+            setTimeout(() => {
+              // hide after 5 seconds
+              setShowInstalling(false);
+            }, 5000);
           }
 
           newWorker.addEventListener("statechange", () => {

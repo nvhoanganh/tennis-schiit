@@ -1,27 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
+import { linkBot } from "./sw-shell";
+import { realUser } from "./sw-shell-real";
+import XRegExp from "xregexp";
+import { checkForBots } from "./utils";
+
 const express = require("express");
 const dynamicRender = express();
-const linkBot = require("./sw-shell");
-const realUser = require("./sw-shell-real");
-const XRegExp = require("xregexp");
-
-const checkForBots = userAgent => {
-  // These are link bots only! DO NOT ADD GOOGLEBOT. If you add Googlebot to
-  // this, you will not have a good day. This is a mix of Sam Li's list
-  // (https://github.com/webcomponents/webcomponents.org/blob/696eb6d6f1fe955db395e96d97c3d1dfe0a02b26/client/bot-filter.py#L9)
-  // and my list
-  // (https://github.com/justinribeiro/blog-pwa/blob/a7174657f3e910cacf2f089c012d40bec719293e/appengine/main.py#L28)
-  const botList = "baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator|slackbot|facebot|web/snippet/|viber".toLowerCase();
-
-  // FIND THE BOT AMONG THE USSSERRRS
-  botList.split("|");
-  if (userAgent.toLowerCase().search(botList) != -1) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 const getMeta = url => {
   // leaderboard
@@ -108,4 +91,4 @@ dynamicRender.get("*", (req, res) => {
   }
 });
 
-module.exports = dynamicRender;
+export default dynamicRender;
