@@ -109,8 +109,10 @@ export const getUserTurnedOnPushNotification = createSelector(
     return (
       group &&
       group.webPush &&
+      user &&
       user.uid in group.webPush &&
-      group.webPush[user.uid]
+      group.webPush[user.uid] &&
+      Object.values(group.webPush[user.uid]).length > 0
     );
   }
 );

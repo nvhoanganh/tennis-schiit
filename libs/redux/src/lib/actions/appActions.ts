@@ -312,7 +312,7 @@ export function turnOffWebPushSubForGroup(uid, groupId) {
 }
 export function getWebPushSub(uid, reg, groupId) {
   const publicKey =
-    "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
+    "BOnQUejk8Yz83B5JtKYl7muwhbKN9EazPrLi_joamVVJWITeQccDpHZp7JDawXi5xaRu7aaPU2WQ-nx8zAsBKSA";
   if (!isPushEnabled()) {
     showToast({
       title: "Push Notification is not enabled on this device",
@@ -341,31 +341,46 @@ export function getWebPushSub(uid, reg, groupId) {
         isClosable: true
       });
     } else {
-      return reg.pushManager.subscribe(subscribeOptions).then(sub => {
-        console.log("SW:Received PushSubscription: ", sub);
-        const batch = firebase.firestore().batch();
-        batch.update(
-          firebase
-            .firestore()
-            .collection(GROUPS)
-            .doc(groupId),
-          {
-            [`webPush.${uid}`]: {
-              [sub.endpoint]: {
-                data: JSON.stringify(sub),
-                timestamp: new Date()
+      return reg.pushManager
+        .subscribe(subscribeOptions)
+        .then(sub => {
+          console.log("SW:Received PushSubscription: ", sub);
+          const batch = firebase.firestore().batch();
+          const subId = `${new Date().getTime()}`;
+          batch.update(
+            firebase
+              .firestore()
+              .collection(GROUPS)
+              .doc(groupId),
+            {
+              [`webPush.${uid}`]: {
+                [subId]: {
+                  data: JSON.stringify(sub),
+                  id: subId,
+                  timestamp: new Date()
+                }
               }
             }
-          }
-        );
+          );
 
-        localStorage.setItem(
-          appConfig.pwaNotificationSubKeyOnThisDevice,
-          "true"
-        );
-        localStorage.removeItem(appConfig.pwaNotificationSubDeniedKey);
-        return batch.commit();
-      });
+          localStorage.setItem(
+            appConfig.pwaNotificationSubKeyOnThisDevice,
+            "true"
+          );
+          localStorage.removeItem(appConfig.pwaNotificationSubDeniedKey);
+          return batch.commit();
+        })
+        .catch(e => {
+          console.log("TCL: getWebPushSub -> e", e);
+          return Promise.reject({
+            position: "bottom",
+            status: "error",
+            title: "Oops! Something went wrong",
+            description: "Please enable notification option via site Settings",
+            duration: null,
+            isClosable: true
+          });
+        });
     }
   });
 }

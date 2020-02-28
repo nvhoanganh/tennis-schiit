@@ -87,13 +87,17 @@ self.addEventListener("push", function(event) {
     data = event.data.json();
   }
   console.log("New notification received", data);
-  self.registration.showNotification(data.title || "Tennis Score Sheet", {
-    body: data.message || "New score submitted",
-    tag: data.tag || "tennis-score",
-    data: {
-      url: data.url
-    },
-    icon: "assets/icons/icon-512x512.png",
-    badge: "assets/icons/icon-128x128.png"
-  });
+  const promiseChain = self.registration.showNotification(
+    data.title || "Tennis Score Sheet",
+    {
+      body: data.message || "New score submitted",
+      tag: data.tag || "tennis-score",
+      data: {
+        url: data.url
+      },
+      icon: "assets/icons/icon-512x512.png",
+      badge: "assets/icons/icon-128x128.png"
+    }
+  );
+  event.waitUntil(promiseChain);
 });

@@ -11,8 +11,9 @@ export function usersOnUpdate(change: any, context: any) {
     return Promise.all(
       Object.keys(after.groups).map(groupId => {
         const groupRef = db.collection("groups").doc(groupId);
-        return groupRef.get().then(d =>
-          d.exists
+        return groupRef.get().then(d => {
+          console.log("TCL: usersOnUpdate -> d.data()", d.data());
+          return d.exists
             ? groupRef.update({
                 players: d.data().players.map(x =>
                   x.userId === userId
@@ -23,8 +24,8 @@ export function usersOnUpdate(change: any, context: any) {
                     : x
                 )
               })
-            : Promise.resolve()
-        );
+            : Promise.resolve();
+        });
       })
     );
   }
