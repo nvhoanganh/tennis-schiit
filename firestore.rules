@@ -13,31 +13,17 @@ service cloud.firestore {
     	return request.auth.uid == get(/databases/$(database)/documents/groups/$(groupId)).data.owner;
     }
 
-    // Have any of these fields changed?
-    function hasNotChanged(fields) {
-      return (fields.size() < 1 || equals(fields[0]))
-        && (fields.size() < 2 || equals(fields[1]))
-        && (fields.size() < 3 || equals(fields[2]))
-        && (fields.size() < 4 || equals(fields[3]))
-        && (fields.size() < 5 || equals(fields[4]))
-        && (fields.size() < 6 || equals(fields[5]))
-        && (fields.size() < 7 || equals(fields[6]))
-        && (fields.size() < 8 || equals(fields[7]))
-        && (fields.size() < 9 || equals(fields[8]))
-        && (fields.size() < 10 || equals(fields[9]))
-        && (fields.size() < 11 || equals(fields[10]))
-        && (fields.size() < 12 || equals(fields[11]))
-        && (fields.size() < 13 || equals(fields[12]))
-    }
-    // Is this field unchanged?
-    function equals(field) {
-      return field in request.resource.data
-        && field in resource.data
-        && val(field) == resource.data[field]
-    }
-
-    function val(field) {
-      return request.resource.data[field];
+    function NonMemberGroupFieldsNotChanged() {
+      return
+        request.resource.data.description == resource.data.get('description', null)
+        && request.resource.data.currentTournament == resource.data.get('currentTournament', null)
+        && request.resource.data.groupImage == resource.data.get('groupImage', null)
+        && request.resource.data.hashedLocation == resource.data.get('hashedLocation', null)
+        && request.resource.data.location == resource.data.get('location', null)
+        && request.resource.data.locationLongLat == resource.data.get('locationLongLat', null)
+        && request.resource.data.name == resource.data.get('name', null)
+        && request.resource.data.onwerName == resource.data.get('onwerName', null)
+        && request.resource.data.owner == resource.data.get('owner', null)
     }
 
     // /players/0NmjOMXj4C7glw3COYqH
@@ -48,6 +34,12 @@ service cloud.firestore {
   	match /users/{userId} {
     	// user can only update/create own profile
       allow update,create: if request.auth.uid == userId;
+      // user can approve join requests
+      allow update: if isLoggedIn()
+      	&& request.resource.data.groups != null
+        && request.resource.data.displayName == resource.data.get('displayName', null)
+        && request.resource.data.leftHanded == resource.data.get('leftHanded', null)
+        && request.resource.data.singleHandedBackhand == resource.data.get('singleHandedBackhand', null)
       // only me can delete account
       allow delete: if request.auth.uid == 'FLDJnQNRuNhV6jPh6WOZQWPKHEB3';
     }
@@ -63,26 +55,21 @@ service cloud.firestore {
       // any authenticated user can join any groups
       allow update: if isLoggedIn()
       	&& request.resource.data.pendingJoinRequests != null
-      	&& hasNotChanged([
-          'description','currentTournament','groupImage',
-          'hashedLocation','location','locationLongLat',
-          'name','onwerName','owner',
-          'played','players']);
+      	&& NonMemberGroupFieldsNotChanged()
+      // member can approve join requests
+      allow update: if isMember(groupId)
+      	&& request.resource.data.players != null
+        && NonMemberGroupFieldsNotChanged()
+
       // member can submit new score
       allow update: if isMember(groupId)
         && request.resource.data.played != resource.data.played
         && request.resource.data.lastMatch != resource.data.get('lastMatch', null)
-        && hasNotChanged([
-          'description','currentTournament','groupImage',
-          'hashedLocation','location','locationLongLat',
-          'name','onwerName','owner']);
+        && NonMemberGroupFieldsNotChanged()
       // member can turn on notifications
       allow update: if isMember(groupId)
         && request.resource.data.webPush != resource.data.webPush
-        && hasNotChanged([
-          'description','currentTournament','groupImage',
-          'hashedLocation','location','locationLongLat',
-          'name','onwerName','owner']);
+        && NonMemberGroupFieldsNotChanged()
     }
 
     match /groups/{groupId}/tournaments/{tourId} {
