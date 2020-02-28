@@ -1,15 +1,10 @@
 import { useToast } from "@chakra-ui/core";
-import { askPersmission, isPushEnabled } from "@tennis-score/redux";
+import { appConfig } from "@tennis-score/core";
+import { getWebPushSub, isPushEnabled } from "@tennis-score/redux";
 import React, { useEffect } from "react";
 import { FaBell } from "react-icons/fa";
-import { appConfig } from "../../assets/config";
 import { Button } from "../components/Button";
-export const usePushNotification = ({
-  getNotificationSub,
-  user,
-  pwaHandle,
-  groupId
-}) => {
+export const usePushNotification = ({ user, pwaHandle, groupId }) => {
   const toast = useToast();
   const askUser = () => {
     setTimeout(() => {
@@ -31,32 +26,20 @@ export const usePushNotification = ({
                 className="btn btn-sm btn-primary px-3"
                 onClick={() => {
                   onClose();
-                  askPersmission().then(result => {
-                    if (result !== "granted") {
+                  getWebPushSub(user.uid, pwaHandle, groupId)
+                    .then(() =>
                       toast({
                         position: "bottom",
-                        status: "error",
-                        title: "Oops! Something went wrong",
+                        status: "success",
+                        title: "You're all set!",
                         description:
-                          "Please enable this option via site Settings",
-                        duration: null,
+                          "You will be notified when new result is submitted",
+                        duration: 3000,
                         isClosable: true
-                      });
-                    } else {
-                      // dispatch action to get and save sub
-                      getNotificationSub(groupId).then(_ => {
-                        toast({
-                          position: "bottom",
-                          status: "success",
-                          title: "You're all set!",
-                          description:
-                            "You will be notified when new result is submitted",
-                          duration: 3000,
-                          isClosable: true
-                        });
-                      });
-                    }
-                  });
+                      })
+                    )
+                    .catch(e => toast(e));
+                    
                 }}
               >
                 Ok
@@ -77,15 +60,21 @@ export const usePushNotification = ({
     }, 1000);
   };
 
-  const { pwaNotificationSubDeniedKey: permissionDenied } = appConfig;
+  const {
+    pwaNotificationSubDeniedKey: permissionDenied,
+    pwaNotificationSubKeyOnThisDevice
+  } = appConfig;
 
   useEffect(() => {
     if (
+      // device need to support web push
       pwaHandle &&
       user &&
       isPushEnabled() &&
-      !user.webPushEnabled &&
-      !localStorage.getItem(permissionDenied)
+      // and user did not deny it previously
+      !localStorage.getItem(permissionDenied) &&
+      // or we haven't got the sub key on this device
+      !localStorage.getItem(pwaNotificationSubKeyOnThisDevice)
     ) {
       askUser();
     }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga";
-import { appConfig } from "../../assets/config";
+import { appConfig } from '@tennis-score/core';
 const useServiceWorker = registerPwaHandle => {
   const [showInstalling, setShowInstalling] = useState(false);
   const [isInstalled, setIsInstaled] = useState(false);

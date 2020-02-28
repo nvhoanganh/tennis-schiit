@@ -8,9 +8,10 @@ import {
 } from "@chakra-ui/core";
 import {
   getStats,
+  getWebPushSub,
   isMember,
   isOwner,
-  getWebPushSub,
+  isPushEnabled,
   turnOffWebPushSubForGroup
 } from "@tennis-score/redux";
 import format from "date-fns/format";
@@ -22,6 +23,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import setQuery from "set-query-string";
+import { usePushNotification } from "../hooks/usePushNotification";
 import { Button } from "./Button";
 import Confirm from "./Confirm";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
@@ -31,7 +33,6 @@ import UpdateButton from "./LoadingButton";
 import PendingMemberCard from "./PendingMemberCard";
 import RouteNav from "./RouteNav";
 import { TournamentDropDown } from "./TournamentDropdown";
-import { usePushNotification } from "../hooks/usePushNotification";
 // lazy loaded component
 const TournamentStatsChart = React.lazy(() => import("./TournamentStatsChart"));
 
@@ -50,13 +51,10 @@ const Leaderboard = ({
   lastDoc,
   pwaHandle,
   pushNotificationIsOn,
-  getNotificationSub,
+  getWebPushSubAction,
   ...props
 }) => {
-  // states
-  console.log(group);
   usePushNotification({
-    getNotificationSub,
     user,
     pwaHandle,
     groupId: match.params.group
@@ -74,14 +72,18 @@ const Leaderboard = ({
         })
       );
     } else {
-      getWebPushSub(user.uid, pwaHandle, match.params.group).then(() =>
-        toast({
-          title: "Turned on Push Notification",
-          status: "success",
-          duration: 2000,
-          isClosable: true
-        })
-      );
+      if (isPushEnabled()) {
+        getWebPushSub(user.uid, pwaHandle, match.params.group)
+          .then(() =>
+            toast({
+              title: "Turned on Push Notification",
+              status: "success",
+              duration: 2000,
+              isClosable: true
+            })
+          )
+          .catch(e => toast(e));
+      }
     }
   };
   const q = queryString.parse(window.location.search);

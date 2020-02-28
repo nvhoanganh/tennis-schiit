@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IAction } from "@tennis-score/redux";
+import { useToast, useToastOptions } from "@chakra-ui/core";
+import { appConfig } from "@tennis-score/core";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { ISignInModel, USERS, GROUPS } from "../models";
-import { isPushEnabled, urlB64ToUint8Array } from "../utils";
+import { isPushEnabled, urlB64ToUint8Array, askPersmission } from "../utils";
 import ReactGA from "react-ga";
 
 export enum AppActionTypes {
+  SHOW_TOAST = "SHOW_TOAST",
   API_ERROR = "LAST_API_ERROR",
   RESET_ERROR = "RESET_ERROR",
   API_START = "API_START",
@@ -34,9 +37,6 @@ export enum AppActionTypes {
   UPDATE_PROFILE = "UPDATE_PROFILE",
   UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS",
 
-  GET_NOTIFICATION_SUB = "GET_NOTIFICATION_SUB",
-  GET_NOTIFICATION_SUB_SUCCESS = "GET_NOTIFICATION_SUB_SUCCESS",
-
   PWA_REG = "SET_PWA_REG"
 }
 export class AppRegisterPwaHandle implements IAction {
@@ -46,6 +46,11 @@ export class AppRegisterPwaHandle implements IAction {
 export class ApiStartAction implements IAction {
   readonly type = AppActionTypes.API_START;
   constructor(public action: string, public payload?: any) {}
+}
+
+export class ShowToastAction implements IAction {
+  readonly type = AppActionTypes.SHOW_TOAST;
+  constructor(public payload: useToastOptions) {}
 }
 export class AppLoadAction implements IAction {
   readonly type = AppActionTypes.APP_LOAD;
@@ -66,11 +71,6 @@ export class ResetErrorAction implements IAction {
 export class ApiErrorAction implements IAction {
   readonly type = AppActionTypes.API_ERROR;
   constructor(public action: string, public err: any) {}
-}
-
-export class GetNotificationSubSuccess implements IAction {
-  readonly type = AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS;
-  constructor(public action: string) {}
 }
 
 export class SignInSuccessAction implements IAction {
@@ -100,6 +100,10 @@ export class UpdateProfileSuccessAction implements IAction {
 
 export function apiStart(action: string, payload?: any): ApiStartAction {
   return { type: AppActionTypes.API_START, action, payload };
+}
+
+export function showToast(payload: useToastOptions): ShowToastAction {
+  return { type: AppActionTypes.SHOW_TOAST, payload };
 }
 export function apiEnd(): ApiEndAction {
   return { type: AppActionTypes.API_END };
@@ -297,6 +301,7 @@ export function appLoad() {
 }
 
 export function turnOffWebPushSubForGroup(uid, groupId) {
+  console.log("TCL: turnOffWebPushSubForGroup -> uid, groupId", uid, groupId);
   return firebase
     .firestore()
     .collection(GROUPS)
@@ -308,61 +313,61 @@ export function turnOffWebPushSubForGroup(uid, groupId) {
 export function getWebPushSub(uid, reg, groupId) {
   const publicKey =
     "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
-
-  if (isPushEnabled()) {
-    console.log("SW:registering Webpush", new Date());
-    const subscribeOptions = {
-      userVisibleOnly: true,
-      applicationServerKey: urlB64ToUint8Array(publicKey)
-    };
-    return reg.pushManager.subscribe(subscribeOptions).then(sub => {
-      console.log("SW:Received PushSubscription: ", sub);
-      console.log("Marked Web Pushed Enabled for this user", uid);
-      console.log("Update group Id web push", groupId);
-      const batch = firebase.firestore().batch();
-      batch.update(
-        firebase
-          .firestore()
-          .collection(USERS)
-          .doc(uid),
-        {
-          webPushEnabled: true
-        }
-      );
-      batch.update(
-        firebase
-          .firestore()
-          .collection(GROUPS)
-          .doc(groupId),
-        {
-          [`webPush.${uid}`]: {
-            data: JSON.stringify(sub),
-            timestamp: new Date()
-          }
-        }
-      );
-      return batch.commit();
+  if (!isPushEnabled()) {
+    showToast({
+      title: "Push Notification is not enabled on this device",
+      status: "error",
+      duration: 2000,
+      isClosable: true
     });
+    return Promise.reject();
   }
-}
 
-export function getWebPushSubAction(groupId) {
-  return (dispatch, getState) => {
-    const {
-      app: {
-        user: { uid },
-        pwaHandle
-      }
-    } = getState();
-    dispatch(apiStart(AppActionTypes.GET_NOTIFICATION_SUB));
-    // delete from pending first
-    return getWebPushSub(uid, pwaHandle, groupId).then(() => {
-      dispatch(apiEnd());
-      dispatch({
-        type: AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS
-      } as GetNotificationSubSuccess);
-    });
+  console.log("SW:registering Webpush", new Date());
+  const subscribeOptions = {
+    userVisibleOnly: true,
+    applicationServerKey: urlB64ToUint8Array(publicKey)
   };
+
+  return askPersmission().then(result => {
+    if (result !== "granted") {
+      localStorage.removeItem(appConfig.pwaNotificationSubKeyOnThisDevice);
+      return Promise.reject({
+        position: "bottom",
+        status: "error",
+        title: "Oops! Something went wrong",
+        description: "Please enable notification option via site Settings",
+        duration: null,
+        isClosable: true
+      });
+    } else {
+      return reg.pushManager.subscribe(subscribeOptions).then(sub => {
+        console.log("SW:Received PushSubscription: ", sub);
+        const batch = firebase.firestore().batch();
+        batch.update(
+          firebase
+            .firestore()
+            .collection(GROUPS)
+            .doc(groupId),
+          {
+            [`webPush.${uid}`]: {
+              [sub.endpoint]: {
+                data: JSON.stringify(sub),
+                timestamp: new Date()
+              }
+            }
+          }
+        );
+
+        localStorage.setItem(
+          appConfig.pwaNotificationSubKeyOnThisDevice,
+          "true"
+        );
+        localStorage.removeItem(appConfig.pwaNotificationSubDeniedKey);
+        return batch.commit();
+      });
+    }
+  });
 }
 
 export type AppAction =
@@ -378,5 +383,6 @@ export type AppAction =
   | ResetErrorAction
   | SignInSuccessAction
   | SignOutSuccessAction
+  | ShowToastAction
   | SignUpSuccessAction
   | SignUpFailedAction;

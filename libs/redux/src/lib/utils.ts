@@ -197,7 +197,7 @@ export function urlB64ToUint8Array(base64String) {
 export function askPersmission() {
   return new Promise(function(resolve, reject) {
     const permissionResult = Notification.requestPermission(function(result) {
-      resolve(result);
+        resolve(result);
     });
 
     if (permissionResult) {

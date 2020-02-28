@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/core";
 import { useEffect } from "react";
 import { isInstalled, isIos } from "@tennis-score/redux";
-import { appConfig } from "../../assets/config";
+import { appConfig } from '@tennis-score/core';
 
 export const usePwaInstallPrompt = () => {
   const toast = useToast();

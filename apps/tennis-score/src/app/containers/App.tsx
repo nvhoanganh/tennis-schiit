@@ -1,5 +1,25 @@
-import { Alert, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/core";
-import { appLoad, getAppLoaded, getCurrentUser, getPendingRequests, loadGroups, registerPwaHandle, signOut } from "@tennis-score/redux";
+import {
+  Alert,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Spinner,
+  useDisclosure,
+  useToast
+} from "@chakra-ui/core";
+import {
+  appLoad,
+  getAppLoaded,
+  getCurrentUser,
+  getPendingRequests,
+  loadGroups,
+  registerPwaHandle,
+  signOut,
+  getShowToast
+} from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -31,6 +51,7 @@ const App = ({
   appLoaded,
   history,
   registerPwaHandle,
+  showToastr,
   signOutHandler
 }) => {
   const toast = useToast();
@@ -43,6 +64,12 @@ const App = ({
     appLoad();
     loadGroups();
   }, []);
+
+  useEffect(() => {
+    if (showToastr) {
+      toast(showToastr);
+    }
+  }, [showToastr]);
 
   useEffect(() => {
     if (window.performance && appLoaded) {
@@ -196,6 +223,7 @@ const App = ({
 
 const mapStateToProps = state => ({
   user: getCurrentUser(state),
+  showToastr: getShowToast(state),
   pendingRequests: getPendingRequests(state),
   appLoaded: getAppLoaded(state)
 });

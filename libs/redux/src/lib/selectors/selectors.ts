@@ -13,6 +13,10 @@ export const getCurrentUser = createSelector(
   getAppState,
   s => s.user
 );
+export const getShowToast = createSelector(
+  getAppState,
+  s => s.showToast
+);
 export const getPwaHandle = createSelector(
   getAppState,
   s => s.pwaHandle
