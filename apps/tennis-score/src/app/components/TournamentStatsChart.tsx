@@ -74,7 +74,7 @@ function TournamentStatsChart({
     const result = pipe(
       getPlayerArray,
       map(k => ({
-        name: players[k.playerId] ? players[k.playerId].name : "NA",
+        name: players[k.playerId] ? players[k.playerId].name : "(Left Player)",
         playerId: k.playerId,
         type: "line",
         showSymbol: true,

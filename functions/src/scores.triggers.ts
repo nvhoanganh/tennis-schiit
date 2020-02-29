@@ -2,10 +2,11 @@ import { db } from "./db";
 import * as R from "ramda";
 import { getScoreString } from "./utils";
 import * as firebase from "firebase-admin";
+
 export function scoresOnCreate(snap, context) {
   const { groupId } = context.params;
   console.log("TCL: scoresOnCreate -> groupId", groupId);
-  const { winners, losers, gameWonByLostTeam } = snap.data();
+  const { winners, losers, gameWonByLostTeam, reverseBagel } = snap.data();
   console.log("TCL: scoresOnCreate -> group.data()", snap.data());
   return db
     .collection("groups")
@@ -21,15 +22,13 @@ export function scoresOnCreate(snap, context) {
         .join(",");
 
       const data = {
-        title: `!${name} lastest match!`,
+        title: `New score for '${name}'!`,
         message: `${winnersName} def. ${losersName} : ${getScoreString(
           gameWonByLostTeam
-        )}`,
-        tag: `${name}-score`,
+        )}${reverseBagel || gameWonByLostTeam === 0 ? " [Bagel]" : ""}`,
         url: `https://tennisscoresheet.com/leaderboard/${groupId}?tab=0`
       };
 
-      console.log("pushing", data);
       const vapidKeys = {
         subject: "mailto:nvhoanganh1909@gmail.com",
         publicKey:

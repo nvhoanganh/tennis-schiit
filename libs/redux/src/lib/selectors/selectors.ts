@@ -177,6 +177,11 @@ export const getLeaderboardPlayers = createSelector(
   }
 );
 
+export const getActivePlayersForGroup = createSelector(
+  getLeaderboardPlayers,
+  players => players.filter(x => !x.leftGroup)
+);
+
 export const getLeaderboardPlayersObj = createSelector(
   getLeaderboardPlayers,
   players => arrayToObject(players, x => x.id, x => x)

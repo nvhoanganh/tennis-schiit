@@ -47,6 +47,17 @@ export function GroupMemberDropdown({
                 Join Group
               </a>
             )}
+            {isMember(user, group) && !isOwner(user, group) && (
+              <a
+                className="d-block h5 py-2"
+                onClick={() => {
+                  leaveGroup();
+                  onClose();
+                }}
+              >
+                Leave Group
+              </a>
+            )}
             {isMember(user, group) && (
               <>
                 <LinkContainer to={`/groups/${group.groupId}/newplayer`}>
@@ -57,6 +68,7 @@ export function GroupMemberDropdown({
                 </p>
               </>
             )}
+
             {isMember(user, group) && (
               <>
                 <a

@@ -1,10 +1,5 @@
 import { Avatar, AvatarBadge } from "@chakra-ui/core";
-import {
-  getUrlAvatar,
-  SORT_PRIZEMONEY,
-  SORT_TRUESKILL,
-  SORT_WINPERCENT
-} from "@tennis-score/redux";
+import { getUrlAvatar, SORT_PRIZEMONEY, SORT_WINPERCENT } from "@tennis-score/redux";
 import classNames from "classnames";
 import React from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -12,6 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import Ripples from "react-ripples";
 import { ScoreCard } from "./ScoreCard";
 
+// helper methods
 const prizeMoneyCls = player =>
   classNames({
     h6: true,
@@ -35,7 +31,7 @@ const getArrow = player =>
     <FaChevronUp className={arrowClass + "text-success d-inline"} />
   ) : null;
 
-const getStats = (player, sortBy) => {
+const getStats = (player, sortBy, showPrize) => {
   const point = (
     <div className="h6">
       {getArrow(player)}
@@ -61,41 +57,25 @@ const getStats = (player, sortBy) => {
     case SORT_PRIZEMONEY:
       return (
         <>
-          {money} {pct} {point}
-        </>
-      );
-    case SORT_TRUESKILL:
-      return (
-        <>
-          {point} {pct} {money}
+          {showPrize ? money : null} {pct} {point}
         </>
       );
     case SORT_WINPERCENT:
       return (
         <>
-          {pct} {money} {point}
+          {pct} {showPrize ? money : null} {point}
+        </>
+      );
+    default:
+      return (
+        <>
+          {point} {pct} {showPrize ? money : null}
         </>
       );
   }
-  return (
-    <>
-      <div className="h6">
-        {getArrow(player)}
-        {player.score}
-        <sup>pt</sup>
-      </div>
-      <div className="h6">
-        {player.winPercentage}
-        <sup>%</sup>
-      </div>
-      <div className={prizeMoneyCls(player)}>
-        {player.prizeMoney}
-        <sup>$</sup>
-      </div>
-    </>
-  );
 };
 
+// component
 const LeaderboardCard = ({ player, ranking, history, ...props }) => {
   if (props.loading) {
     return (
@@ -113,6 +93,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
   }
   const getUserLink = () =>
     `/group/${props.group.groupId}/player/${player.id}?userId=${player.linkedplayerId}`;
+
   return (
     <div className="px-2 border-bottom">
       <Ripples
@@ -144,7 +125,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
             </a>
             {player.played ? (
               <div className="float-right text-right">
-                {getStats(player, props.sortBy)}
+                {getStats(player, props.sortBy, props.showPrize)}
               </div>
             ) : null}
             <ScoreCard {...player} />

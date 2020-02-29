@@ -23,7 +23,15 @@ const ResultCard = ({
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
       <span key={x} className={"d-block" + (isLoser ? " text-right" : "")}>
-        <span className="pl-1">{players[x] ? players[x].name : "NA"}</span>
+        {players[x] ? (
+          players[x].leftGroup ? (
+            <del className="pl-1" title="player left group text-muted">
+              <em>{players[x].name}</em>
+            </del>
+          ) : (
+            <span className="pl-1">{players[x].name}</span>
+          )
+        ) : null}
       </span>
     ));
   };

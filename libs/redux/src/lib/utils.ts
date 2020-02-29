@@ -34,7 +34,11 @@ export const isMember = (user, group) =>
   group &&
   group.players &&
   Object.values(group.players).filter(x => x["linkedplayerId"] === user.uid)
-    .length > 0;
+    .length > 0 &&
+  // has not left the group
+  !(Object.values(group.players).find(
+    x => x["linkedplayerId"] === user.uid
+  ) as any).leftGroup;
 
 export const removeById = (id, obj) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -119,7 +123,7 @@ export const getHandyCap = val => {
 
 export const getPlayersName = (players, allPlayers) => {
   return Object.keys(players).map(x =>
-    allPlayers[x] ? allPlayers[x].name : "NA"
+    allPlayers[x] ? allPlayers[x].name : "(Left Player)"
   );
 };
 export const getPlayersNameAsString = (p, allP) =>
@@ -197,7 +201,7 @@ export function urlB64ToUint8Array(base64String) {
 export function askPersmission() {
   return new Promise(function(resolve, reject) {
     const permissionResult = Notification.requestPermission(function(result) {
-        resolve(result);
+      resolve(result);
     });
 
     if (permissionResult) {

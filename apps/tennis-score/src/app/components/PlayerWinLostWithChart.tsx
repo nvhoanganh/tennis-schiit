@@ -73,7 +73,7 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
     const getStats = o =>
       Object.keys(o).map(x => ({
         value: o[x],
-        name: players[x] ? players[x].name : "NA"
+        name: players[x] ? players[x].name : "(Left Player)"
       }));
 
     return [
@@ -82,7 +82,7 @@ export function PlayerWinLostWithChart({ stats, players, playerId }) {
         type: "pie",
         radius: ["0%", "60%"],
         label: {
-          position: "inkner"
+          position: "inner"
         },
         data: winLostRecords.winWith ? getStats(winLostRecords.winWith) : []
       },

@@ -1,9 +1,9 @@
-import { getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getLeaderboardPlayers, getLeaderboardPlayersObj, getPendingRequests, loadLeaderboard, loadPlayers, submitScore } from "@tennis-score/redux";
+import { getActivePlayersForGroup, getAppLoaded, getCurrentUser, getCurrLeaderGroup, getCurrLeaderTournament, getLeaderboardPlayersObj, getPendingRequests, loadLeaderboard, loadPlayers, submitScore } from "@tennis-score/redux";
 import { connect } from "react-redux";
 import ViewHead2Head from "../components/ViewHead2Head";
 
 const mapStateToProps = state => ({
-  players: getLeaderboardPlayers(state),
+  players: getActivePlayersForGroup(state),
   playersAsObject: getLeaderboardPlayersObj(state),
   user: getCurrentUser(state),
   group: getCurrLeaderGroup(state),
