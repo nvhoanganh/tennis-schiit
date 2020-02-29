@@ -48,7 +48,7 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
           )
         }
       >
-        {loading ? (
+        {loading || !group ? (
           <MyLoadingSkeleton
             height={props.height || 260}
             class="card-img-top border-bottom"

@@ -144,7 +144,9 @@ export function deleteGroup(groupId) {
       .firestore()
       .collection(GROUPS)
       .doc(groupId)
-      .delete()
+      .update({
+        deletedDate: new Date()
+      })
       .then(() => {
         dispatch(apiEnd());
         dispatch({ type: GroupActionTypes.DELETE_GROUP, id: groupId });

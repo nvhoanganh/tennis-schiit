@@ -288,7 +288,7 @@ const Leaderboard = ({
                     history={history}
                     group={group}
                     sortBy={tournament ? tournament.sortBy : ""}
-                    showPrize={+tournament.prize > 0}
+                    showPrize={tournament && +tournament.prize > 0}
                     ranking={i}
                   ></LeaderboardCard>
                 ))}

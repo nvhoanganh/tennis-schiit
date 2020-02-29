@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga";
-import { appConfig } from '@tennis-score/core';
+import { appConfig } from "@tennis-score/core";
 const useServiceWorker = registerPwaHandle => {
   const [showInstalling, setShowInstalling] = useState(false);
   const [isInstalled, setIsInstaled] = useState(false);
@@ -17,7 +17,7 @@ const useServiceWorker = registerPwaHandle => {
           console.log("SW:update found, status is:", newWorker.state);
           if (
             newWorker.state === "installing" &&
-            localStorage.getItem(appConfig.pwaInstalled)
+            localStorage.getItem(appConfig.pwaInstalled) === "true"
           ) {
             // only show Installing banner if service worker is already installed.
             setShowInstalling(true);

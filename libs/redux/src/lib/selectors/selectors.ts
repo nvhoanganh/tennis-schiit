@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
-import { pipe, groupBy, map, sortBy, sort } from "ramda";
+import { pipe, groupBy, map, sortBy, sort, path } from "ramda";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 import { arrayToObject, calculateStats, isMember, roundOff } from "../utils";
 const getPlayers = state => state.players;
@@ -26,6 +26,7 @@ export const getAllGroups = createSelector(
   getGroups,
   s => s
 );
+
 export const getScores = createSelector(
   getScoresState,
   s => s.entities
@@ -191,12 +192,24 @@ export const getLeaderBoardGroupUser = createSelector(
   getGroupUser,
   (players, user) => (!user ? null : { ...players[user.playerId], ...user })
 );
+
+export const playerOtherGroups = createSelector(
+  getLeaderBoardGroupUser,
+  getAllGroups,
+  (player, allGroups) =>
+    Object.values(allGroups)
+      .filter((x: any) => !x.deletedDate)
+      .filter((x: any) => x.groupId in (path(["groups"], player) || {}))
+);
+
 export const getMyGroups = createSelector(
   getCurrentUser,
   getGroups,
   (user, groups) => {
     if (!user) return [];
-    return Object.values(groups).filter(x => isMember(user, x));
+    return Object.values(groups)
+      .filter((x: any) => !x.deletedDate)
+      .filter(x => isMember(user, x));
   }
 );
 
@@ -224,6 +237,8 @@ export const getGroupNotMemberOff = createSelector(
   getGroups,
   (user, groups) => {
     if (!user) return Object.values(groups);
-    return Object.values(groups).filter(x => !isMember(user, x));
+    return Object.values(groups)
+      .filter((x: any) => !x.deletedDate)
+      .filter(x => !isMember(user, x));
   }
 );

@@ -41,7 +41,9 @@ const AddressLookup: React.SFC<{
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
+        setValue(name, address);
         setValue(`${name}LongLat`, latLng);
+        setDirty(true);
       })
       .catch(error => console.error("Error", error));
   };

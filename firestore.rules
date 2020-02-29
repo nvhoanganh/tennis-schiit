@@ -24,6 +24,7 @@ service cloud.firestore {
         && request.resource.data.name == resource.data.get('name', null)
         && request.resource.data.onwerName == resource.data.get('onwerName', null)
         && request.resource.data.owner == resource.data.get('owner', null)
+        && request.resource.data.deletedDate == resource.data.get('deletedDate', null)
     }
 
     // /players/0NmjOMXj4C7glw3COYqH
@@ -46,7 +47,7 @@ service cloud.firestore {
 
     match /groups/{groupId}/{path=**} {
     	// owner of group has full access
-      allow write: if isOwnerOfGroup(groupId);
+      allow update: if isOwnerOfGroup(groupId);
     }
 
     match /groups/{groupId} {
@@ -73,8 +74,8 @@ service cloud.firestore {
     }
 
     match /groups/{groupId}/tournaments/{tourId} {
-    	// only owner create/delete tournament
-      allow create, delete, update: if isOwnerOfGroup(groupId);
+    	// only owner create tournament
+      allow create, update: if isOwnerOfGroup(groupId);
       // member can update players stats (submit new score) or approve new member join request
       allow update: if isMember(groupId)
         && request.resource.data.players != resource.data.get('players', null);
@@ -84,12 +85,16 @@ service cloud.firestore {
     match /groups/{groupId}/tournaments/{tourId}/stats/{statId} {
     	// member can add new stats (submit new score)
       allow create: if isMember(groupId);
+      // only owner can delete stats
+      allow delete: if isOwnerOfGroup(groupId);
     }
 
     // /groups/0oiWTODB7i2iXjCIMw1H/tournaments/5UEwlZqwV0aF1OJxfqmb/scores/0UMrglcSCu570jrVrPrh
     match /groups/{groupId}/tournaments/{tourId}/scores/{scoreId} {
     	// member can add new score (submit new score)
       allow create: if isMember(groupId);
+      // only owner can delete score
+      allow delete: if isOwnerOfGroup(groupId);
     }
 
     // everyone can read everything
