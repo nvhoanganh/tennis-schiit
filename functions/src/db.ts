@@ -3,20 +3,16 @@ const admin = require("firebase-admin");
 export const db = admin.firestore();
 
 export function getTournamentResults(groupId: string, tourId: string) {
-  return db
-    .collection("groups")
-    .doc(groupId)
-    .get()
-    .then(g => {
-      const group = g.data();
-      return db
+  return getGroup(groupId).then(group => {
+    return (
+      db
         .collection("groups")
         .doc(groupId)
         .collection("tournaments")
         .doc(tourId)
         .collection("scores")
         .orderBy("matchDate", "desc")
-        .limit(10)
+        //.limit(10)
         .get()
         .then(d =>
           d.docs.map(x => {
@@ -31,9 +27,7 @@ export function getTournamentResults(groupId: string, tourId: string) {
             return {
               groupName: group.name,
               winners: group.players
-                .filter(
-                  p => Object.keys(winners).indexOf(p.userId) >= 0
-                )
+                .filter(p => Object.keys(winners).indexOf(p.userId) >= 0)
                 .map(p => p.name)
                 .join(";"),
               losers: group.players
@@ -46,6 +40,15 @@ export function getTournamentResults(groupId: string, tourId: string) {
               headStart
             };
           })
-        );
-    });
+        )
+    );
+  });
+}
+
+export function getGroup(groupId) {
+  return db
+    .collection("groups")
+    .doc(groupId)
+    .get()
+    .then(g => g.data());
 }

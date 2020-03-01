@@ -18,3 +18,9 @@ export const checkForBots = userAgent => {
     return false;
   }
 };
+
+export const getGroupImageUrlFull = url => {
+  return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
+    url
+  )}?alt=media`;
+};

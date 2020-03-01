@@ -1,34 +1,36 @@
 import { linkBot } from "./sw-shell";
 import { realUser } from "./sw-shell-real";
-import XRegExp from "xregexp";
-import { checkForBots } from "./utils";
+import { checkForBots, getGroupImageUrlFull } from "./utils";
+import { getGroup } from "./db";
 
 const express = require("express");
+const XRegExp = require("xregexp");
 const dynamicRender = express();
 
-const getMeta = url => {
-  // leaderboard
-  let match = XRegExp.exec(url, XRegExp("/leaderboard/(?<groupId>.+)?tab=0"));
+const getMeta = async url => {
+  // leaderboard - home
+  let match = XRegExp.exec(url, XRegExp("/leaderboard/(?<groupId>.+)\\?tab=0"));
   if (match && match.groupId) {
-    console.log("match leaderboard home page");
+    console.log("match leaderboard home page", match.groupId);
+    const group = await getGroup(match.groupId);
     return {
-      title: "HSV Leaderboard",
-      image:
-        "https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2F0oiWTODB7i2iXjCIMw1H-IMG_20180328_215043_414x260.jpg?alt=media",
-      description: "HSV Leaderboard - Tennis Score Sheet",
-      content: "HSV Leaderboard - Tennis Score Sheet"
+      title: `${group.name} Leaderboard`,
+      image: getGroupImageUrlFull(group.groupImage),
+      description: `${group.name} Leaderboard - Tennis Score Sheet`,
+      content: `${group.name} Leaderboard - Tennis Score Sheet`
     };
   }
 
-  match = XRegExp.exec(url, XRegExp("/leaderboard/(?<groupId>.+)?tab=1"));
+  // leaderboard - stats
+  match = XRegExp.exec(url, XRegExp("/leaderboard/(?<groupId>.+)\\?tab=1"));
   if (match && match.groupId) {
     console.log("match leaderboard stats");
+    const group = await getGroup(match.groupId);
     return {
-      title: "HSV Player Stats",
-      image:
-        "https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2F0oiWTODB7i2iXjCIMw1H-IMG_20180328_215043_414x260.jpg?alt=media",
-      description: "HSV Group Stats - Tennis Score Sheet",
-      content: "HSV Group Stats - Tennis Score Sheet"
+      title: `${group.name} Player Stats`,
+      image: getGroupImageUrlFull(group.groupImage),
+      description: `${group.name} Player Stats - Tennis Score Sheet`,
+      content: `${group.name} Player Stats - Tennis Score Sheet`
     };
   }
 
@@ -36,17 +38,61 @@ const getMeta = url => {
   match = XRegExp.exec(
     url,
     XRegExp(
-      "/group/(?<groupId>.+)/player/(?<playerId>.+)/?userId=(?<userId>.+)"
+      "/group/(?<groupId>.+)/player/(?<playerId>.+)\\?userId=(?<userId>.+)"
     )
   );
-
   if (match) {
-    console.log("match user profile page");
+    console.log("match player profile");
+    const group = await getGroup(match.groupId);
+    const player = group.players.find(x => x.userId === match.playerId);
     return {
-      title: "Player Profile",
-      image: `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2Favatar_${match.userId}_200x200.png?alt=media`,
-      description: "Player Profile - Tennis Score Sheet",
-      content: "Player Profile - Tennis Score Sheet"
+      title: `${player.name} profile`,
+      image: `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/images%2Favatar_${match.userId}.png?alt=media`,
+      description: `${player.name} Profile - Tennis Score Sheet`,
+      content: `${player.name} Profile - Tennis Score Sheet`
+    };
+  }
+
+  // https://tennisscoresheet.com/headtohead/0oiWTODB7i2iXjCIMw1H/tournament/5UEwlZqwV0aF1OJxfqmb?team1=Zuw8wJhOlMiKg1h9WOgH%7CfC98k2vULrb9HCOpoHts&team2=JUiZ9HOtW1eLsUTvtndZ%7CR0YcF7WNYUQolBtbGDKv
+  // head 2 head result
+  match = XRegExp.exec(
+    url,
+    XRegExp(
+      "/headtohead/(?<groupId>.+)/tournament/(?<tourId>.+)\\?team1=(?<team1>.+)&team2=(?<team2>.+)"
+    )
+  );
+  if (match) {
+    console.log("match head 2 head");
+    const group = await getGroup(match.groupId);
+    const getPlayers = players =>
+      group.players
+        .filter(p => players.indexOf(p.userId) >= 0)
+        .map(p => p.name)
+        .join(",");
+
+    const team1 = getPlayers(match.team1.split("%7C"));
+    const team2 = getPlayers(match.team2.split("%7C"));
+    return {
+      title: `${team1} vs ${team2} - Head 2 Head Result`,
+      image: getGroupImageUrlFull(group.groupImage),
+      description: `${team1} vs ${team2} - Head 2 Head Result - Tennis Score Sheet`,
+      content: `${team1} vs ${team2} - Head 2 Head Result - Tennis Score Sheet`
+    };
+  }
+
+  // https://tennisscoresheet.com/groups/0oiWTODB7i2iXjCIMw1H/tournament/5UEwlZqwV0aF1OJxfqmb/results
+  match = XRegExp.exec(
+    url,
+    XRegExp("/groups/(?<groupId>.+)/tournament/(?<tourId>.+)/results")
+  );
+  if (match && match.groupId) {
+    console.log("match group result");
+    const group = await getGroup(match.groupId);
+    return {
+      title: `${group.name} latest match results`,
+      image: getGroupImageUrlFull(group.groupImage),
+      description: `${group.name} latest match results`,
+      content: `${group.name} latest match results`
     };
   }
 
@@ -67,7 +113,7 @@ const getMeta = url => {
 //
 // The trick is on L66, pwaShell(): You must update that file! Open for
 // explainer.
-dynamicRender.get("*", (req, res) => {
+dynamicRender.get("*", async (req, res) => {
   // What say you bot tester?
   const userAgent = req.headers["user-agent"];
   const botResult = checkForBots(userAgent);
@@ -79,7 +125,7 @@ dynamicRender.get("*", (req, res) => {
     // inject the header
     res.set("Cache-Control", "public, max-age=300, s-maxage=600");
     res.set("Vary", "User-Agent");
-    res.send(linkBot(getMeta(req.url)));
+    res.send(linkBot(await getMeta(req.url)));
   } else {
     // this is real
     console.log(
