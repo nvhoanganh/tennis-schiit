@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "py train-keras.py && npm run export-tfjs",
+    "export-tfjs": "tensorflowjs_converter --input_format keras model.h5 model/output"
   },
   "author": "",
   "license": "ISC",
