@@ -6,13 +6,17 @@ async function load() {
     "https://raw.githubusercontent.com/nvhoanganh/tennis-schiit/master/machine-learning/model/output/model.json"
   );
   // The first argument is the data, and the second is the shape.
-  const inputData = tf.tensor2d([[0.95, 0.3, 0]], [1, 3]);
+  let inputData = tf.tensor2d([[0.85, 0.05, 0]], [1, 3]);
+  let result = model.predict(inputData);
+  console.log(result.dataSync());
 
-  // Get the highest confidence prediction from our model
-  const result = model.predict(inputData);
-  // const winner = irisClasses[result.argMax().dataSync()[0]];
-  // Display the winner
-  console.log(result);
+  inputData = tf.tensor2d([[0.05, 0.85, 0]], [1, 3]);
+  result = model.predict(inputData);
+  console.log(result.dataSync());
+
+  inputData = tf.tensor2d([[0.95, 0.95, 0]], [1, 3]);
+  result = model.predict(inputData);
+  console.log(result.dataSync());
 }
 
 // JavaScript
