@@ -1,6 +1,7 @@
 import { getScoreString } from "./utils";
 const admin = require("firebase-admin");
 export const db = admin.firestore();
+import * as R from "ramda";
 
 export function getTournamentResults(groupId: string, tourId: string) {
   return getGroup(groupId).then(group => {
@@ -12,7 +13,7 @@ export function getTournamentResults(groupId: string, tourId: string) {
         .doc(tourId)
         .collection("scores")
         .orderBy("matchDate", "desc")
-        //.limit(10)
+        // .limit(20)
         .get()
         .then(d =>
           d.docs.map(x => {
@@ -26,10 +27,12 @@ export function getTournamentResults(groupId: string, tourId: string) {
             } = x.data();
             return {
               groupName: group.name,
+              winnersIds: Object.keys(winners).join(";"),
               winners: group.players
                 .filter(p => Object.keys(winners).indexOf(p.userId) >= 0)
                 .map(p => p.name)
                 .join(";"),
+              losersIds: Object.keys(losers).join(";"),
               losers: group.players
                 .filter(p => Object.keys(losers).indexOf(p.userId) >= 0)
                 .map(p => p.name)
@@ -41,6 +44,28 @@ export function getTournamentResults(groupId: string, tourId: string) {
             };
           })
         )
+        .then(results => {
+          // get normalized winners and losers
+          const getWL = lw =>
+            R.pipe(
+              R.map(R.prop(lw)),
+              R.flatten
+            );
+
+          const getUniqSortedPlayers = R.pipe(
+            R.converge(R.concat, [getWL("winnersIds"), getWL("losersIds")]),
+            R.uniq,
+            a => a.sort()
+          );
+
+          const uniqueSorted = getUniqSortedPlayers(results);
+
+          return results.map(r => ({
+            ...r,
+            winnersId: uniqueSorted.indexOf(r.winnersIds),
+            losersId: uniqueSorted.indexOf(r.losersIds)
+          }));
+        })
     );
   });
 }

@@ -18,13 +18,15 @@ api.get("/api/groups/:groupId/tournament/:tourId/result.csv", (req, res) => {
   getTournamentResults(groupId, tourId).then(
     d => {
       const csv =
-        "winners,losers,matchDate,isBagel,score,headStart\n" +
+        "winners,winnersId,losers,losersId,matchDate,isBagel,score,headStart\n" +
         d
           .map(
             x =>
-              `${x.winners},${x.losers},${x.matchDate.toISOString()},${
-                x.isBagel
-              },${x.score},${x.headStart}`
+              `${x.winners},${x.winnersId},${x.losers},${
+                x.losersId
+              },${x.matchDate.toISOString()},${x.isBagel},${x.score},${
+                x.headStart
+              }`
           )
           .join("\n");
       res.set("Content-Type", "text/plain");
