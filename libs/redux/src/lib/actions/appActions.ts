@@ -330,12 +330,16 @@ export function getWebPushSub(uid, reg, groupId) {
   };
 
   return askPersmission().then(result => {
-    if (result !== "granted") {
+    console.log("getWebPushSub -> result", result);
+    if (
+      result === "denied" ||
+      (result === "default" && Notification.permission === "denied")
+    ) {
       localStorage.removeItem(appConfig.pwaNotificationSubKeyOnThisDevice);
       return Promise.reject({
         position: "bottom",
         status: "error",
-        title: "Oops! Something went wrong",
+        title: "Notification is disabled for this site!",
         description: "Please enable notification option via site Settings",
         duration: null,
         isClosable: true
