@@ -10,11 +10,15 @@ async function load() {
   let result = model.predict(inputData);
   console.log(result.dataSync());
 
-  inputData = tf.tensor2d([[28, 5, 0]], [1, 3]);
+  inputData = tf.tensor2d([[34, 28, 0]], [1, 3]);
   result = model.predict(inputData);
   console.log(result.dataSync());
 
   inputData = tf.tensor2d([[19, 37, 0]], [1, 3]);
+  result = model.predict(inputData);
+  console.log(result.dataSync());
+
+  inputData = tf.tensor2d([[37, 19, 0]], [1, 3]);
   result = model.predict(inputData);
   console.log(result.dataSync());
 }
