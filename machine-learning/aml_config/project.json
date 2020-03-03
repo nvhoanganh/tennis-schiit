@@ -1,0 +1,4 @@
+{
+    "Id": "ml-ws-exp1",
+    "Scope": "/subscriptions/76d03a17-20be-4175-bbed-ca6d7819c68f/resourceGroups/machine-learning/providers/Microsoft.MachineLearningServices/workspaces/ml-ws/experiments/ml-ws-exp1"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "machine-learning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "py train-keras.py && npm run export-tfjs",
+    "export-tfjs": "tensorflowjs_converter --input_format keras model.h5 model/output"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^1.5.2",
+    "@tensorflow/tfjs-node": "^1.5.2"
+  }
+}
