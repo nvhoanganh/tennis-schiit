@@ -4,7 +4,8 @@ import keras
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv('tennis-result-2.csv')
+# df = pd.read_csv('tennis-result-2.csv')
+df = pd.read_csv('0oiWTODB7i2iXjCIMw1H.csv')
 
 properties = list(df.columns.values)
 properties.remove('matchDate')
@@ -33,7 +34,7 @@ print('Test accuracy:', test_acc)
 
 
 
-x_predict = np.array([[0.05, 0.1, 0 ], [0.55, 0.7, 0]])
+x_predict = np.array([[25, 9, 0 ], [8, 33, 0]])
 
 result = model.predict_classes(x_predict)
 

@@ -1,20 +1,20 @@
-// https://github.com/nvhoanganh/tennis-schiit/blob/master/machine-learning/model/model.json
-const tf = require("@tensorflow/tfjs");
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
+// eslint-disable @typescript-eslint/no-var-requires
 
+const tf = require("@tensorflow/tfjs-node");
 async function load() {
-  const model = await tf.loadLayersModel(
-    "https://raw.githubusercontent.com/nvhoanganh/tennis-schiit/master/machine-learning/model/output/model.json"
-  );
+  const model = await tf.loadLayersModel("file://model/output/model.json");
   // The first argument is the data, and the second is the shape.
-  let inputData = tf.tensor2d([[0.85, 0.05, 0]], [1, 3]);
+  let inputData = tf.tensor2d([[28, 34, 0]], [1, 3]);
   let result = model.predict(inputData);
   console.log(result.dataSync());
 
-  inputData = tf.tensor2d([[0.05, 0.85, 0]], [1, 3]);
+  inputData = tf.tensor2d([[28, 5, 0]], [1, 3]);
   result = model.predict(inputData);
   console.log(result.dataSync());
 
-  inputData = tf.tensor2d([[0.95, 0.95, 0]], [1, 3]);
+  inputData = tf.tensor2d([[19, 37, 0]], [1, 3]);
   result = model.predict(inputData);
   console.log(result.dataSync());
 }
