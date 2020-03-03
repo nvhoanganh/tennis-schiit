@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppAction, AppActionTypes } from "../actions";
+import { useToastOptions } from "@chakra-ui/core";
 
 export interface AppState {
   pendingRequests: number;
@@ -12,6 +13,7 @@ export interface AppState {
   signInError?: any;
   user?: any;
   currentGroup?: string;
+  showToast?: useToastOptions;
   signUpError?: any;
 }
 
@@ -27,6 +29,11 @@ const app = (
         ...state,
         lastAction: action.type,
         pendingRequests: state.pendingRequests + 1
+      };
+    case AppActionTypes.SHOW_TOAST:
+      return {
+        ...state,
+        showToast: action.payload
       };
     case AppActionTypes.APP_LOAD:
       return {

@@ -6,7 +6,14 @@ import {
   Tabs,
   useToast
 } from "@chakra-ui/core";
-import { getStats, isMember, isOwner } from "@tennis-score/redux";
+import {
+  getStats,
+  getWebPushSub,
+  isMember,
+  isOwner,
+  isPushEnabled,
+  turnOffWebPushSubForGroup
+} from "@tennis-score/redux";
 import format from "date-fns/format";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import queryString from "query-string";
@@ -16,6 +23,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import { LinkContainer } from "react-router-bootstrap";
 import setQuery from "set-query-string";
+import { usePushNotification } from "../hooks/usePushNotification";
 import { Button } from "./Button";
 import Confirm from "./Confirm";
 import { GroupMemberDropdown } from "./GroupMemberDropdown";
@@ -42,11 +50,41 @@ const Leaderboard = ({
   hasMore,
   lastDoc,
   pwaHandle,
-  getNotificationSub,
+  pushNotificationIsOn,
+  getWebPushSubAction,
   ...props
 }) => {
-  // states
-  // usePushNotification({getNotificationSub, user, pwaHandle});
+  usePushNotification({
+    user,
+    pwaHandle,
+    groupId: match.params.group
+  });
+  const handleAddPush = () => {
+    if (pushNotificationIsOn) {
+      // turn off
+      turnOffWebPushSubForGroup(user.uid, match.params.group).then(() =>
+        toast({
+          title: "Turned off Push Notification",
+          status: "success",
+          duration: 2000,
+          isClosable: true
+        })
+      );
+    } else {
+      if (isPushEnabled()) {
+        getWebPushSub(user.uid, pwaHandle, match.params.group)
+          .then(() =>
+            toast({
+              title: "Turned on Push Notification",
+              status: "success",
+              duration: 2000,
+              isClosable: true
+            })
+          )
+          .catch(e => toast(e));
+      }
+    }
+  };
   const q = queryString.parse(window.location.search);
   const toast = useToast();
   const [tabIndex, setTabIndex] = useState(+q.tab || 0);
@@ -95,7 +133,7 @@ const Leaderboard = ({
   const approveJoinRequestHandler = player => {
     if (players.filter(x => !x.linkedplayerId).length === 0) {
       // approve as new
-      props.approveJoinRequest(player, match.params.group, null).then(
+      props.approveJoinRequest(player, group, null).then(
         toast({
           title: "Player added",
           status: "success",
@@ -135,9 +173,11 @@ const Leaderboard = ({
             center={group.name.toUpperCase()}
             right={
               <GroupMemberDropdown
+                pushNotificationIsOn={pushNotificationIsOn}
                 history={history}
-                leaveGroup={props.leaveGroup}
+                leaveGroup={() => props.leaveGroup(match.params.group)}
                 joinGroup={props.joinGroup}
+                enablePushNotification={handleAddPush}
                 user={user}
                 group={group}
               />
@@ -248,6 +288,7 @@ const Leaderboard = ({
                     history={history}
                     group={group}
                     sortBy={tournament ? tournament.sortBy : ""}
+                    showPrize={tournament && +tournament.prize > 0}
                     ranking={i}
                   ></LeaderboardCard>
                 ))}
@@ -286,16 +327,18 @@ const Leaderboard = ({
                         </>
                       }
                     >
-                      <div className="py-4 border-bottom shadow-sm">
-                        <TournamentStatsChart
-                          title="Prize Money"
-                          value="prizeMoney"
-                          prefix="$"
-                          suffix=""
-                          players={group.players}
-                          stats={stats}
-                        ></TournamentStatsChart>
-                      </div>
+                      {tournament && +tournament.prize > 0 && (
+                        <div className="py-4 border-bottom shadow-sm">
+                          <TournamentStatsChart
+                            title="Prize Money"
+                            value="prizeMoney"
+                            prefix="$"
+                            suffix=""
+                            players={group.players}
+                            stats={stats}
+                          ></TournamentStatsChart>
+                        </div>
+                      )}
 
                       <div className="py-4 border-bottom shadow-sm">
                         <TournamentStatsChart
@@ -307,7 +350,6 @@ const Leaderboard = ({
                           stats={stats}
                         ></TournamentStatsChart>
                       </div>
-
                       <div className="py-4 border-bottom shadow-sm">
                         <TournamentStatsChart
                           title="TrueSkill Points"

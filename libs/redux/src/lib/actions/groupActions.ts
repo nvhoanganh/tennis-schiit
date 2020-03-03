@@ -24,6 +24,9 @@ export enum GroupActionTypes {
   JOIN_GROUP = "JOIN_GROUP",
   JOIN_GROUP_SUCCESS = "JOIN_GROUP_SUCCESS",
 
+  LEAVE_GROUP = "LEAVE_GROUP",
+  LEAVE_GROUP_SUCCESS = "LEAVE_GROUP_SUCCESS",
+
   REJECT_JOIN_GROUP = "REJECT_JOIN_GROUP",
   REJECT_JOIN_GROUP_SUCCESS = "REJECT_JOIN_GROUP_SUCCESS",
 
@@ -141,7 +144,9 @@ export function deleteGroup(groupId) {
       .firestore()
       .collection(GROUPS)
       .doc(groupId)
-      .delete()
+      .update({
+        deletedDate: new Date()
+      })
       .then(() => {
         dispatch(apiEnd());
         dispatch({ type: GroupActionTypes.DELETE_GROUP, id: groupId });
@@ -179,6 +184,50 @@ export function joinGroup(groupId) {
           groupId: groupId,
           user
         } as JoinGroupSuccessAction);
+      });
+  };
+}
+
+export function leaveGroup(groupId) {
+  return async (dispatch, getState) => {
+    const {
+      app: {
+        user: { uid }
+      }
+    } = getState();
+
+    const groupRef = firebase
+      .firestore()
+      .collection(GROUPS)
+      .doc(groupId);
+
+    const userRef = firebase
+      .firestore()
+      .collection(USERS)
+      .doc(uid);
+
+    dispatch(apiStart(GroupActionTypes.LEAVE_GROUP));
+
+    return userRef
+      .update({
+        [`groups.${groupId}`]: firebase.firestore.FieldValue.delete()
+      })
+      .then(() =>
+        groupRef.get().then(d =>
+          groupRef.update({
+            players: d.data().players.map(x =>
+              x.userId === uid
+                ? {
+                    ...x,
+                    leftGroup: new Date()
+                  }
+                : x
+            )
+          })
+        )
+      )
+      .then(() => {
+        dispatch(apiEnd());
       });
   };
 }
@@ -225,7 +274,7 @@ export function rejectJoinRequest(target, groupId) {
   };
 }
 
-export function approveJoinRequest(target, groupId, createAs) {
+export function approveJoinRequest(target, group, createAs) {
   return async (dispatch, getState) => {
     const {
       app: {
@@ -236,7 +285,7 @@ export function approveJoinRequest(target, groupId, createAs) {
     const groupRef = firebase
       .firestore()
       .collection(GROUPS)
-      .doc(groupId);
+      .doc(group.groupId);
 
     const userRef = firebase
       .firestore()
@@ -252,12 +301,36 @@ export function approveJoinRequest(target, groupId, createAs) {
       })
       .then(() =>
         userRef.update({
-          [`groups.${groupId}`]: true
+          [`groups.${group.groupId}`]: true
         })
       )
       .then(() => {
-        // add player
+        // add new player
+        if (group.players[target.uid] && group.players[target.uid].leftGroup) {
+          // this is old player who left the group before, just need to remove
+          // replace ghost player
+          return groupRef.get().then(d => {
+            const newPlayersList = d.data().players.map(x =>
+              x.userId === target.uid
+                ? {
+                    ...x,
+                    email: target.email,
+                    name: target.displayName,
+                    avatarUrl: target.avatarUrl || "",
+                    linkedplayerId: target.uid,
+                    addedBy: uid,
+                    leftGroup: null
+                  }
+                : x
+            );
+            return groupRef.update({
+              players: newPlayersList
+            });
+          });
+        }
+
         if (createAs === null) {
+          // add new player to the group
           return groupRef.update({
             players: firebase.firestore.FieldValue.arrayUnion({
               email: target.email,
@@ -270,6 +343,7 @@ export function approveJoinRequest(target, groupId, createAs) {
             })
           });
         } else {
+          // replace ghost player
           return groupRef.get().then(d => {
             const newPlayersList = d.data().players.map(x =>
               x.userId === createAs.id
@@ -291,7 +365,6 @@ export function approveJoinRequest(target, groupId, createAs) {
       })
       .then(() => {
         dispatch(apiEnd());
-        dispatch(loadLeaderboard(groupId));
       });
   };
 }

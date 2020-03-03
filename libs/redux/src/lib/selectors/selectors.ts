@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
-import { pipe, groupBy, map, sortBy, sort } from "ramda";
+import { pipe, groupBy, map, sortBy, sort, path } from "ramda";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 import { arrayToObject, calculateStats, isMember, roundOff } from "../utils";
 const getPlayers = state => state.players;
@@ -13,6 +13,10 @@ export const getCurrentUser = createSelector(
   getAppState,
   s => s.user
 );
+export const getShowToast = createSelector(
+  getAppState,
+  s => s.showToast
+);
 export const getPwaHandle = createSelector(
   getAppState,
   s => s.pwaHandle
@@ -22,6 +26,7 @@ export const getAllGroups = createSelector(
   getGroups,
   s => s
 );
+
 export const getScores = createSelector(
   getScoresState,
   s => s.entities
@@ -98,6 +103,21 @@ export const getCurrLeaderGroup = createSelector(
   }
 );
 
+export const getUserTurnedOnPushNotification = createSelector(
+  getCurrLeaderGroup,
+  getCurrentUser,
+  (group, user) => {
+    return (
+      group &&
+      group.webPush &&
+      user &&
+      user.uid in group.webPush &&
+      group.webPush[user.uid] &&
+      Object.values(group.webPush[user.uid]).length > 0
+    );
+  }
+);
+
 export const getCurrLeaderTournament = createSelector(
   getLeaderboardState,
   s => s.tournament
@@ -158,6 +178,11 @@ export const getLeaderboardPlayers = createSelector(
   }
 );
 
+export const getActivePlayersForGroup = createSelector(
+  getLeaderboardPlayers,
+  players => players.filter(x => !x.leftGroup)
+);
+
 export const getLeaderboardPlayersObj = createSelector(
   getLeaderboardPlayers,
   players => arrayToObject(players, x => x.id, x => x)
@@ -167,12 +192,24 @@ export const getLeaderBoardGroupUser = createSelector(
   getGroupUser,
   (players, user) => (!user ? null : { ...players[user.playerId], ...user })
 );
+
+export const playerOtherGroups = createSelector(
+  getLeaderBoardGroupUser,
+  getAllGroups,
+  (player, allGroups) =>
+    Object.values(allGroups)
+      .filter((x: any) => !x.deletedDate)
+      .filter((x: any) => x.groupId in (path(["groups"], player) || {}))
+);
+
 export const getMyGroups = createSelector(
   getCurrentUser,
   getGroups,
   (user, groups) => {
     if (!user) return [];
-    return Object.values(groups).filter(x => isMember(user, x));
+    return Object.values(groups)
+      .filter((x: any) => !x.deletedDate)
+      .filter(x => isMember(user, x));
   }
 );
 
@@ -200,6 +237,8 @@ export const getGroupNotMemberOff = createSelector(
   getGroups,
   (user, groups) => {
     if (!user) return Object.values(groups);
-    return Object.values(groups).filter(x => !isMember(user, x));
+    return Object.values(groups)
+      .filter((x: any) => !x.deletedDate)
+      .filter(x => !isMember(user, x));
   }
 );

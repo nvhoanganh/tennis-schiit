@@ -15,3 +15,11 @@ export function isValidNumber(value) {
   const pattern = /^\d+$/;
   return value && pattern.test(value);
 }
+
+export const appConfig = {
+  pwaInstalled: "tennis-scoresheet-pwa-installed",
+  pwaInstallPromptTimesKey: "tennis-scoresheet-ios-ask-pwa",
+  pwaInstallPromptTimes: 3,
+  pwaNotificationSubDeniedKey: "tennis-scoresheet-ask-notify-denied",
+  pwaNotificationSubKeyOnThisDevice: "tennis-scoresheet-notification-subscribed"
+};

@@ -85,8 +85,8 @@ const ManageGroup = ({
       </div>
 
       <Confirm
-        title="Permanent Delete?"
-        message="Are you sure you want to permanently delete this group? All data will be lost"
+        title="Delete Group?"
+        message="Are you sure you want to delete this group? You won't be able to access this group anymore."
         close="Cancel"
         mainAction="Delete"
         mainActionClass="red"

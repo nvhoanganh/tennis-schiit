@@ -39,6 +39,7 @@ const PlayerProfile = ({
   match,
   group,
   groups,
+  playerGroups,
   history,
   pendingRequests,
   tournament,
@@ -48,10 +49,12 @@ const PlayerProfile = ({
   const [myStats, setMyStats] = useState<any>(null);
   const [myMatches, setmyMatches] = useState<any>(null);
   const q = queryString.parse(location.search);
+
   useEffect(() => {
     props.loadLeaderboard(match.params.group);
     props.getPlayer(match.params.id, q.userId);
   }, []);
+
   useEffect(() => {
     if (group && group.currentTournament) {
       getStatsByPlayer({
@@ -193,17 +196,17 @@ const PlayerProfile = ({
         </div>
       </>
 
-      {player.groups ? (
+      {playerGroups ? (
         <>
           <HeaderCard>Groups</HeaderCard>
           <div className="pb-5">
             <ScrollPills height={200}>
-              {Object.keys(player.groups).map((p, i) => (
-                <div key={p} className="m-2 shadow-sm">
+              {playerGroups.map(group => (
+                <div key={group.groupId} className="m-2 shadow-sm">
                   <GroupCard
                     style={{ minWidth: 200 }}
                     height={148}
-                    group={groups[p]}
+                    group={group}
                     history={history}
                     user={player}
                     showIsMember={false}

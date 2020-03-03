@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga";
-import { appConfig } from "../../assets/config";
+import { appConfig } from "@tennis-score/core";
 const useServiceWorker = registerPwaHandle => {
   const [showInstalling, setShowInstalling] = useState(false);
   const [isInstalled, setIsInstaled] = useState(false);
@@ -17,10 +17,14 @@ const useServiceWorker = registerPwaHandle => {
           console.log("SW:update found, status is:", newWorker.state);
           if (
             newWorker.state === "installing" &&
-            localStorage.getItem(appConfig.pwaInstalled)
+            localStorage.getItem(appConfig.pwaInstalled) === "true"
           ) {
             // only show Installing banner if service worker is already installed.
             setShowInstalling(true);
+            setTimeout(() => {
+              // hide after 5 seconds
+              setShowInstalling(false);
+            }, 5000);
           }
 
           newWorker.addEventListener("statechange", () => {
@@ -29,7 +33,7 @@ const useServiceWorker = registerPwaHandle => {
               case "installed":
                 if (navigator.serviceWorker.controller) {
                   console.log("SW:send skip waiting", new Date());
-                  localStorage.setItem(appConfig.pwaInstalled, "true");
+
                   newWorker.postMessage({ type: "SKIP_WAITING" });
                 }
                 break;
@@ -37,6 +41,7 @@ const useServiceWorker = registerPwaHandle => {
           });
         });
 
+        localStorage.setItem(appConfig.pwaInstalled, "true");
         registerPwaHandle(reg);
       });
 

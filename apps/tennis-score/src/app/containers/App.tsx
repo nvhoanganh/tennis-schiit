@@ -1,5 +1,25 @@
-import { Alert, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/core";
-import { appLoad, getAppLoaded, getCurrentUser, getPendingRequests, loadGroups, registerPwaHandle, signOut } from "@tennis-score/redux";
+import {
+  Alert,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Spinner,
+  useDisclosure,
+  useToast
+} from "@chakra-ui/core";
+import {
+  appLoad,
+  getAppLoaded,
+  getCurrentUser,
+  getPendingRequests,
+  loadGroups,
+  registerPwaHandle,
+  signOut,
+  getShowToast
+} from "@tennis-score/redux";
 import "firebase/auth";
 import "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -31,17 +51,25 @@ const App = ({
   appLoaded,
   history,
   registerPwaHandle,
+  showToastr,
   signOutHandler
 }) => {
   const toast = useToast();
   const [showInstalling, isInstalled] = useServiceWorker(registerPwaHandle);
   const [show, setShow] = useState(false);
+
   usePwaInstallPrompt();
 
   useEffect(() => {
     appLoad();
     loadGroups();
   }, []);
+
+  useEffect(() => {
+    if (showToastr) {
+      toast(showToastr);
+    }
+  }, [showToastr]);
 
   useEffect(() => {
     if (window.performance && appLoaded) {
@@ -178,7 +206,7 @@ const App = ({
       </Drawer>
 
       <Confirm
-        title="Restar now?"
+        title="Restart now?"
         message="New version has been successfully installed. Do you want to reload now?"
         close="Maybe later"
         mainAction="OK"
@@ -195,6 +223,7 @@ const App = ({
 
 const mapStateToProps = state => ({
   user: getCurrentUser(state),
+  showToastr: getShowToast(state),
   pendingRequests: getPendingRequests(state),
   appLoaded: getAppLoaded(state)
 });
