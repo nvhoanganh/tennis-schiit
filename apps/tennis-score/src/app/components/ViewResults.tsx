@@ -1,5 +1,17 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
-import { DeleteScore, getPossibleVerse, isMember, SearchScore } from "@tennis-score/redux";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
+import {
+  DeleteScore,
+  getPossibleVerse,
+  isMember,
+  SearchScore
+} from "@tennis-score/redux";
 import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
@@ -81,7 +93,7 @@ const ViewResults = ({
   return (
     <>
       <RouteNav history={history} center="Match Results"></RouteNav>
-      {scores && Object.keys(scores).length > 0 ? (
+      {group && scores && Object.keys(scores).length > 0 ? (
         <>
           {tournament ? (
             <HeaderCard

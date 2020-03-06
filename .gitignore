@@ -131,3 +131,4 @@ lint/tmp/
 /deploy/android/Tennis Score Sheet/app/release/**
 /deploy/android/Tennis Score Sheet/app/debug/**
 /deploy/android/Tennis Score Sheet/.idea/caches/*.ser
+/firebase-cred.json

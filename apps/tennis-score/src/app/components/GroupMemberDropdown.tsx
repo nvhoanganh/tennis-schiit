@@ -1,4 +1,10 @@
-import { Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure } from "@chakra-ui/core";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useDisclosure
+} from "@chakra-ui/core";
 import { isMember, isOwner } from "@tennis-score/redux";
 import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
@@ -9,8 +15,10 @@ export function GroupMemberDropdown({
   history,
   user,
   group,
+  pushNotificationIsOn,
   joinGroup,
-  leaveGroup
+  leaveGroup,
+  enablePushNotification
 }) {
   const joinHandler = _ => {
     if (!user) {
@@ -19,6 +27,7 @@ export function GroupMemberDropdown({
       joinGroup(group.groupId);
     }
   };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -38,6 +47,17 @@ export function GroupMemberDropdown({
                 Join Group
               </a>
             )}
+            {isMember(user, group) && !isOwner(user, group) && (
+              <a
+                className="d-block h5 py-2"
+                onClick={() => {
+                  leaveGroup();
+                  onClose();
+                }}
+              >
+                Leave Group
+              </a>
+            )}
             {isMember(user, group) && (
               <>
                 <LinkContainer to={`/groups/${group.groupId}/newplayer`}>
@@ -46,6 +66,29 @@ export function GroupMemberDropdown({
                 <p className="text-muted small pb-2">
                   <em> Invite user or create ghost player</em>
                 </p>
+              </>
+            )}
+
+            {isMember(user, group) && (
+              <>
+                <a
+                  className="h5"
+                  onClick={() => {
+                    enablePushNotification();
+                    onClose();
+                  }}
+                >
+                  Turn {pushNotificationIsOn ? "Off" : "On"} Push Notification
+                </a>
+                {pushNotificationIsOn ? (
+                  <p className="text-muted small pb-2">
+                    <em> Stop receiving push notification for this group</em>
+                  </p>
+                ) : (
+                  <p className="text-muted small pb-2">
+                    <em> Get push notification when new score is added</em>
+                  </p>
+                )}
               </>
             )}
             {isOwner(user, group) && (

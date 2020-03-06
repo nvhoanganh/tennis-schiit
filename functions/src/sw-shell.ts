@@ -1,4 +1,4 @@
-const linkBot = config => {
+export function linkBot(config: any) {
   const { title, image, description, content } = config;
   return `
 <!DOCTYPE html>
@@ -27,5 +27,4 @@ const linkBot = config => {
 </body>
 </html>
 `;
-};
-module.exports = linkBot;
+}

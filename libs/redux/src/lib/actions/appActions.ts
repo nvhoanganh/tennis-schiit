@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IAction } from "@tennis-score/redux";
+import { useToast, useToastOptions } from "@chakra-ui/core";
+import { appConfig } from "@tennis-score/core";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { ISignInModel, USERS } from "../models";
-import { isPushEnabled, urlB64ToUint8Array } from "../utils";
+import { ISignInModel, USERS, GROUPS } from "../models";
+import { isPushEnabled, urlB64ToUint8Array, askPersmission } from "../utils";
 import ReactGA from "react-ga";
 
 export enum AppActionTypes {
+  SHOW_TOAST = "SHOW_TOAST",
   API_ERROR = "LAST_API_ERROR",
   RESET_ERROR = "RESET_ERROR",
   API_START = "API_START",
@@ -34,9 +37,6 @@ export enum AppActionTypes {
   UPDATE_PROFILE = "UPDATE_PROFILE",
   UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS",
 
-  GET_NOTIFICATION_SUB = "GET_NOTIFICATION_SUB",
-  GET_NOTIFICATION_SUB_SUCCESS = "GET_NOTIFICATION_SUB_SUCCESS",
-
   PWA_REG = "SET_PWA_REG"
 }
 export class AppRegisterPwaHandle implements IAction {
@@ -46,6 +46,11 @@ export class AppRegisterPwaHandle implements IAction {
 export class ApiStartAction implements IAction {
   readonly type = AppActionTypes.API_START;
   constructor(public action: string, public payload?: any) {}
+}
+
+export class ShowToastAction implements IAction {
+  readonly type = AppActionTypes.SHOW_TOAST;
+  constructor(public payload: useToastOptions) {}
 }
 export class AppLoadAction implements IAction {
   readonly type = AppActionTypes.APP_LOAD;
@@ -66,11 +71,6 @@ export class ResetErrorAction implements IAction {
 export class ApiErrorAction implements IAction {
   readonly type = AppActionTypes.API_ERROR;
   constructor(public action: string, public err: any) {}
-}
-
-export class GetNotificationSubSuccess implements IAction {
-  readonly type = AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS;
-  constructor(public action: string, public subscripttion: any) {}
 }
 
 export class SignInSuccessAction implements IAction {
@@ -100,6 +100,10 @@ export class UpdateProfileSuccessAction implements IAction {
 
 export function apiStart(action: string, payload?: any): ApiStartAction {
   return { type: AppActionTypes.API_START, action, payload };
+}
+
+export function showToast(payload: useToastOptions): ShowToastAction {
+  return { type: AppActionTypes.SHOW_TOAST, payload };
 }
 export function apiEnd(): ApiEndAction {
   return { type: AppActionTypes.API_END };
@@ -264,7 +268,7 @@ export function appLoad() {
 
       firebase
         .firestore()
-        .collection("users")
+        .collection(USERS)
         .doc(user.uid)
         .get()
         .then(function(doc) {
@@ -295,48 +299,94 @@ export function appLoad() {
     });
   };
 }
-function getWebPushSub(uid, reg) {
-  const publicKey =
-    "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
 
-  if (isPushEnabled()) {
-    console.log("SW:registering Webpush", new Date());
-    const subscribeOptions = {
-      userVisibleOnly: true,
-      applicationServerKey: urlB64ToUint8Array(publicKey)
-    };
-    return reg.pushManager.subscribe(subscribeOptions).then(sub => {
-      console.log("SW:Received PushSubscription: ", sub);
-      return firebase
-        .firestore()
-        .collection("users")
-        .doc(uid)
-        .update({
-          webPush: sub
-        })
-        .then(() => sub);
+export function turnOffWebPushSubForGroup(uid, groupId) {
+  console.log("TCL: turnOffWebPushSubForGroup -> uid, groupId", uid, groupId);
+  return firebase
+    .firestore()
+    .collection(GROUPS)
+    .doc(groupId)
+    .update({
+      [`webPush.${uid}`]: false
     });
-  }
 }
-
-export function getWebPushSubAction() {
-  return (dispatch, getState) => {
-    const {
-      app: {
-        user: { uid },
-        pwaHandle
-      }
-    } = getState();
-    dispatch(apiStart(AppActionTypes.GET_NOTIFICATION_SUB));
-    // delete from pending first
-    return getWebPushSub(uid, pwaHandle).then(subscripttion => {
-      dispatch(apiEnd());
-      dispatch({
-        type: AppActionTypes.GET_NOTIFICATION_SUB_SUCCESS,
-        subscripttion
-      } as GetNotificationSubSuccess);
+export function getWebPushSub(uid, reg, groupId) {
+  const publicKey =
+    "BOnQUejk8Yz83B5JtKYl7muwhbKN9EazPrLi_joamVVJWITeQccDpHZp7JDawXi5xaRu7aaPU2WQ-nx8zAsBKSA";
+  if (!isPushEnabled()) {
+    showToast({
+      title: "Push Notification is not enabled on this device",
+      status: "error",
+      duration: 2000,
+      isClosable: true
     });
+    return Promise.reject();
+  }
+
+  console.log("SW:registering Webpush", new Date());
+  const subscribeOptions = {
+    userVisibleOnly: true,
+    applicationServerKey: urlB64ToUint8Array(publicKey)
   };
+
+  return askPersmission().then(result => {
+    console.log("getWebPushSub -> result", result);
+    if (
+      result === "denied" ||
+      (result === "default" && Notification.permission === "denied")
+    ) {
+      localStorage.removeItem(appConfig.pwaNotificationSubKeyOnThisDevice);
+      return Promise.reject({
+        position: "bottom",
+        status: "error",
+        title: "Notification is disabled for this site!",
+        description: "Please enable notification option via site Settings",
+        duration: null,
+        isClosable: true
+      });
+    } else {
+      return reg.pushManager
+        .subscribe(subscribeOptions)
+        .then(sub => {
+          console.log("SW:Received PushSubscription: ", sub);
+          const batch = firebase.firestore().batch();
+          const subId = `${new Date().getTime()}`;
+          batch.update(
+            firebase
+              .firestore()
+              .collection(GROUPS)
+              .doc(groupId),
+            {
+              [`webPush.${uid}`]: {
+                [subId]: {
+                  data: JSON.stringify(sub),
+                  id: subId,
+                  timestamp: new Date()
+                }
+              }
+            }
+          );
+
+          localStorage.setItem(
+            appConfig.pwaNotificationSubKeyOnThisDevice,
+            "true"
+          );
+          localStorage.removeItem(appConfig.pwaNotificationSubDeniedKey);
+          return batch.commit();
+        })
+        .catch(e => {
+          console.log("TCL: getWebPushSub -> e", e);
+          return Promise.reject({
+            position: "bottom",
+            status: "error",
+            title: "Oops! Something went wrong",
+            description: "Please enable notification option via site Settings",
+            duration: null,
+            isClosable: true
+          });
+        });
+    }
+  });
 }
 
 export type AppAction =
@@ -352,5 +402,6 @@ export type AppAction =
   | ResetErrorAction
   | SignInSuccessAction
   | SignOutSuccessAction
+  | ShowToastAction
   | SignUpSuccessAction
   | SignUpFailedAction;

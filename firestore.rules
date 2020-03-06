@@ -1,9 +1,103 @@
 rules_version = '2';
+// https://medium.com/day4/firebases-firestore-rules-how-the-f-af5821513025
 service cloud.firestore {
   match /databases/{database}/documents {
+  	function isLoggedIn() {
+    	return request.auth.uid != null;
+    }
+  	function isMember(groupId) {
+    	return groupId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.groups;
+    }
+
+    function isOwnerOfGroup(groupId) {
+    	return request.auth.uid == get(/databases/$(database)/documents/groups/$(groupId)).data.owner;
+    }
+
+    function NonMemberGroupFieldsNotChanged() {
+      return
+        request.resource.data.description == resource.data.get('description', null)
+        && request.resource.data.currentTournament == resource.data.get('currentTournament', null)
+        && request.resource.data.groupImage == resource.data.get('groupImage', null)
+        && request.resource.data.hashedLocation == resource.data.get('hashedLocation', null)
+        && request.resource.data.location == resource.data.get('location', null)
+        && request.resource.data.locationLongLat == resource.data.get('locationLongLat', null)
+        && request.resource.data.name == resource.data.get('name', null)
+        && request.resource.data.onwerName == resource.data.get('onwerName', null)
+        && request.resource.data.owner == resource.data.get('owner', null)
+        && request.resource.data.get('deletedDate', null) == resource.data.get('deletedDate', null)
+    }
+
+    // /players/0NmjOMXj4C7glw3COYqH
+    match /players/{playerId} {
+    	// owner and member can add new player
+      allow create: if isMember(request.resource.data.groupId) || isOwnerOfGroup(request.resource.data.groupId);
+    }
+  	match /users/{userId} {
+    	// user can only update/create own profile
+      allow update,create: if request.auth.uid == userId;
+      // user can approve join requests
+      allow update: if isLoggedIn()
+      	&& request.resource.data.groups != null
+        && request.resource.data.displayName == resource.data.get('displayName', null)
+        && request.resource.data.leftHanded == resource.data.get('leftHanded', null)
+        && request.resource.data.singleHandedBackhand == resource.data.get('singleHandedBackhand', null)
+      // only me can delete account
+      allow delete: if request.auth.uid == 'FLDJnQNRuNhV6jPh6WOZQWPKHEB3';
+    }
+
+    match /groups/{groupId}/{path=**} {
+    	// owner of group has full access
+      allow update: if isOwnerOfGroup(groupId);
+    }
+
+    match /groups/{groupId} {
+    	// authenticated user can create new groups
+      allow create: if isLoggedIn();
+      // any authenticated user can join any groups
+      allow update: if isLoggedIn()
+      	&& request.resource.data.pendingJoinRequests != null
+      	&& NonMemberGroupFieldsNotChanged()
+      // member can approve join requests
+      allow update: if isMember(groupId)
+      	&& request.resource.data.players != null
+        && NonMemberGroupFieldsNotChanged()
+
+      // member can submit new score
+      allow update: if isMember(groupId)
+        && request.resource.data.played != resource.data.played
+        && request.resource.data.lastMatch != resource.data.get('lastMatch', null)
+        && NonMemberGroupFieldsNotChanged()
+      // member can turn on notifications
+      allow update: if isMember(groupId)
+        && request.resource.data.webPush != resource.data.webPush
+        && NonMemberGroupFieldsNotChanged()
+    }
+
+    match /groups/{groupId}/tournaments/{tourId} {
+    	// only owner create tournament
+      allow create, update: if isOwnerOfGroup(groupId);
+      // member can update players stats (submit new score) or approve new member join request
+      allow update: if isMember(groupId)
+        && request.resource.data.players != resource.data.get('players', null);
+    }
+
+    // /groups/0oiWTODB7i2iXjCIMw1H/tournaments/5UEwlZqwV0aF1OJxfqmb/stats/0Dzcj6I1ShZ62KMkOsXE
+    match /groups/{groupId}/tournaments/{tourId}/stats/{statId} {
+    	// member can add new stats (submit new score)
+      allow create: if isMember(groupId);
+      allow delete: if isOwnerOfGroup(groupId);
+    }
+
+    // /groups/0oiWTODB7i2iXjCIMw1H/tournaments/5UEwlZqwV0aF1OJxfqmb/scores/0UMrglcSCu570jrVrPrh
+    match /groups/{groupId}/tournaments/{tourId}/scores/{scoreId} {
+    	// member can add new score (submit new score)
+      allow create: if isMember(groupId);
+      allow delete: if isOwnerOfGroup(groupId);
+    }
+
+    // everyone can read everything
     match /{document=**} {
       allow read: if true;
-      allow create, update, delete: if request.auth.uid != null;
     }
   }
 }

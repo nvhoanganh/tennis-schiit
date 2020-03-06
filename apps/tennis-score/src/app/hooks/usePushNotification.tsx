@@ -1,93 +1,82 @@
 import { useToast } from "@chakra-ui/core";
-import { askPersmission, isInstalled, isPushEnabled } from "@tennis-score/redux";
+import { appConfig } from "@tennis-score/core";
+import { getWebPushSub, isPushEnabled } from "@tennis-score/redux";
 import React, { useEffect } from "react";
 import { FaBell } from "react-icons/fa";
-import { appConfig } from "../../assets/config";
 import { Button } from "../components/Button";
-
-export const usePushNotification = ({
-  getNotificationSub,
-  user,
-  pwaHandle
-}) => {
+export const usePushNotification = ({ user, pwaHandle, groupId }) => {
   const toast = useToast();
+  const askUser = () => {
+    setTimeout(() => {
+      toast({
+        position: "bottom",
+        status: "success",
+        duration: null,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <div className="m-1 py-3 px-4 bg-dark rounded-lg shadow">
+            <p className="text-white d-flex">
+              <FaBell className="mr-2 h4 align-self-end" />
+              <span className="ml-2 align-self-center">
+                Get Notifications for new match result?
+              </span>
+            </p>
+            <p className="text-center py-2">
+              <Button
+                className="btn btn-sm btn-primary px-3"
+                onClick={() => {
+                  onClose();
+                  getWebPushSub(user.uid, pwaHandle, groupId)
+                    .then(() =>
+                      toast({
+                        position: "bottom",
+                        status: "success",
+                        title: "You're all set!",
+                        description:
+                          "You will be notified when new result is submitted",
+                        duration: 3000,
+                        isClosable: true
+                      })
+                    )
+                    .catch(e => toast(e));
+                    
+                }}
+              >
+                Ok
+              </Button>
+              <Button
+                className="btn btn-sm btn-light ml-2"
+                onClick={() => {
+                  onClose();
+                  localStorage.setItem(permissionDenied, "true");
+                }}
+              >
+                No, thanks
+              </Button>
+            </p>
+          </div>
+        )
+      });
+    }, 1000);
+  };
+
   const {
-    pwaNotificationSubKey: key,
-    pwaNotificationSubGivenKey: subscribedKey
+    pwaNotificationSubDeniedKey: permissionDenied,
+    pwaNotificationSubKeyOnThisDevice
   } = appConfig;
+
   useEffect(() => {
     if (
+      // device need to support web push
       pwaHandle &&
       user &&
       isPushEnabled() &&
-      !isInstalled() &&
-      !localStorage.getItem(subscribedKey)
+      // and user did not deny it previously
+      !localStorage.getItem(permissionDenied) &&
+      // or we haven't got the sub key on this device
+      !localStorage.getItem(pwaNotificationSubKeyOnThisDevice)
     ) {
-      setTimeout(() => {
-        localStorage.setItem(key, (+localStorage.getItem(key) + 1).toString());
-        toast({
-          position: "bottom",
-          status: "success",
-          duration: null,
-          isClosable: true,
-          render: ({ onClose }) => (
-            <div className="m-1 py-3 px-4 bg-dark rounded-lg shadow">
-              <p className="text-white d-flex">
-                <FaBell className="mr-2 h4 align-self-end" />
-                <span className="ml-2 align-self-center">
-                  Get Notifications for new match result?
-                </span>
-              </p>
-              <p className="text-center py-2">
-                <Button
-                  className="btn btn-sm btn-primary px-3"
-                  onClick={() => {
-                    onClose();
-                    askPersmission().then(result => {
-                      if (result !== "granted") {
-                        toast({
-                          position: "bottom",
-                          status: "error",
-                          title: "Oops! Something went wrong",
-                          description:
-                            "Please enable this option via site Settings",
-                          duration: null,
-                          isClosable: true
-                        });
-                      } else {
-                        localStorage.setItem(subscribedKey, "true");
-                        // dispatch action to get and save sub
-                        getNotificationSub().then(_ => {
-                          toast({
-                            position: "bottom",
-                            status: "success",
-                            title: "You're all set!",
-                            description:
-                              "You will be notified when new result is submitted",
-                            duration: 3000,
-                            isClosable: true
-                          });
-                        });
-                      }
-                    });
-                  }}
-                >
-                  Ok
-                </Button>
-                <Button
-                  className="btn btn-sm btn-light ml-2"
-                  onClick={() => {
-                    onClose();
-                    localStorage.setItem(subscribedKey, "true");
-                  }}
-                >
-                  No, thanks
-                </Button>
-              </p>
-            </div>
-          )
-        });
-      }, 1000);
+      askUser();
     }
   }, []);
 };
