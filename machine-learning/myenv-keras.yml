@@ -9,7 +9,6 @@ dependencies:
   # The python interpreter version.
   # Currently Azure ML only supports 3.5.2 and later.
 - python=3.6.3
-- tensorflow=1.15
 - numpy=1.16.2
 - keras=2.3.1
 
