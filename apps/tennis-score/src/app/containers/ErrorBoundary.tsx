@@ -43,7 +43,14 @@ function ShowError() {
               <div>
                 <FaExclamationTriangle className="text-danger h1" />
                 <p>Oops! Something went wrong</p>
-                <p className="text-muted small">Please reload to try again</p>
+                <p
+                  className="small btn-link"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                >
+                  Click here to reload
+                </p>
               </div>
             </div>
           </div>
