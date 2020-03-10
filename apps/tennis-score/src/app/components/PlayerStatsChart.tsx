@@ -15,7 +15,7 @@ export function PlayerStatsChart({ stats }) {
     title: {
       left: "center",
       bottom: "bottom",
-      text: "My Stats"
+      text: "Stats"
     },
     grid: {
       left: "3%",

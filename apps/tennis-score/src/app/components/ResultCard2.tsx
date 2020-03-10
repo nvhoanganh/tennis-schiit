@@ -25,11 +25,22 @@ const ResultCard = ({
       <span key={x} className={"d-block" + (isLoser ? " text-right" : "")}>
         {players[x] ? (
           players[x].leftGroup ? (
-            <del className="pl-1" title="player left group text-muted">
+            <del className="pl-1" title="player left group">
               <em>{players[x].name}</em>
             </del>
           ) : (
-            <span className="pl-1">{players[x].name}</span>
+            <span
+              className={
+                "pl-1" +
+                (players[x].id === props.forPlayerId
+                  ? isLoser
+                    ? " text-danger"
+                    : " text-success"
+                  : "")
+              }
+            >
+              {players[x].name}
+            </span>
           )
         ) : null}
       </span>

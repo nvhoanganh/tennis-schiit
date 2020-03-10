@@ -9,7 +9,8 @@ import {
 import {
   getMatchesByPlayer,
   getStatsByPlayer,
-  getUrlAvatar
+  getUrlAvatar,
+  getSortedResult
 } from "@tennis-score/redux";
 import queryString from "query-string";
 import React, { useEffect, useState } from "react";
@@ -32,6 +33,7 @@ import RouteNav from "./RouteNav";
 import { ScrollPills } from "./ScrollPills";
 import { ShareLink } from "./ShareLink";
 import { StatsCard } from "./StatsCard";
+import ResultCard from "./ResultCard2";
 
 const PlayerProfile = ({
   player,
@@ -134,6 +136,7 @@ const PlayerProfile = ({
             <TabList className="m-2">
               <Tab>Overall</Tab>
               <Tab>Stats</Tab>
+              <Tab>Results</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -189,6 +192,24 @@ const PlayerProfile = ({
                       players={players}
                     ></PlayerWinLostWithChart>
                   </div>
+                )}
+              </TabPanel>
+              <TabPanel>
+                {myMatches && myMatches.length > 0 ? (
+                  <div className="mx-2">
+                    {getSortedResult(myMatches).map((k, i) => (
+                      <ResultCard
+                        key={i}
+                        showFullDate={true}
+                        hideMenu={true}
+                        forPlayerId={match.params.id}
+                        players={players}
+                        {...(k as any)}
+                      ></ResultCard>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center my-5">0 match played</p>
                 )}
               </TabPanel>
             </TabPanels>
