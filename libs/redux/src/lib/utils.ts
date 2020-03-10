@@ -117,7 +117,7 @@ export const getHandyCap = val => {
       return "0-3";
 
     default:
-      return "";
+      return "0-0";
   }
 };
 

@@ -1,5 +1,5 @@
-import { Avatar } from '@chakra-ui/core';
-import { getUrlAvatar } from '@tennis-score/redux';
+import { Avatar } from "@chakra-ui/core";
+import { getUrlAvatar } from "@tennis-score/redux";
 import React from "react";
 import CheckBoxInput from "./CheckBoxInput";
 export function PlayerPicker({ players, state, setValue, ...props }) {
@@ -55,7 +55,7 @@ export function PlayerPicker({ players, state, setValue, ...props }) {
                   <Avatar
                     size="sm"
                     name={p.name}
-                    src={getUrlAvatar(p.linkedplayerId || p.id)}
+                    src={p.avatarUrl ? getUrlAvatar(p.linkedplayerId) : ""}
                   />
                 </div>
                 <div className="ml-2 font-weight-bold mr-auto mt-1">
