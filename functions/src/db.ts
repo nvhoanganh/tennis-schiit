@@ -6,88 +6,82 @@ import * as R from "ramda";
 export function getTournamentResults(groupId: string, tourId: string) {
   return getGroup(groupId).then(group => {
     console.log(group);
-    return db
-      .collection("groups")
-      .doc(groupId)
-      .collection("tournaments")
-      .doc(tourId)
-      .collection("scores")
-      .orderBy("matchDate", "desc")
-      // .limit(10)
-      .get()
-      .then(d =>
-        d.docs.map(x => {
-          const {
-            winners,
-            losers,
-            matchDate,
-            reverseBagel,
-            headStart,
-            gameWonByLostTeam
-          } = x.data();
-          return {
-            groupId: groupId,
-            groupName: group.name,
-            winnersIds: Object.keys(winners).join(";"),
-            winners: group.players
-              .filter(p => Object.keys(winners).indexOf(p.userId) >= 0)
-              .map(p => p.name)
-              .join(";"),
-            losersIds: Object.keys(losers).join(";"),
-            losers: group.players
-              .filter(p => Object.keys(losers).indexOf(p.userId) >= 0)
-              .map(p => p.name)
-              .join(";"),
-            matchDate: matchDate.toDate(),
-            isBagel: reverseBagel || gameWonByLostTeam === 0,
-            score: getScoreString(gameWonByLostTeam),
-            headStart
-          };
-        })
-      )
-      .then(results => {
-        // get normalized winners and losers
-        const getWL = lw =>
-          R.pipe(
-            R.map(R.prop(lw)),
-            R.flatten
+    return (
+      db
+        .collection("groups")
+        .doc(groupId)
+        .collection("tournaments")
+        .doc(tourId)
+        .collection("scores")
+        .orderBy("matchDate", "desc")
+        // .limit(10)
+        .get()
+        .then(d =>
+          d.docs.map(x => {
+            const {
+              winners,
+              losers,
+              matchDate,
+              reverseBagel,
+              headStart,
+              gameWonByLostTeam
+            } = x.data();
+            return {
+              groupId: groupId,
+              groupName: group.name,
+              winnersIds: Object.keys(winners).join(";"),
+              winners: group.players
+                .filter(p => Object.keys(winners).indexOf(p.userId) >= 0)
+                .map(p => p.name)
+                .join(";"),
+              losersIds: Object.keys(losers).join(";"),
+              losers: group.players
+                .filter(p => Object.keys(losers).indexOf(p.userId) >= 0)
+                .map(p => p.name)
+                .join(";"),
+              matchDate: matchDate.toDate(),
+              isBagel: reverseBagel || gameWonByLostTeam === 0,
+              score: getScoreString(gameWonByLostTeam),
+              headStart
+            };
+          })
+        )
+        .then(results => {
+          // get normalized winners and losers
+          const getWL = lw =>
+            R.pipe(
+              R.map(R.prop(lw)),
+              R.flatten
+            );
+
+          const getUniqSortedPlayers = R.pipe(
+            R.converge(R.concat, [getWL("winnersIds"), getWL("losersIds")]),
+            R.uniq,
+            a => a.sort()
           );
 
-        const getUniqSortedPlayers = R.pipe(
-          R.converge(R.concat, [getWL("winnersIds"), getWL("losersIds")]),
-          R.uniq,
-          a => a.sort()
-        );
+          const uniqueSorted = getUniqSortedPlayers(results);
 
-        const uniqueSorted = getUniqSortedPlayers(results);
-
-        return results.map(r => ({
-          ...r,
-          winnersId: uniqueSorted.indexOf(r.winnersIds),
-          losersId: uniqueSorted.indexOf(r.losersIds)
-        }));
-      });
+          return results.map(r => ({
+            ...r,
+            winnersId: uniqueSorted.indexOf(r.winnersIds),
+            losersId: uniqueSorted.indexOf(r.losersIds)
+          }));
+        })
+    );
   });
 }
 
 export function getAllResults() {
   return getAllGroups()
-    .then(groups => {
-      const validGroups = groups
-        .filter(x => !x.deletedDate && !!x.currentTournament)
-        .map(x => ({
-          groupId: x.groupId,
-          groupName: x.name,
-          currentTournament: x.currentTournament
-        }));
-
-      return Promise.all(
-        validGroups.map(x =>
-          getTournamentResults(x.groupId, x.currentTournament)
-        )
-      );
-    })
-    .then(x => R.flatten(x))
+    .then(groups =>
+      Promise.all(
+        groups
+          .filter(x => !x.deletedDate && !!x.currentTournament)
+          .map(x => getTournamentResults(x.groupId, x.currentTournament))
+      )
+    )
+    .then(R.flatten)
     .then(results => {
       const sortedGroupIds = R.pipe(
         R.map(R.prop("groupId")),
