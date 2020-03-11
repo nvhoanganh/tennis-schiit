@@ -1,4 +1,4 @@
-import { getTournamentResults } from "./db";
+import { getTournamentResults, getAllResults } from "./db";
 import * as R from "ramda";
 const express = require("express");
 const api = express();
@@ -40,6 +40,56 @@ api.get("/api/groups/:groupId/tournament/:tourId/result.csv", (req, res) => {
   );
 });
 
+api.get("/api/results/trainingdata.json", (req, res) => {
+  getAllResults().then(
+    d => {
+      res.set("Content-Type", "application/json");
+      res.send(d);
+    },
+    error => {
+      res.set("Content-Type", "text/plain");
+      res.send("Error:" + error);
+    }
+  );
+});
+
+api.get("/api/results/trainingdata.csv", (req, res) => {
+  getAllResults().then(
+    d => {
+      const csv =
+        "groupName,groupId,team1,team1Name,team2,team2Name,matchDate,isBagel,score,headStart,WinOrLose\n" +
+        // split in half
+        R.take(d.length / 2, d)
+          .map(
+            x =>
+              `${x.groupName},${x.groupIdx},${x.winnersId},${x.winners},${
+                x.losersId
+              },${x.losers},${x.matchDate.toISOString()},${x.isBagel},${
+                x.score
+              },${x.headStart || 0},1`
+          )
+          .join("\n") +
+        "\n" +
+        R.takeLast(d.length / 2, d)
+          .map(
+            x =>
+              `${x.groupName},${x.groupIdx},${x.losersId},${x.losers},${
+                x.winnersId
+              },${x.winners},${x.matchDate.toISOString()},${x.isBagel},${
+                x.score
+              },${x.headStart || 0},0`
+          )
+          .join("\n");
+      res.set("Content-Type", "text/plain");
+      res.send(csv);
+    },
+    error => {
+      res.set("Content-Type", "text/plain");
+      res.send("Error:" + error);
+    }
+  );
+});
+
 api.get(
   "/api/groups/:groupId/tournament/:tourId/trainingdata.csv",
   (req, res) => {
@@ -47,23 +97,27 @@ api.get(
     getTournamentResults(groupId, tourId).then(
       d => {
         const csv =
-          "team1,team2,matchDate,isBagel,score,headStart,WinOrLose\n" +
+          "team1,team1Name,team2,team2Name,matchDate,isBagel,score,headStart,WinOrLose\n" +
           // split in half
           R.take(d.length / 2, d)
             .map(
               x =>
-                `${x.winnersId},${x.losersId},${x.matchDate.toISOString()},${
-                  x.isBagel
-                },${x.score},${x.headStart || 0},1`
+                `${x.winnersId},${x.winners},${x.losersId},${
+                  x.losers
+                },${x.matchDate.toISOString()},${x.isBagel},${
+                  x.score
+                },${x.headStart || 0},1`
             )
             .join("\n") +
           "\n" +
           R.takeLast(d.length / 2, d)
             .map(
               x =>
-                `${x.losersId},${x.winnersId},${x.matchDate.toISOString()},${
-                  x.isBagel
-                },${x.score},${x.headStart || 0},0`
+                `${x.losersId},${x.losers},${x.winnersId},${
+                  x.winners
+                },${x.matchDate.toISOString()},${x.isBagel},${
+                  x.score
+                },${x.headStart || 0},0`
             )
             .join("\n");
         res.set("Content-Type", "text/plain");
