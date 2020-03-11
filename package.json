@@ -11,6 +11,7 @@
     "start": "nx serve",
     "workbox": "workbox injectManifest workbox-config.js",
     "firebase": "firebase",
+    "testcafe:ci": "concurrently \"npm start\" \"testcafe chrome:headless testcafe/e2e-tests.js\"",
     "shell:prod": "cross-env GOOGLE_APPLICATION_CREDENTIALS=c:/tennis.json firebase functions:shell",
     "emulate:prod": "cross-env GOOGLE_APPLICATION_CREDENTIALS=c:/tennis.json firebase emulators:start",
     "serve:prod": "cross-env GOOGLE_APPLICATION_CREDENTIALS=c:/tennis.json firebase serve --only hosting,functions",
@@ -48,6 +49,7 @@
     "@fortawesome/react-fontawesome": "^0.1.7",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
+    "concurrently": "^5.1.0",
     "date-fns": "^2.8.1",
     "document-register-element": "1.13.1",
     "echarts": "^4.6.0",
@@ -98,6 +100,7 @@
     "reselect": "^4.0.0",
     "set-query-string": "^2.2.0",
     "styled-components": "^5.0.0",
+    "testcafe": "^1.8.2",
     "trueskill": "0.0.2"
   },
   "devDependencies": {

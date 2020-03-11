@@ -40,7 +40,7 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
   return (
     <div style={{ ...props.style }} className="border-top">
       <Ripples
-        className="w-100"
+        className="w-100 group__link"
         onClick={() =>
           setTimeout(
             () => history.push(`/leaderboard/${group ? group.groupId : ""}`),

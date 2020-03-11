@@ -14,14 +14,14 @@ const RouteNav: React.SFC<{
           <Button
             type="button"
             onClick={() => history.goBack()}
-            className="btn btn-link btn-sm text-dark"
+            className="btn btn-link btn-sm text-dark nav__back"
           >
             <FaArrowLeft style={{ fontSize: "1.2rem" }} />
           </Button>
         )}
       </div>
       <div className="p-2 d-flex align-self-center h5 mb-0">{center}</div>
-      <div className="p-2 align-self-center">
+      <div className="p-2 align-self-center nav__rightmore">
         {right ? (
           right
         ) : (

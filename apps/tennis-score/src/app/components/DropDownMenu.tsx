@@ -14,7 +14,7 @@ export function DropDownMenu({ options, icon }) {
       <button
         onClick={onOpen}
         type="button"
-        className="btn btn-link btn-sm text-dark"
+        className="btn btn-link btn-sm text-dark dropdown__button"
       >
         {icon}
       </button>

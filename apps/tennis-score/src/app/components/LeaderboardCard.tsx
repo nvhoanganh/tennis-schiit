@@ -113,7 +113,7 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
 
           <div className="mr-auto">
             <a
-              className="h5 text-dark pl-0"
+              className="h5 text-dark pl-0 player__name"
               onClick={() => setTimeout(() => history.push(getUserLink()), 200)}
             >
               {player.name}

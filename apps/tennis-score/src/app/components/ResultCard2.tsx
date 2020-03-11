@@ -80,7 +80,7 @@ const ResultCard = ({
         {getPlayers(losers, true)}
       </div>
       {!hideMenu && (
-        <div className="p-1 align-self-center">
+        <div className="p-1 align-self-center resultcard">
           <DropDownMenu
             icon={<FaEllipsisV />}
             options={[

@@ -169,7 +169,7 @@ const ViewHead2Head = ({
                 />
               </div>
               <HeaderCard>Results</HeaderCard>
-              <div className="pb-5">
+              <div className="pb-5 mx-2">
                 {getSortedResult(scores).map(k => (
                   <ResultCard
                     key={k["id"]}

@@ -13,8 +13,8 @@ const HeaderCard: React.SFC<{
       }
       style={style}
     >
-      <div className="flex-grow-1 align-self-center">{children}</div>
-      <div className="align-self-center">
+      <div className="flex-grow-1 align-self-center header__content">{children}</div>
+      <div className="align-self-center header__rightmore">
         {right ? (
           right
         ) : (
