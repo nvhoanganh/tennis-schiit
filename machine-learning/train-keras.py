@@ -1,31 +1,42 @@
+# azureml-core of version 1.0.72 or higher is required
+# azureml-dataprep[pandas] of version 1.1.34 or higher is required
+from azureml.core import Workspace, Dataset
 import pandas as pd
 import numpy as np
 import keras
-import tensorflow as tf
 from sklearn.model_selection import train_test_split
+from azureml.core.model import Model
+
+
+
 
 
 def create_model():
       model = keras.models.Sequential()
-      model.add(keras.layers.Dense(4, input_dim=3, activation='relu'))
+      model.add(keras.layers.Dense(4, input_dim=4, activation='relu'))
       model.add(keras.layers.Dense(4, activation='relu'))
       model.add(keras.layers.Dense(1, activation='sigmoid'))
       model.compile(loss='binary_crossentropy', optimizer='adam',  metrics=['accuracy'])
       return model;
 
 
-df = pd.read_csv('tennis-result-2.csv')
 
-properties = list(df.columns.values)
-properties.remove('matchDate')
-properties.remove('isBagel')
-properties.remove('score')
-properties.remove('WinOrLose')
+subscription_id = '76d03a17-20be-4175-bbed-ca6d7819c68f'
+resource_group = 'machine-learning'
+workspace_name = 'ml-ws'
+
+workspace = Workspace(subscription_id, resource_group, workspace_name)
+
+dataset = Dataset.get_by_name(workspace, name='tennis-result-less-columns')
+dataset = dataset.to_pandas_dataframe()
 
 
-x = df[properties]
-y = df['WinOrLose']
-print(x)
+properties = list(dataset.columns.values)
+
+
+x = dataset[properties]
+y = dataset['WinOrLose']
+
 x = x.values
 y = y.values
 
@@ -39,9 +50,9 @@ print('Test accuracy:', test_acc)
 
 
 
-x_predict = np.array([[0.05, 0.1, 0 ], [0.7, 0.55, 0]])
+x_predict = np.array([[1, 17, 0, 0 ], [31, 33, -1, 0]])
 
-##result = training_model.predict_classes(x_predict)
+result = training_model.predict_classes(x_predict)
 
 
 
@@ -57,10 +68,16 @@ training_model.save("model/model.h5")
 training_model.save_weights("model/model_weight.h5")
 
 
+# Register model weight
+model = Model.register(workspace = workspace,
+                        model_path ="model/model_weight.h5",
+                        model_name = "ml-ws-keras-weight-ddd",
+                        tags = {"for": "ddd night"},
+                        description = "This is a sample Keras model trained by tennis result data for DDD night",)
 
 
 ## load model and score
-loaded_model = create_model();
-loaded_model.load_weights("model/model_weight.h5")
-result = loaded_model.predict_classes(x_predict)
-print(result)
+# loaded_model = create_model();
+# loaded_model.load_weights("model/model_weight.h5")
+# result = loaded_model.predict_classes(x_predict)
+# print(result)
