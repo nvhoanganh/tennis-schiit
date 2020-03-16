@@ -31,14 +31,9 @@ def run(raw_data):
         model.compile(loss='binary_crossentropy', optimizer='adam',  metrics=['accuracy'])
         model.load_weights(model_root)
 
-        # logging.info("model loaded")
-        # logging.info(raw_data)
         data = np.array(json.loads(raw_data)['data'])
-        # logging.info(data)
-        # make prediction
-        # logging.info('ready to predict')
         result = model.predict_classes(data)
-        # logging.info(result)
+
         return result.tolist()
     except Exception as e:
         return json.dumps({"error": str(e)})
