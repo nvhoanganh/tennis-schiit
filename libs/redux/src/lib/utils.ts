@@ -3,10 +3,14 @@ import addSeconds from "date-fns/addSeconds";
 import { flatten, path } from "ramda";
 
 export const getFileNameAndExt = url => {
-  const {
-    groups: { ext, file }
-  } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
-  return [file, ext];
+  try {
+    const {
+      groups: { ext, file }
+    } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
+    return [file, ext];
+  } catch (error) {
+    return [null, null];
+  }
 };
 
 export function delay(duration): Promise<void> {
@@ -62,26 +66,31 @@ export const calculateStats = (player, prize) => {
 
 export const getGroupImageUrl = url => {
   const [file, ext] = getFileNameAndExt(url);
-
-  return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
-    file + "_414x260." + ext
-  )}?alt=media`;
+  return file
+    ? `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
+        file + "_414x260." + ext
+      )}?alt=media`
+    : null;
 };
 
 export const getGroupImageUrlFull = url => {
   const [file, ext] = getFileNameAndExt(url);
 
-  return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
-    file + "." + ext
-  )}?alt=media`;
+  return file
+    ? `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
+        file + "." + ext
+      )}?alt=media`
+    : "";
 };
 
 export const getUserAvatarUrl = url => {
   const [file, ext] = getFileNameAndExt(url);
 
-  return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
-    file + "_200x200." + ext
-  )}?alt=media`;
+  return file
+    ? `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
+        file + "_200x200." + ext
+      )}?alt=media`
+    : "";
 };
 
 export const getHandyCap = val => {
