@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IAction } from "@tennis-score/redux";
+export interface IAction {
+  type: string;
+}
 import { useToast, useToastOptions } from "@chakra-ui/core";
 import { appConfig } from "@tennis-score/core";
 import * as firebase from "firebase/app";

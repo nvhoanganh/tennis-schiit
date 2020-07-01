@@ -1,6 +1,12 @@
 /* eslint-disable no-useless-escape */
 import addSeconds from "date-fns/addSeconds";
-import { flatten, path } from "ramda";
+import { flatten, path, defaultTo, pipe, inc } from "ramda";
+
+export const defaultZero = defaultTo(0);
+export const increment = pipe(
+  defaultTo(0),
+  inc
+);
 
 export const getFileNameAndExt = url => {
   if (!url) return [null, null];
@@ -49,15 +55,19 @@ export const removeById = (id, obj) => {
 
 export const roundOff = roundOff => Math.floor(roundOff * 100) / 100;
 export const calculateStats = (player, prize) => {
-  const won = player.won || 0;
-  const bagelWon = player.bagelWon || 0;
-  const lost = player.lost || 0;
-  const bagelLost = player.bagelLost || 0;
+  const won = defaultZero(player.won);
+  const bagelWon = defaultZero(player.bagelWon);
+  const lost = defaultZero(player.lost);
+  const bagelLost = defaultZero(player.bagelLost);
   return {
     played: won + lost,
     winPercentage: roundOff((won / (won + lost)) * 100),
     prizeMoney:
-      won * +prize + bagelWon * +prize - lost * +prize - bagelLost * +prize
+      won * +prize + bagelWon * +prize - lost * +prize - bagelLost * +prize,
+    won,
+    lost,
+    bagelLost,
+    bagelWon
   };
 };
 

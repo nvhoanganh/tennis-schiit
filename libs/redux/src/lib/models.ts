@@ -61,5 +61,8 @@ export const PLAYERS = "players";
 export const SORT_TRUESKILL = "TrueSkill";
 export const SORT_WINPERCENT = "Win Percentage";
 export const SORT_PRIZEMONEY = "Prize Money";
-export const SORT_GAMEDIFFERENCE = "Games Won";
-export const SORT_GAMEDIFFERENCE_AVG = "Games Won Avg";
+export const SORT_GAMEDIFFERENCE = "Total Games Difference";
+export const SORT_GAMEDIFFERENCE_AVG = "Total Games Difference/Match Played";
+
+export const SORT_TOTALGAMEWON = "Total Games Won";
+export const SORT_GAMEWON_AVG = "Total Games Won/Match Played";

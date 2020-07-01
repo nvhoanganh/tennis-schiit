@@ -4,7 +4,9 @@ import {
   SORT_TRUESKILL,
   SORT_WINPERCENT,
   SORT_GAMEDIFFERENCE,
-  SORT_GAMEDIFFERENCE_AVG
+  SORT_GAMEDIFFERENCE_AVG,
+  SORT_TOTALGAMEWON,
+  SORT_GAMEWON_AVG
 } from "@tennis-score/redux";
 import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
@@ -136,7 +138,9 @@ const AddEditTournament = ({
               SORT_WINPERCENT,
               SORT_PRIZEMONEY,
               SORT_GAMEDIFFERENCE,
-              SORT_GAMEDIFFERENCE_AVG
+              SORT_GAMEDIFFERENCE_AVG,
+              SORT_TOTALGAMEWON,
+              SORT_GAMEWON_AVG
             ]}
           ></SelectInput>
 
