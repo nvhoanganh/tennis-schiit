@@ -12,7 +12,7 @@ import {
   USERS
 } from "../models";
 import { apiEnd, apiStart } from "./appActions";
-import { loadGroups } from "./groupActions";
+import { pipe, reverse, sortBy, prop } from "ramda";
 export enum PlayerActionTypes {
   LOAD_PLAYERS = "LOAD_PLAYERS",
   LOAD_PLAYERS_SUCCESS = "LOAD_PLAYERS_SUCCESS",
@@ -136,10 +136,14 @@ export function getMatchesByPlayer({ groupId, tourId, playerId }) {
   const lost = scoreRef.where(`losers.${playerId}`, "==", true).get();
 
   return Promise.all([win, lost]).then(results => {
-    return [
+    const r = [
       ...results[0].docs.map(y => y.data()),
       ...results[1].docs.map(y => y.data())
     ];
+    return pipe(
+      sortBy(x => (x.timestamp || x.matchDate).toDate()),
+      reverse
+    )(r);
   });
 }
 

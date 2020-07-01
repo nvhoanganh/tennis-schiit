@@ -5,6 +5,9 @@ import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { DropDownMenu } from "./DropDownMenu";
 
+const forUser = (userId, userProfileId, isLoser) =>
+  userProfileId === userId ? (isLoser ? "text-danger" : "text-success") : "";
+
 const ResultCard = ({
   winners,
   losers,
@@ -18,20 +21,22 @@ const ResultCard = ({
   showHead2Head,
   deleteScore,
   canDelete,
+  forUserId,
   ...props
 }) => {
   const getPlayers = (p, isLoser) => {
     return Object.keys(p).map(x => (
       <span key={x} className={"d-block" + (isLoser ? " text-right" : "")}>
-        {players[x] ? (
-          players[x].leftGroup ? (
+        {players[x] &&
+          (players[x].leftGroup ? (
             <del className="pl-1" title="player left group text-muted">
               <em>{players[x].name}</em>
             </del>
           ) : (
-            <span className="pl-1">{players[x].name}</span>
-          )
-        ) : null}
+            <span className={`pl-1 ${forUser(x, forUserId, isLoser)}`}>
+              {players[x].name}
+            </span>
+          ))}
       </span>
     ));
   };

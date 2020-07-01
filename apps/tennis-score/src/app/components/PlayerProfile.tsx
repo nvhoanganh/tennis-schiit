@@ -201,6 +201,8 @@ const PlayerProfile = ({
                       players={players}
                       groupId={match.params.group}
                       tournamentId={match.params.tour}
+                      forUserId={player.id}
+                      showFullDate
                       hideMenu
                       {...m}
                     ></ResultCard>
