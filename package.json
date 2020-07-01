@@ -57,7 +57,7 @@
     "echarts-for-react": "^2.0.15-beta.1",
     "emotion-theming": "^10.0.27",
     "express": "4.17.1",
-    "firebase": "^7.5.2",
+    "firebase": "^7.15.5",
     "firebase-tools": "^7.13.1",
     "formik": "^2.0.6",
     "free-gaussian": "0.1.0",
@@ -132,7 +132,7 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "2.1.2",
-    "http-server": "^0.12.1",
+    "http-server": "^0.12.3",
     "jest": "24.1.0",
     "prettier": "1.18.2",
     "redux-devtools-extension": "~2.13.8",
@@ -142,7 +142,7 @@
     "tslint": "~5.11.0",
     "typescript": "~3.5.3",
     "url-loader": "^3.0.0",
-    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-bundle-analyzer": "^3.8.0",
     "workbox-cli": "^5.0.0"
   }
 }
