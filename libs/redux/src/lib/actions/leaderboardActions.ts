@@ -1,10 +1,19 @@
-import { setNewScore } from "@tennis-score/api-interfaces";
+import { ScoreEngine } from "@tennis-score/api-interfaces";
 import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { merge } from "ramda";
-import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
+import {
+  GROUPS,
+  SCORES,
+  STATS,
+  TOURNAMENTS,
+  USERS,
+  SORT_TRUESKILL,
+  SORT_GAMEDIFFERENCE,
+  SORT_GAMEDIFFERENCE_AVG
+} from "../models";
 import { arrayToObject, calculateStats, getPlayers } from "../utils";
 import { apiEnd, apiStart, AppActionTypes } from "./appActions";
 
@@ -160,7 +169,7 @@ export function submitScore({
     const {
       leaderboard: {
         players,
-        tournament: { prize }
+        tournament: { prize, sortBy }
       }
     } = getState();
     dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
@@ -174,8 +183,25 @@ export function submitScore({
     Object.keys(losers).forEach(key => {
       mLosers[key] = players[key] || {};
     });
+
     // update
-    setNewScore(mWinners, mLosers);
+    switch (sortBy) {
+      case SORT_TRUESKILL:
+        ScoreEngine.truSkill(mWinners, mLosers);
+        break;
+
+      case SORT_GAMEDIFFERENCE:
+        ScoreEngine.gameDifference(
+          mWinners,
+          gameWonByLostTeam,
+          reverseBagel,
+          sortBy === SORT_GAMEDIFFERENCE_AVG
+        );
+        break;
+
+      default:
+        break;
+    }
 
     const groupRef = firebase
       .firestore()
@@ -206,6 +232,8 @@ export function submitScore({
     const winnersK = Object.keys(mWinners);
     const loserK = Object.keys(mLosers);
     const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
+
+    // update active tournament, for each players
     winnersK.forEach(k => {
       // update each
       if (winByBagel) {
@@ -222,9 +250,9 @@ export function submitScore({
       };
       batch.update(tourRef, {
         [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1),
-        [`players.${k}.previousScore`]: mWinners[k].previousScore,
-        [`players.${k}.score`]: mWinners[k].score,
-        [`players.${k}.skill`]: mWinners[k].skill,
+        [`players.${k}.previousScore`]: mWinners[k].previousScore || 0,
+        [`players.${k}.score`]: mWinners[k].score || 0,
+        [`players.${k}.skill`]: mWinners[k].skill || "",
         [`players.${k}.lastMatch`]: new Date()
       });
       // add hisoric data
@@ -247,9 +275,9 @@ export function submitScore({
       };
       batch.update(tourRef, {
         [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1),
-        [`players.${k}.previousScore`]: mLosers[k].previousScore,
-        [`players.${k}.score`]: mLosers[k].score,
-        [`players.${k}.skill`]: mLosers[k].skill,
+        [`players.${k}.previousScore`]: mLosers[k].previousScore || 0,
+        [`players.${k}.score`]: mLosers[k].score || 0,
+        [`players.${k}.skill`]: mLosers[k].skill || "",
         [`players.${k}.lastMatch`]: new Date()
       });
       // add hisoric data

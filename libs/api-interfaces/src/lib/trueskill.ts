@@ -1,11 +1,11 @@
 import trueskill from "trueskill";
 
-export const setNewScore = (winners, losers) => {
+const truSkill = (winners, losers) => {
   const mu = 25;
   const sigma = 3;
   const initialScore = [mu, mu / sigma];
 
-  let players = [];
+  const players = [];
   Object.keys(winners).forEach(k => {
     const p = winners[k];
     p.rank = 1;
@@ -27,4 +27,32 @@ export const setNewScore = (winners, losers) => {
   players.forEach(p => {
     p.score = p.skill[0] - 3 * p.skill[1];
   });
+};
+
+const gameDifference = (
+  winners,
+  gameWonByLostTeam,
+  reverseBagel,
+  isAverage
+) => {
+  const players = [];
+  Object.keys(winners).forEach(k => {
+    const p = winners[k];
+    p.won = p.won || 0;
+    p.lost = p.lost || 0;
+    const preScore = p.score || 0;
+    const isBagel = reverseBagel || +gameWonByLostTeam === 0;
+    const gameDiff = (+gameWonByLostTeam < 6 ? 6 : 7) - +gameWonByLostTeam;
+    p.score = preScore + gameDiff + (isBagel || reverseBagel ? 2 : 0);
+    p.previousScore = preScore;
+    if (isAverage) {
+      p.score = p.score / (p.lost + p.won);
+    }
+    players.push(p);
+  });
+};
+
+export const ScoreEngine = {
+  gameDifference,
+  truSkill
 };

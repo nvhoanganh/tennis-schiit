@@ -2,7 +2,9 @@ import { isValidNumber } from "@tennis-score/core";
 import {
   SORT_PRIZEMONEY,
   SORT_TRUESKILL,
-  SORT_WINPERCENT
+  SORT_WINPERCENT,
+  SORT_GAMEDIFFERENCE,
+  SORT_GAMEDIFFERENCE_AVG
 } from "@tennis-score/redux";
 import format from "date-fns/format";
 import React, { useEffect, useState } from "react";
@@ -129,7 +131,13 @@ const AddEditTournament = ({
             errorMessage="Please select"
             setValue={setValue}
             isValid={true}
-            options={[SORT_TRUESKILL, SORT_WINPERCENT, SORT_PRIZEMONEY]}
+            options={[
+              SORT_TRUESKILL,
+              SORT_WINPERCENT,
+              SORT_PRIZEMONEY,
+              SORT_GAMEDIFFERENCE,
+              SORT_GAMEDIFFERENCE_AVG
+            ]}
           ></SelectInput>
 
           <div className="row py-3">

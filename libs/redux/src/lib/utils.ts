@@ -3,6 +3,7 @@ import addSeconds from "date-fns/addSeconds";
 import { flatten, path } from "ramda";
 
 export const getFileNameAndExt = url => {
+  if (!url) return [null, null];
   const {
     groups: { ext, file }
   } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
@@ -60,7 +61,9 @@ export const calculateStats = (player, prize) => {
   };
 };
 
-export const getGroupImageUrl = url => {
+export const getGroupImageUrl = (url, name) => {
+  if (!url)
+    return "https://dummyimage.com/414x260?text=" + encodeURIComponent(name);
   const [file, ext] = getFileNameAndExt(url);
 
   return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
@@ -69,6 +72,7 @@ export const getGroupImageUrl = url => {
 };
 
 export const getGroupImageUrlFull = url => {
+  if (!url) return "https://dummyimage.com/414x260";
   const [file, ext] = getFileNameAndExt(url);
 
   return `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(

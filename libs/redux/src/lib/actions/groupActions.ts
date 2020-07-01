@@ -329,7 +329,7 @@ export function approveJoinRequest(target, group, createAs) {
           });
         }
 
-        if (createAs === null) {
+        if (!createAs) {
           // add new player to the group
           return groupRef.update({
             players: firebase.firestore.FieldValue.arrayUnion({

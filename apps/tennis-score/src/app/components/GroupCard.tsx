@@ -57,7 +57,7 @@ const GroupCard = ({ group, user, showIsMember, history, ...props }) => {
           <div className="w-100">
             <Module
               className="shadow-sm"
-              imageUrl={getGroupImageUrl(group.groupImage)}
+              imageUrl={getGroupImageUrl(group.groupImage, group.name)}
             >
               <IconRows>
                 <div className="text-nowrap text-right">
