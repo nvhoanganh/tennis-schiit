@@ -148,17 +148,15 @@ const Leaderboard = ({
   };
 
   const approveJoinAndMergePlayer = asPlayer => {
-    props
-      .approveJoinRequest(approvingPlayer, match.params.group, asPlayer)
-      .then(_ => {
-        handleClose();
-        toast({
-          title: "Player added",
-          status: "success",
-          duration: 3000,
-          isClosable: true
-        });
+    props.approveJoinRequest(approvingPlayer, group, asPlayer).then(_ => {
+      handleClose();
+      toast({
+        title: "Player added",
+        status: "success",
+        duration: 3000,
+        isClosable: true
       });
+    });
   };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -428,7 +426,9 @@ const Leaderboard = ({
                 }
               >
                 <span>
-                  <em>Create new</em>
+                  <strong>
+                    <em>Create new</em>
+                  </strong>
                 </span>
               </HeaderCard>
             </div>

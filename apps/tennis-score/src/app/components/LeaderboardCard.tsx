@@ -1,5 +1,13 @@
 import { Avatar, AvatarBadge } from "@chakra-ui/core";
-import { getUrlAvatar, SORT_PRIZEMONEY, SORT_WINPERCENT } from "@tennis-score/redux";
+import {
+  getUrlAvatar,
+  SORT_PRIZEMONEY,
+  SORT_WINPERCENT,
+  SORT_GAMEDIFFERENCE_AVG,
+  SORT_GAMEDIFFERENCE,
+  SORT_TOTALGAMEWON,
+  SORT_GAMEWON_AVG
+} from "@tennis-score/redux";
 import classNames from "classnames";
 import React from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -31,22 +39,31 @@ const getArrow = player =>
     <FaChevronUp className={arrowClass + "text-success d-inline"} />
   ) : null;
 
-const getStats = (player, sortBy, showPrize) => {
-  const point = (
+const Stats = ({ player, sortBy, showPrize }) => {
+  const Point = ({ showChange }) => (
     <div className="h6">
-      {getArrow(player)}
+      {showChange && getArrow(player)}
       {player.score}
       <sup>pt</sup>
     </div>
   );
-  const pct = (
+
+  const PointAvg = ({ showChange }) => (
+    <div className="h6">
+      {showChange && getArrow(player)}
+      {player.scoreAvg.toFixed(2)}
+      <sup>pm</sup>
+    </div>
+  );
+
+  const Percentage = () => (
     <div className="h6">
       {player.winPercentage}
       <sup>%</sup>
     </div>
   );
 
-  const money = (
+  const Money = () => (
     <div className={prizeMoneyCls(player)}>
       {player.prizeMoney}
       <sup>$</sup>
@@ -57,19 +74,37 @@ const getStats = (player, sortBy, showPrize) => {
     case SORT_PRIZEMONEY:
       return (
         <>
-          {showPrize ? money : null} {pct} {point}
+          {showPrize ? <Money /> : null} <Percentage />{" "}
+          <Point showChange={false} />
         </>
       );
     case SORT_WINPERCENT:
       return (
         <>
-          {pct} {showPrize ? money : null} {point}
+          <Percentage /> {showPrize ? <Money /> : null}{" "}
+          <Point showChange={false} />
+        </>
+      );
+
+    case SORT_TOTALGAMEWON:
+    case SORT_GAMEDIFFERENCE:
+      return (
+        <>
+          <Point showChange /> <Percentage /> <PointAvg showChange={false} />
+        </>
+      );
+
+    case SORT_GAMEWON_AVG:
+    case SORT_GAMEDIFFERENCE_AVG:
+      return (
+        <>
+          <PointAvg showChange /> <Percentage /> <Point showChange={false} />
         </>
       );
     default:
       return (
         <>
-          {point} {pct} {showPrize ? money : null}
+          <Point showChange /> <Percentage /> {showPrize ? <Money /> : null}
         </>
       );
   }
@@ -125,7 +160,11 @@ const LeaderboardCard = ({ player, ranking, history, ...props }) => {
             </a>
             {player.played ? (
               <div className="float-right text-right">
-                {getStats(player, props.sortBy, props.showPrize)}
+                <Stats
+                  player={player}
+                  sortBy={props.sortBy}
+                  showPrize={props.showPrize}
+                />
               </div>
             ) : null}
             <ScoreCard {...player} />

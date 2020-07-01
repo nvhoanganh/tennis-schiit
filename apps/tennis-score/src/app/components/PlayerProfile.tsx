@@ -49,7 +49,7 @@ const PlayerProfile = ({
   ...props
 }) => {
   const [myStats, setMyStats] = useState<any>(null);
-  const [myMatches, setmyMatches] = useState<any>(null);
+  const [myMatches, setmyMatches] = useState<any>([]);
   const q = queryString.parse(location.search);
 
   useEffect(() => {
@@ -184,7 +184,7 @@ const PlayerProfile = ({
                   <div className="text-center h6 my-5">0 match played</div>
                 )}
 
-                {myMatches && myMatches.length > 0 && (
+                {myMatches.length && (
                   <div className="py-4 border-bottom shadow-sm">
                     <PlayerWinLostWithChart
                       stats={myMatches}

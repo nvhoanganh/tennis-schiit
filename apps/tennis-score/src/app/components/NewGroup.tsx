@@ -113,7 +113,7 @@ const NewGroup = ({ loading, history, editGroup, addGroup, group }) => {
             <div>
               <img
                 alt="Group"
-                src={getGroupImageUrl(group.groupImage)}
+                src={getGroupImageUrl(group.groupImage, group.name)}
                 style={{
                   height: 140,
                   objectFit: "cover"

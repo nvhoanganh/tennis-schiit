@@ -37,6 +37,7 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
+    "count": "cloc tennis-schiit/ --exclude-lang=JSON,XML,svg,Markdown,Gradle",
     "generate-lib": "nx g @nrwl/workspace:lib"
   },
   "private": true,

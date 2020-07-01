@@ -1,12 +1,28 @@
-import { setNewScore } from "@tennis-score/api-interfaces";
-import { IAction } from "@tennis-score/redux";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { merge } from "ramda";
-import { GROUPS, SCORES, STATS, TOURNAMENTS, USERS } from "../models";
-import { arrayToObject, calculateStats, getPlayers } from "../utils";
-import { apiEnd, apiStart, AppActionTypes } from "./appActions";
+import {
+  GROUPS,
+  SCORES,
+  STATS,
+  TOURNAMENTS,
+  USERS,
+  SORT_TRUESKILL,
+  SORT_GAMEDIFFERENCE,
+  SORT_GAMEDIFFERENCE_AVG,
+  SORT_TOTALGAMEWON,
+  SORT_GAMEWON_AVG
+} from "../models";
+import {
+  arrayToObject,
+  calculateStats,
+  getPlayers,
+  defaultZero,
+  increment
+} from "../utils";
+import { apiEnd, apiStart, AppActionTypes, IAction } from "./appActions";
+import { ScoreEngine } from "../trueskill";
 
 export enum LeaderboardActionTypes {
   GET_USER = "GET_USER",
@@ -160,23 +176,13 @@ export function submitScore({
     const {
       leaderboard: {
         players,
-        tournament: { prize }
+        tournament: { prize, sortBy }
       }
     } = getState();
     dispatch(apiStart(LeaderboardActionTypes.SUBMIT_SCORE));
 
-    /// calculate score based on previous
-    const mWinners = {};
-    const mLosers = {};
-    Object.keys(winners).forEach(key => {
-      mWinners[key] = players[key] || {};
-    });
-    Object.keys(losers).forEach(key => {
-      mLosers[key] = players[key] || {};
-    });
-    // update
-    setNewScore(mWinners, mLosers);
-
+    // private members
+    const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
     const groupRef = firebase
       .firestore()
       .collection(GROUPS)
@@ -186,6 +192,65 @@ export function submitScore({
       .collection(TOURNAMENTS)
       .doc(group.currentTournament);
 
+    const mWinners = {};
+    const mLosers = {};
+
+    /// calculate score based on previous
+    const calc = (k, obj) => {
+      return {
+        ...obj,
+        ...calculateStats(obj, prize),
+        playerId: k,
+        timestamp: new Date(matchDate),
+        lastMatch: new Date()
+      };
+    };
+
+    Object.keys(winners).forEach(key => {
+      mWinners[key] = players[key] || {};
+      mWinners[key] = {
+        ...mWinners[key],
+        ...(winByBagel && { bagelWon: increment(mWinners[key].bagelWon) }),
+        won: increment(mWinners[key].won),
+        lost: defaultZero(mWinners[key].lost)
+      };
+
+      mWinners[key] = calc(key, mWinners[key]);
+    });
+
+    Object.keys(losers).forEach(key => {
+      mLosers[key] = players[key] || {};
+      mLosers[key] = {
+        ...mLosers[key],
+        ...(winByBagel && { bagelLost: increment(mLosers[key].bagelLost) }),
+        won: defaultZero(mLosers[key].won),
+        lost: increment(mLosers[key].lost)
+      };
+
+      mLosers[key] = calc(key, mLosers[key]);
+    });
+
+    // calculate scores
+    switch (sortBy) {
+      case SORT_TRUESKILL:
+        ScoreEngine.truSkill(mWinners, mLosers);
+        break;
+
+      case SORT_GAMEDIFFERENCE_AVG:
+      case SORT_GAMEDIFFERENCE:
+        ScoreEngine.gameDifference(mWinners, gameWonByLostTeam, reverseBagel);
+        break;
+
+      case SORT_TOTALGAMEWON:
+      case SORT_GAMEWON_AVG:
+        ScoreEngine.gameWon(mWinners, mLosers, gameWonByLostTeam, reverseBagel);
+        break;
+
+      default:
+        break;
+    }
+
+    // add to scores collection
     const g = await tourRef.collection(SCORES).add({
       winners,
       losers,
@@ -205,26 +270,17 @@ export function submitScore({
 
     const winnersK = Object.keys(mWinners);
     const loserK = Object.keys(mLosers);
-    const winByBagel = gameWonByLostTeam === "0" || reverseBagel;
-    winnersK.forEach(k => {
-      // update each
-      if (winByBagel) {
-        mWinners[k].bagelWon = (mWinners[k].bagelWon || 0) + 1;
-      }
-      mWinners[k].won = (mWinners[k].won || 0) + 1;
 
-      mWinners[k] = {
-        ...mWinners[k],
-        ...calculateStats(mWinners[k], prize),
-        playerId: k,
-        timestamp: new Date(matchDate),
-        lastMatch: new Date()
-      };
+    // update active tournament, for each players
+    winnersK.forEach(k => {
       batch.update(tourRef, {
-        [`players.${k}.won`]: firebase.firestore.FieldValue.increment(1),
-        [`players.${k}.previousScore`]: mWinners[k].previousScore,
-        [`players.${k}.score`]: mWinners[k].score,
-        [`players.${k}.skill`]: mWinners[k].skill,
+        [`players.${k}.won`]: mWinners[k].won,
+        [`players.${k}.bagelWon`]: mWinners[k].bagelWon,
+        [`players.${k}.previousScore`]: defaultZero(mWinners[k].previousScore),
+        [`players.${k}.score`]: defaultZero(mWinners[k].score),
+        [`players.${k}.scoreAvg`]:
+          defaultZero(mWinners[k].score) / mWinners[k].played,
+        [`players.${k}.skill`]: mWinners[k].skill || "",
         [`players.${k}.lastMatch`]: new Date()
       });
       // add hisoric data
@@ -233,23 +289,14 @@ export function submitScore({
     });
 
     loserK.forEach(k => {
-      if (winByBagel) {
-        mLosers[k].bagelLost = (mLosers[k].bagelLost || 0) + 1;
-      }
-      mLosers[k].lost = (mLosers[k].lost || 0) + 1;
-
-      mLosers[k] = {
-        ...mLosers[k],
-        ...calculateStats(mLosers[k], prize),
-        playerId: k,
-        timestamp: new Date(matchDate),
-        lastMatch: new Date()
-      };
       batch.update(tourRef, {
-        [`players.${k}.lost`]: firebase.firestore.FieldValue.increment(1),
-        [`players.${k}.previousScore`]: mLosers[k].previousScore,
-        [`players.${k}.score`]: mLosers[k].score,
-        [`players.${k}.skill`]: mLosers[k].skill,
+        [`players.${k}.lost`]: mLosers[k].lost,
+        [`players.${k}.bagelLost`]: mLosers[k].bagelLost,
+        [`players.${k}.previousScore`]: defaultZero(mLosers[k].previousScore),
+        [`players.${k}.score`]: defaultZero(mLosers[k].score),
+        [`players.${k}.scoreAvg`]:
+          defaultZero(mLosers[k].score) / mLosers[k].played,
+        [`players.${k}.skill`]: mLosers[k].skill || "",
         [`players.${k}.lastMatch`]: new Date()
       });
       // add hisoric data
@@ -257,18 +304,6 @@ export function submitScore({
       batch.set(newHistoricRef, mLosers[k]);
     });
 
-    if (winByBagel) {
-      winnersK.forEach(k => {
-        batch.update(tourRef, {
-          [`players.${k}.bagelWon`]: firebase.firestore.FieldValue.increment(1)
-        });
-      });
-      loserK.forEach(k => {
-        batch.update(tourRef, {
-          [`players.${k}.bagelLost`]: firebase.firestore.FieldValue.increment(1)
-        });
-      });
-    }
     await batch.commit();
     // end
 

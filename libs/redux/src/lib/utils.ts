@@ -1,16 +1,19 @@
 /* eslint-disable no-useless-escape */
 import addSeconds from "date-fns/addSeconds";
-import { flatten, path } from "ramda";
+import { flatten, path, defaultTo, pipe, inc } from "ramda";
+
+export const defaultZero = defaultTo(0);
+export const increment = pipe(
+  defaultTo(0),
+  inc
+);
 
 export const getFileNameAndExt = url => {
-  try {
-    const {
-      groups: { ext, file }
-    } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
-    return [file, ext];
-  } catch (error) {
-    return [null, null];
-  }
+  if (!url) return [null, null];
+  const {
+    groups: { ext, file }
+  } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
+  return [file, ext];
 };
 
 export function delay(duration): Promise<void> {
@@ -52,19 +55,25 @@ export const removeById = (id, obj) => {
 
 export const roundOff = roundOff => Math.floor(roundOff * 100) / 100;
 export const calculateStats = (player, prize) => {
-  const won = player.won || 0;
-  const bagelWon = player.bagelWon || 0;
-  const lost = player.lost || 0;
-  const bagelLost = player.bagelLost || 0;
+  const won = defaultZero(player.won);
+  const bagelWon = defaultZero(player.bagelWon);
+  const lost = defaultZero(player.lost);
+  const bagelLost = defaultZero(player.bagelLost);
   return {
     played: won + lost,
     winPercentage: roundOff((won / (won + lost)) * 100),
     prizeMoney:
-      won * +prize + bagelWon * +prize - lost * +prize - bagelLost * +prize
+      won * +prize + bagelWon * +prize - lost * +prize - bagelLost * +prize,
+    won,
+    lost,
+    bagelLost,
+    bagelWon
   };
 };
 
-export const getGroupImageUrl = url => {
+export const getGroupImageUrl = (url, name) => {
+  if (!url)
+    return "https://dummyimage.com/414x260?text=" + encodeURIComponent(name);
   const [file, ext] = getFileNameAndExt(url);
   return file
     ? `https://firebasestorage.googleapis.com/v0/b/tennis-schiit.appspot.com/o/${encodeURIComponent(
@@ -74,6 +83,7 @@ export const getGroupImageUrl = url => {
 };
 
 export const getGroupImageUrlFull = url => {
+  if (!url) return "https://dummyimage.com/414x260";
   const [file, ext] = getFileNameAndExt(url);
 
   return file

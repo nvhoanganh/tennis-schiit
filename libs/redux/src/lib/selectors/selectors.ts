@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
-import { pipe, groupBy, map, sortBy, sort, path } from "ramda";
+import { pipe, groupBy, map, sortBy, sort, path, prop } from "ramda";
 import { SORT_TRUESKILL, SORT_WINPERCENT } from "../models";
 import { arrayToObject, calculateStats, isMember, roundOff } from "../utils";
 const getPlayers = state => state.players;
@@ -207,9 +207,12 @@ export const getMyGroups = createSelector(
   getGroups,
   (user, groups) => {
     if (!user) return [];
-    return Object.values(groups)
-      .filter((x: any) => !x.deletedDate)
-      .filter(x => isMember(user, x));
+    const sortByName = sortBy(prop("name"));
+    return sortByName(
+      Object.values(groups)
+        .filter((x: any) => !x.deletedDate)
+        .filter(x => isMember(user, x))
+    );
   }
 );
 

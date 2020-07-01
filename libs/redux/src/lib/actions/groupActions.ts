@@ -8,7 +8,7 @@ import geohash from "ngeohash";
 import { GROUPS, IGroup, STATS, TOURNAMENTS, USERS } from "../models";
 import { arrayToObject } from "../utils";
 import { apiEnd, apiStart } from "./appActions";
-import { loadLeaderboard } from "./leaderboardActions";
+
 export enum GroupActionTypes {
   LOAD_GROUPS = "LOAD_GROUPS",
   LOAD_GROUPS_SUCCESS = "LOAD_GROUPS_SUCCESS",
@@ -329,7 +329,7 @@ export function approveJoinRequest(target, group, createAs) {
           });
         }
 
-        if (createAs === null) {
+        if (!createAs) {
           // add new player to the group
           return groupRef.update({
             players: firebase.firestore.FieldValue.arrayUnion({
