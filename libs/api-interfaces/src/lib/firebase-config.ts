@@ -1,6 +1,6 @@
 export const FBCONF = {
   apiKey: "AIzaSyCbhMnOl-eKAlPWNFBX9CJODlHSnDne5u0",
-  authDomain: "tennis-schiit.firebaseapp.com",
+  authDomain: "tennisscoresheet.com",
   databaseURL: "https://tennis-schiit.firebaseio.com",
   projectId: "tennis-schiit",
   storageBucket: "tennis-schiit.appspot.com",
