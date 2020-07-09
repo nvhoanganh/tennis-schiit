@@ -8,8 +8,9 @@ export const increment = pipe(
   inc
 );
 
+const hasGroupImg = (url: string) => url.match(/^(?<file>.*)\.(?<ext>.*)$/);
+
 export const getFileNameAndExt = url => {
-  if (!url) return [null, null];
   const {
     groups: { ext, file }
   } = /^(?<file>.*)\.(?<ext>.*)$/.exec(url) as any;
@@ -72,7 +73,7 @@ export const calculateStats = (player, prize) => {
 };
 
 export const getGroupImageUrl = (url, name) => {
-  if (!url)
+  if (!url || !hasGroupImg(url))
     return "https://dummyimage.com/414x260?text=" + encodeURIComponent(name);
   const [file, ext] = getFileNameAndExt(url);
   return file
@@ -83,7 +84,7 @@ export const getGroupImageUrl = (url, name) => {
 };
 
 export const getGroupImageUrlFull = url => {
-  if (!url) return "https://dummyimage.com/414x260";
+  if (!url || !hasGroupImg(url)) return "https://dummyimage.com/414x260";
   const [file, ext] = getFileNameAndExt(url);
 
   return file
@@ -94,6 +95,7 @@ export const getGroupImageUrlFull = url => {
 };
 
 export const getUserAvatarUrl = url => {
+  if (!url || !hasGroupImg(url)) return "https://dummyimage.com/200x200?text";
   const [file, ext] = getFileNameAndExt(url);
 
   return file
